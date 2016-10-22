@@ -67,8 +67,11 @@ public class SoundThread extends Thread implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.start_button) {
-            soundManager.soundStart();
-            //this.start();
+            if (run) {
+                run = false;
+            } else {
+                this.start();
+            }
 
         }
     }
