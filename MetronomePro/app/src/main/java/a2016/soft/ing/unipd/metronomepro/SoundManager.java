@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
 import java.io.IOException;
@@ -16,7 +17,9 @@ public class SoundManager {
     public SoundManager(Context c) {
         mp = new MediaPlayer();
         try {
-            mp.setDataSource(c.getAssets().openFd("Tick.mid").getFileDescriptor());
+            AssetFileDescriptor afd = c.getAssets().openFd("Tick.mid");
+            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mp.prepare();
         } catch (IOException ex) {
             //eccezione da gestire
         }

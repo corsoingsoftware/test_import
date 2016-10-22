@@ -12,12 +12,10 @@ public class SoundThread extends Thread implements View.OnClickListener {
     private long stepMillis;
     private SoundManager soundManager;
     private boolean run;
-
     public SoundThread(Context c) {
         soundManager = new SoundManager(c);
         stepMillis = Long.MAX_VALUE;
     }
-
     public SoundThread(Context c, long stepMillis) {
         this(c);
         this.stepMillis = stepMillis;
@@ -33,7 +31,15 @@ public class SoundThread extends Thread implements View.OnClickListener {
      * @return parte bassa del tempo in millisecondi tra un minuto e l'altro
      */
     public static long millisIntervalFromBPM(int bPM) {
-        return 0;
+        return 60000 / bPM;
+    }
+
+    public long getStepMillis() {
+        return stepMillis;
+    }
+
+    public void setStepMillis(long stepMillis) {
+        this.stepMillis = stepMillis;
     }
 
     public boolean isRun() {
@@ -46,6 +52,7 @@ public class SoundThread extends Thread implements View.OnClickListener {
 
     @Override
     public void run() {
+        run = true;
         while (run) {
             try {
 
@@ -60,7 +67,8 @@ public class SoundThread extends Thread implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.start_button) {
-            this.start();
+            soundManager.soundStart();
+            //this.start();
 
         }
     }
