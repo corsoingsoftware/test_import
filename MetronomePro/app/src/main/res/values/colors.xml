@@ -6,6 +6,6 @@
     <color name="coloreBottoni">#ccc5c5</color>
     <color name="coloreScritte">#212121</color>
     <color name="coloreScrittaPlay">#388e3c</color>
-    <color name="coloreAvantiIndietroVeloce">#FFDD2C00</color>
+    <color name="coloreAvantiIndietroVeloce">#DD2C00</color>
     <color name="coloreAvantiIndietroLento">#43a047</color>
 </resources>
