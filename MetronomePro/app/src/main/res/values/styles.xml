@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/MyButtonStyle</item>
         <item name="android:buttonStyle">@style/MyButtonStyle</item>
-        //aggiungo prova stile colore bottone
+        <!-- aggiungo prova stile colore bottone-->
 
     </style>
 
