@@ -13,8 +13,6 @@
     </style>
 
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button">
-        //aggiungo un mio stile per il
-        colore dei bottoni
-        <item name="background">@color/prova</item>
+        <item name="background">@color/coloreBottoni</item>
     </style>
 </resources>
