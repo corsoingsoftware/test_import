@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     SoundThread clackThread;
-    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
+    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, playButton;
     private TextView bPMTextView;
     private int actualBPM;
 
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setActualBPM(int actualBPM) {
         this.actualBPM = actualBPM;
-        this.bPMTextView.setText(actualBPM);
+        this.bPMTextView.setText(Integer.toString(actualBPM));
         //Ricalcola ora il delay tra un clack e l'altro
         //controlla se il thread è in esecuzione
         //lo mette in pausa e cambia i millis e riparte
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
-        backForwardButton = (Button) findViewById(R.id.button_back_forward);
+        playButton = (Button) findViewById(R.id.start_button);
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
         fasterButton.setOnClickListener(this);
         slowerButton.setOnClickListener(this);
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.button_back_forward:
                     toAdd = -10;
                     break;
+
             }
             setActualBPM(getActualBPM() + toAdd);
         }

@@ -1,12 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
+import android.view.View;
 
 /**
  * Created by feder on 22/10/2016.
  */
 
-public class SoundThread extends Thread {
+public class SoundThread extends Thread implements View.OnClickListener {
 
     private long stepMillis;
     private SoundManager soundManager;
@@ -53,6 +54,14 @@ public class SoundThread extends Thread {
                 run = false;
             }
             soundManager.soundStart();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.start_button) {
+            this.start();
+
         }
     }
 }
