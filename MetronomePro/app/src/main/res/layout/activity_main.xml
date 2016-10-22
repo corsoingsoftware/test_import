@@ -10,25 +10,69 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="a2016.soft.ing.unipd.metronomepro.MainActivity">
 
-    <TextView
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/Button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:text="@string/select_time_main" />
+        android:layout_centerVertical="true">
 
-    <Spinner
-        android:id="@+id/select_time_spinner"
-        android:layout_width="match_parent"
+        <Button
+            android:id="@+id/button_back_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_back_forward_text" />
+
+        <Button
+            android:id="@+id/button_slower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_slower_text" />
+
+        <Button
+            android:id="@+id/button_faster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_faster_text" />
+
+        <Button
+            android:id="@+id/button_fast_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_fast_forward_text" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/show_BPM"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/Button_layout"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_marginBottom="82dp"
+        android:text="@string/select_time_main"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="@string/start_text" />
+
+    <TextView
+        android:id="@+id/debug_time_millis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/start_button"
+        android:layout_alignLeft="@+id/show_BPM"
+        android:layout_alignStart="@+id/show_BPM"
+        android:layout_marginBottom="47dp"
+        android:textSize="20sp" />
+
 </RelativeLayout>

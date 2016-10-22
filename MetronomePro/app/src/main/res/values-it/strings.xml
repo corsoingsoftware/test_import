@@ -2,4 +2,9 @@
 <resources>
     <string name="select_time_main">Seleziona il tempo:</string>
     <string name="start_text">Play!</string>
+    <string name="button_faster_text">\u003E</string>
+    <string name="button_slower_text">\u003C</string>
+    <string name="button_fast_forward_text">\u003E\u003E</string>
+    <string name="button_back_forward_text">\u003C\u003C</string>
+
 </resources>
