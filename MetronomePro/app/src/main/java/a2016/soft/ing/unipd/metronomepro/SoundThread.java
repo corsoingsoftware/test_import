@@ -12,6 +12,7 @@ public class SoundThread extends Thread implements View.OnClickListener {
     private long stepMillis;
     private SoundManager soundManager;
     private boolean run;
+
     public SoundThread(Context c) {
         soundManager = new SoundManager(c);
         stepMillis = Long.MAX_VALUE;
