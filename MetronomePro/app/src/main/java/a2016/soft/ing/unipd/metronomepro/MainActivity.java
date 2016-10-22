@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setActualBPM(int actualBPM) {
         this.actualBPM = actualBPM;
-        this.bPMTextView.setText(actualBPM);
+        this.bPMTextView.setText(Integer.toString(actualBPM));
         //Ricalcola ora il delay tra un clack e l'altro
         //controlla se il thread è in esecuzione
         //lo mette in pausa e cambia i millis e riparte
