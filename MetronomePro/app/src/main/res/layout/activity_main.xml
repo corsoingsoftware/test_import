@@ -21,40 +21,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_back_forward_text" />
+            android:text="@string/button_back_forward_text"
+            android:textColor="@color/coloreAvantiIndietroVeloce"
+            android:textSize="35sp" />
 
         <Button
             android:id="@+id/button_slower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_slower_text" />
+            android:text="@string/button_slower_text"
+            android:textColor="@color/coloreAvantiIndietroLento"
+            android:textSize="35sp" />
 
         <Button
             android:id="@+id/button_faster"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_faster_text" />
+            android:text="@string/button_faster_text"
+            android:textColor="@color/coloreAvantiIndietroLento"
+            android:textSize="35sp" />
 
         <Button
             android:id="@+id/button_fast_forward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_fast_forward_text" />
+            android:text="@string/button_fast_forward_text"
+            android:textColor="@color/coloreAvantiIndietroVeloce"
+            android:textSize="35sp" />
     </android.support.v7.widget.LinearLayoutCompat>
-
-    <TextView
-        android:id="@+id/show_BPM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/Button_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="82dp"
-        android:text="@string/select_time_main"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="30sp" />
 
     <Button
         android:id="@+id/start_button"
@@ -63,25 +60,43 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
-        android:text="@string/start_text" />
+        android:text="@string/start_text"
+        android:textColor="@color/coloreScrittaPlay"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/number_of_BPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/coloreScritte"
+        android:textSize="35sp" />
 
     <TextView
         android:id="@+id/debug_time_millis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/start_button"
-        android:layout_alignLeft="@+id/show_BPM"
-        android:layout_alignStart="@+id/show_BPM"
-        android:layout_marginBottom="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="43dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/number_of_BPM"
-        android:layout_width="match_parent"
+        android:id="@+id/show_BPM"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/Button_layout"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="42dp" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:text="@string/select_time_main"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/coloreScritte"
+        android:textSize="30sp" />
 
 </RelativeLayout>

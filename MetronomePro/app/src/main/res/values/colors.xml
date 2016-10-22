@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="prova">#FF0000</color>
+    <color name="coloreBottoni">#ccc5c5</color>
+    <color name="coloreScritte">#212121</color>
+    <color name="coloreScrittaPlay">#388e3c</color>
+    <color name="coloreAvantiIndietroVeloce">#FFDD2C00</color>
+    <color name="coloreAvantiIndietroLento">#43a047</color>
 </resources>
