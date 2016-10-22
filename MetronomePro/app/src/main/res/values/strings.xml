@@ -6,4 +6,5 @@
     <string name="button_slower_text">\u003C</string>
     <string name="button_fast_forward_text">\u003E\u003E</string>
     <string name="button_back_forward_text">\u003C\u003C</string>
+    <string name="title_activity_metronome">Metronome</string>
 </resources>
