@@ -26,6 +26,10 @@ public class SoundManager {
     }
 
     public void soundStart() {
+        if (mp.isPlaying()) {
+            // mp.pause();
+            mp.seekTo(0);
+        }
         mp.start();
     }
 }
