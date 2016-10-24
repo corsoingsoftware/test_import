@@ -12,6 +12,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
 
     public static final int MIN, MAX, INITIAL_VALUE;
+    private static SoundThread clackThread;
 
     static {
         MIN = 30;
@@ -19,7 +20,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         INITIAL_VALUE = 100;
     }
 
-    SoundThread clackThread;
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
     private TextView bPMTextView;
     private int actualBPM;
@@ -53,9 +53,10 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
-        setActualBPM(INITIAL_VALUE);
-        clackThread = new SoundThread(this, actualBPM);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.fab);
+        if (clackThread == null) {
+            clackThread = new SoundThread(this, INITIAL_VALUE);
+        }
         playButton.setOnClickListener(clackThread);
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
