@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class SoundManager {
 
-    private MediaPlayer mp;
+    MediaPlayer mp;
 
-    public SoundManager(Context c) {
+    public SoundManager(Context c,) {
         mp = new MediaPlayer();
         try {
-            AssetFileDescriptor afd = c.getAssets().openFd("Tick.mid");
+            AssetFileDescriptor afd = c.getAssets().openFd("Snap.wav");
             mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mp.prepare();
         } catch (IOException ex) {
