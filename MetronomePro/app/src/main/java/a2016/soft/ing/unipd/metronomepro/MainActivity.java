@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         INITIAL_VALUE = 100;
     }
 
-    SoundThread clackThread;
+    private static SoundThread clackThread;
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, playButton;
     private TextView bPMTextView;
     private int actualBPM;
@@ -49,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
-        setActualBPM(INITIAL_VALUE);
-        clackThread = new SoundThread(this, actualBPM);
+        if(clackThread!=null) {
+            setActualBPM(INITIAL_VALUE);
+            clackThread = new SoundThread(this, actualBPM);
+        }
         playButton.setOnClickListener(clackThread);
     }
 

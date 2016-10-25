@@ -14,7 +14,7 @@ public class SoundManager {
 
     MediaPlayer mp;
 
-    public SoundManager(Context c,) {
+    public SoundManager(Context c) {
         mp = new MediaPlayer();
         try {
             AssetFileDescriptor afd = c.getAssets().openFd("Snap.wav");
