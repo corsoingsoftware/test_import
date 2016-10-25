@@ -55,6 +55,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         backForwardButton.setOnClickListener(this);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.fab);
         if (clackThread == null) {
+            setActualBPM(INITIAL_VALUE);
             clackThread = new SoundThread(this, INITIAL_VALUE);
         }
         playButton.setOnClickListener(clackThread);
