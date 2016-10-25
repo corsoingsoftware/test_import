@@ -9,22 +9,26 @@ import android.view.View;
 
 public class SoundThread extends Thread implements View.OnClickListener {
 
+    private static final long sensibilityInMs = 1;
+    private static final long sensibility = 1000000;
     private long stepMillis;
     private SoundManager soundManager;
+    private long lastNanoTime;
+    private long nanoStep;
     private boolean run;
 
     public SoundThread(Context c) {
         soundManager = new SoundManager(c);
-        stepMillis = Long.MAX_VALUE;
+        setStepMillis(Long.MAX_VALUE);
     }
     public SoundThread(Context c, long stepMillis) {
         this(c);
-        this.stepMillis = stepMillis;
+        setStepMillis(stepMillis);
     }
 
     public SoundThread(Context c, int bPM) {
         this(c);
-        this.stepMillis = millisIntervalFromBPM(bPM);
+        setStepMillis(millisIntervalFromBPM(bPM));
     }
 
     /**
@@ -40,6 +44,7 @@ public class SoundThread extends Thread implements View.OnClickListener {
     }
 
     public void setStepMillis(long stepMillis) {
+        nanoStep = stepMillis * 1000000;
         this.stepMillis = stepMillis;
     }
 
@@ -51,17 +56,22 @@ public class SoundThread extends Thread implements View.OnClickListener {
         this.run = run;
     }
 
+
     @Override
     public void run() {
         run = true;
         while (run) {
+            soundManager.soundStart();
+            //System.out.println(System.nanoTime()-lastNanoTime);
             try {
-
-                Thread.sleep(stepMillis);
+                lastNanoTime = System.nanoTime();
+                long nextNanoTime = lastNanoTime + nanoStep - sensibility;
+                while (System.nanoTime() <= nextNanoTime) {
+                    Thread.sleep(sensibilityInMs);
+                }
             } catch (InterruptedException ex) {
                 run = false;
             }
-            soundManager.soundStart();
         }
     }
 
