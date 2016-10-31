@@ -43,11 +43,12 @@ public class CommunicationThread extends Thread {
         while (true) {
             try {
                 // Read from the InputStream
+
                 bytes = mmInStream.read(buffer);
                 // Send the obtained bytes to the UI activity
                 mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                         .sendToTarget();
-            } catch (IOException e) {
+            } catch (Exception ex) {
                 break;
             }
         }

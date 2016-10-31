@@ -26,9 +26,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
     public static final int MIN, MAX, INITIAL_VALUE;
     private static SoundThread clackThread;
-    BluetoothAdapter bt;
-    CommunicationThread ct;
-    BluetoothSocket bs;
 
     static {
         MIN = 30;
@@ -36,6 +33,9 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         INITIAL_VALUE = 100;
     }
 
+    BluetoothAdapter bt;
+    CommunicationThread ct;
+    BluetoothSocket bs;
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, button_1, button_2;
     private TextView bPMTextView;
     private int actualBPM;
@@ -136,11 +136,19 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
         bt = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
-        UUID sessionUUID = UUID.randomUUID();
+        UUID sessionUUID = UUID.fromString("0000110E-0000-1000-8000-00805F9B34FB");
         bs = null;
         for (BluetoothDevice bd : pairedDevices) {
             try {
                 bs = bd.createInsecureRfcommSocketToServiceRecord(sessionUUID);
+            } catch (Exception ex) {
+
+            }
+        }
+        if (bs != null) {
+            try {
+                bs.connect();
+
             } catch (Exception ex) {
 
             }
