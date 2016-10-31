@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,24 +14,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-<<<<<<< Updated upstream
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.CommunicationThread;
 
-=======
-import java.util.UUID;
-
->>>>>>> Stashed changes
 
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     public static final int MIN, MAX, INITIAL_VALUE;
     private static SoundThread clackThread;
-    private BluetoothAdapter bt;
-    private BluetoothSocket bs;
 
     static {
         MIN = 30;
@@ -87,7 +83,16 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
             }
         }
-        CommunicationThread ct = new CommunicationThread(bs);
+        CommunicationThread ct = new CommunicationThread(bs, new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == CommunicationThread.MESSAGE_READ) {
+                    //ho letto il messaggio
+                    System.out.println(Arrays.toString((byte[]) msg.obj));
+                }
+                return true;
+            }
+        }));
         ct.start();
         try {
             ct.write(new byte[]{2, 4});
@@ -131,18 +136,14 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             setActualBPM(Math.max(Math.min(getActualBPM() + toAdd, MAX), MIN));
         }
     }
-    public void BT() {
-        bt = BluetoothAdapter.getDefaultAdapter();
-        if (!bt.isEnabled())
+    public void checkBT() {
+        BluetoothAdapter myBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!myBtAdapter.isEnabled())
             System.err.print("BT non attivato");
-
+    }
+    public void visibile(){
         Intent discoverability = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         startActivity(discoverability);
-
-        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
-        UUID sessionUUID = UUID.randomUUID();
-        for(BluetoothDevice bd:pairedDevices)
-
     }
 
 }
