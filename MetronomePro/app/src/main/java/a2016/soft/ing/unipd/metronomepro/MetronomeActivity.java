@@ -1,5 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -95,6 +97,15 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             }
             setActualBPM(Math.max(Math.min(getActualBPM() + toAdd, MAX), MIN));
         }
+    }
+    public void checkBT() {
+        BluetoothAdapter myBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!myBtAdapter.isEnabled())
+            System.err.print("BT non attivato");
+    }
+    public void visibile(){
+        Intent discoverability = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        startActivity(discoverability);
     }
 
 }
