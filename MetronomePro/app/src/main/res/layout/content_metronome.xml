@@ -14,51 +14,25 @@
     tools:context="a2016.soft.ing.unipd.metronomepro.MetronomeActivity"
     tools:showIn="@layout/activity_metronome">
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/Button_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
-
-        <Button
-            android:id="@+id/button_back_forward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_back_forward_text" />
-
-        <Button
-            android:id="@+id/button_slower"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_slower_text" />
-
-        <Button
-            android:id="@+id/button_faster"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_faster_text" />
-
-        <Button
-            android:id="@+id/button_fast_forward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_fast_forward_text" />
-
-    </android.support.v7.widget.LinearLayoutCompat>
-
     <TextView
-        android:id="@+id/number_of_BPM"
+        android:id="@+id/show_BPM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/Button_layout"
+        android:layout_alignLeft="@+id/show_BPM"
+        android:layout_alignStart="@+id/show_BPM"
+        android:layout_below="@+id/debug_time_millis"
+        android:text="@string/select_time_main"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/show_BPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="35sp" />
+        android:text="@string/select_time_main"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
 
     <TextView
         android:id="@+id/debug_time_millis"
@@ -72,12 +46,40 @@
         android:layout_marginRight="36dp"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/show_BPM"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/Button_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/select_time_main"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true">
+
+        <Button
+            android:id="@+id/button_back_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_back_forward_text" />
+
+        <TextView
+            android:id="@+id/number_of_BPM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/Button_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="34dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="35sp" />
+
+
+        <Button
+            android:id="@+id/button_fast_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_fast_forward_text" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
 </RelativeLayout>

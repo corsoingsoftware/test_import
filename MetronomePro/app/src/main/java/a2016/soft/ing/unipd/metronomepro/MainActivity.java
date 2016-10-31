@@ -9,6 +9,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int MIN, MAX, INITIAL_VALUE;
+    private static SoundThread clackThread;
 
     static {
         MIN = 30;
@@ -16,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         INITIAL_VALUE = 100;
     }
 
-    private static SoundThread clackThread;
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, playButton;
     private TextView bPMTextView;
     private int actualBPM;
@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fasterButton = (Button) findViewById(R.id.button_faster);
-        slowerButton = (Button) findViewById(R.id.button_slower);
+        //  fasterButton = (Button) findViewById(R.id.button_faster);
+        //  slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
         playButton = (Button) findViewById(R.id.start_button);
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
-        fasterButton.setOnClickListener(this);
-        slowerButton.setOnClickListener(this);
+        //fasterButton.setOnClickListener(this);
+        //slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
         if(clackThread!=null) {
@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int toAdd = 0;
             switch (b.getId()) {
 
-                case R.id.button_faster:
-                    toAdd = 1;
-                    break;
+                //        case R.id.button_faster:
+                //            toAdd = 1;
+                //            break;
 
-                case R.id.button_slower:
-                    toAdd = -1;
-                    break;
+                //        case R.id.button_slower:
+                //            toAdd = -1;
+                //            break;
 
                 case R.id.button_fast_forward:
                     toAdd = 10;

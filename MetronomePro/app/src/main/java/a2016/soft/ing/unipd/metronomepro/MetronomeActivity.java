@@ -45,13 +45,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_metronome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fasterButton = (Button) findViewById(R.id.button_faster);
-        slowerButton = (Button) findViewById(R.id.button_slower);
+        //fasterButton = (Button) findViewById(R.id.button_faster);
+        //slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
-        fasterButton.setOnClickListener(this);
-        slowerButton.setOnClickListener(this);
+        //fasterButton.setOnClickListener(this);
+        //slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.fab);
@@ -76,13 +76,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             int toAdd = 0;
             switch (b.getId()) {
 
-                case R.id.button_faster:
-                    toAdd = 1;
-                    break;
+                //  case R.id.button_faster:
+                //      toAdd = 1;
+                //     break;
 
-                case R.id.button_slower:
-                    toAdd = -1;
-                    break;
+                // case R.id.button_slower:
+                //     toAdd = -1;
+                //break;
 
                 case R.id.button_fast_forward:
                     toAdd = 10;
