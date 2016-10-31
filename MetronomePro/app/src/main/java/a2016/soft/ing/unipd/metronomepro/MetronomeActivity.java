@@ -138,18 +138,14 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
     public void initialializeCommunicationThread() {
 
-        ct = new CommunicationThread(bs, new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == CommunicationThread.MESSAGE_READ) {
-                    //ho letto il messaggio
-                    System.out.println(Arrays.toString((byte[]) msg.obj));
-                }
-                return true;
-            }
-        }));
         ct.start();
-        ct.write(new byte[]{2, 4});
     }
 
+    @Override
+    public boolean handleMessage(Message msg) {
+
+        ct = new CommunicationThread(bs, new Handler(this);
+
+        return false;
+    }
 }
