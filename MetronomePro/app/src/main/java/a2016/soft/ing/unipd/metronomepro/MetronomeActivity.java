@@ -78,6 +78,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             clackThread = new SoundThread(this, INITIAL_VALUE);
         }
         playButton.setOnClickListener(clackThread);
+        button_1.setOnClickListener(initializeBluetoothAdapter(); initializeCommunicationThread(););
 
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -140,7 +141,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void initialializeCommunicationThread() {
+    public void initializeCommunicationThread() {
 
         ct = new CommunicationThread(bs, new Handler(this));
         ct.start();
