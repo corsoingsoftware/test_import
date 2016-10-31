@@ -36,7 +36,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         INITIAL_VALUE = 100;
     }
 
-    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
+    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, button_1, button_2;
     private TextView bPMTextView;
     private int actualBPM;
 
@@ -64,6 +64,9 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
+        button_1 = (Button) findViewById(R.id.button1);
+        button_2 = (Button) findViewById(R.id.button);
+
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
         fasterButton.setOnClickListener(this);
         slowerButton.setOnClickListener(this);
@@ -141,6 +144,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
         ct = new CommunicationThread(bs, new Handler(this));
         ct.start();
+
+        button_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ct.write(new byte[] {1, 2, 3});
+            }
+        });
     }
 
     @Override
