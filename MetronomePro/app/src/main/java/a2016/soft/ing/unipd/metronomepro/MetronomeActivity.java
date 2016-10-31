@@ -38,7 +38,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
     private TextView bPMTextView;
     private int actualBPM;
-    private BluetoothSocket bs;
 
     public int getActualBPM() {
         return actualBPM;
@@ -139,14 +138,18 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
     public void initialializeCommunicationThread() {
 
+        ct = new CommunicationThread(bs, new Handler(this));
         ct.start();
     }
 
     @Override
     public boolean handleMessage(Message msg) {
 
-        ct = new CommunicationThread(bs, new Handler(this);
 
-        return false;
+        if (msg.what == CommunicationThread.MESSAGE_READ) {
+            //ho letto il messaggio
+            System.out.println(Arrays.toString((byte[]) msg.obj));
+        }
+        return true;
     }
 }
