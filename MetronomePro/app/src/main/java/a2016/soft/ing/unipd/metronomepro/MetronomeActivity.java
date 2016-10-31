@@ -38,6 +38,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
     private TextView bPMTextView;
     private int actualBPM;
+    private BluetoothSocket bs;
 
     public int getActualBPM() {
         return actualBPM;
