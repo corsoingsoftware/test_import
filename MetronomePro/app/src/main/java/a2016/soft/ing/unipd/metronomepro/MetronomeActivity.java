@@ -12,17 +12,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+<<<<<<< Updated upstream
 import java.util.Set;
 import java.util.UUID;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.CommunicationThread;
 
+=======
+import java.util.UUID;
+
+>>>>>>> Stashed changes
 
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     public static final int MIN, MAX, INITIAL_VALUE;
     private static SoundThread clackThread;
+    private BluetoothAdapter bt;
+    private BluetoothSocket bs;
 
     static {
         MIN = 30;
@@ -117,14 +124,18 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             setActualBPM(Math.max(Math.min(getActualBPM() + toAdd, MAX), MIN));
         }
     }
-    public void checkBT() {
-        BluetoothAdapter myBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!myBtAdapter.isEnabled())
+    public void BT() {
+        bt = BluetoothAdapter.getDefaultAdapter();
+        if (!bt.isEnabled())
             System.err.print("BT non attivato");
-    }
-    public void visibile(){
+
         Intent discoverability = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         startActivity(discoverability);
+
+        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
+        UUID sessionUUID = UUID.randomUUID();
+        for(BluetoothDevice bd:pairedDevices)
+
     }
 
 }
