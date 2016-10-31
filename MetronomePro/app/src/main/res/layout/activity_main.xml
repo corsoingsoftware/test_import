@@ -23,19 +23,15 @@
             android:layout_weight="1"
             android:text="@string/button_back_forward_text" />
 
-        <Button
-            android:id="@+id/button_slower"
+        <TextView
+            android:id="@+id/show_BPM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_slower_text" />
-
-        <Button
-            android:id="@+id/button_faster"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_faster_text" />
+            android:layout_alignLeft="@+id/start_button"
+            android:layout_alignStart="@+id/start_button"
+            android:layout_centerVertical="true"
+            android:text="@string/select_time_main"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <Button
             android:id="@+id/button_fast_forward"
@@ -77,13 +73,15 @@
         android:layout_marginRight="36dp"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/show_BPM"
+    <EditText
+        android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/select_time_main"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_marginTop="34dp"
+        android:ems="10"
+        android:inputType="number" />
+
 
 </RelativeLayout>
