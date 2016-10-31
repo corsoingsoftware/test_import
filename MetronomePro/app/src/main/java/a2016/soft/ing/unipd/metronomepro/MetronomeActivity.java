@@ -1,6 +1,8 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Set;
+import java.util.UUID;
+
+import a2016.soft.ing.unipd.metronomepro.bluetooth.CommunicationThread;
 
 
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -62,6 +69,18 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             clackThread = new SoundThread(this, INITIAL_VALUE);
         }
         playButton.setOnClickListener(clackThread);
+        BluetoothAdapter bt = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
+        UUID sessionUUID = UUID.randomUUID();
+        BluetoothSocket bs = null;
+        for (BluetoothDevice bd : pairedDevices) {
+            try {
+                bs = bd.createInsecureRfcommSocketToServiceRecord(sessionUUID);
+            } catch (Exception ex) {
+
+            }
+        }
+        CommunicationThread ct = new CommunicationThread(bs);
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

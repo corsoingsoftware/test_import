@@ -15,7 +15,7 @@ public class CommunicationThread extends Thread {
     private final InputStream mmInStream;
     private final OutputStream mmOutStream;
 
-    public ConnectedThread(BluetoothSocket socket) {
+    public CommunicationThread(BluetoothSocket socket) {
         mmSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
@@ -42,8 +42,8 @@ public class CommunicationThread extends Thread {
                 // Read from the InputStream
                 bytes = mmInStream.read(buffer);
                 // Send the obtained bytes to the UI activity
-                mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
-                        .sendToTarget();
+//                mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+//                        .sendToTarget();
             } catch (IOException e) {
                 break;
             }
