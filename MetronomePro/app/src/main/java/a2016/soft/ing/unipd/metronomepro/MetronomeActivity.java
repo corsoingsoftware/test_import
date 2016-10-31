@@ -82,7 +82,12 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         }
         CommunicationThread ct = new CommunicationThread(bs);
         ct.start();
-        ct.write(new byte[]{2, 4});
+        try {
+            ct.write(new byte[]{2, 4});
+
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
