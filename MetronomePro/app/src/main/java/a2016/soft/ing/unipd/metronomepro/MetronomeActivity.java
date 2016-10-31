@@ -146,7 +146,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean handleMessage(Message msg) {
 
-
         if (msg.what == CommunicationThread.MESSAGE_READ) {
             //ho letto il messaggio
             System.out.println(Arrays.toString((byte[]) msg.obj));
