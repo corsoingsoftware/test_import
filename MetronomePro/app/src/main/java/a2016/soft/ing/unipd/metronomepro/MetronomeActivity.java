@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -80,7 +83,16 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
             }
         }
-        CommunicationThread ct = new CommunicationThread(bs);
+        CommunicationThread ct = new CommunicationThread(bs, new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == CommunicationThread.MESSAGE_READ) {
+                    //ho letto il messaggio
+                    System.out.println(Arrays.toString((byte[]) msg.obj));
+                }
+                return true;
+            }
+        }));
         ct.start();
         try {
             ct.write(new byte[]{2, 4});
