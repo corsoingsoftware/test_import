@@ -21,11 +21,13 @@ import java.util.UUID;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.CommunicationThread;
 
 
-public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener, Handler.Callback{
 
 
     public static final int MIN, MAX, INITIAL_VALUE;
     private static SoundThread clackThread;
+    BluetoothAdapter bt;
+    CommunicationThread ct;
 
     static {
         MIN = 30;
@@ -72,34 +74,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             clackThread = new SoundThread(this, INITIAL_VALUE);
         }
         playButton.setOnClickListener(clackThread);
-        BluetoothAdapter bt = BluetoothAdapter.getDefaultAdapter();
-        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
-        UUID sessionUUID = UUID.randomUUID();
-        BluetoothSocket bs = null;
-        for (BluetoothDevice bd : pairedDevices) {
-            try {
-                bs = bd.createInsecureRfcommSocketToServiceRecord(sessionUUID);
-            } catch (Exception ex) {
 
-            }
-        }
-        CommunicationThread ct = new CommunicationThread(bs, new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == CommunicationThread.MESSAGE_READ) {
-                    //ho letto il messaggio
-                    System.out.println(Arrays.toString((byte[]) msg.obj));
-                }
-                return true;
-            }
-        }));
-        ct.start();
-        try {
-            ct.write(new byte[]{2, 4});
-
-        } catch (Exception e) {
-            System.out.print(e.getMessage());
-        }
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -144,6 +119,37 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     public void visibile(){
         Intent discoverability = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         startActivity(discoverability);
+    }
+
+    public void initializeBluetoothAdapter() {
+
+        bt = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
+        UUID sessionUUID = UUID.randomUUID();
+        BluetoothSocket bs = null;
+        for (BluetoothDevice bd : pairedDevices) {
+            try {
+                bs = bd.createInsecureRfcommSocketToServiceRecord(sessionUUID);
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+
+    public void initialializeCommunicationThread() {
+
+        ct = new CommunicationThread(bs, new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == CommunicationThread.MESSAGE_READ) {
+                    //ho letto il messaggio
+                    System.out.println(Arrays.toString((byte[]) msg.obj));
+                }
+                return true;
+            }
+        }));
+        ct.start();
+        ct.write(new byte[]{2, 4});
     }
 
 }
