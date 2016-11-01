@@ -1,13 +1,12 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
-import android.view.View;
 
 /**
  * Created by feder on 22/10/2016.
  */
 
-public class SoundThread extends Thread implements View.OnClickListener {
+public class SoundThread extends Thread {
 
     private static final long sensibilityInMs = 1;
     private static final long sensibility = 1000000;
@@ -70,21 +69,10 @@ public class SoundThread extends Thread implements View.OnClickListener {
                     Thread.sleep(sensibilityInMs);
                 }
             } catch (InterruptedException ex) {
-                run = false;
+                setRun(false);
             }
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        //è sempre sicuro che sia solo lo start button ad usare questo metodo
-//        if (v.getId() == R.id.start_button) {
-            if (run) {
-                run = false;
-            } else {
-                this.start();
-            }
 
-//        }
-    }
 }

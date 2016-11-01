@@ -7,4 +7,16 @@
     <string name="button_fast_forward_text">\u003E\u003E</string>
     <string name="button_back_forward_text">\u003C\u003C</string>
     <string name="title_activity_metronome">Metronome</string>
+    <string name="sync_text">Sync</string>
+    <string name="no_bt">Bluetooth not found</string>
+
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
 </resources>

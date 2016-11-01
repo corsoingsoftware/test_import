@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int MIN, MAX, INITIAL_VALUE;
+    private static SoundThread clackThread;
 
     static {
         MIN = 30;
@@ -16,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         INITIAL_VALUE = 100;
     }
 
-    private static SoundThread clackThread;
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, playButton;
     private TextView bPMTextView;
     private int actualBPM;
@@ -51,9 +52,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backForwardButton.setOnClickListener(this);
         if(clackThread!=null) {
             setActualBPM(INITIAL_VALUE);
-            clackThread = new SoundThread(this, actualBPM);
         }
-        playButton.setOnClickListener(clackThread);
+        final Context c = this;
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clackThread != null && clackThread.isRun()) {
+                    clackThread.setRun(false);
+                    clackThread = null;
+                } else {
+                    //clackThread.join();
+                    clackThread = new SoundThread(c, actualBPM);
+                    clackThread.start();
+                }
+            }
+        });
     }
 
     @Override
