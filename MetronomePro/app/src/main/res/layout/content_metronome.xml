@@ -28,33 +28,11 @@
         android:id="@+id/show_BPM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/show_BPM"
-        android:layout_alignStart="@+id/show_BPM"
-        android:layout_below="@+id/debug_time_millis"
-        android:text="@string/select_time_main"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-    <TextView
-        android:id="@+id/show_BPM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/select_time_main"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-
-    <TextView
-        android:id="@+id/debug_time_millis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/start_button"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="43dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:textSize="20sp" />
 
     <android.support.v7.widget.LinearLayoutCompat
         android:id="@+id/Button_layout"
