@@ -15,6 +15,16 @@
     tools:showIn="@layout/activity_metronome">
 
     <TextView
+        android:id="@+id/number_of_BPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="35sp" />
+
+    <TextView
         android:id="@+id/show_BPM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,16 +71,14 @@
             android:layout_weight="1"
             android:text="@string/button_back_forward_text" />
 
-        <TextView
-            android:id="@+id/number_of_BPM"
+        <EditText
+            android:id="@+id/ET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/Button_layout"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="34dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="35sp" />
-
+            android:ems="10"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/button_fast_forward"

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -22,7 +22,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     }
 
     private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
-    private TextView bPMTextView;
+    private EditText codexET;
     private int actualBPM;
 
     public int getActualBPM() {
@@ -31,7 +31,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
     public void setActualBPM(int actualBPM) {
         this.actualBPM = actualBPM;
-        this.bPMTextView.setText(Integer.toString(actualBPM));
+        this.codexET.setText(Integer.toString(actualBPM));
         if (clackThread != null)
             clackThread.setStepMillis(SoundThread.millisIntervalFromBPM(actualBPM));
         //Ricalcola ora il delay tra un clack e l'altro
@@ -49,7 +49,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         //slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
-        bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
+        codexET = (EditText) findViewById(R.id.ET);
         //fasterButton.setOnClickListener(this);
         //slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
