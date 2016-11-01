@@ -94,7 +94,17 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
             }
             setActualBPM(Math.max(Math.min(getActualBPM() + toAdd, MAX), MIN));
+    }
+        if(v instanceof EditText) {
+            int value;
+            EditText ed = (EditText)v;
+            try {
+                value = Integer.parseInt(ed.getText().toString());
+                setActualBPM(value);
+                setActualBPM(Math.max(Math.min(getActualBPM(), MAX), MIN));
+            }
+            catch (NumberFormatException nfe){
+            }
         }
     }
-
 }
