@@ -102,6 +102,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private FloatingActionButton fab;
     private TextView bPMTextView;
     private int actualBPM;
+    private Button syncButton;
 
     public int getActualBPM() {
         return actualBPM;
@@ -127,6 +128,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 //        slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
+        syncButton = (Button) findViewById(R.id.sync_button);
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
 //        fasterButton.setOnClickListener(this);
 //        slowerButton.setOnClickListener(this);
@@ -208,15 +210,26 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
      * Inizializza il servizio bluetooth
      */
     public void inizializeBluetoothServices() {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        } else {
-            // Initialize the BluetoothChatService to perform bluetooth connections
-            mCommService = new BluetoothCommunicationService(this, mBluetoothHandler);
+        try {
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            } else {
+                // Initialize the BluetoothChatService to perform bluetooth connections
+                mCommService = new BluetoothCommunicationService(this, mBluetoothHandler);
+            }
+            syncButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //do something
+                }
+            });
+        } catch (Exception ex) {
+            syncButton.setEnabled(false);
         }
     }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
