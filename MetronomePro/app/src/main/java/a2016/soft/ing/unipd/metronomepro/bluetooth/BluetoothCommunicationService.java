@@ -411,6 +411,9 @@ public class BluetoothCommunicationService {
                 mmSocket.connect();
             } catch (IOException e) {
                 // Close the socket
+                mHandler.obtainMessage(Constants.MESSAGE_TOAST, -1, -1, e.getMessage())
+                        .sendToTarget();
+
                 try {
                     mmSocket.close();
                 } catch (IOException e2) {

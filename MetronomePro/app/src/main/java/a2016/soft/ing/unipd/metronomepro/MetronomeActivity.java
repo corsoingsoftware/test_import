@@ -39,24 +39,33 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         INITIAL_VALUE = 100;
     }
 
+    /**
+     * adapter per il bluetooth
+     */
+    private BluetoothAdapter mBluetoothAdapter;
+    /**
+     * Servizio di comunicazione col bluetooth
+     */
+    private BluetoothCommunicationService mCommService;
+    private Button /*fasterButton, slowerButton,*/ fastForwardButton, backForwardButton;
+    private FloatingActionButton fab;
     private final Handler mBluetoothHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
-                    /*switch (msg.arg1) {
-                        case BluetoothChatService.STATE_CONNECTED:
-                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
+                    switch (msg.arg1) {
+                        case BluetoothCommunicationService.STATE_CONNECTED:
                             break;
-                        case BluetoothChatService.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
+                        case BluetoothCommunicationService.STATE_CONNECTING:
                             break;
-                        case BluetoothChatService.STATE_LISTEN:
-                        case BluetoothChatService.STATE_NONE:
-                            setStatus(R.string.title_not_connected);
+                        case BluetoothCommunicationService.STATE_LISTEN:
                             break;
-                    }*/
+                        case BluetoothCommunicationService.STATE_NONE:
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case Constants.MESSAGE_WRITE:
                     /*byte[] writeBuf = (byte[]) msg.obj;
@@ -83,6 +92,12 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                         Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }*/
+                    try {
+                        if (msg.obj != null)
+                            Snackbar.make(fab, msg.obj.toString(), Snackbar.LENGTH_LONG).show();
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                    }
                     break;
                 default:
                     //WTF??
@@ -90,16 +105,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             }
         }
     };
-    /**
-     * adapter per il bluetooth
-     */
-    private BluetoothAdapter mBluetoothAdapter;
-    /**
-     * Servizio di comunicazione col bluetooth
-     */
-    private BluetoothCommunicationService mCommService;
-    private Button /*fasterButton, slowerButton,*/ fastForwardButton, backForwardButton;
-    private FloatingActionButton fab;
     private TextView bPMTextView;
     private int actualBPM;
     private Button syncButton;
@@ -219,10 +224,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 // Initialize the BluetoothChatService to perform bluetooth connections
                 mCommService = new BluetoothCommunicationService(this, mBluetoothHandler);
             }
+            final Context c = this;
             syncButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //do something
+                    Intent serverIntent = new Intent(c, DeviceListActivity.class);
+                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
                 }
             });
         } catch (Exception ex) {
