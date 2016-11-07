@@ -61,7 +61,7 @@ public class SoundThread extends Thread {
         run = true;
         while (run) {
             soundManager.soundStart();
-            //System.out.println(System.nanoTime()-lastNanoTime);
+            System.out.println(System.nanoTime() - lastNanoTime);
             try {
                 lastNanoTime = System.nanoTime();
                 long nextNanoTime = lastNanoTime + nanoStep - sensibility;

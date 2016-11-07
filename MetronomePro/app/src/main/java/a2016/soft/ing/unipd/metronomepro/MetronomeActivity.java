@@ -230,7 +230,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 public void onClick(View v) {
                     //do something
                     Intent serverIntent = new Intent(c, DeviceListActivity.class);
-                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 }
             });
         } catch (Exception ex) {

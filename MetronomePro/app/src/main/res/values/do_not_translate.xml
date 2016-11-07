@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fileAudioName">Snap.wav</string>
+    <string name="bluetoothSecureUUID">bdb21cef-c1a8-448d-aa1b-d6301a27dd3a</string>
+    <string name="bluetoothInsecureUUID">74571d59-c9ee-42ac-bdbc-6d1989ede75c</string>
 </resources>

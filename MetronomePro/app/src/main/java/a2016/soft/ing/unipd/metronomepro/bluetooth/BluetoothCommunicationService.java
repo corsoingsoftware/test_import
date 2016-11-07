@@ -31,7 +31,10 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.util.UUID;
+
+import a2016.soft.ing.unipd.metronomepro.R;
 
 import static android.content.ContentValues.TAG;
 
@@ -54,10 +57,8 @@ public class BluetoothCommunicationService {
     private static final String NAME_SECURE = "BluetoothCommSecure";
     private static final String NAME_INSECURE = "BluetoothCommInsecure";
     // Unique UUID for this application (da modificare?)
-    private static final UUID MY_UUID_SECURE =
-            UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
-    private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+    private final UUID MY_UUID_SECURE;
+    private final UUID MY_UUID_INSECURE;
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -74,6 +75,8 @@ public class BluetoothCommunicationService {
      * @param handler A Handler to send messages back to the UI Activity
      */
     public BluetoothCommunicationService(Context context, Handler handler) {
+        MY_UUID_SECURE = UUID.fromString(context.getString(R.string.bluetoothSecureUUID)); // UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+        MY_UUID_INSECURE = UUID.fromString(context.getString(R.string.bluetoothInsecureUUID));// UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -385,13 +388,18 @@ public class BluetoothCommunicationService {
             // given BluetoothDevice
             try {
                 if (secure) {
-                    tmp = device.createRfcommSocketToServiceRecord(
-                            MY_UUID_SECURE);
+                    Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                    tmp = (BluetoothSocket) m.invoke(device, 1);
+//                    tmp = device.createRfcommSocketToServiceRecord(
+//                            MY_UUID_SECURE);
                 } else {
                     tmp = device.createInsecureRfcommSocketToServiceRecord(
                             MY_UUID_INSECURE);
                 }
             } catch (IOException e) {
+                Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
+            } catch (Exception e) {
+                //illegal reflection
                 Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
             }
             mmSocket = tmp;
