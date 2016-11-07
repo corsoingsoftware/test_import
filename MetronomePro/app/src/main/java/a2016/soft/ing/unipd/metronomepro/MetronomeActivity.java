@@ -1,8 +1,12 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.UUID;
 
-public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
+import a2016.soft.ing.unipd.metronomepro.bluetooth.CommunicationThread;
+
+
+public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener, Handler.Callback{
 
 
     public static final int MIN, MAX, INITIAL_VALUE;
@@ -23,7 +33,10 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         INITIAL_VALUE = 100;
     }
 
-    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton;
+    BluetoothAdapter bt;
+    CommunicationThread ct;
+    BluetoothSocket bs;
+    private Button fasterButton, slowerButton, fastForwardButton, backForwardButton, button_1, button_2;
     private TextView bPMTextView;
     private int actualBPM;
 
@@ -51,6 +64,9 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
         backForwardButton = (Button) findViewById(R.id.button_back_forward);
+        button_1 = (Button) findViewById(R.id.button1);
+        button_2 = (Button) findViewById(R.id.button);
+
         bPMTextView = (TextView) findViewById(R.id.number_of_BPM);
         fasterButton.setOnClickListener(this);
         slowerButton.setOnClickListener(this);
@@ -62,6 +78,14 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             clackThread = new SoundThread(this, INITIAL_VALUE);
         }
         playButton.setOnClickListener(clackThread);
+        button_1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            initializeBluetoothAdapter();
+                                            initializeCommunicationThread();
+                                        }
+                                    });
+
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -108,4 +132,49 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         startActivity(discoverability);
     }
 
+    public void initializeBluetoothAdapter() {
+
+        bt = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bt.getBondedDevices();
+        UUID sessionUUID = UUID.fromString("0000110E-0000-1000-8000-00805F9B34FB");
+        bs = null;
+        for (BluetoothDevice bd : pairedDevices) {
+            try {
+                bs = bd.createInsecureRfcommSocketToServiceRecord(sessionUUID);
+            } catch (Exception ex) {
+
+            }
+        }
+        if (bs != null) {
+            try {
+                bs.connect();
+
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+
+    public void initializeCommunicationThread() {
+
+        ct = new CommunicationThread(bs, new Handler(this));
+        ct.start();
+
+        button_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ct.write(new byte[] {1, 2, 3});
+            }
+        });
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+
+        if (msg.what == CommunicationThread.MESSAGE_READ) {
+            //ho letto il messaggio
+            System.out.println(Arrays.toString((byte[]) msg.obj));
+        }
+        return true;
+    }
 }
