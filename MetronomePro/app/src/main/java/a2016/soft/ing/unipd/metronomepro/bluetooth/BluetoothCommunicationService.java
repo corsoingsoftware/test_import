@@ -31,7 +31,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import a2016.soft.ing.unipd.metronomepro.R;
@@ -375,8 +374,8 @@ public class BluetoothCommunicationService {
      * succeeds or fails.
      */
     private class ConnectThread extends Thread {
-        private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
+        private BluetoothSocket mmSocket;
         private String mSocketType;
 
         public ConnectThread(BluetoothDevice device, boolean secure) {
@@ -388,10 +387,8 @@ public class BluetoothCommunicationService {
             // given BluetoothDevice
             try {
                 if (secure) {
-                    Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    tmp = (BluetoothSocket) m.invoke(device, 1);
-//                    tmp = device.createRfcommSocketToServiceRecord(
-//                            MY_UUID_SECURE);
+                    tmp = device.createRfcommSocketToServiceRecord(
+                            MY_UUID_SECURE);
                 } else {
                     tmp = device.createInsecureRfcommSocketToServiceRecord(
                             MY_UUID_INSECURE);
@@ -418,18 +415,29 @@ public class BluetoothCommunicationService {
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
-                // Close the socket
-                mHandler.obtainMessage(Constants.MESSAGE_TOAST, -1, -1, e.getMessage())
-                        .sendToTarget();
-
                 try {
-                    mmSocket.close();
-                } catch (IOException e2) {
-                    Log.e(TAG, "unable to close() " + mSocketType +
-                            " socket during connection failure", e2);
+                    Log.e("", "trying fallback...");
+
+                    mmSocket = (BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(mmDevice, 1);
+                    mmSocket.connect();
+
+                    Log.e("", "Connected");
+                } catch (Exception e2) {
+                    Log.e("", "Couldn't establish Bluetooth connection!");
+                    mHandler.obtainMessage(Constants.MESSAGE_TOAST, -1, -1, e.getMessage())
+                            .sendToTarget();
+
+                    try {
+                        mmSocket.close();
+                    } catch (IOException e3) {
+                        Log.e(TAG, "unable to close() " + mSocketType +
+                                " socket during connection failure", e2);
+                    }
+                    connectionFailed();
+                    return;
                 }
-                connectionFailed();
-                return;
+                // Close the socket
+
             }
 
             // Reset the ConnectThread because we're done
