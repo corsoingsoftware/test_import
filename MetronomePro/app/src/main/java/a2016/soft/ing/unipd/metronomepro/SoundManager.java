@@ -2,34 +2,42 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
-
+import android.content.res.AssetManager;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import java.io.IOException;
+import java.io.InputStream;
+import android.media.AudioTrack;
 
-/**
- * Created by giuli on 22/10/2016.
- */
 
-public class SoundManager {
 
-    MediaPlayer mp;
+public  class SoundManager {
 
-    public SoundManager(Context c) {
-        mp = new MediaPlayer();
+    AudioTrack at;
+        public void onCreate() {
+
+        int BUFFER_SIZE = 1024;
+
+        at = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.ENCODING_PCM_16BIT,
+
+                AudioFormat.ENCODING_PCM_16BIT, BUFFER_SIZE, AudioTrack.MODE_STREAM);
+    }
+   public byte[] void go()
+        byte[] click = byte[];
+        int i = 0;
+        int bufferSize = 512;
+        byte [] buffer = new byte[bufferSize];
+        InputStream is = new InputStream();
+
+        }
         try {
-            AssetFileDescriptor afd = c.getAssets().openFd("Snap.wav");
-            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            mp.prepare();
-        } catch (IOException ex) {
-            //eccezione da gestire
-        }
+            while((i = inputStream.read()) != -1)
+                at.write(buffer, 0, i);
+        } catch (IOException e) {}
+
     }
 
-    public void soundStart() {
-        if (mp.isPlaying()) {
-            // mp.pause();
-            mp.seekTo(0);
-        }
-        mp.start();
-    }
 }
+
+
