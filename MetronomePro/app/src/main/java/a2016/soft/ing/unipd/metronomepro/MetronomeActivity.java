@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothCommunicationService;
+import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
 
 import static android.R.drawable.ic_media_pause;
@@ -54,7 +54,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     /**
      * Servizio di comunicazione col bluetooth
      */
-    private BluetoothCommunicationService mCommService;
+    private BluetoothChatService mCommService;
     private Button /*fasterButton, slowerButton,*/ fastForwardButton, backForwardButton;
     private FloatingActionButton fab;
     private final Handler mBluetoothHandler = new Handler() {
@@ -63,13 +63,14 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
-                        case BluetoothCommunicationService.STATE_CONNECTED:
+                        case BluetoothChatService.STATE_CONNECTED:
+                            mCommService.write("dio cane ce l'ho fatta".getBytes());
                             break;
-                        case BluetoothCommunicationService.STATE_CONNECTING:
+                        case BluetoothChatService.STATE_CONNECTING:
                             break;
-                        case BluetoothCommunicationService.STATE_LISTEN:
+                        case BluetoothChatService.STATE_LISTEN:
                             break;
-                        case BluetoothCommunicationService.STATE_NONE:
+                        case BluetoothChatService.STATE_NONE:
                             break;
                         default:
                             break;
@@ -156,6 +157,9 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mCommService != null) {
+                    mCommService.write("dio cane".getBytes());
+                }
                 if (clackThread != null && clackThread.isRun()) {
                     clackThread.setRun(false);
                     clackThread = null;
@@ -196,13 +200,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);*/
         inizializeBluetoothServices();
-    }
-
-    /* register the broadcast receiver with the intent values to be matched */
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        registerReceiver(mReceiver, mIntentFilter);
     }
 
     /* unregister the broadcast receiver */
@@ -253,6 +250,29 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mCommService != null) {
+            mCommService.stop();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Performing this check in onResume() covers the case in which BT was
+        // not enabled during onStart(), so we were paused to enable it...
+        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
+        if (mCommService != null) {
+            // Only if the state is STATE_NONE, do we know that we haven't started already
+            if (mCommService.getState() == BluetoothChatService.STATE_NONE) {
+                // Start the Bluetooth chat services
+                mCommService.start();
+            }
+        }
+    }
     /**
      * Inizializza il servizio bluetooth
      */
@@ -264,7 +284,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             } else {
                 // Initialize the BluetoothChatService to perform bluetooth connections
-                mCommService = new BluetoothCommunicationService(this, mBluetoothHandler);
+                mCommService = new BluetoothChatService(this, mBluetoothHandler);
             }
             final Context c = this;
             syncButton.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +320,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
                     //setupChat();
-                    mCommService = new BluetoothCommunicationService(this, mBluetoothHandler);
+                    mCommService = new BluetoothChatService(this, mBluetoothHandler);
                 } else {
 
                     // User did not enable Bluetooth or an error occurred
