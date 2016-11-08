@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
+import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 
 import static android.R.drawable.ic_media_pause;
 import static android.R.drawable.ic_media_play;
@@ -26,12 +27,18 @@ import static android.R.drawable.ic_media_play;
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
+
+
     public static final int MIN, MAX, INITIAL_VALUE;
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
+    private static final byte ASK_NANOTIME=1;
+    private static final byte REPLY_NANOTIME=2;
     private static SoundThread clackThread;
+
+    private boolean shouldInitializeTalking=false;
 
     static {
         MIN = 30;
@@ -51,10 +58,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
      * adapter per il bluetooth
      */
     private BluetoothAdapter mBluetoothAdapter;
+
     /**
      * Servizio di comunicazione col bluetooth
      */
     private BluetoothChatService mCommService;
+    private long firstNanoTime;
+
     private Button /*fasterButton, slowerButton,*/ fastForwardButton, backForwardButton;
     private FloatingActionButton fab;
     private final Handler mBluetoothHandler = new Handler() {
@@ -64,7 +74,14 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothChatService.STATE_CONNECTED:
-                            mCommService.write("dio cane ce l'ho fatta".getBytes());
+                            if (shouldInitializeTalking) {
+                                firstNanoTime=System.nanoTime();
+                                byte[] bytes=ByteLongConverter.longToBytes(firstNanoTime);
+                                byte[] messageToSend=new byte[bytes.length+1];
+                                messageToSend[0]=MetronomeActivity.ASK_NANOTIME;
+                                System.arraycopy(bytes,0,messageToSend,1,bytes.length);
+                                mCommService.write(messageToSend);
+                            }
                             break;
                         case BluetoothChatService.STATE_CONNECTING:
                             break;
@@ -83,10 +100,38 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                     mConversationArrayAdapter.add("Me:  " + writeMessage);*/
                     break;
                 case Constants.MESSAGE_READ:
-                    /*byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);*/
+                    //Chiamo il metodo in base alla risposta
+                    byte[] buffer= (byte[])msg.obj;
+                    byte[] message=new byte[msg.arg1];
+                    System.arraycopy(buffer,0,message,0,message.length);
+                    if(message.length>0){
+                        byte action= message[0];
+                        byte[] datas=new byte[message.length-1];
+                        System.arraycopy(message,1,datas,0,datas.length);
+                        switch (action) {
+                            case MetronomeActivity.ASK_NANOTIME:
+                                long otherNanoTime=ByteLongConverter.bytesToLong(datas);
+                                long nanoTime= System.nanoTime();
+                                byte[] myNanoTimeInBytes=ByteLongConverter.longToBytes(nanoTime);
+                                //byte[] nanoDifference=ByteLongConverter.longToBytes(otherNanoTime-nanoTime);
+                                byte[] messageToSend= new byte[/*nanoDifference.length+*/myNanoTimeInBytes.length+1];
+                                messageToSend[0]=MetronomeActivity.REPLY_NANOTIME;
+                                System.arraycopy(myNanoTimeInBytes,0,messageToSend,1,myNanoTimeInBytes.length);
+                                //System.arraycopy(nanoDifference,0,messageToSend,1+myNanoTimeInBytes.length,nanoDifference.length);
+                                mCommService.write(messageToSend);
+                                break;
+                            case MetronomeActivity.REPLY_NANOTIME:
+                                //qua ho nei primi 8 byte di datas otherNanoTimeInBytes, negli altri ho la differenza!!
+                                long actualTime=System.nanoTime();
+                                long ping=actualTime-firstNanoTime;
+                                byte[] otherNanoTimeInBytes=new byte[datas.length];
+                                long otherNanoTimeLong=ByteLongConverter.bytesToLong(otherNanoTimeInBytes);
+                                break;
+                            default:
+                                break;
+
+                        }
+                    }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     /*// save the connected device's name
@@ -97,10 +142,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                     }*/
                     break;
                 case Constants.MESSAGE_TOAST:
-                    /*if (null != activity) {
-                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
-                                Toast.LENGTH_SHORT).show();
-                    }*/
                     try {
                         if (msg.obj != null)
                             Snackbar.make(fab, msg.obj.toString(), Snackbar.LENGTH_LONG).show();
@@ -158,7 +199,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 if (mCommService != null) {
-                    mCommService.write("dio cane".getBytes());
+                    //Ho premuto playPausa
                 }
                 if (clackThread != null && clackThread.isRun()) {
                     clackThread.setRun(false);
@@ -291,6 +332,8 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(View v) {
                     //do something
+                    //Dico che deve essere questo device ad iniziare a parlare
+                    shouldInitializeTalking=true;
                     Intent serverIntent = new Intent(c, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 }
