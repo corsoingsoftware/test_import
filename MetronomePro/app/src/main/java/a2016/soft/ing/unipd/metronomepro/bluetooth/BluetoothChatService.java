@@ -406,6 +406,8 @@ public class BluetoothChatService {
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
+                mHandler.obtainMessage(Constants.MESSAGE_TOAST, -1, -1, e.getMessage())
+                        .sendToTarget();
                 // Close the socket
                 try {
                     mmSocket.close();

@@ -80,6 +80,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                                 byte[] messageToSend=new byte[bytes.length+1];
                                 messageToSend[0]=MetronomeActivity.ASK_NANOTIME;
                                 System.arraycopy(bytes,0,messageToSend,1,bytes.length);
+                                Snackbar.make(fab, "ask nanotime sent", Snackbar.LENGTH_INDEFINITE).show();
                                 mCommService.write(messageToSend);
                             }
                             break;
@@ -110,6 +111,8 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                         System.arraycopy(message,1,datas,0,datas.length);
                         switch (action) {
                             case MetronomeActivity.ASK_NANOTIME:
+
+                                Snackbar.make(fab, "ask nanotime received", Snackbar.LENGTH_INDEFINITE).show();
                                 long otherNanoTime=ByteLongConverter.bytesToLong(datas);
                                 long nanoTime= System.nanoTime();
                                 byte[] myNanoTimeInBytes=ByteLongConverter.longToBytes(nanoTime);
@@ -117,10 +120,12 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                                 byte[] messageToSend= new byte[/*nanoDifference.length+*/myNanoTimeInBytes.length+1];
                                 messageToSend[0]=MetronomeActivity.REPLY_NANOTIME;
                                 System.arraycopy(myNanoTimeInBytes,0,messageToSend,1,myNanoTimeInBytes.length);
+                                Snackbar.make(fab, "reply nanotime sent", Snackbar.LENGTH_INDEFINITE).show();
                                 //System.arraycopy(nanoDifference,0,messageToSend,1+myNanoTimeInBytes.length,nanoDifference.length);
                                 mCommService.write(messageToSend);
                                 break;
                             case MetronomeActivity.REPLY_NANOTIME:
+                                Snackbar.make(fab, "reply nanotime received", Snackbar.LENGTH_INDEFINITE).show();
                                 //qua ho nei primi 8 byte di datas otherNanoTimeInBytes, negli altri ho la differenza!!
                                 long actualTime=System.nanoTime();
                                 long ping=actualTime-firstNanoTime;
