@@ -52,6 +52,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
+        android:onClick="onClickListener"
         android:text="@string/start_text"
         android:textSize="40sp" />
 

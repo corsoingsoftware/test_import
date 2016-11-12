@@ -1,5 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
+import android.os.IBinder;
+
 /**
  * Created by Federico Favotto on 12/11/2016.
  * Questa interfaccia espone una serie di metodi utili per far partire e gestire il "clack" del metronomo

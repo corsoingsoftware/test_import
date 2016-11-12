@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 
 /**
@@ -10,6 +11,7 @@ import android.os.IBinder;
  */
 public class SoundManagerService extends Service {
     public SoundManagerService() {
+        AudioTrackController atc = new AudioTrackController();
     }
 
     @Override
