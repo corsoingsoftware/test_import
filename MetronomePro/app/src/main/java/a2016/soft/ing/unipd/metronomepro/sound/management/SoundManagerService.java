@@ -13,7 +13,7 @@ import android.util.Log;
 public class SoundManagerService extends Service {
 
     private static String LOG_TAG = "SoudManagerService";       //aggiungo una stringa di log per facilitare il debug
-    private IBinder mBinder = new MyBinder();
+    private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
     private boolean IS_PLAYING = false;
     private final int MIN_BPM = 30;
@@ -71,7 +71,7 @@ public class SoundManagerService extends Service {
 
 
 
-    public class MyBinder extends Binder{
+    public class myBinder extends Binder{
         SoundManagerService getService() {
             return SoundManagerService.this;
         }
