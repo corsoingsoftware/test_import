@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -25,8 +26,38 @@ public class AudioTrackController implements SoundManager {
         try {
             FileInputStream streamInClack = new FileInputStream(clack);
             FileInputStream streamFinClack = new FileInputStream(clackFinal);
-            initialClack = new byte[streamInClack.available()];
-            finalClack = new byte[streamFinClack.available()];
+            byte[] initialClack1 = new byte[streamInClack.available()];
+            byte[] finalClack1 = new byte[streamFinClack.available()];
+
+            //adesso tolgo gli header di 44 byte all'inizio dei file
+            initialClack = new byte[initialClack1.length - 44];
+            finalClack = new byte[finalClack1.length - 44];
+            //legge i file e li salva nei due array
+            try {
+                streamInClack.read(initialClack1);
+                streamFinClack.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                streamFinClack.read(finalClack1);
+                streamFinClack.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //mi trovo con due array di dimensioni clack -44Byte
+            //adesso li riempio
+            for (int i = 43; i < initialClack1.length; i++) {
+                int j = 0;
+                initialClack[j] = initialClack1[i];
+                j = j + 1;
+            }
+            for (int i = 43; i < finalClack1.length; i++) {
+                int j = 0;
+                finalClack[j] = finalClack1[i];
+                j = j + 1;
+            }
         } catch (IOException e) {
         }
     }
