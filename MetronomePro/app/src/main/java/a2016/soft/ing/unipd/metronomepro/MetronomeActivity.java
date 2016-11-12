@@ -40,13 +40,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private static final byte REPLY_NANOTIME=2;
     private static SoundThread clackThread;
 
+    private boolean shouldInitializeTalking=false;
+
     static {
         MIN = 30;
         MAX = 300;
         INITIAL_VALUE = 100;
     }
-
-    private boolean shouldInitializeTalking = false;
 
    /* *//**
      * Wifi direct
@@ -55,6 +55,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;*/
+
     /**
      * adapter per il bluetooth
      */
@@ -181,7 +182,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metronome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
