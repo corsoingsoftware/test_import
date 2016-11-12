@@ -2,8 +2,6 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import java.io.FileDescriptor;
 
-import a2016.soft.ing.unipd.metronomepro.*;
-
 /**
  * Created by feder on 12/11/2016.
  * Si occupa di gestire le interazioni con audioTrack, un'istanza di questa classe sarà contenuta nel service.
@@ -20,6 +18,7 @@ public class AudioTrackController implements SoundManager {
      */
     void loadFile(FileDescriptor clack, FileDescriptor clackFinal){
 
+
     }
 
     @Override
@@ -29,6 +28,7 @@ public class AudioTrackController implements SoundManager {
 
     @Override
     public void play() {
+
 
     }
 

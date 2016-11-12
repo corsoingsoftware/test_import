@@ -9,6 +9,7 @@ import android.os.IBinder;
  * Contiene al suo interno un audiotrackcontroller e lo gestisce correttamente in base alle chiamate che gli arrivano!!
  */
 public class SoundManagerService extends Service {
+
     public SoundManagerService() {
     }
 
@@ -17,4 +18,6 @@ public class SoundManagerService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+
 }
