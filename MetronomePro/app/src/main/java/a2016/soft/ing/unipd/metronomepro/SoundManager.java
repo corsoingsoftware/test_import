@@ -16,6 +16,9 @@ import java.nio.ByteOrder;
 
 /**
  * Created by giuli on 22/10/2016.
+ *
+ * Classe modificata da Federico per mettere un esempio di come caricare il file audio ecc ecc
+ * Totalmente da cancellare.
  */
 
 public class SoundManager {

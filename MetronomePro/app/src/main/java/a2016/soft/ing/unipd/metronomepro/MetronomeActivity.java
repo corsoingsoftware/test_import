@@ -23,7 +23,9 @@ import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 import static android.R.drawable.ic_media_pause;
 import static android.R.drawable.ic_media_play;
 
-
+/**
+ * Qua dentro ci sarà un SoundManagerServiceCaller che si occuperà di chiamare il servizio
+ */
 public class MetronomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
