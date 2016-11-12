@@ -23,7 +23,7 @@ public class SoundManagerServiceCaller implements SoundManager {
 
             // We've bound to LocalService, cast the IBinder and get LocalService instance
 
-            SoundManagerService.LocalBinder binder = (SoundManagerService.LocalBinder) service;
+            SoundManagerService.myBinder binder = (SoundManagerService.myBinder) service;
             mService = binder.getService();
         }
 
