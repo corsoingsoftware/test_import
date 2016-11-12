@@ -35,6 +35,7 @@ public class SoundThread extends Thread {
      * @return parte bassa del tempo in millisecondi tra un minuto e l'altro
      */
     public static long millisIntervalFromBPM(int bPM) {
+
         return 60000 / bPM;
     }
 

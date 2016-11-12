@@ -68,7 +68,7 @@ public class SoundManager {
             }
             System.arraycopy(byteData,WAV_HEADER_SIZE_IN_BYTES,prova,0,byteData.length-WAV_HEADER_SIZE_IN_BYTES);
             at.write(prova, 0, prova.length);
-            int a=at.setLoopPoints(0,intSize/DEFAULT_FRAME_SIZE,10);
+            int a=at.setLoopPoints(0,intSize/DEFAULT_FRAME_SIZE,-1);
             at.play();
 
             a=at.setLoopPoints(0,(intSize/DEFAULT_FRAME_SIZE)/2,10);
