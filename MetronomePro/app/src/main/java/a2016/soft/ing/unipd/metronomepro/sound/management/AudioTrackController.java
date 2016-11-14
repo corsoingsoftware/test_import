@@ -21,6 +21,10 @@ public class AudioTrackController implements SoundManager {
 
     private static final int WAV_HEADER_SIZE_IN_BYTES = 44;
     private static final int SAMPLE_RATE_IN_HERTZ = 44100;
+    private static int maxBPM;
+    private static int minBPM;
+    private static int currBPM;
+    private static boolean isRun = false;
     private byte[] initialClack; //metto i due array come variabili per potervi accedere da fuori
     private byte[] finalClack;
     private ByteBuffer silence = ByteBuffer.allocate(2);
@@ -85,7 +89,8 @@ public class AudioTrackController implements SoundManager {
 
     @Override
     public void initialize(int maxBPM, int minBPM) {
-
+        AudioTrackController.maxBPM = maxBPM;
+        AudioTrackController.minBPM = minBPM;
     }
 
     @Override
@@ -110,7 +115,10 @@ public class AudioTrackController implements SoundManager {
 
     @Override
     public int getState() {
-        return 0;
+        if (isRun == true)
+            return 1;
+        else
+            return 0;
     }
 
     @Override
@@ -120,6 +128,6 @@ public class AudioTrackController implements SoundManager {
 
     @Override
     public void setBPM(int newBPM) {
-
+        currBPM = newBPM;
     }
 }
