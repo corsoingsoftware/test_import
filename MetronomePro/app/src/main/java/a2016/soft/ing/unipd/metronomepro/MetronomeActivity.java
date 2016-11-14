@@ -210,7 +210,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SoundManager(c);
+                //new SoundManager(c);
                 soundManagerServiceCaller.initialize(MIN,MAX);
                 //soundManagerServiceCaller.setBPM(INITIAL_VALUE);
                 soundManagerServiceCaller.play();

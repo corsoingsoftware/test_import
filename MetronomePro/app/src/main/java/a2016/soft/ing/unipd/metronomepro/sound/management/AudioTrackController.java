@@ -21,13 +21,13 @@ import java.nio.ByteOrder;
 public class AudioTrackController implements SoundManager {
 
     private static final int WAV_HEADER_SIZE_IN_BYTES = 44;
-    private static final int SAMPLE_RATE_IN_HERTZ = 44100;
-    private static final int FRAME_SIZE = 4;
+    private static final int SAMPLE_RATE_IN_HERTZ = 8000;
+    private static final int FRAME_SIZE = 2;
     /**
      * sample rate in hertz per numero di byte per sample per numero di canali
      */
     private int maxPeriodLengthInBytes;
-    private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_STEREO;
+    private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private int maxBPM;
     private int minBPM;
@@ -58,16 +58,25 @@ public class AudioTrackController implements SoundManager {
 //            silence.putShort(Short.MIN_VALUE);
             //adesso tolgo gli header di 44 byte all'inizio dei file
             //inizializzo i due array al doppio della dimensione del suono
-            initialClack = new byte[streamInClack.available() - WAV_HEADER_SIZE_IN_BYTES];
+            initialClack = new byte[2000];
+            for(int i=0;i<2000-1;i++){
+                double b=Math.sin(2*Math.PI*i/(8000/2440));
+                ByteBuffer bb = ByteBuffer.allocate(2);
+                bb.order(ByteOrder.LITTLE_ENDIAN);
+                bb.putShort((short)(b*Short.MIN_VALUE));
+                bb.position(0);
+                initialClack[i++]=bb.get();
+                initialClack[i]=bb.get();
+            }
             finalClack = new byte[streamFinClack.available() - WAV_HEADER_SIZE_IN_BYTES];
             //legge i file e li salva nei due array temoranei
-            try {
-                streamInClack.skip(WAV_HEADER_SIZE_IN_BYTES);
-                int a=streamInClack.read(initialClack);
-                streamInClack.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                streamInClack.skip(WAV_HEADER_SIZE_IN_BYTES);
+//                int a=streamInClack.read(initialClack);
+//                streamInClack.close();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
             try {
                 streamFinClack.skip(WAV_HEADER_SIZE_IN_BYTES);
                 streamFinClack.read(finalClack);
@@ -84,8 +93,8 @@ public class AudioTrackController implements SoundManager {
     public void initialize( int minBPM,int maxBPM) {
         this.maxBPM = maxBPM;
         this.minBPM = minBPM;
-        maxPeriodLengthInBytes =SAMPLE_RATE_IN_HERTZ * FRAME_SIZE* (60 / minBPM);
-        bufferSize = android.media.AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT);
+        maxPeriodLengthInBytes =(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE* 2*4*4);
+        bufferSize = 8000*4;//android.media.AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT);
 
         bufferSizeInFrame= bufferSize/FRAME_SIZE;
         at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
@@ -136,7 +145,7 @@ public class AudioTrackController implements SoundManager {
             if (at.getState() != AudioTrack.PLAYSTATE_STOPPED)
                 at.stop();
             int frameStop=(int)Math.round((double)(60*bufferSizeInFrame)/(double)(currBPM*(60/minBPM)));
-            at.setLoopPoints(0, frameStop, -1);
+            at.setLoopPoints(0, 16000, -1);
         }
 
     }
