@@ -2,9 +2,15 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import a2016.soft.ing.unipd.metronomepro.R;
 
 /**
  * Riceve le chiamate in entrata e gestisce Audiotrack!
@@ -21,6 +27,19 @@ public class SoundManagerService extends Service {
 
     public SoundManagerService() {
         this.atc = new AudioTrackController();
+        AssetFileDescriptor afdClack = null;
+        try {
+            afdClack = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        AssetFileDescriptor afdClackFinal = null;
+        try {
+            afdClackFinal = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.atc.loadFile(afdClack.getFileDescriptor(),afdClackFinal.getFileDescriptor());
     }
 
     // i vari metodi ricevono i comandi da SoundManagerServiceCaller e dopo aver fatto i controlli chiamano i metodi
@@ -29,12 +48,9 @@ public class SoundManagerService extends Service {
 
     /**
      *  controllo che il massimo e il minimo siano entro il range rispettato
-     * @param lowBPM
-     * @param highBPM
      */
-    public void initialize(int lowBPM, int highBPM){
-        if(lowBPM >= MIN_BPM && highBPM <= MAX_BPM)
-            atc.initialize(lowBPM,highBPM);
+    public void initialize(){
+        atc.initialize(MIN_BPM,MAX_BPM);
     }
     // il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
     // se c'è già qualcosa in esecuzione ignora la chiamata
@@ -63,7 +79,7 @@ public class SoundManagerService extends Service {
         controllo che il numero stia dentro al range massimo
      */
     public void setBPM(int BPM){
-        if(BPM >= MIN_BPM || BPM <= MAX_BPM) {
+        if(BPM >= MIN_BPM && BPM <= MAX_BPM) {
             Log.v(LOG_TAG, "in setBPM");
             atc.setBPM(BPM);
         }
@@ -74,7 +90,6 @@ public class SoundManagerService extends Service {
     public IBinder onBind(Intent intent) {
         Log.v(LOG_TAG, "in onBind");
         return mBinder;
-        // TODO: Return the communication channel to the service. DONE!!
     }
 
 
