@@ -37,16 +37,16 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     public SoundManagerServiceCaller(Context c) {
         cService = c;
+        Intent intent = new Intent(cService, SoundManagerService.class);
+        cService.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
-    public void initialize(int maxBPM, int minBPM) {
-
+    public void initialize(int minBPM, int maxBPM) {
+        mService.initialize(minBPM,maxBPM);
         //Creo il Bundle (Intent), aggiunti i parametri e avvio il servizio con il Bundle
         //Le stringhe vanno memorizzate nello stesso posto
 
-        Intent intent = new Intent(cService, SoundManagerService.class);
-        cService.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

@@ -16,10 +16,10 @@ public interface SoundManager {
      * (advice per chi implementerà: da questi si può trovare un buffer size ottimale e divisibile per questi, in modo da trovare l'unità di
      * frame corretta e sapere ogni quanto tempo viene perso un frame, inoltre precaricherà un suono adeguato per massimizzare le prestazioni
      * successivamente)
-     * @param maxBPM numero massimo di BPM desiderati
      * @param minBPM numero minimo di BPM desiderati
+     * @param maxBPM numero massimo di BPM desiderati
      */
-    void initialize(int maxBPM, int minBPM);
+    void initialize(int minBPM,int maxBPM);
 
     /**
      * Questo metodo fa partire il suono correntemente impostato, se esso è già in esecuzione allora non fa nulla

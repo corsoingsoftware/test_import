@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 
 import static android.R.drawable.ic_media_pause;
@@ -38,9 +39,10 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private static final int REQUEST_ENABLE_BT = 3;
     private static final byte ASK_NANOTIME=1;
     private static final byte REPLY_NANOTIME=2;
-    private static SoundThread clackThread;
+//    private static SoundThread clackThread;
 
     private boolean shouldInitializeTalking=false;
+    private SoundManagerServiceCaller soundManagerServiceCaller;
 
     static {
         MIN = 30;
@@ -173,8 +175,9 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     public void setActualBPM(int actualBPM) {
         this.actualBPM = actualBPM;
         this.bPMTextView.setText(Integer.toString(actualBPM));
-        if (clackThread != null)
-            clackThread.setStepMillis(SoundThread.millisIntervalFromBPM(actualBPM));
+        soundManagerServiceCaller.setBPM(actualBPM);
+//        if (clackThread != null)
+//            clackThread.setStepMillis(SoundThread.millisIntervalFromBPM(actualBPM));
         //Ricalcola ora il delay tra un clack e l'altro
         //controlla se il thread è in esecuzione
         //lo mette in pausa e cambia i millis e riparte
@@ -186,6 +189,8 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_metronome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        soundManagerServiceCaller= new SoundManagerServiceCaller(this);
+
 //        fasterButton = (Button) findViewById(R.id.button_faster);
 //        slowerButton = (Button) findViewById(R.id.button_slower);
         fastForwardButton = (Button) findViewById(R.id.button_fast_forward);
@@ -197,15 +202,19 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (clackThread == null) {
-            setActualBPM(INITIAL_VALUE);
-            clackThread = new SoundThread(this, INITIAL_VALUE);
-        }
+//        if (clackThread == null) {
+//            setActualBPM(INITIAL_VALUE);
+//            clackThread = new SoundThread(this, INITIAL_VALUE);
+//        }
         final Context c = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCommService != null) {
+                new SoundManager(c);
+                soundManagerServiceCaller.initialize(MIN,MAX);
+                //soundManagerServiceCaller.setBPM(INITIAL_VALUE);
+                soundManagerServiceCaller.play();
+                /*if (mCommService != null) {
                     //Ho premuto playPausa
                 }
                 if (clackThread != null && clackThread.isRun()) {
@@ -217,7 +226,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
                     clackThread = new SoundThread(c, actualBPM);
                     clackThread.start();
                     fab.setImageResource(ic_media_pause);
-                }
+                }*/
             }
         });
 //        playButton.setOnClickListener(new View.OnClickListener() {

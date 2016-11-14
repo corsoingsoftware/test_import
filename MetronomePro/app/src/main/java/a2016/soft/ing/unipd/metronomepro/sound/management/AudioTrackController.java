@@ -26,7 +26,7 @@ public class AudioTrackController implements SoundManager {
     /**
      * sample rate in hertz per numero di byte per sample per numero di canali
      */
-    private int maxPeriodLengthInBytes = SAMPLE_RATE_IN_HERTZ * FRAME_SIZE;
+    private int maxPeriodLengthInBytes;
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_STEREO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private int maxBPM;
@@ -63,7 +63,7 @@ public class AudioTrackController implements SoundManager {
             //legge i file e li salva nei due array temoranei
             try {
                 streamInClack.skip(WAV_HEADER_SIZE_IN_BYTES);
-                streamInClack.read(initialClack);
+                int a=streamInClack.read(initialClack);
                 streamInClack.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -81,10 +81,10 @@ public class AudioTrackController implements SoundManager {
     }
 
     @Override
-    public void initialize(int maxBPM, int minBPM) {
+    public void initialize( int minBPM,int maxBPM) {
         this.maxBPM = maxBPM;
         this.minBPM = minBPM;
-        maxPeriodLengthInBytes *= 60 / minBPM;
+        maxPeriodLengthInBytes =SAMPLE_RATE_IN_HERTZ * FRAME_SIZE* (60 / minBPM);
         bufferSize = android.media.AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT);
 
         bufferSizeInFrame= bufferSize/FRAME_SIZE;

@@ -22,10 +22,14 @@ public class SoundManagerService extends Service {
     private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
     private boolean isPlaying = false;
-    private static final int MIN_BPM = 30;
-    private static final int MAX_BPM = 300;
 
-    public SoundManagerService() {
+   /* public SoundManagerService() {
+
+    }*/
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         this.atc = new AudioTrackController();
         AssetFileDescriptor afdClack = null;
         try {
@@ -49,8 +53,8 @@ public class SoundManagerService extends Service {
     /**
      *  controllo che il massimo e il minimo siano entro il range rispettato
      */
-    public void initialize(){
-        atc.initialize(MIN_BPM,MAX_BPM);
+    public void initialize(int min,int max){
+        atc.initialize(min,max);
     }
     // il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
     // se c'è già qualcosa in esecuzione ignora la chiamata
@@ -79,11 +83,8 @@ public class SoundManagerService extends Service {
         controllo che il numero stia dentro al range massimo
      */
     public void setBPM(int BPM){
-        if(BPM >= MIN_BPM && BPM <= MAX_BPM) {
-            Log.v(LOG_TAG, "in setBPM");
-            atc.setBPM(BPM);
-        }
-
+        Log.v(LOG_TAG, "in setBPM");
+        atc.setBPM(BPM);
     }
     @Override
 
