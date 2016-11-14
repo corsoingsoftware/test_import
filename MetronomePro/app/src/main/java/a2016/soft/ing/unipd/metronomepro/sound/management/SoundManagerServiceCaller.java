@@ -51,13 +51,11 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     @Override
     public void play() {
-
         mService.play();
     }
 
     @Override
     public void stop() {
-
         mService.stop();
     }
 
@@ -73,7 +71,6 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     @Override
     public void setBPM(int newBPM) {
-
         mService.setBPM(newBPM);
     }
 }

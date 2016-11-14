@@ -12,42 +12,50 @@ import android.util.Log;
  */
 public class SoundManagerService extends Service {
 
-    private static String LOG_TAG = "SoudManagerService";       //aggiungo una stringa di log per facilitare il debug
+    private static final String LOG_TAG = "SoundManagerService";       //aggiungo una stringa di log per facilitare il debug
     private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
-    private boolean IS_PLAYING = false;
-    private final int MIN_BPM = 30;
-    private final int MAX_BPM = 300;
+    private boolean isPlaying = false;
+    private static final int MIN_BPM = 30;
+    private static final int MAX_BPM = 300;
 
     public SoundManagerService() {
-        AudioTrackController atc = new AudioTrackController();
+        this.atc = new AudioTrackController();
     }
 
     // i vari metodi ricevono i comandi da SoundManagerServiceCaller e dopo aver fatto i controlli chiamano i metodi
     //   di AudioTrackController
 
 
-    // @param numero di BPM massimi e minimi
-    // controllo che il massimo e il minimo siano entro il range rispettato
+    /**
+     *  controllo che il massimo e il minimo siano entro il range rispettato
+     * @param lowBPM
+     * @param highBPM
+     */
     public void initialize(int lowBPM, int highBPM){
         if(lowBPM >= MIN_BPM && highBPM <= MAX_BPM)
             atc.initialize(lowBPM,highBPM);
     }
     // il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
     // se c'è già qualcosa in esecuzione ignora la chiamata
+
+    /**
+     * il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
+     * se c'è già qualcosa in esecuzione ignora la chiamata
+     */
     public void play(){
-        if(!IS_PLAYING){
+        if(!isPlaying){
             Log.v(LOG_TAG, "in play");
             atc.play();
-            IS_PLAYING = true;
+            isPlaying = true;
         }
     }
     // il metodo controlla che ci sia un altro suono in esecuzione, in caso contrario ignora la chiamata
     public void stop(){
-        if(IS_PLAYING) {
+        if(isPlaying) {
             Log.v(LOG_TAG, "in stop");
             atc.stop();
-            IS_PLAYING = false;
+            isPlaying = false;
         }
     }
     /*
