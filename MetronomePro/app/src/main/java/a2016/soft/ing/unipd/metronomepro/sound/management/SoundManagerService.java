@@ -12,6 +12,10 @@ import java.io.IOException;
 
 import a2016.soft.ing.unipd.metronomepro.R;
 
+import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.INITIAL_VALUE;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MAX;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MIN;
+
 /**
  * Riceve le chiamate in entrata e gestisce Audiotrack!
  * Contiene al suo interno un audiotrackcontroller e lo gestisce correttamente in base alle chiamate che gli arrivano!!
@@ -31,6 +35,7 @@ public class SoundManagerService extends Service {
     public void onCreate() {
         super.onCreate();
         this.atc = new AudioTrackController();
+
         AssetFileDescriptor afdClack = null;
         try {
             afdClack = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
@@ -44,6 +49,8 @@ public class SoundManagerService extends Service {
             e.printStackTrace();
         }
         this.atc.loadFile(afdClack.getFileDescriptor(),afdClackFinal.getFileDescriptor());
+        this.atc.initialize(MIN,MAX);
+        this.atc.setBPM(INITIAL_VALUE);
     }
 
     // i vari metodi ricevono i comandi da SoundManagerServiceCaller e dopo aver fatto i controlli chiamano i metodi
@@ -56,6 +63,22 @@ public class SoundManagerService extends Service {
     public void initialize(int min,int max){
         atc.initialize(min,max);
     }
+
+    /**
+     * Numero bpm attualmente impostato
+     * @return bpm
+     */
+    public int getBPM(){
+        return atc.getCurrBPM();
+    }
+
+    /**
+     * Stato del player
+     * @return 0 none/stop 1 play 2 pause
+     */
+    public int getState() {
+        return atc.getState();
+    }
     // il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
     // se c'è già qualcosa in esecuzione ignora la chiamata
 
@@ -64,19 +87,11 @@ public class SoundManagerService extends Service {
      * se c'è già qualcosa in esecuzione ignora la chiamata
      */
     public void play(){
-        if(!isPlaying){
-            Log.v(LOG_TAG, "in play");
             atc.play();
-            isPlaying = true;
-        }
     }
     // il metodo controlla che ci sia un altro suono in esecuzione, in caso contrario ignora la chiamata
     public void stop(){
-        if(isPlaying) {
-            Log.v(LOG_TAG, "in stop");
             atc.stop();
-            isPlaying = false;
-        }
     }
     /*
         @param il nuovo numero di BPM

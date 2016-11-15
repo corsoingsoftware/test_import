@@ -3,10 +3,13 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,9 +21,12 @@ import android.widget.TextView;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerService;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 
+import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MAX;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MIN;
 import static android.R.drawable.ic_media_pause;
 import static android.R.drawable.ic_media_play;
 
@@ -32,7 +38,6 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 
 
 
-    public static final int MIN, MAX, INITIAL_VALUE;
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -44,11 +49,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
     private boolean shouldInitializeTalking=false;
     private SoundManagerServiceCaller soundManagerServiceCaller;
 
-    static {
-        MIN = 30;
-        MAX = 300;
-        INITIAL_VALUE = 100;
-    }
+
 
    /* *//**
      * Wifi direct
@@ -183,6 +184,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         //lo mette in pausa e cambia i millis e riparte
     }
 
+    public void onServiceInitialized() {
+        int bpm= soundManagerServiceCaller.getBPM();
+        //Aggiorno la view
+        this.actualBPM = bpm;
+        this.bPMTextView.setText(Integer.toString(actualBPM));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,25 +218,13 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new SoundManager(c);
-                soundManagerServiceCaller.initialize(MIN,MAX);
-                //soundManagerServiceCaller.setBPM(INITIAL_VALUE);
-                soundManagerServiceCaller.play();
-                /*if (mCommService != null) {
-                    //Ho premuto playPausa
-                }
-                if (clackThread != null && clackThread.isRun()) {
-                    clackThread.setRun(false);
-                    clackThread = null;
-                    fab.setImageResource(ic_media_play);
-                } else {
-                    //clackThread.join();
-                    clackThread = new SoundThread(c, actualBPM);
-                    clackThread.start();
-                    fab.setImageResource(ic_media_pause);
-                }*/
+                if(soundManagerServiceCaller.getState()==1)
+                    soundManagerServiceCaller.stop();
+                else
+                    soundManagerServiceCaller.play();
             }
         });
+
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -256,7 +252,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);*/
-        inizializeBluetoothServices();
+       // inizializeBluetoothServices();
     }
 
     /* unregister the broadcast receiver */

@@ -16,4 +16,6 @@ public interface SoundServiceConstants {
     public final static int STOP = 4;
     public final static int STATE_SETTING_BPM = 5;
 
+    public static final int MIN=30, MAX=300, INITIAL_VALUE=120;
+
 }
