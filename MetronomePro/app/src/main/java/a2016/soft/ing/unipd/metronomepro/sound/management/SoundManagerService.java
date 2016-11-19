@@ -26,7 +26,6 @@ public class SoundManagerService extends Service {
     private static final String LOG_TAG = "SoundManagerService";        //aggiungo una stringa di LOG per facilitare il debug
     private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
-    private boolean isPlaying = false;                                  //di default non il metronomo non sta suonando
 
     @Override
     public void onCreate() {
@@ -49,7 +48,11 @@ public class SoundManagerService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+        try {
+            this.atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+        } catch (NullPointerException e) {
+            Log.v(LOG_TAG, "NullPointerException on getFileDescriptor");
+        }
         this.atc.initialize(MIN, MAX);
         this.atc.setBPM(INITIAL_VALUE);
     }
@@ -108,10 +111,9 @@ public class SoundManagerService extends Service {
 
 
     /**
-     * Riceve il nuovo numero di bpm da SoundManagerServiceCaller e lo passa ad AudioTrackController
-     * nella classe AudioTrackController ci dovrà essere un controllo sulla validità del numero passato
-     *
-     * @param BPM
+     * @param BPM nuovo numero di bpm dato da SoundManagerServiceCaller
+     *            lo passa ad AudioTrackController
+     *            nella classe AudioTrackController ci dovrà essere un controllo sulla validità del numero passato
      */
     public void setBPM(int BPM) {
         Log.v(LOG_TAG, "in setBPM");
