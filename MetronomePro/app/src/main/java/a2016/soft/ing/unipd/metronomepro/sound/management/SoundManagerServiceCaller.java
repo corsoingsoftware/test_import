@@ -114,7 +114,7 @@ public class SoundManagerServiceCaller implements SoundManager {
         //Da completare
     }
 
-    //Metodi che si occupano delle chiamate ECHO al servizio.
+    //Metodi che si occupano delle chiamate ECHO al servizio
 
     @Override
     public void play() {
