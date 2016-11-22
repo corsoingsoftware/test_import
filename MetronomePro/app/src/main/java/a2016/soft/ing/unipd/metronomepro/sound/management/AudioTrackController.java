@@ -177,10 +177,15 @@ public class AudioTrackController implements SoundManager {
      */
     @Override
     public int getState() {
-        if(at.getPlayState()==AudioTrack.PLAYSTATE_STOPPED) return 0;
-        if(at.getPlayState()==AudioTrack.PLAYSTATE_PLAYING) return 1;
-        if(at.getPlayState()==AudioTrack.PLAYSTATE_PAUSED) return 2;
-        return 0;
+        switch(at.getPlayState()){
+            case AudioTrack.PLAYSTATE_STOPPED:
+                return 0;
+            case AudioTrack.PLAYSTATE_PLAYING:
+                return 1;
+            case AudioTrack.PLAYSTATE_PAUSED:
+                return 2;
+            default: return -1; //Non dovrebbe mai essere qui.
+        }
     }
 
     /**
