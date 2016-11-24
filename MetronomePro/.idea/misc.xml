@@ -59,4 +59,11 @@
       </state>
     </states>
   </component>
+  <component name="revuProjectSettings">
+    <option name="reviewFiles">
+      <list>
+        <option value="CodeReviewFilippoFerrazini.xml" />
+      </list>
+    </option>
+  </component>
 </project>
