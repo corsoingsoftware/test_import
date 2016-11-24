@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="FrancescoMarcon" status="fixing" shared="true">
+  <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 11:13:14 +0100" lastUpdatedOn="2016-11-24 12:19:35 +0100"/>
+  <goal></goal>
+  <referential>
+    <priorities/>
+    <tags>
+      <tag name="Consiglio"/>
+      <tag name="Debug"/>
+      <tag name="Possibile Errore"/>
+      <tag name="Stile"/>
+    </tags>
+    <users>
+      <user displayName="FrancescoMarcon" login="FrancescoMarcon" roles="admin,reviewer,author"/>
+    </users>
+  </referential>
+  <filescope pathPattern="file[*]:*//*" vcsAfterRev="6a7566027121c81cf46c51957afbbd40322f3a99"/>
+  <issues>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Primo sguardo generale senza Comprensione Fine" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="-1" lineEnd="-1" hash="0" tags="Consiglio,Debug,Stile" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 11:41:45 +0100" lastUpdatedOn="2016-11-24 12:19:46 +0100"/>
+      <desc>Ottima struttura di directory per una ricerca più facile della classe.
+Il nome della classe vista la struttura delle directory per semplicità potrebbe essere scelto in modo più semplice e breve?
+Ad un primo sguardo generale la classe è impostata bene cioè è modulare i metodi sono &quot;atomici&quot;.
+Come classe noto un uso elevato di sovrascritture di metodi, i quali rendono di difficile comprensione(per un Newbie,non esperto di Android); potrebbe essere utile inserire nel commento la classe relativa al metodo che si intende sovrascrivere, così da velocizzare il revisore.
+Potresti usare un po&apos; di più gli strumenti di Debug &quot;(android.util.Log)&quot;</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilità Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="19" lineEnd="19" hash="1799705603" tags="Possibile Errore" status="to_resolve">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 11:56:57 +0100" lastUpdatedOn="2016-11-24 12:20:11 +0100"/>
+      <desc>Questa variabile non dovrebbe essere inizializata nel corpo del costruttore</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilita Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="56" lineEnd="56" hash="-265417029" tags="Possibile Errore" status="to_resolve">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 11:58:29 +0100" lastUpdatedOn="2016-11-24 12:19:57 +0100"/>
+      <desc>questa variabile non è visibile solo localmente?
+un altro modo per capirlo con certezza maggiore potrebbe essere l&apos;inserimento all&apos; atto di creazione del oggetto un log di verifica o in qualche altro punto</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Nome variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="69" lineEnd="69" hash="-1408378072" tags="Stile" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 12:03:14 +0100" lastUpdatedOn="2016-11-24 12:19:00 +0100"/>
+      <desc>il nome variabile non dovrebbe riferirsi al messaggio che porta l&apos;intent</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="113" lineEnd="113" hash="-441059413" tags="Consiglio" status="resolved" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-24 12:15:03 +0100" lastUpdatedOn="2016-11-24 12:18:47 +0100"/>
+      <desc>Lo strumento Ide fornisce una veloce richiamo dei punti da completare nel commento inerisci TODO
+Android Studio inserira l&apos;argomento del commento nelle barra in basso alla voce TODO</desc>
+    </issue>
+  </issues>
+</review>
