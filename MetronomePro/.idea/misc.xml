@@ -43,4 +43,11 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+  <component name="revuProjectSettings">
+    <option name="reviewFiles">
+      <list>
+        <option value="audio_t_g_segato.xml" />
+      </list>
+    </option>
+  </component>
 </project>
