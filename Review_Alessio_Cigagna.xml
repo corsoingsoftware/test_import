@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="Review Alessio Cigagna" status="reviewing" shared="true">
-  <history createdBy="AlessioCigagna" lastUpdatedBy="AlessioCigagna" createdOn="2016-11-23 20:59:23 +0100" lastUpdatedOn="2016-11-23 20:59:27 +0100"/>
+  <history createdBy="[unknown]" lastUpdatedBy="[unknown]" createdOn="2016-11-23 20:59:23 +0100" lastUpdatedOn="2016-11-23 20:59:27 +0100"/>
   <goal></goal>
   <referential>
     <priorities/>
@@ -43,6 +43,31 @@ The code would be easier to read.</desc>
     <issue filePath="MetronomePro/app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="This method does nothing" vcsRev="556aa1ca7c3b2d4993914461ec7b59c658a4ec7f" lineStart="146" lineEnd="146" hash="146522308" status="to_resolve">
       <history createdBy="AlessioCigagna" lastUpdatedBy="AlessioCigagna" createdOn="2016-11-23 21:37:48 +0100" lastUpdatedOn="2016-11-23 21:39:48 +0100"/>
       <desc>This method is empty, maybe you missed that.</desc>
+    </issue>
+    <issue summary="Checklist used for code review" lineStart="-1" lineEnd="-1" hash="1508372605" status="to_resolve">
+      <history createdBy="AlessioCigagna" lastUpdatedBy="AlessioCigagna" createdOn="2016-11-24 18:59:54 +0100" lastUpdatedOn="2016-11-24 18:59:54 +0100"/>
+      <desc>	Checklist Item
+1	Use Intention-Revealing Names
+2	Pick one word per concept
+3	Classes should be small!
+4	Functions should be small!
+5	Do one Thing
+6	Don&apos;t Repeat Yourself (Avoid Duplication)
+7	Explain yourself in code
+8	Make sure the code formatting is applied
+9	Use Exceptions rather than Return codes
+10	Don&apos;t return Null
+11	Avoid duplication of code
+12	Minimize the accessibility of classes and members
+13	Input into a system should be checked for valid data size and range
+14	Avoid excessive logs for unusual behavior
+15	Release resources (Streams, Connections, etc) in all cases
+16	Limit the accessibility of packages,classes, interfaces, methods, and fields
+17	Limit the extensibility of classes and methods (by making it final)
+18	Avoid exposing constructors of sensitive classes
+19	Keep Synchronized Sections Small
+20	Avoid creating unnecessary objects
+</desc>
     </issue>
   </issues>
 </review>
