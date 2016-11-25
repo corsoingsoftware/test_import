@@ -19,7 +19,7 @@
         <note createdBy="FrancescoLoro" createdOn="2016-11-25 12:34:36 +0100">&lt;The assets should not generate any error because the audio files is inside the project, but is better to add a catch, thanks&gt;</note>
       </notes>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="state&apos;s code" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="89" lineEnd="89" hash="683027423" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="state&apos;s code" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="89" lineEnd="89" hash="683027423" status="resolved">
       <history createdBy="FilippoFerrazini" lastUpdatedBy="FrancescoLoro" createdOn="2016-11-25 11:53:23 +0100" lastUpdatedOn="2016-11-25 12:34:03 +0100"/>
       <desc>The state&apos;s code is defined in somewhere place?
 
