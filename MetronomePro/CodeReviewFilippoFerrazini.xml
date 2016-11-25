@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReviewFilippoFerrazini" status="fixing" shared="true">
+  <history createdBy="[unknown]" lastUpdatedBy="FrancescoLoro" createdOn="2016-11-24 12:43:27 +0100" lastUpdatedOn="2016-11-25 11:13:17 +0100"/>
+  <goal></goal>
+  <referential>
+    <priorities/>
+    <tags/>
+    <users>
+      <user displayName="FilippoFerrazini " login="FilippoFerrazini" roles="reviewer,author"/>
+      <user displayName="FrancescoLoro" login="FrancescoLoro" roles="admin,reviewer,author"/>
+    </users>
+  </referential>
+  <filescope pathPattern="file[*]:*//*"/>
+  <issues/>
+</review>
