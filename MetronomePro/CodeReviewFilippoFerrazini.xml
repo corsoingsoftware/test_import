@@ -12,22 +12,50 @@
   </referential>
   <filescope pathPattern="file[*]:*//*"/>
   <issues>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="to do on error" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="41" lineEnd="56" hash="864097246" status="to_resolve">
-      <history createdBy="FilippoFerrazini" lastUpdatedBy="FrancescoLoro" createdOn="2016-11-25 11:41:44 +0100" lastUpdatedOn="2016-11-25 12:36:31 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="to do on error" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="41" lineEnd="56" hash="864097246" status="resolved">
+      <history createdBy="FilippoFerrazini" lastUpdatedBy="FilippoFerrazini" createdOn="2016-11-25 11:41:44 +0100" lastUpdatedOn="2016-11-25 15:16:25 +0100"/>
       <desc>If one of assets generates an error, the execution has to continue? </desc>
       <notes>
         <note createdBy="FrancescoLoro" createdOn="2016-11-25 12:34:36 +0100">&lt;The assets should not generate any error because the audio files is inside the project, but is better to add a catch, thanks&gt;</note>
+        <note createdBy="FilippoFerrazini" createdOn="2016-11-25 15:15:54 +0100">Resolved</note>
       </notes>
     </issue>
     <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="state&apos;s code" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="89" lineEnd="89" hash="683027423" status="resolved">
-      <history createdBy="FilippoFerrazini" lastUpdatedBy="FrancescoLoro" createdOn="2016-11-25 11:53:23 +0100" lastUpdatedOn="2016-11-25 12:34:03 +0100"/>
+      <history createdBy="FilippoFerrazini" lastUpdatedBy="FilippoFerrazini" createdOn="2016-11-25 11:53:23 +0100" lastUpdatedOn="2016-11-25 15:15:35 +0100"/>
       <desc>The state&apos;s code is defined in somewhere place?
 
 
 Il codice dello stato è definito da qualche parte?</desc>
       <notes>
         <note createdBy="FrancescoLoro" createdOn="2016-11-25 12:32:32 +0100">&lt;yes, is defined in AudioTrackController&gt;</note>
+        <note createdBy="FilippoFerrazini" createdOn="2016-11-25 15:14:36 +0100">Maybe it possible remove  0 none/stop ....
+</note>
       </notes>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="Final comment" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="-1" lineEnd="-1" hash="-717967953" status="to_resolve">
+      <history createdBy="FilippoFerrazini" lastUpdatedBy="FilippoFerrazini" createdOn="2016-11-25 15:21:43 +0100" lastUpdatedOn="2016-11-25 15:21:43 +0100"/>
+      <desc>From the nature of class, some point of check list aren&apos;t usable.
+
+
+CHECK LIST
+
+1-Is the architecture designed to accommodate likely changes?
+2-Have you defined coding conventions for names, comments, and formatting?
+3-Are classes designed for minimal interaction with each other?
+4-Is the class well named, and does its name describe its central purpose?
+5-Has unrelated information been moved out of the class?
+6-Does the class avoid exposing member data?
+7-If the routine is a function, does it return a valid value under all possible circumstances?
+8-Has your project defined a standardized approach to exception handling?
+9-Is the code free of empty catch blocks?
+10-Does the name fully and accurately describe what the variable represents?
+11-Are loop index names meaningful (something other than i, j, or k if the loop is more than one or two lines long or is nested)?
+12-Does the convention distinguish among local, class, and global data?
+13-Does the code avoid magic numbers?
+14-Have relatively independent groups of statements been moved into their own routines?
+15-Code is duplicated
+16-Changes within a class tend to be compartmentalized
+17-Use lazy evaluation</desc>
     </issue>
   </issues>
 </review>
