@@ -6,8 +6,6 @@ import android.media.AudioTrack;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -25,19 +23,15 @@ public class AudioTrackController implements SoundManager {
     private static final int SIN_FREQUENCY=610;
     private static final int FRAME_SIZE = 2;
     private static final int SIN_LENGTH_IN_BYTES=500;
+    private static final int SECOND = 60;
+    private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
+    private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     /**
      * sample rate in hertz per numero di byte per sample per numero di canali
      */
     private int maxPeriodLengthInBytes;
-    private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
-    private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private int maxBPM;
     private int minBPM;
-
-    public int getCurrBPM() {
-        return currBPM;
-    }
-
     private int currBPM;
     private int bufferSize;
     private int bufferSizeInFrame;
@@ -45,6 +39,10 @@ public class AudioTrackController implements SoundManager {
     private byte[] finalClack;
     //    private ByteBuffer silence = ByteBuffer.allocate(2);
     private AudioTrack at;
+
+    public int getCurrBPM() {
+        return currBPM;
+    }
 
     /**
      * Questo metodo carica questi due file in due array, per poi poterli gestire
@@ -57,12 +55,7 @@ public class AudioTrackController implements SoundManager {
             //inizializzo i due array di byte
             FileInputStream streamInClack = new FileInputStream(clack);
             FileInputStream streamFinClack = new FileInputStream(clackFinal);
-//            //array temporanei
-//            byte[] initialClack1 = new byte[streamInClack.available()];
-//            byte[] finalClack1 = new byte[streamFinClack.available()];
-//
-//            //inizializzo il byte di silenzio
-//            silence.putShort(Short.MIN_VALUE);
+
             //adesso tolgo gli header di 44 byte all'inizio dei file
             //inizializzo i due array al doppio della dimensione del suono
             initialClack = new byte[SIN_LENGTH_IN_BYTES];
@@ -75,22 +68,6 @@ public class AudioTrackController implements SoundManager {
                 initialClack[i++]=bb.get();
                 initialClack[i]=bb.get();
             }
-            //finalClack = new byte[streamFinClack.available() - WAV_HEADER_SIZE_IN_BYTES];
-            //legge i file e li salva nei due array temoranei
-//            try {
-//                streamInClack.skip(WAV_HEADER_SIZE_IN_BYTES);
-//                int a=streamInClack.read(initialClack);
-//                streamInClack.close();
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-            /*try {
-                streamFinClack.skip(WAV_HEADER_SIZE_IN_BYTES);
-                streamFinClack.read(finalClack);
-                streamFinClack.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }*/
 
         } catch (Exception e) {
         }
@@ -100,8 +77,8 @@ public class AudioTrackController implements SoundManager {
     public void initialize( int minBPM,int maxBPM) {
         this.maxBPM = maxBPM;
         this.minBPM = minBPM;
-        maxPeriodLengthInBytes =(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE *(60/minBPM));
-        bufferSize = maxPeriodLengthInBytes;//android.media.AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT);
+        maxPeriodLengthInBytes = (SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECOND / minBPM));
+        bufferSize = maxPeriodLengthInBytes;
 
         bufferSizeInFrame= bufferSize/FRAME_SIZE;
         at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
@@ -158,8 +135,8 @@ public class AudioTrackController implements SoundManager {
                 at.stop();
                 shouldRestart=true;
             }
-            int frameStop=(int)Math.round((double)(60*bufferSizeInFrame)/(double)(currBPM*(60/minBPM)));
-            int aaa=((60*bufferSizeInFrame)%(currBPM*(60/minBPM)));
+            int frameStop = (int) Math.round((double) (SECOND * bufferSizeInFrame) / (double) (currBPM * (SECOND / minBPM)));
+            int aaa = ((SECOND * bufferSizeInFrame) % (currBPM * (SECOND / minBPM)));
             at.setLoopPoints(0, frameStop, -1);
             if(shouldRestart) at.play();
         }
