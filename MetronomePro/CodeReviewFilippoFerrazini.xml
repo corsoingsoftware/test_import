@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReviewFilippoFerrazini" status="fixing" shared="true">
-  <history createdBy="[unknown]" lastUpdatedBy="FrancescoLoro" createdOn="2016-11-24 12:43:27 +0100" lastUpdatedOn="2016-11-25 11:13:17 +0100"/>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReviewFilippoFerrazini" status="reviewing" shared="true">
+  <history createdBy="[unknown]" lastUpdatedBy="[unknown]" createdOn="2016-11-24 12:43:27 +0100" lastUpdatedOn="2016-11-25 11:13:17 +0100"/>
   <goal></goal>
   <referential>
     <priorities/>
@@ -11,5 +11,17 @@
     </users>
   </referential>
   <filescope pathPattern="file[*]:*//*"/>
-  <issues/>
+  <issues>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="to do on error" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="41" lineEnd="56" hash="864097246" status="to_resolve">
+      <history createdBy="FilippoFerrazini" lastUpdatedBy="FilippoFerrazini" createdOn="2016-11-25 11:41:44 +0100" lastUpdatedOn="2016-11-25 11:41:44 +0100"/>
+      <desc>If one of assets generates an error, the execution has to continue? </desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="state&apos;s code" vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="89" lineEnd="89" hash="683027423" status="to_resolve">
+      <history createdBy="FilippoFerrazini" lastUpdatedBy="FilippoFerrazini" createdOn="2016-11-25 11:53:23 +0100" lastUpdatedOn="2016-11-25 11:53:23 +0100"/>
+      <desc>The state&apos;s code is defined in somewhere place?
+
+
+Il codice dello stato è definito da qualche parte?</desc>
+    </issue>
+  </issues>
 </review>
