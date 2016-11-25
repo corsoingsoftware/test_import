@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="audio_t_g_segato" status="draft" shared="true">
-  <history createdBy="FedericoFavotto" lastUpdatedBy="FedericoFavotto" createdOn="2016-11-24 15:05:40 +0100" lastUpdatedOn="2016-11-24 15:08:16 +0100"/>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="audio_t_g_segato" status="fixing" shared="true">
+  <history createdBy="[unknown]" lastUpdatedBy="[unknown]" createdOn="2016-11-24 15:05:40 +0100" lastUpdatedOn="2016-11-24 15:08:16 +0100"/>
   <goal></goal>
   <referential>
     <priorities/>
@@ -11,5 +11,58 @@
     </users>
   </referential>
   <filescope pathPattern="file[*]:*//*||file[app]:src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java"/>
-  <issues/>
+  <issues>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Unnecessary import statement" lineStart="7" lineEnd="7" hash="-293105820" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:02:40 +0100" lastUpdatedOn="2016-11-25 15:02:40 +0100"/>
+      <desc>Maybe if you want, you can remove the three import statement that you don&apos;t use in the class,</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Little distraction" lineStart="175" lineEnd="175" hash="1862939948" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:03:39 +0100" lastUpdatedOn="2016-11-25 15:03:39 +0100"/>
+      <desc>In the method&apos;s comment, you wrote that in case of &apos;default&apos; you return 0 and not -1.</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Checklist for code review" lineStart="223" lineEnd="223" hash="0" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:06:50 +0100" lastUpdatedOn="2016-11-25 15:06:50 +0100"/>
+      <desc>Checklist for code review:
+Structure
+- Is the code well-structured, consistent in style, and consistently formatted?
+- Are there any uncalled or unneeded procedures or any unreachable code?
+- Can any code be replaced by calls to external reusable components or library functions?
+- Are there any blocks of repeated code that could be condensed into a single procedure?
+- Are symbolics used rather than “magic number” constants or string constants (hardcoding)?
+- Are any modules excessively complex and should be restructured or split into multiple routines?
+Documentation
+- Is the code clearly and adequately documented with an easy-to-maintain commenting style?
+- Are all comments consistent with the code?
+Variables
+- Are all variables properly defined with meaningful, consistent, and clear names?
+- Do all assigned variables have proper type consistency or casting?
+- Are there any redundant or unused variables?
+Loops and branches
+- Are all loops, branches, and logic constructs complete, correct, and properly nested?
+- Are the most common cases tested first in IF ELSEIF chains?
+- Are all cases covered in an IF ELSEIF or CASE block, including ELSE or DEFAULT clauses?
+- Does every case statement have a default?
+- Are loop termination conditions obvious and invariably achievable?
+- Can any statements that are enclosed within loops be placed outside the loops?
+Defensive programming
+- Are imported data and input arguments tested for validity and completeness?
+- Are all output variables assigned?
+- Is every memory allocation deallocated?
+- Are all files and devices are left in the correct state upon program termination?</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Good job. Class and code written very well and clearly." lineStart="26" lineEnd="26" hash="411277657" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:08:00 +0100" lastUpdatedOn="2016-11-25 15:08:00 +0100"/>
+      <desc>Excellent description of the use of the class, and good documentations of methods with explanatory comments.
+I didn&apos;t find great problems in the code, it seems without error.
+Excellent development.</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Is a public method?" lineStart="103" lineEnd="103" hash="666279378" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:12:47 +0100" lastUpdatedOn="2016-11-25 15:12:47 +0100"/>
+      <desc>I suppose that is public. Isn&apos;t it?</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="The number 60 indicate the seconds in a minute, isn&apos;t it? " lineStart="133" lineEnd="133" hash="1337435849" status="to_resolve">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:22:07 +0100" lastUpdatedOn="2016-11-25 15:23:17 +0100"/>
+      <desc>The number 60 (repeated in the lines 134, 215, 217) would be better to put it as a constant?</desc>
+    </issue>
+  </issues>
 </review>
