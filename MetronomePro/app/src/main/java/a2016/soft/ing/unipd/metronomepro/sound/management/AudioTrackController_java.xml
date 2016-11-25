@@ -9,8 +9,8 @@
         <priorities />
         <tags />
         <users>
-            <user displayName="Alessio" login="AlessioCigagna" roles="reviewer,author" />
-            <user displayName="GiulioPettenuzzo" login="GiulioPettenuzzo"
+            <user displayName="Alessio" login="Cigagna" roles="reviewer,author" />
+            <user displayName="GiulioPettenuzzo" loginAlessio="GiulioPettenuzzo"
                 roles="admin,reviewer,author" />
             <user displayName="Leonardo" login="LeonardoLerose" roles="reviewer,author" />
         </users>
