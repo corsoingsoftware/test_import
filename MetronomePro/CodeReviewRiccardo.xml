@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReviewRiccardo" status="reviewing" shared="true">
+  <history createdBy="[unknown]" lastUpdatedBy="[unknown]" createdOn="2016-11-26 15:12:28 +0100" lastUpdatedOn="2016-11-26 15:12:33 +0100"/>
+  <goal></goal>
+  <referential>
+    <priorities/>
+    <tags/>
+    <users>
+      <user displayName="RiccardoBonafede" login="RiccardoBonafede" roles="admin,reviewer,author"/>
+    </users>
+  </referential>
+  <filescope pathPattern="file[*]:*//*"/>
+  <issues>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerService.java" summary="This class seems ok. I would only add some comments on every try/catch blocks in the oncreate method." vcsRev="16ef3bc15e9ef694576b7ea88f3a14cb5af2d6a7" lineStart="-1" lineEnd="-1" hash="30537853" status="to_resolve">
+      <history createdBy="RiccardoBonafede" lastUpdatedBy="RiccardoBonafede" createdOn="2016-11-26 15:34:40 +0100" lastUpdatedOn="2016-11-26 15:34:40 +0100"/>
+    </issue>
+  </issues>
+</review>
