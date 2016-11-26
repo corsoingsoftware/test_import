@@ -12,15 +12,19 @@
   </referential>
   <filescope pathPattern="file[*]:*//*||file[app]:src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java"/>
   <issues>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Unnecessary import statement" lineStart="7" lineEnd="7" hash="-293105820" status="to_resolve">
-      <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:02:40 +0100" lastUpdatedOn="2016-11-25 15:02:40 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Unnecessary import statement" lineStart="7" lineEnd="7" hash="-293105820" status="closed">
+      <history createdBy="GiacomoSegato" lastUpdatedBy="FedericoFavotto" createdOn="2016-11-25 15:02:40 +0100" lastUpdatedOn="2016-11-26 13:53:34 +0100"/>
       <desc>Maybe if you want, you can remove the three import statement that you don&apos;t use in the class,</desc>
+      <notes>
+        <note createdBy="FedericoFavotto" createdOn="2016-11-26 13:53:16 +0100">It shouldn&apos;t be there! =(
+Fixed!</note>
+      </notes>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Little distraction" lineStart="175" lineEnd="175" hash="1862939948" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Little distraction" lineStart="175" lineEnd="175" hash="1862939948" status="closed">
       <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:03:39 +0100" lastUpdatedOn="2016-11-25 15:03:39 +0100"/>
       <desc>In the method&apos;s comment, you wrote that in case of &apos;default&apos; you return 0 and not -1.</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Checklist for code review" lineStart="223" lineEnd="223" hash="0" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Checklist for code review" lineStart="226" lineEnd="226" hash="0" status="to_resolve">
       <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:06:50 +0100" lastUpdatedOn="2016-11-25 15:06:50 +0100"/>
       <desc>Checklist for code review:
 Structure
@@ -56,11 +60,11 @@ Defensive programming
 I didn&apos;t find great problems in the code, it seems without error.
 Excellent development.</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Is a public method?" lineStart="103" lineEnd="103" hash="666279378" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="Is a public method?" lineStart="103" lineEnd="103" hash="666279378" status="closed">
       <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:12:47 +0100" lastUpdatedOn="2016-11-25 15:12:47 +0100"/>
       <desc>I suppose that is public. Isn&apos;t it?</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="The number 60 indicate the seconds in a minute, isn&apos;t it? " lineStart="133" lineEnd="133" hash="1337435849" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController.java" summary="The number 60 indicate the seconds in a minute, isn&apos;t it? " lineStart="133" lineEnd="133" hash="1337435849" status="closed">
       <history createdBy="GiacomoSegato" lastUpdatedBy="GiacomoSegato" createdOn="2016-11-25 15:22:07 +0100" lastUpdatedOn="2016-11-25 15:23:17 +0100"/>
       <desc>The number 60 (repeated in the lines 134, 215, 217) would be better to put it as a constant?</desc>
     </issue>

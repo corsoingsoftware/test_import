@@ -46,6 +46,7 @@
   <component name="revuProjectSettings">
     <option name="reviewFiles">
       <list>
+        <option value="review_federico_scremin.xml" />
         <option value="audio_t_g_segato.xml" />
       </list>
     </option>
