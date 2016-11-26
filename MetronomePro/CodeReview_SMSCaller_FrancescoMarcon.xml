@@ -12,22 +12,22 @@
   </referential>
   <filescope pathPattern="file[*]:*//*"/>
   <issues>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilità Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="19" lineEnd="19" hash="1799705603" status="to_resolve">
-      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:50:23 +0100" lastUpdatedOn="2016-11-25 08:50:23 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilità Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="19" lineEnd="19" hash="1799705603" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:50:23 +0100" lastUpdatedOn="2016-11-25 12:35:02 +0100"/>
       <desc>Questa variabile non dovrebbe essere inizializata nel corpo del costruttore</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="113" lineEnd="113" hash="-441059413" status="to_resolve">
-      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:57:14 +0100" lastUpdatedOn="2016-11-25 08:57:14 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="113" lineEnd="113" hash="-441059413" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:57:14 +0100" lastUpdatedOn="2016-11-25 12:35:25 +0100"/>
       <desc>Lo strumento Ide fornisce una veloce richiamo dei punti da completare nel commentando inerisci TODO
 Android Studio inserira l&apos;argomento del commento nelle barra in basso alla voce
 TODO </desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Nome variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="69" lineEnd="69" hash="-1408378072" status="to_resolve">
-      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:00:52 +0100" lastUpdatedOn="2016-11-25 09:00:52 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Nome variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="69" lineEnd="69" hash="-1408378072" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:00:52 +0100" lastUpdatedOn="2016-11-25 12:35:10 +0100"/>
       <desc>il nome variabile non dovrebbe riferirsi al messaggio che porta l&apos;intent</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilita Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="56" lineEnd="56" hash="-265417029" status="to_resolve">
-      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:12:26 +0100" lastUpdatedOn="2016-11-25 09:21:06 +0100"/>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilita Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="56" lineEnd="56" hash="-265417029" status="to_resolve" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:12:26 +0100" lastUpdatedOn="2016-11-25 12:35:07 +0100"/>
       <desc>questa variabile non dovrebbe essere inizializata nel costruttore richiamata?
 un altro modo per capirlo meglio potrebbe essere l&apos;uso di strumenti di Debug in qualche altro punto del codice</desc>
     </issue>
@@ -38,6 +38,9 @@ Il nome della classe vista la struttura delle directory per semplicità potrebbe
 Ad un primo sguardo generale la classe è impostata bene cioè è modulare i metodi sono &quot;atomici&quot;.
 Come classe noto un uso elevato di sovrascritture di metodi, i quali rendono di difficile comprensione(per un Newbie,non esperto di Android); potrebbe essere utile inserire nel commento la classe relativa al metodo che si intende sovrascrivere, così da velocizzare il revisore.
 Potresti usare maggiormente gli strumenti di Debug&quot; (android.util.Log)&quot;</desc>
+    </issue>
+    <issue summary="Riassunto domande CheckList utilizzate" lineStart="-1" lineEnd="-1" hash="45270556" status="to_resolve">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 19:57:04 +0100" lastUpdatedOn="2016-11-25 19:57:04 +0100"/>
     </issue>
   </issues>
 </review>

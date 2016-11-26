@@ -6,8 +6,8 @@
     <priorities/>
     <tags/>
     <users>
+      <user displayName="DaohongLi" login="DaohongLi" roles="reviewer,author"/>
       <user displayName="OmarVesco" login="OmarVesco" roles="admin,reviewer,author"/>
-      <user displayName="daohongLi" login="daohongLi" roles="reviewer,author"/>
     </users>
   </referential>
   <filescope pathPattern="file[*]:*//*"/>
