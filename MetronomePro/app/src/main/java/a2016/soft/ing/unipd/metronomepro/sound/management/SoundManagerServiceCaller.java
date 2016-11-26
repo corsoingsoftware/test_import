@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 
 import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
 
@@ -19,6 +20,7 @@ public class SoundManagerServiceCaller implements SoundManager {
     private MetronomeActivity activityContext;
     private boolean mBound;     //Booleano che indica se è stata effettuata o meno la connessione al servizio.
     private ServiceConnection mConnection;
+    private static final String LOG_TAG = "SMSCaller";
 
 
     /**
@@ -30,6 +32,8 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     public SoundManagerServiceCaller(MetronomeActivity c) {
 
+        mBound = true;
+
         //Ottengo il context in modo da poter utilizzare i metodi di MetronomeActivity e creare i pacchetti.
         activityContext = c;
 
@@ -40,6 +44,8 @@ public class SoundManagerServiceCaller implements SoundManager {
 
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
+
+                Log.v(LOG_TAG, "in onServiceConnected");
 
                 /*
                     Effettuo il cast a myBinder. (Classe interna estensiva di IBinder dichiarata in SoundManagerService)
@@ -54,7 +60,6 @@ public class SoundManagerServiceCaller implements SoundManager {
                 */
 
                 mService = binder.getService();
-                mBound = true;
 
                 //Chiamata al metodo onServiceInitialized di MetronomeActivity.
                 activityContext.onServiceInitialized();
@@ -62,15 +67,16 @@ public class SoundManagerServiceCaller implements SoundManager {
 
             @Override
             public void onServiceDisconnected(ComponentName arg0) {
+                Log.v(LOG_TAG, "in onServiceDisconnected");
                 mBound = false;
             }
         };
 
         //Creo il pacchetto Intent che conterrà il context e la classe del servizio.
-        Intent intent = new Intent(activityContext, SoundManagerService.class);
+        Intent intent_connection = new Intent(activityContext, SoundManagerService.class);
 
         //Connessione.
-        activityContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        activityContext.bindService(intent_connection, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     /**
@@ -80,6 +86,7 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     @Override
     public void initialize(int minBPM, int maxBPM) {
+        Log.v(LOG_TAG, "in initialize");
         mService.initialize(minBPM,maxBPM);
     }
 
@@ -88,6 +95,7 @@ public class SoundManagerServiceCaller implements SoundManager {
      */
 
     public int getBPM(){
+        Log.v(LOG_TAG, "in getBPM");
         return mService.getBPM();
     }
 
@@ -97,6 +105,7 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     @Override
     public void setBPM(int newBPM) {
+        Log.v(LOG_TAG, "in setBPM");
         mService.setBPM(newBPM);
     }
 
@@ -106,23 +115,27 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     @Override
     public int getState() {
+        Log.v(LOG_TAG, "in getState");
         return mService.getState();
     }
 
     @Override
     public void setRhythmics(int numerator, int denom) {
-        //Da completare
+        Log.v(LOG_TAG, "in setRhythmics");
+        // TODO: 26/11/2016 da completare
     }
 
     //Metodi che si occupano delle chiamate ECHO al servizio.
 
     @Override
     public void play() {
+        Log.v(LOG_TAG, "in play");
         mService.play();
     }
 
     @Override
     public void stop() {
+        Log.v(LOG_TAG, "in stop");
         mService.stop();
     }
 }
