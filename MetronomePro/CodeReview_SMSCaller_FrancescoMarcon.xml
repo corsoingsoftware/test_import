@@ -37,9 +37,10 @@ un altro modo per capirlo meglio potrebbe essere l&apos;uso di strumenti di Debu
 true significa che il servizio è attivo
 secondo me sarebbe meglio inizializzare a false</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Funzionalità mbound" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="resolved">
-      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:10:08 +0100" lastUpdatedOn="2016-11-26 16:10:08 +0100"/>
-      <desc>cosa significa la variabile mbound?
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Funzionalità mbound" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="reopened">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:10:08 +0100" lastUpdatedOn="2016-11-26 17:54:24 +0100"/>
+      <desc>Pensaci bene!
+cosa significa la variabile mbound?
 non è l&apos;attivazione di un servizio?
 dove va inserita?</desc>
     </issue>
