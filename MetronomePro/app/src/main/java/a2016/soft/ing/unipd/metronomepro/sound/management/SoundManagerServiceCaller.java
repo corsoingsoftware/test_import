@@ -32,7 +32,7 @@ public class SoundManagerServiceCaller implements SoundManager {
 
     public SoundManagerServiceCaller(MetronomeActivity c) {
 
-        mBound = true;
+        mBound = false;
 
         //Ottengo il context in modo da poter utilizzare i metodi di MetronomeActivity e creare i pacchetti.
         activityContext = c;
@@ -77,6 +77,8 @@ public class SoundManagerServiceCaller implements SoundManager {
 
         //Connessione.
         activityContext.bindService(intent_connection, mConnection, Context.BIND_AUTO_CREATE);
+
+        mBound = true;
     }
 
     /**

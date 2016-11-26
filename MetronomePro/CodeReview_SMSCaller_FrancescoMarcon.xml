@@ -16,7 +16,7 @@
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:50:23 +0100" lastUpdatedOn="2016-11-25 12:35:02 +0100"/>
       <desc>Questa variabile non dovrebbe essere inizializata nel corpo del costruttore</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="113" lineEnd="113" hash="-441059413" status="resolved" assignees="FrancescoMarcon">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="115" lineEnd="115" hash="-441059413" status="resolved" assignees="FrancescoMarcon">
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:57:14 +0100" lastUpdatedOn="2016-11-25 12:35:25 +0100"/>
       <desc>Lo strumento Ide fornisce una veloce richiamo dei punti da completare nel commentando inerisci TODO
 Android Studio inserira l&apos;argomento del commento nelle barra in basso alla voce
@@ -31,19 +31,19 @@ TODO </desc>
       <desc>questa variabile non dovrebbe essere inizializata nel costruttore richiamata?
 un altro modo per capirlo meglio potrebbe essere l&apos;uso di strumenti di Debug in qualche altro punto del codice</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="inizializzazione variabile " vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="34" lineEnd="34" hash="-457179461" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="inizializzazione variabile " vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="34" lineEnd="34" hash="-457179461" status="resolved">
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:02:45 +0100" lastUpdatedOn="2016-11-26 16:02:45 +0100"/>
       <desc>cosa significa se io vado ad inizializzare a true ?
 true significa che il servizio è attivo
 secondo me sarebbe meglio inizializzare a false</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Funzionalità mbound" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Funzionalità mbound" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="resolved">
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:10:08 +0100" lastUpdatedOn="2016-11-26 16:10:08 +0100"/>
       <desc>cosa significa la variabile mbound?
 non è l&apos;attivazione di un servizio?
 dove va inserita?</desc>
     </issue>
-    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="struttura esempio molto bene seguita" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="to_resolve">
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="struttura esempio molto bene seguita" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="resolved">
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:18:32 +0100" lastUpdatedOn="2016-11-26 16:18:32 +0100"/>
       <desc>ho visto che hai seguito molto bene la struttura degli esempi di android studio a questo link
 https://developer.android.com/guide/components/bound-services.html
@@ -58,7 +58,7 @@ Ad un primo sguardo generale la classe è impostata bene cioè è modulare i met
 Come classe noto un uso elevato di sovrascritture di metodi, i quali rendono di difficile comprensione(per un Newbie,non esperto di Android); potrebbe essere utile inserire nel commento la classe relativa al metodo che si intende sovrascrivere, così da velocizzare il revisore.
 Potresti usare maggiormente gli strumenti di Debug&quot; (android.util.Log)&quot;</desc>
     </issue>
-    <issue summary="Riassunto domande CheckList utilizzate" lineStart="-1" lineEnd="-1" hash="45270556" status="to_resolve">
+    <issue summary="Riassunto domande CheckList utilizzate" lineStart="-1" lineEnd="-1" hash="45270556" status="resolved">
       <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 19:57:04 +0100" lastUpdatedOn="2016-11-26 15:57:54 +0100"/>
       <desc>Domande usate della CheckList
 
