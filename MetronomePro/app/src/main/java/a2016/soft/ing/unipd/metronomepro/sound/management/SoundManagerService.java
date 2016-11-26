@@ -20,6 +20,7 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceCon
  * e le passa ad AudiotrackController
  * Contiene al suo interno un AudioTrackController e lo gestisce correttamente in base alle chiamate che gli arrivano
  * E' un servizio di tipo Bound
+ *
  * @link https://developer.android.com/guide/components/bound-services.html
  * @link http://www.truiton.com/2014/11/bound-service-example-android/
  */
@@ -42,13 +43,13 @@ public class SoundManagerService extends Service {
         try {
             afdClack = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();            /*controllo l'eccezione nel caso in cui non ci sia uno dei  due file audio */
         }
         AssetFileDescriptor afdClackFinal = null;
         try {
             afdClackFinal = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();             /*controllo l'eccezione nel caso in cui non ci sia uno dei  due file audio */
         }
         try {
             this.atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
