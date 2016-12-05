@@ -3,6 +3,8 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.provider.Settings;
+import android.util.Log;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -41,7 +43,8 @@ public class AudioTrackController implements SoundManager {
     private int currBPM;
     private int bufferSize;
     private int bufferSizeInFrame;
-    private byte[] initialClack; //metto i due array come variabili per potervi accedere da fuori
+    private byte[] initialClack = new byte[] {0,1,0,10}; //metto i due array come variabili per potervi accedere da fuori
+    byte[] period = new byte[50];
     private byte[] finalClack;
     //    private ByteBuffer silence = ByteBuffer.allocate(2);
     private AudioTrack at;
@@ -106,7 +109,7 @@ public class AudioTrackController implements SoundManager {
         bufferSizeInFrame= bufferSize/FRAME_SIZE;
         at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
                 AUDIO_FORMAT, bufferSize, AudioTrack.MODE_STATIC);
-        byte[] period = new byte[maxPeriodLengthInBytes];
+        period = new byte[maxPeriodLengthInBytes];
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         bb.putShort(Short.MIN_VALUE);
@@ -147,7 +150,7 @@ public class AudioTrackController implements SoundManager {
     public void setRhythmics(int numerator, int denom) {
 
     }
-
+    private static final String LOG_TOG = "AudioTrackCt";
     @Override
     public void setBPM(int newBPM) {
 
@@ -163,6 +166,9 @@ public class AudioTrackController implements SoundManager {
             at.setLoopPoints(0, frameStop, -1);
             if(shouldRestart) at.play();
         }
+        System.out.print("DIO CANE ANDIAMO ");
+        Log.v(LOG_TOG, "DIOMO");
+
 
     }
 }
