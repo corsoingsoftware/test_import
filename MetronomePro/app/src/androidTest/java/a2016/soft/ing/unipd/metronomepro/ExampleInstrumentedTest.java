@@ -20,23 +20,44 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-    @Test
+
+    /*@Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AudioTrackController atc = new AudioTrackController();
-        atc.initialize(30,300);
 
         AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
         AssetFileDescriptor afdClackFinal = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
 
         atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
 
+        atc.initialize(30, 300);
+
         atc.setBPM(100);
         atc.setBPM(400);
-        assertEquals(100, atc.getCurrBPM());
+        assertNotEquals(400, atc.getCurrBPM());
 
         assertEquals("a2016.soft.ing.unipd.metronomepro", appContext.getPackageName());
+    }*/
+
+    @Test
+    public void setBpm() throws Exception
+    {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        AudioTrackController atc = new AudioTrackController();
+
+        AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+        AssetFileDescriptor afdClackFinal = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+
+        atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+
+        atc.initialize(30, 300);
+
+        atc.setBPM(100);
+        atc.setBPM(400);
+        assertNotEquals(400, atc.getCurrBPM());
     }
 }
