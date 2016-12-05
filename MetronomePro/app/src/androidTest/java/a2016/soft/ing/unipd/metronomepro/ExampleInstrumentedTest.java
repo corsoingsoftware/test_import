@@ -24,7 +24,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void setBpm() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         AudioTrackController atc = new AudioTrackController();
 
         AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
@@ -42,7 +41,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void getState() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         AudioTrackController atc = new AudioTrackController();
 
         AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
