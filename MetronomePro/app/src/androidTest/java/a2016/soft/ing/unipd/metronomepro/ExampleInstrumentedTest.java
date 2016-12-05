@@ -21,9 +21,8 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
 
-    /*@Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
+    @Test
+    public void setBpm() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AudioTrackController atc = new AudioTrackController();
@@ -38,13 +37,10 @@ public class ExampleInstrumentedTest {
         atc.setBPM(100);
         atc.setBPM(400);
         assertNotEquals(400, atc.getCurrBPM());
-
-        assertEquals("a2016.soft.ing.unipd.metronomepro", appContext.getPackageName());
-    }*/
+    }
 
     @Test
-    public void setBpm() throws Exception
-    {
+    public void getState() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AudioTrackController atc = new AudioTrackController();
@@ -54,10 +50,12 @@ public class ExampleInstrumentedTest {
 
         atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
 
-        atc.initialize(30, 300);
+        atc.initialize(30,300);
 
-        atc.setBPM(100);
-        atc.setBPM(400);
-        assertNotEquals(400, atc.getCurrBPM());
+        assertEquals(0, atc.getState());
+        atc.play();
+        assertEquals(1, atc.getState());
+        atc.stop();
+        assertEquals(0, atc.getState());
     }
 }
