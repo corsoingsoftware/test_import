@@ -52,7 +52,7 @@ public class AudioTrackController implements SoundManager {
      * @param clack      il clack normale
      * @param clackFinal il clack di fine battuta
      */
-    void loadFile(FileDescriptor clack, FileDescriptor clackFinal) {
+    public void loadFile(FileDescriptor clack, FileDescriptor clackFinal) {
         try {
             //inizializzo i due array di byte
             FileInputStream streamInClack = new FileInputStream(clack);

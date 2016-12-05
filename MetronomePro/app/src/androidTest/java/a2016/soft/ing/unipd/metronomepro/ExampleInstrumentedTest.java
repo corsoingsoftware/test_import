@@ -1,11 +1,15 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +24,18 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
+
+        AudioTrackController atc = new AudioTrackController();
+        atc.initialize(30,300);
+
+        AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+        AssetFileDescriptor afdClackFinal = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+
+        atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+
+        atc.setBPM(100);
+        atc.setBPM(400);
+        assertEquals(100, atc.getCurrBPM());
 
         assertEquals("a2016.soft.ing.unipd.metronomepro", appContext.getPackageName());
     }

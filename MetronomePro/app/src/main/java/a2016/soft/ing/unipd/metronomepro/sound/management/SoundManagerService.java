@@ -44,7 +44,7 @@ public class SoundManagerService extends Service {
         }
         AssetFileDescriptor afdClackFinal = null;
         try {
-            afdClackFinal = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
+            afdClackFinal = getApplicationContext().getAssets().openFd("prova_Snap.wav");;
         } catch (IOException e) {
             e.printStackTrace();
         }
