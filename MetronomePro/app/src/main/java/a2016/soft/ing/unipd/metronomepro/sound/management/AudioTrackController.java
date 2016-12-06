@@ -99,6 +99,7 @@ public class AudioTrackController implements SoundManager {
         }
     }
 
+
     @Override
     public void initialize( int minBPM,int maxBPM) {
         this.maxBPM = maxBPM;
@@ -167,4 +168,5 @@ public class AudioTrackController implements SoundManager {
             if(shouldRestart) at.play();
         }
     }
+    public AudioTrack getAudioTrack(){ return at; }
 }
