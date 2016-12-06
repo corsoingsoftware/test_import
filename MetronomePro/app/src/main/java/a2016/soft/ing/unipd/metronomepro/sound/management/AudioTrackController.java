@@ -166,9 +166,5 @@ public class AudioTrackController implements SoundManager {
             at.setLoopPoints(0, frameStop, -1);
             if(shouldRestart) at.play();
         }
-        System.out.print("DIO CANE ANDIAMO ");
-        Log.v(LOG_TOG, "DIOMO");
-
-
     }
 }
