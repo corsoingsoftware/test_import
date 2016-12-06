@@ -145,7 +145,7 @@ public class AudioTrackController implements SoundManager {
         if(at.getPlayState()==AudioTrack.PLAYSTATE_PAUSED) return 2;
         return 0;
     }
-
+    //questo sarà il metodo per iplementare la ritmica
     @Override
     public void setRhythmics(int numerator, int denom) {
 
