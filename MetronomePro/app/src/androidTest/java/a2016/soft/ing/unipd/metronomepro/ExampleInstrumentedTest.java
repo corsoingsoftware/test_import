@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioTrack;
 import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -55,5 +56,38 @@ public class ExampleInstrumentedTest {
         assertEquals(1, atc.getState());
         atc.stop();
         assertEquals(0, atc.getState());
+    }
+
+    @Test
+    public void play() throws Exception{
+
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        AudioTrackController atc = new AudioTrackController();
+
+        AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+        AssetFileDescriptor afdClackFinal = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+
+        atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+
+        atc.initialize(30,300);
+
+        atc.play();
+        assertEquals(atc.getAudioTrack().getPlayState(), AudioTrack.PLAYSTATE_PLAYING);
+    }
+
+    @Test
+    public void stop() throws Exception{
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        AudioTrackController atc = new AudioTrackController();
+
+        AssetFileDescriptor afdClack = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+        AssetFileDescriptor afdClackFinal = appContext.getAssets().openFd(appContext.getString(R.string.fileAudioName));
+
+        atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+
+        atc.initialize(30,300);
+
+        atc.play();
+        assertEquals(atc.getAudioTrack().getState(), AudioTrack.PLAYSTATE_STOPPED);
     }
 }
