@@ -43,8 +43,8 @@ public class AudioTrackController implements SoundManager {
     private int currBPM;
     private int bufferSize;
     private int bufferSizeInFrame;
-    private byte[] initialClack = new byte[] {0,1,0,10}; //metto i due array come variabili per potervi accedere da fuori
-    byte[] period = new byte[50];
+    private byte[] period;
+    private byte[] initialClack; //metto i due array come variabili per potervi accedere da fuori
     private byte[] finalClack;
     //    private ByteBuffer silence = ByteBuffer.allocate(2);
     private AudioTrack at;
