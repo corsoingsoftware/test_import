@@ -43,4 +43,12 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+  <component name="revuProjectSettings">
+    <option name="reviewFiles">
+      <list>
+        <option value="CodeReview_SMSCaller_daohongLi.xml" />
+        <option value="CodeReview_SMSCaller_FrancescoMarcon.xml" />
+      </list>
+    </option>
+  </component>
 </project>
