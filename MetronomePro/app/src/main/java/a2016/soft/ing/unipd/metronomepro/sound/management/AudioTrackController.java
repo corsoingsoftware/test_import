@@ -8,6 +8,11 @@ import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PAUSE;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PLAYING;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_STOP;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_UNKNOW;
+
 /**
  * Created by feder on 12/11/2016.
  * Si occupa di gestire le interazioni con audioTrack, un'istanza di questa classe sarà contenuta nel service.
@@ -194,7 +199,7 @@ public class AudioTrackController implements SoundManager {
      * @return playstate defined by constants, default= playstatte_unknow
      */
     @Override
-    public int getState() {
+    public PlayState getState() {
         switch(at.getPlayState()){
             case AudioTrack.PLAYSTATE_STOPPED:
                 return PLAYSTATE_STOP;

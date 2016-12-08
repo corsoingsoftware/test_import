@@ -116,7 +116,7 @@ public class SoundManagerServiceCaller implements SoundManager {
      */
 
     @Override
-    public int getState() {
+    public PlayState getState() {
         Log.v(LOG_TAG, "in getState");
         return mService.getState();
     }

@@ -13,8 +13,7 @@ import android.os.IBinder;
 
 public interface SoundManager {
 
-    int PLAYSTATE_STOP =0, PLAYSTATE_PLAYING =1, PLAYSTATE_PAUSE =2, PLAYSTATE_UNKNOW =-1;
-    /**
+     /**
      * Questo metodo inizializza le variabili interne necessarie alla classe per poter gestire gli altri metodi.
      * Esso va sempre chiamato all'inizializzazione della classe che implementa l'interfaccia
      * se i parametri maxbpm e minbpm son impostati e diversi da -1 allora la classe implementatrice cercherà di ottimizzare
@@ -39,9 +38,9 @@ public interface SoundManager {
 
     /**
      * restituisce lo stato attuale del player
-     * @return 0=nessun suono impostato, 1=pronto a partire, 2=in esecuzione
+     * @return playstate that describes status
      */
-    int getState();
+    PlayState getState();
 
     /**
      * Imposta la ritmica, se il suono è in esecuzione allora viene fermato.

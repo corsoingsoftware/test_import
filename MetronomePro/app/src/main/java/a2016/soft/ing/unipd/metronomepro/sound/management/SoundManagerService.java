@@ -85,7 +85,7 @@ public class SoundManagerService extends Service {
      *
      * @return 0 none/stop 1 play 2 pause
      */
-    public int getState() {
+    public PlayState getState() {
         Log.v(LOG_TAG, "in getState");
         return atc.getState();
     }
