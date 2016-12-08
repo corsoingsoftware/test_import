@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+import java.util.function.Consumer;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int MIN, MAX, INITIAL_VALUE;

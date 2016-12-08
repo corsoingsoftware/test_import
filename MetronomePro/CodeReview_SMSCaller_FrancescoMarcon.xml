@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReview_SMSCaller_FrancescoMarcon" status="reviewing" shared="true">
+  <history createdBy="[unknown]" lastUpdatedBy="[unknown]" createdOn="2016-11-24 21:30:26 +0100" lastUpdatedOn="2016-11-24 21:31:57 +0100"/>
+  <goal></goal>
+  <referential>
+    <priorities/>
+    <tags/>
+    <users>
+      <user displayName="FrancescoMarcon" login="FrancescoMarcon" roles="reviewer,author"/>
+      <user displayName="OmarVesco" login="OmarVesco" roles="admin,reviewer,author"/>
+    </users>
+  </referential>
+  <filescope pathPattern="file[*]:*//*"/>
+  <issues>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilità Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="19" lineEnd="19" hash="1799705603" status="resolved" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:50:23 +0100" lastUpdatedOn="2016-11-25 12:35:02 +0100"/>
+      <desc>Questa variabile non dovrebbe essere inizializata nel corpo del costruttore</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Consiglio IDE" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="115" lineEnd="115" hash="-441059413" status="resolved" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:57:14 +0100" lastUpdatedOn="2016-11-25 12:35:25 +0100"/>
+      <desc>Lo strumento Ide fornisce una veloce richiamo dei punti da completare nel commentando inerisci TODO
+Android Studio inserira l&apos;argomento del commento nelle barra in basso alla voce
+TODO </desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Nome variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="69" lineEnd="69" hash="-1408378072" status="resolved" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:00:52 +0100" lastUpdatedOn="2016-11-25 12:35:10 +0100"/>
+      <desc>il nome variabile non dovrebbe riferirsi al messaggio che porta l&apos;intent</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Visibilita Variabile" vcsRev="6a7566027121c81cf46c51957afbbd40322f3a99" lineStart="56" lineEnd="56" hash="-265417029" status="resolved" assignees="FrancescoMarcon">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 09:12:26 +0100" lastUpdatedOn="2016-11-25 12:35:07 +0100"/>
+      <desc>questa variabile non dovrebbe essere inizializata nel costruttore richiamata?
+un altro modo per capirlo meglio potrebbe essere l&apos;uso di strumenti di Debug in qualche altro punto del codice</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="inizializzazione variabile " vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="34" lineEnd="34" hash="-457179461" status="resolved">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:02:45 +0100" lastUpdatedOn="2016-11-26 16:02:45 +0100"/>
+      <desc>cosa significa se io vado ad inizializzare a true ?
+true significa che il servizio è attivo
+secondo me sarebbe meglio inizializzare a false</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="Funzionalità mbound" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="reopened">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:10:08 +0100" lastUpdatedOn="2016-11-26 17:54:24 +0100"/>
+      <desc>Pensaci bene!
+cosa significa la variabile mbound?
+non è l&apos;attivazione di un servizio?
+dove va inserita?</desc>
+    </issue>
+    <issue filePath="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/SoundManagerServiceCaller.java" summary="struttura esempio molto bene seguita" vcsRev="515fd70de769fedbeee2d52c40f629c0059f6e92" lineStart="20" lineEnd="20" hash="1799705603" status="resolved">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-26 16:18:32 +0100" lastUpdatedOn="2016-11-26 16:18:32 +0100"/>
+      <desc>ho visto che hai seguito molto bene la struttura degli esempi di android studio a questo link
+https://developer.android.com/guide/components/bound-services.html
+sotto capitolo &quot;Extending the Binder class&quot;
+Ma mi è sorto un dubbio riguardo al interfaccia che hai usato il servizio non fa lo stesso lavoro di un interfaccia? in che caso? ci sono altre classi che fanno uso del interfaccia? </desc>
+    </issue>
+    <issue summary="Primo sguardo generale senza Comprensione Fine" lineStart="-1" lineEnd="-1" hash="45270556" status="resolved">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 08:49:53 +0100" lastUpdatedOn="2016-11-25 09:14:44 +0100"/>
+      <desc>Ottima struttura di directory per una ricerca più facile della classe.
+Il nome della classe vista la struttura delle directory per semplicità potrebbe essere scelto in modo più semplice e breve?
+Ad un primo sguardo generale la classe è impostata bene cioè è modulare i metodi sono &quot;atomici&quot;.
+Come classe noto un uso elevato di sovrascritture di metodi, i quali rendono di difficile comprensione(per un Newbie,non esperto di Android); potrebbe essere utile inserire nel commento la classe relativa al metodo che si intende sovrascrivere, così da velocizzare il revisore.
+Potresti usare maggiormente gli strumenti di Debug&quot; (android.util.Log)&quot;</desc>
+    </issue>
+    <issue summary="Riassunto domande CheckList utilizzate" lineStart="-1" lineEnd="-1" hash="45270556" status="resolved">
+      <history createdBy="FrancescoMarcon" lastUpdatedBy="FrancescoMarcon" createdOn="2016-11-25 19:57:04 +0100" lastUpdatedOn="2016-11-26 15:57:54 +0100"/>
+      <desc>Domande usate della CheckList
+
+Specific Functional Requirements
+Are all the inputs to the system specified, including their source, accuracy, range of values, and frequency?
+Are all the outputs from the system specified, including their destination, accuracy, range of values, frequency, and format?
+use error-checking or debug?
+
+General Architectural 
+Are the motivations for all major decisions provided?
+
+Design Goals
+Is the design stratified into layers?
+Are you satisfied with the way the program has been decomposed into subsystems, packages, and method?
+
+Abstract
+Are you preserving the integrity of the class’s interface as you modify the class?
+Does the class’s interface present a consistent abstraction?
+Is the class’s interface abstract enough that you don’t have to think about how its services are implemented?
+Are you preserving the integrity of the class’s interface as you modify the class?
+
+Encapsulation
+Does the class avoid exposing member data?
+Big-Picture Issues (Visione D&apos;insieme)
+Does the routine’s name describe everything the routine does?
+Does the routine have strong, functional cohesion—doing one and only one thing and doing it well?
+
+Parameter-Passing Issues
+Are interface assumptions documented?
+If the routine is a function, does it return a valid value under all possible circumstances?
+
+Initializing Variables
+Does the code initialize variables as they’re declared, if possible?
+Does the code compile with no warnings from the compiler?
+
+Other General Issues in Using Data
+Are all the declared variables being used?
+
+Power of Variables Names
+Does the name fully and accurately describe what the variable represents?
+Is the name long enough that you don’t have to puzzle it out?
+Naming Conventions
+Does the convention distinguish among type names, named constants, enumerated types, and variables?
+
+Short Names
+Does the code use long names (unless it’s necessary to use short ones)?
+
+Structure
+Have you considered creating a class as an alternative to using a structure?
+
+Debuggin
+Use available tools
+Narrow the suspicious region of the code
+Use available tools
+
+Layout And Style
+Is formatting done primarily to illuminate the logical structure of the code?
+
+Self-Documenting Code
+Good Commenting Technique
+Can someone pick up the code and immediately start to understand it?</desc>
+      <notes>
+        <note createdBy="FrancescoMarcon" createdOn="2016-11-26 15:57:33 +0100">&lt;enter your note here&gt;</note>
+      </notes>
+    </issue>
+  </issues>
+</review>

@@ -239,4 +239,8 @@ public class AudioTrackController implements SoundManager {
         }
 
     }
+
+    public AudioTrack getAudioTrack(){
+        return at;
+    }
 }

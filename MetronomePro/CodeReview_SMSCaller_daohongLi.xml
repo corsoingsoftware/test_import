@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review xmlns="http://plugins.intellij.net/revu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://plugins.intellij.net/revu http://plugins.intellij.net/revu/ns/revu_1_0.xsd" name="CodeReview_SMSCaller_daohongLi" status="draft" shared="true">
+  <history createdBy="OmarVesco" lastUpdatedBy="OmarVesco" createdOn="2016-11-25 18:36:23 +0100" lastUpdatedOn="2016-11-25 18:36:40 +0100"/>
+  <goal></goal>
+  <referential>
+    <priorities/>
+    <tags/>
+    <users>
+      <user displayName="DaohongLi" login="DaohongLi" roles="reviewer,author"/>
+      <user displayName="OmarVesco" login="OmarVesco" roles="admin,reviewer,author"/>
+    </users>
+  </referential>
+  <filescope pathPattern="file[*]:*//*"/>
+  <issues/>
+</review>
