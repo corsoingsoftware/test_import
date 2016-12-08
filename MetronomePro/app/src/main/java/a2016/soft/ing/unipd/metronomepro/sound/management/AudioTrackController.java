@@ -47,7 +47,7 @@ public class AudioTrackController implements SoundManager {
     private byte[] initialClack; //metto i due array come variabili per potervi accedere da fuori
     private byte[] finalClack;
     //    private ByteBuffer silence = ByteBuffer.allocate(2);
-    private AudioTrack at;
+    protected AudioTrack at;
 
     /**
      * Questo metodo carica questi due file in due array, per poi poterli gestire
