@@ -33,7 +33,9 @@
         <service
             android:name=".sound.management.SoundManagerService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name="layout.xml.NewSong"></activity>
     </application>
 
 </manifest>
