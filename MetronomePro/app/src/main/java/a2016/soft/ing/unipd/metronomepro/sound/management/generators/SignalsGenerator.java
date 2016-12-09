@@ -50,7 +50,7 @@ public class SignalsGenerator {
      * @param lengthInBytes lenght in bytes of sinus
      * @return sinus sound in bytes to play it with current configs
      */
-    public byte[] generateSin(long lengthInBytes){
+    public byte[] generateSin(long lengthInBytes, int sinFrequency){
         return null;
     }
 
