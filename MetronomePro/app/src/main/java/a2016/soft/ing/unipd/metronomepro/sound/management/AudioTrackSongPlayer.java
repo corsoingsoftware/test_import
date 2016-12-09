@@ -136,7 +136,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         for (int i = 0; i < songs.length; i++) {
 
-            if (hashMap.containsValue(songs[i].getName())) {
+            if (hashMap.containsKey(songs[i].getName())) {
 
                 arraySong = (byte[]) hashMap.get(songs[i].getName());
                 at.write(arraySong, 0, arraySong.length);
