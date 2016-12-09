@@ -25,6 +25,13 @@ public interface DataProvider {
     List<Song> getSongs(String searchName, Playlist playlist);
 
     /**
+     * read the playlists
+     * @param searchName search parameter, ignore if null
+     * @return the list of avaiable playlist
+     */
+    List<Playlist> getPlaylists(String searchName);
+
+    /**
      * memorize the song in database, throw exception if fails
      * override if present!
      * @param song to memorize
@@ -33,7 +40,7 @@ public interface DataProvider {
 
     /**
      * Delete the song throw exception if fails
-     * @param song  to delete
+     * @param song to delete
      */
     void delete(Song song);
 
