@@ -7,5 +7,5 @@ import java.util.List;
  * Created by feder on 07/12/2016.
  */
 
-public interface Song extends List<TimeSlice> {
+public interface Song extends List<TimeSlice>, Streamable {
 }
