@@ -13,33 +13,38 @@ public class SignalsGenerator {
     private static final int DEFAULT_SAMPLE_RATE_IN_HERTZ = 8000;
 
     /**
-     * Configurazione del canale audio
-     * Config for Audiotrack
+     * 2 bytes per sample default (short unsigned)
      */
-    private static final int DEFAULT_CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
+    private static final int DEFAULT_BYTES_PER_SAMPLE = 2;
     /**
-     * Configurazione del formato: pcm è un formato non compresso, anche i wav han lo stesso coding
-     * Config format for audiotrack
+     * one channel default
      */
-    private static final int DEFAULT_AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
+    private static final int DEFAULT_CHANNELS_COUNT = 1;
+
+    private int sampleRate;
+    private int bytesPerSample;
+    private int channelsCount;
+
+
     /**
      * default constructor
      */
     public SignalsGenerator() {
-        this(DEFAULT_SAMPLE_RATE_IN_HERTZ, DEFAULT_AUDIO_FORMAT, DEFAULT_CHANNEL_CONFIG);
+        this(DEFAULT_SAMPLE_RATE_IN_HERTZ, DEFAULT_BYTES_PER_SAMPLE, DEFAULT_CHANNELS_COUNT);
     }
 
     /**
      * Constructor to initialize the generator
      * @param sampleRate sample rate in hertz
-     * @param audioFormat format of audio, use {@link AudioFormat} class
-     * @param channelConfig config of channels, use {@link AudioFormat} class
+     * @param bytesPerSample bytes per sample
+     * @param channelsCount number of channels, it defines the frame size
      */
-    public SignalsGenerator(long sampleRate,
-                            int audioFormat,
-                            int channelConfig){
-
+    public SignalsGenerator(int channelsCount, int sampleRate, int bytesPerSample) {
+        this.channelsCount = channelsCount;
+        this.sampleRate = sampleRate;
+        this.bytesPerSample = bytesPerSample;
     }
+
     /**
      * generates a sinusoidal sound
      * @param lengthInBytes lenght in bytes of sinus
