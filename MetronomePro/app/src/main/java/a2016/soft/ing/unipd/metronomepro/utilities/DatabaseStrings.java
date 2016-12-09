@@ -8,7 +8,6 @@ package a2016.soft.ing.unipd.metronomepro.utilities;
 public class DatabaseStrings {
 
     public static final String DBNAME = "MetronomeProDatabase";
-    public static final int DB_VERSION = 1;
     public static final String TBL_TRACCE = "Tracce";
     public static final long FIELD_T_ID = 0;
     public static final String FIELD_T_NAME = "Nome";

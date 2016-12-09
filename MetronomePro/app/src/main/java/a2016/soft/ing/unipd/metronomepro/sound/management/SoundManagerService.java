@@ -23,9 +23,15 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceCon
  */
 public class SoundManagerService extends Service {
 
-    private static final String LOG_TAG = "SoundManagerService";        //aggiungo una stringa di LOG per facilitare il debug
+           //aggiungo una stringa di log per facilitare il debug
     private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
+    private boolean isPlaying = false;
+    private final static String LOG_TAG = "SoundManagerService";
+
+   /* public SoundManagerService() {
+
+    }*/
 
     @Override
     public void onCreate() {
