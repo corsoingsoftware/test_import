@@ -15,10 +15,19 @@ import java.util.ListIterator;
 
 public class ParcelableSong implements Song, Parcelable {
 
+    /**
+     * Unparcel the song
+     * @param in
+     */
     protected ParcelableSong(Parcel in) {
     }
 
     public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
+        /**
+         * create song from parcel, just call default parcel constructor
+         * @param in
+         * @return
+         */
         @Override
         public ParcelableSong createFromParcel(Parcel in) {
             return new ParcelableSong(in);
@@ -45,6 +54,11 @@ public class ParcelableSong implements Song, Parcelable {
         return 0;
     }
 
+    /**
+     * Parcel the song!
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
