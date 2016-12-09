@@ -9,4 +9,7 @@ import java.util.List;
  */
 
 public interface Song extends List<TimeSlice>, Streamable {
+
+    String getName();
+
 }

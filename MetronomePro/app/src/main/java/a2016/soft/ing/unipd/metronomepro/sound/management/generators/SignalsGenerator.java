@@ -1,7 +1,5 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management.generators;
 
-import android.media.AudioFormat;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -28,9 +26,14 @@ public class SignalsGenerator {
      */
     private static final int DEFAULT_CHANNELS_COUNT = 1;
 
+    private static final int SIN_LENGTH_IN_BYTES = 500;
+
+    private static final int SIN_FREQUENCY = 610;
+
     private int sampleRate;
     private int bytesPerSample;
     private int channelsCount;
+    private byte[] sinusoid;
 
 
     /**
@@ -58,7 +61,20 @@ public class SignalsGenerator {
      * @return sinus sound in bytes to play it with current configs
      */
     public byte[] generateSin(int lengthInBytes, int sinFrequency){
-        return null;
+
+        sinusoid = new byte[SIN_LENGTH_IN_BYTES];
+
+        for (int i = 0; i < SIN_LENGTH_IN_BYTES - 1; i++) {
+            double b = Math.sin(2 * Math.PI * i / (DEFAULT_SAMPLE_RATE_IN_HERTZ / sinFrequency));
+            ByteBuffer bb = ByteBuffer.allocate(2);
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+            bb.putShort((short) (b * Short.MIN_VALUE));
+            bb.position(0);
+            sinusoid[i++] = bb.get();
+            sinusoid[i] = bb.get();
+        }
+
+        return sinusoid;
     }
 
     /**
