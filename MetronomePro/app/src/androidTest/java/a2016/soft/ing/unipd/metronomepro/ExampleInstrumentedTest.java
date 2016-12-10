@@ -110,6 +110,7 @@ public class ExampleInstrumentedTest {
         t3.setBpm(100);
         t1.setDurationInBeats(20);
 
+
         Song s = new ParcelableSong();
         s.add(t1);
         s.add(t2);
