@@ -30,8 +30,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
                     era una cosa che facevi tu ma non posso impostare un servizio senza il contesto
 
      */
-    public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback){
-       // this.pService= new SongPlayerService();
+    public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback) {
         pBound = false;
         activityContext = c;
         pConnection = new ServiceConnection() {
