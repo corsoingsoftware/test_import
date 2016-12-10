@@ -21,6 +21,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider {
 
     /**
+     * average playlist size
+     */
+    public static final int DEFAULT_PLAYLIST_SIZE=20;
+    /**
      * creo il database con SQLopenhelper passandogli il contesto
      *
      * @param c context
@@ -90,10 +94,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
         if(searchName!=null) {
             query+=" WHERE " +
-                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE %" + searchName + "%;";
+                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE %\"" + searchName + "\"%;";
         }
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(1)));
+        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
         return playlists;
     }
 
@@ -105,19 +109,29 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @return arraylist delle canzoni con esattamente quel titolo presenti el db
      */
     public List<Song> getSongs(String searchName, Playlist playlist) {
-        if (searchName == null || playlist == null)
-            throw new SQLException("Null parameter");
-        ArrayList<Song> SongList = new ArrayList<>();
-        String query = "SELECT * FROM " + DataProviderConstants.TBL_ASSOCIATION
-                + "WHERE " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + "IS " + searchName + "AND"
-                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + "IS" + playlist + ";";
+        ArrayList<Song> songs = new ArrayList<>(DEFAULT_PLAYLIST_SIZE);
+        if(searchName==null) searchName="";
+        String query ="";
+        if(playlist!=null) {
+            query = "SELECT " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_SONG +
+                    " FROM " + DataProviderConstants.TBL_ASSOCIATION
+                    + " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " IS " + searchName + "AND"
+                    + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " IS" + playlist + ";";
+        }
+        else {
+            query="SELECT " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_SONG +
+                    " FROM " + DataProviderConstants.TBL_TRACK;
+            query+=" WHERE "+DataProviderConstants.FIELD_TRACK_NAME+" LIKE %\""+searchName+"\"%;";
+        }
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
         int i = 0;
         while (cursor.moveToNext()) {
-            SongList.set(i, cursor.getBlob(1));
+            Song s=EntitiesBuilder.getSong();
+            s.decode(cursor.getBlob(0));
+            songs.add(s);
             i++;
         }
-        return SongList;
+        return songs;
 
 
     }
@@ -125,13 +139,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     /**
      * memorizza la traccia nel db, il db non mi lascia inserire una traccia con nome null perchè è chiave primaria
      *
-     * @param name con cui si vuole salvare la traccia
      * @param song to memorize
      */
     public void save(Song song) {
         ContentValues cv = new ContentValues();
-        cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")", name);
-        cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_SONG + ")", song);
+        cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")", song.getName());
+        cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_SONG + ")", song.encode());
         this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_TRACK, "", cv);
     }
 
@@ -141,7 +154,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param song to delete
      */
     public void deleteSong(Song song) {
-        this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_SONG + "='" + song + "'", null);
+        this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME + "='" + song.getName() + "'", null);
     }
 
     /**
@@ -151,9 +164,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to save or update!
      */
     public void savePlaylist(Playlist playlist) {
-        ContentValues cv = new ContentValues();
-        cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist);
-        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
+//        ContentValues cv = new ContentValues();
+//        cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist);
+//        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
     }
 
     /**
