@@ -18,7 +18,7 @@ public class SongPlayerService extends Service {
     private static final String LOG_TAG = "SongPlayerService";
     private IBinder mBinder = new MyBinder();
     private SongPlayer atsp;
-    @Nullable
+
     @Override
     public void onCreate(){
         Log.v(LOG_TAG,"in onCreate");
@@ -30,13 +30,13 @@ public class SongPlayerService extends Service {
     }
 
     public void initialize(long frequencyBeep, long lenghtBeep, long frequencyBoop, long lenghtBoop, long sampleRate, int audioFormat, int channelConfig){
+        atsp.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
         Log.v(LOG_TAG,"in initialize(7param)");
-        //per il momento non va implementato
     }
 
     public void initialize(long sampleRate, int audioFormat, int channelConfig){
+        atsp.initialize(sampleRate,audioFormat,channelConfig);
         Log.v(LOG_TAG,"in initialize(3param)");
-        //per il momento non va implementato
     }
 
     public void initialize(){
