@@ -93,7 +93,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         String query = "SELECT * FROM " + DataProviderConstants.TBL_PLAYLIST + "WHERE" +
                 DataProviderConstants.FIELD_PLAYLIST_NAME + "IS"+ searchName+";";
         Cursor cursor = this.getReadableDatabase().rawQuery(query,null);
-        Playlist.set(0,cursor.getString(1));
+        Playlist.set(0,cursor.getString(2));
+        return Playlist;
     }
 
     /**
