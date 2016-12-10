@@ -36,13 +36,13 @@ public interface DataProvider {
      * override if present!
      * @param song to memorize
      */
-    void save(Song song);
+    void save(String name, Song song);
 
     /**
      * Delete the song throw exception if fails
      * @param song to delete
      */
-    void delete(Song song);
+    void deleteSong(Song song);
 
     /**
      * save the playlist, and the songs in it if they aren't in database already
