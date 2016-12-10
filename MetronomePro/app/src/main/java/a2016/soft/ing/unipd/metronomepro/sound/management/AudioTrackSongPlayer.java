@@ -78,13 +78,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
     @Override
     public void load(Song song) {
 
-        /* Gli arriva una song in ingresso, controllo se è già presente. Se non lo è, la aggiungo all'Hash Map richiamando
+        /* Arriva una song in ingresso, controllo se è già presente. Se non lo è, la aggiungo all'Hash Map richiamando
             getSong per ottenere l'array. Aggiungo il nome come chiave e l'array come valore.
         */
 
         if (!hashMap.containsKey(song.getName())) {
 
-            //Create a new element for the hashtable
+            //Create a new element for the hashMap
 
             hashMap.put(song.getName(), getSong(song));
         }
