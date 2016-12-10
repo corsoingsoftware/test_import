@@ -22,12 +22,16 @@ public class AudioTrackSongPlayer implements SongPlayer {
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
 
     public AudioTrackSongPlayer() {
+
+        at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
+                AUDIO_FORMAT, AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT), AudioTrack.MODE_STATIC);
         this.initialize();
+
     }
 
     @Override
     public void play() {
-
+        at.play();
     }
 
     //richiama dal costruttore
@@ -52,12 +56,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public void pause() {
-
+        at.pause();
     }
 
     @Override
     public void stop() {
 
+        at.stop();
     }
 
     @Override
@@ -131,8 +136,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
         // Riceve in input un array di Songs. Cerca nell'HashMap, se le trova le scrive nel buffer di AudioTrack.
         byte[] arraySong;
 
-        at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
-                AUDIO_FORMAT, AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT), AudioTrack.MODE_STATIC);
 
         for (int i = 0; i < songs.length; i++) {
 
