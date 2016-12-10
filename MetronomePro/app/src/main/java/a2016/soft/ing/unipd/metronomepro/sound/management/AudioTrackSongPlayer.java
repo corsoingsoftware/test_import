@@ -98,7 +98,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         SignalsGenerator sGenerator = new SignalsGenerator();
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
-        //int num_slices = 0;
 
         for (TimeSlice ts : s) {
 
@@ -118,7 +117,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
 
             listSong.add(arraySlice);
-            //num_slices++;
         }
 
 
@@ -147,7 +145,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
             case AudioTrack.PLAYSTATE_PAUSED:
                 return PLAYSTATE_PAUSE;
             default:
-                return PLAYSTATE_UNKNOW; //Non dovrebbe mai essere qui.
+                return PLAYSTATE_UNKNOW;
         }
     }
 
