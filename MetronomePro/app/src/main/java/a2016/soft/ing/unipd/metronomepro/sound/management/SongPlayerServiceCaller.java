@@ -19,14 +19,18 @@ public class SongPlayerServiceCaller implements SongPlayer {
     private SongPlayerService pService;
     private boolean pBound; //serve a verificare la connessione al servizio
     private ServiceConnection pConnection;
-    private MetronomeActivity activityContext;
+    private Context activityContext;
+
+    public interface SongPlayerServiceCallerCallback {
+        void serviceConnected();
+    }
 
     /*costruttore gli passa un metronomeActivity (provvisorio)
     per federico: avevi detto che il fatto di passare al costruttore un oggetto di tipo metronomeActivity
                     era una cosa che facevi tu ma non posso impostare un servizio senza il contesto
 
      */
-    public SongPlayerServiceCaller(MetronomeActivity c){
+    public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback){
        // this.pService= new SongPlayerService();
         pBound = false;
         activityContext = c;
@@ -35,11 +39,11 @@ public class SongPlayerServiceCaller implements SongPlayer {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Log.v(LOG_TAG,"in onServiceConnected");
                 //cast
-                SongPlayerService.myBinder binder = (SongPlayerService.myBinder) service;
+                SongPlayerService.MyBinder binder = (SongPlayerService.MyBinder) service;
                 //chiamo il metodo della sottoclasse di SongPlayerService
                 pService = binder.getService();
                 //Chiamo il metodo onServiceInitialized di MetronomeActivity.
-                activityContext.onServiceInitialized();
+                callback.serviceConnected();
             }
 
             @Override

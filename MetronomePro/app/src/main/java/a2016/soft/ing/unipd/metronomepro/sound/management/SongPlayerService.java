@@ -16,8 +16,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 public class SongPlayerService extends Service {
 
     private static final String LOG_TAG = "SongPlayerService";
-    private IBinder mBinder = new myBinder();
-    private AudioTrackSongPlayer atsp;
+    private IBinder mBinder = new MyBinder();
+    private SongPlayer atsp;
     @Nullable
     @Override
     public void onCreate(){
@@ -74,7 +74,7 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in load");
 
     }
-    public class myBinder extends Binder {
+    public class MyBinder extends Binder {
         SongPlayerService getService() {
             return SongPlayerService.this;
         }
