@@ -18,7 +18,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.generators.SignalsGene
 public class AudioTrackSongPlayer implements SongPlayer {
 
     private AudioTrack at;
-    private HashMap hashMap;
+    private HashMap hashMap = new HashMap();
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
 
     public AudioTrackSongPlayer() {
@@ -41,12 +41,14 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         this.frequencyBeep = frequencyBeep;
         this.lengthBeep = lengthBeep;
+        this.frequencyBoop = frequencyBoop;
+        this.lenghtBoop = lengthBoop;
     }
 
     @Override
     public void initialize(int sampleRate, int audioFormat, int channelConfig) {
 
-        this.initialize(0, 0, 0, 0, SAMPLE_RATE_IN_HERTZ, AUDIO_FORMAT, CHANNEL_CONFIG);
+        this.initialize(0, 0, 0, 0, sampleRate, audioFormat, channelConfig);
     }
 
     @Override
