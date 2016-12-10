@@ -27,9 +27,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
 
     public AudioTrackSongPlayer() {
-
         this.initialize();
-
     }
 
     @Override

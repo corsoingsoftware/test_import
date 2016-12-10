@@ -26,14 +26,19 @@ public class SignalsGenerator {
      */
     private static final int DEFAULT_CHANNELS_COUNT = 1;
 
-    private static final int SIN_LENGTH_IN_BYTES = 500;
-
-    private static final int SIN_FREQUENCY = 610;
-
+    /**
+     * Sample rate in hertz
+     */
     private int sampleRate;
+    /**
+     * Attualmente non considerato
+     *
+     */
     private int bytesPerSample;
+    /**
+     * Attualmente non considerato
+     */
     private int channelsCount;
-    private byte[] sinusoid;
 
 
     /**
@@ -62,11 +67,11 @@ public class SignalsGenerator {
      */
     public byte[] generateSin(int lengthInBytes, int sinFrequency){
 
-        sinusoid = new byte[SIN_LENGTH_IN_BYTES];
+        byte[] sinusoid = new byte[lengthInBytes];
 
-        for (int i = 0; i < SIN_LENGTH_IN_BYTES - 1; i++) {
-            double b = Math.sin(2 * Math.PI * i / (DEFAULT_SAMPLE_RATE_IN_HERTZ / sinFrequency));
-            ByteBuffer bb = ByteBuffer.allocate(2);
+        for (int i = 0; i < lengthInBytes - 1; i++) {
+            double b = Math.sin(2 * Math.PI * i / (sampleRate / sinFrequency));
+            ByteBuffer bb = ByteBuffer.allocate(SHORT_SIZE);
             bb.order(ByteOrder.LITTLE_ENDIAN);
             bb.putShort((short) (b * Short.MIN_VALUE));
             bb.position(0);
