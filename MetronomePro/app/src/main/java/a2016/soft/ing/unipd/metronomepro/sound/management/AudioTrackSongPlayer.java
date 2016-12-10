@@ -130,6 +130,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
             int bpm_slice = ts.getBpm();
             int PeriodLengthInBytes = (SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / bpm_slice));
 
+            //Si potrebbe generare fuori e lasciare lo stesso puntatore, perché tanto poi viene copiata
             byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
             numBytes+=PeriodLengthInBytes;
