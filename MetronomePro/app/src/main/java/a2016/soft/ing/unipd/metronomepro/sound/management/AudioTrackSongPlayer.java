@@ -5,6 +5,7 @@ import android.media.AudioTrack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -23,10 +24,14 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 public class AudioTrackSongPlayer implements SongPlayer {
 
     private AudioTrack at;
-    private HashMap hashMap = new HashMap();
+    /**
+     * The name of song is key
+     */
+    private HashMap<String, byte[]> hashMap;
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
 
     public AudioTrackSongPlayer() {
+        hashMap = new HashMap<String, byte[]>();
         this.initialize();
     }
 
@@ -37,8 +42,24 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     //richiama dal costruttore
 
+    /**
+     * A lot of parameters but they are necessary, there are method with less parameters
+     * @param frequencyBeep frequency of higher tone beep
+     * @param lengthBeep length of higher tone beep
+     * @param frequencyBoop frequency of lower tone boop
+     * @param lengthBoop length of lower tone boop
+     * @param sampleRate rate of audio signal
+     * @param audioFormat format of audio signal
+     * @param channelConfig config of channels
+     */
     @Override
-    public void initialize(int frequencyBeep, int lengthBeep, int frequencyBoop, int lengthBoop, int sampleRate, int audioFormat, int channelConfig) {
+    public void initialize(int frequencyBeep,
+                           int lengthBeep,
+                           int frequencyBoop,
+                           int lengthBoop,
+                           int sampleRate,
+                           int audioFormat,
+                           int channelConfig) {
 
         this.frequencyBeep = frequencyBeep;
         this.lengthBeep = lengthBeep;
@@ -53,7 +74,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
     @Override
     public void initialize(int sampleRate, int audioFormat, int channelConfig) {
 
-        this.initialize(0, 0, 0, 0, sampleRate, audioFormat, channelConfig);
+        this.initialize(DEFAULT_BEEP_FREQUENCY,
+                DEFAULT_SIN_LENGTH_IN_BYTES,
+                DEFAULT_BOOP_FREQUENCY,
+                DEFAULT_SIN_LENGTH_IN_BYTES,
+                sampleRate,
+                audioFormat,
+                channelConfig);
 
     }
 
@@ -96,6 +123,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         SignalsGenerator sGenerator = new SignalsGenerator();
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
+        int numBytes=0;
 
         for (TimeSlice ts : s) {
 
@@ -104,31 +132,18 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
             byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
-
-            byte[] arraySlice = new byte[sound.length + silence.length];
-
-            //Concateno i due array
-
-            System.arraycopy(sound, 0, arraySlice, 0, sound.length);
-            System.arraycopy(silence, 0, arraySlice, sound.length - 1, silence.length);
+            numBytes+=PeriodLengthInBytes;
 
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
-
-            listSong.add(arraySlice);
+            listSong.add(sound);
+            listSong.add(silence);
         }
-
-
-        byte[] arraySong = new byte[0];
-        byte[] arrayTemp;
-
+        byte[] arraySong = new byte[numBytes];
+        int indexOfArraySong=0;
         for (byte[] sliceTemp : listSong) {
-
-            arrayTemp = new byte[arraySong.length + sliceTemp.length];
-            System.arraycopy(arraySong, 0, arrayTemp, 0, arraySong.length);
-            System.arraycopy(sliceTemp, 0, arrayTemp, arraySong.length - 1, sliceTemp.length);
-            arraySong = arrayTemp;
+            System.arraycopy(sliceTemp,0,arraySong,indexOfArraySong,sliceTemp.length);
+            indexOfArraySong+=sliceTemp.length;
         }
-
         return arraySong;
     }
 
@@ -147,7 +162,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         }
     }
 
-    public void write(Song[] songs) {
+    public void write(Song[] songs) throws Exception {
 
         // Riceve in input un array di Songs. Cerca nell'HashMap, se le trova le scrive nel buffer di AudioTrack.
         byte[] arraySong;
@@ -156,9 +171,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
         for (int i = 0; i < songs.length; i++) {
 
             if (hashMap.containsKey(songs[i].getName())) {
-
-                arraySong = (byte[]) hashMap.get(songs[i].getName());
-                at.write(arraySong, 0, arraySong.length);
+                arraySong = hashMap.get(songs[i].getName());
+                int bytesWritten=at.write(arraySong, 0, arraySong.length);
+                //just to know how to works, to the first test.
+                if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
             }
         }
     }

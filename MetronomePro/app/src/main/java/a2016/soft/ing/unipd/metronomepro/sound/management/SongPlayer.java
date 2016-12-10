@@ -18,6 +18,24 @@ public interface SongPlayer {
     static final int SECS_IN_MIN = 60;
 
     /**
+     * Frequenza della sinusoide
+     * sin frequency of beep
+     */
+    static final int DEFAULT_BEEP_FREQUENCY=610;
+
+    /**
+     * Frequenza della sinusoide
+     * sin frequency OF boop
+     */
+    static final int DEFAULT_BOOP_FREQUENCY=400;
+    /**
+     * Lunghezza totale della sinusoide in bytes questa lunghezza deve essere molto più breve dei max bpm, che attualmente son 300
+     * per decisione di struttura
+     * Total length in bytes of the "beep", it must be shorter than minimum period, so when bpm are higher
+     */
+    static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
+
+    /**
      * Start the current song
      */
     void play();
