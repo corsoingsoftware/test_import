@@ -125,13 +125,15 @@ public class AudioTrackSongPlayer implements SongPlayer {
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
         int numBytes=0;
 
+        //Tutti gli elementi di listsong punteranno allo stesso array di bytes
+        //ma tanto dopo viene fatto un arraycopy
+        //risparmio memoria
+        byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
             int PeriodLengthInBytes = (SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / bpm_slice));
 
-            //Si potrebbe generare fuori e lasciare lo stesso puntatore, perché tanto poi viene copiata
-            byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
             numBytes+=PeriodLengthInBytes;
 
