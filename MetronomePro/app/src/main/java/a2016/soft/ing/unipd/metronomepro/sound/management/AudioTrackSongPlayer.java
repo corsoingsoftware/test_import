@@ -5,7 +5,6 @@ import android.media.AudioTrack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -100,12 +99,16 @@ public class AudioTrackSongPlayer implements SongPlayer {
         at.stop();
     }
 
+    /**
+     * Controlla se è già presente la song passata come parametro. Se non lo è la aggiungo all'Hash Map richiamando
+     * getSong in modo da ottenere l'array che la rappresenta. Aggiungo il nome come chiave e l'array come valore.
+     *
+     * @param song canzone da aggiungere
+     */
+
     @Override
     public void load(Song song) {
 
-        /* Arriva una song in ingresso, controllo se è già presente. Se non lo è, la aggiungo all'Hash Map richiamando
-            getSong per ottenere l'array. Aggiungo il nome come chiave e l'array come valore.
-        */
 
         if (!hashMap.containsKey(song.getName())) {
 
@@ -116,18 +119,24 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     }
 
+    /**
+     * Restituisce l'array che rappresenta la canzone. Costruisce la sinusoide e il silenzio utilizzando la classe SignalsGenerator.
+     * @param s song to search
+     * @return arraySong array di byte che rappresenta la canzone
+     */
+
     @Override
     public byte[] getSong(Song s) {
 
-        //Restituisce l'array costruito a partire dalla canzone (composta da più Time Slice). Costruisco le sinusoidi ed etc.
-
         SignalsGenerator sGenerator = new SignalsGenerator();
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
-        int numBytes=0;
+        int numBytes = 0;
 
-        //Tutti gli elementi di listsong punteranno allo stesso array di bytes
-        //ma tanto dopo viene fatto un arraycopy
-        //risparmio memoria
+        /**
+         *  Tutti gli elementi di listsong punteranno allo stesso array di bytes in, tanto dopo viene fatto un arraycopy.
+         *  Risparmio memoria.
+         */
+
         byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
         for (TimeSlice ts : s) {
 
@@ -138,6 +147,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
             numBytes+=PeriodLengthInBytes;
 
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
+
             listSong.add(sound);
             listSong.add(silence);
         }
@@ -149,6 +159,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
         }
         return arraySong;
     }
+
+    /**
+     * Restituisce lo stato di AudioTrack.
+     * @return Playstate identifica lo stato di AudioTrack
+     */
 
     @Override
     public PlayState getState() {
@@ -165,11 +180,16 @@ public class AudioTrackSongPlayer implements SongPlayer {
         }
     }
 
+    /**
+     * Riceve in input un array di Songs. Le cerca nell'HashMap e, se presenti, le scrive nel buffer di AudioTrack.
+     * @param songs array contenente le canzoni
+     * @throws Exception
+     */
+
     public void write(Song[] songs) throws Exception {
 
-        // Riceve in input un array di Songs. Cerca nell'HashMap, se le trova le scrive nel buffer di AudioTrack.
-        byte[] arraySong;
 
+        byte[] arraySong;
 
         for (int i = 0; i < songs.length; i++) {
 
