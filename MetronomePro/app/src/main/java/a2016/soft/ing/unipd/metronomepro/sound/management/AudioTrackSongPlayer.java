@@ -138,8 +138,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
             numBytes+=PeriodLengthInBytes;
 
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
-            listSong.add(sound);
-            listSong.add(silence);
+            for(int count=0;count<ts.getDurationInBeats();count++) {
+                listSong.add(sound);
+                listSong.add(silence);
+            }
         }
         byte[] arraySong = new byte[numBytes];
         int indexOfArraySong=0;
