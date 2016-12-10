@@ -10,6 +10,11 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.generators.SignalsGenerator;
 
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PAUSE;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PLAYING;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_STOP;
+import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_UNKNOW;
+
 /**
  * Created by feder on 08/12/2016.
  * This class uses AudioTrack to create song in bytes from a Song, and provides methods to play the track!
@@ -23,8 +28,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     public AudioTrackSongPlayer() {
 
-        at = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG,
-                AUDIO_FORMAT, AudioTrack.getMinBufferSize(SAMPLE_RATE_IN_HERTZ, CHANNEL_CONFIG, AUDIO_FORMAT), AudioTrack.MODE_STATIC);
         this.initialize();
 
     }
@@ -43,12 +46,17 @@ public class AudioTrackSongPlayer implements SongPlayer {
         this.lengthBeep = lengthBeep;
         this.frequencyBoop = frequencyBoop;
         this.lenghtBoop = lengthBoop;
+
+        at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
+                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
+
     }
 
     @Override
     public void initialize(int sampleRate, int audioFormat, int channelConfig) {
 
         this.initialize(0, 0, 0, 0, sampleRate, audioFormat, channelConfig);
+
     }
 
     @Override
@@ -130,7 +138,17 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public PlayState getState() {
-        return null;
+
+        switch (at.getPlayState()) {
+            case AudioTrack.PLAYSTATE_STOPPED:
+                return PLAYSTATE_STOP;
+            case AudioTrack.PLAYSTATE_PLAYING:
+                return PLAYSTATE_PLAYING;
+            case AudioTrack.PLAYSTATE_PAUSED:
+                return PLAYSTATE_PAUSE;
+            default:
+                return PLAYSTATE_UNKNOW; //Non dovrebbe mai essere qui.
+        }
     }
 
     public void write(Song[] songs) {
