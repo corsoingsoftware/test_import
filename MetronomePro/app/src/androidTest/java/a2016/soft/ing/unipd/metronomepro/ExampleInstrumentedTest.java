@@ -120,7 +120,7 @@ public class ExampleInstrumentedTest {
         SongPlayer atsp = new AudioTrackSongPlayer();
         atsp.load(s);
 
-        Song[] arrayS = new Song[0];
+        Song[] arrayS = new Song[1];
         arrayS[0] = s;
 
         ((AudioTrackSongPlayer)atsp).write(arrayS);

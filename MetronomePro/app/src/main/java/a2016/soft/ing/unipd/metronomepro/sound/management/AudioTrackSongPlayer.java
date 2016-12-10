@@ -170,20 +170,25 @@ public class AudioTrackSongPlayer implements SongPlayer {
             int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
-            numBytes+=PeriodLengthInBytes;
 
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
-            for(int count=0;count<ts.getDurationInBeats();count++) {
+
+            for (int count = 0; count < ts.getDurationInBeats(); count++) {
                 listSong.add(sound);
                 listSong.add(silence);
+                numBytes += PeriodLengthInBytes;
             }
         }
+
         byte[] arraySong = new byte[numBytes];
-        int indexOfArraySong=0;
+        int indexOfArraySong = 0;
+
         for (byte[] sliceTemp : listSong) {
-            System.arraycopy(sliceTemp,0,arraySong,indexOfArraySong,sliceTemp.length);
-            indexOfArraySong+=sliceTemp.length;
+
+            System.arraycopy(sliceTemp, 0, arraySong, indexOfArraySong, sliceTemp.length);
+            indexOfArraySong += sliceTemp.length;
         }
+
         return arraySong;
     }
 
@@ -226,6 +231,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 int bytesWritten=at.write(arraySong, 0, arraySong.length);
                 //just to know how to works, to the first test.
                 if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
+
+                // TODO: 10/12/2016 creare Thread 
             }
         }
     }
