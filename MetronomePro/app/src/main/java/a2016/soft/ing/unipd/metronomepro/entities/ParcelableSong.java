@@ -39,6 +39,10 @@ public class ParcelableSong implements Song, Parcelable {
 
     private String name;
 
+    ParcelableSong() {
+
+    }
+
     protected ParcelableSong(Parcel in) {
 
     }

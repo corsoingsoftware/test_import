@@ -36,7 +36,7 @@ public interface DataProvider {
      * override if present!
      * @param song to memorize
      */
-    void save(String name, Song song);
+    void save(Song song);
 
     /**
      * Delete the song throw exception if fails
