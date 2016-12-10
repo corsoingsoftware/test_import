@@ -15,13 +15,6 @@ import java.util.ListIterator;
 
 public class ParcelableSong implements Song, Parcelable {
 
-    /**
-     * Unparcel the song
-     * @param in
-     */
-    protected ParcelableSong(Parcel in) {
-    }
-
     public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
         /**
          * create song from parcel, just call default parcel constructor
@@ -38,6 +31,21 @@ public class ParcelableSong implements Song, Parcelable {
             return new ParcelableSong[size];
         }
     };
+    /**
+     * Unparcel the song
+     *
+     * @param in
+     */
+
+    private String name;
+
+    ParcelableSong() {
+
+    }
+
+    protected ParcelableSong(Parcel in) {
+
+    }
 
     @Override
     public byte[] encode() {
@@ -182,4 +190,9 @@ public class ParcelableSong implements Song, Parcelable {
     public List<TimeSlice> subList(int fromIndex, int toIndex) {
         return null;
     }
+
+    public String getName() {
+        return name;
+    }
+
 }
