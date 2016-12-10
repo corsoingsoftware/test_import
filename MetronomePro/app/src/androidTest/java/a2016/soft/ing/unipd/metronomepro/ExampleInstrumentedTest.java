@@ -14,6 +14,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -106,9 +107,9 @@ public class ExampleInstrumentedTest {
         t1.setBpm(60);
         t1.setDurationInBeats(20);
         t2.setBpm(80);
-        t1.setDurationInBeats(20);
+        t2.setDurationInBeats(20);
         t3.setBpm(100);
-        t1.setDurationInBeats(20);
+        t3.setDurationInBeats(20);
 
 
         Song s = new ParcelableSong();
@@ -116,13 +117,13 @@ public class ExampleInstrumentedTest {
         s.add(t2);
         s.add(t3);
 
-        AudioTrackSongPlayer atsp = new AudioTrackSongPlayer();
+        SongPlayer atsp = new AudioTrackSongPlayer();
         atsp.load(s);
 
         Song[] arrayS = new Song[0];
         arrayS[0] = s;
 
-        atsp.write(arrayS);
+        ((AudioTrackSongPlayer)atsp).write(arrayS);
         atsp.play();
     }
 }

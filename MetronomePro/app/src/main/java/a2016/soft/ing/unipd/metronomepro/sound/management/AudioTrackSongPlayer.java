@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
+import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
@@ -21,6 +22,31 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
  */
 
 public class AudioTrackSongPlayer implements SongPlayer {
+
+    static final int SAMPLE_RATE_IN_HERTZ = 8000;
+    static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
+    static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
+    static final int FRAME_SIZE = 2;
+    static final int SECS_IN_MIN = 60;
+
+    /**
+     * Frequenza della sinusoide
+     * sin frequency of beep
+     */
+    static final int DEFAULT_BEEP_FREQUENCY=610;
+
+    /**
+     * Frequenza della sinusoide
+     * sin frequency OF boop
+     */
+    static final int DEFAULT_BOOP_FREQUENCY=400;
+    /**
+     * Lunghezza totale della sinusoide in bytes questa lunghezza deve essere molto più breve dei max bpm, che attualmente son 300
+     * per decisione di struttura
+     * Total length in bytes of the "beep", it must be shorter than minimum period, so when bpm are higher
+     */
+    static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
+
 
     private AudioTrack at;
     /**
@@ -141,7 +167,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
-            int PeriodLengthInBytes = (SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / bpm_slice));
+            int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
             numBytes+=PeriodLengthInBytes;
