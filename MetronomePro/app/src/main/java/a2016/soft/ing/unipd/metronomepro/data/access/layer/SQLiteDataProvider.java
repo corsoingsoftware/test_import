@@ -89,7 +89,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         if(searchName == null)
             throw new SQLException("Null parameter");
 
-        ArrayList<Song> Playlist = new ArrayList<>(1);
+        ArrayList<Playlist> Playlist = new ArrayList<>(1);
         String query = "SELECT * FROM " + DataProviderConstants.TBL_PLAYLIST + "WHERE" +
                 DataProviderConstants.FIELD_PLAYLIST_NAME + "IS"+ searchName+";";
         Cursor cursor = this.getReadableDatabase().rawQuery(query,null);

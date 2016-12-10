@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import org.junit.Test;
 
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.SQLiteDataProvider;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
