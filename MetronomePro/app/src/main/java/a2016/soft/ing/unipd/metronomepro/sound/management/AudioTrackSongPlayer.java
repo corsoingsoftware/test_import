@@ -28,13 +28,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
     static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
     static final int FRAME_SIZE = 2;
     static final int SECS_IN_MIN = 60;
-
     /**
      * Frequenza della sinusoide
      * sin frequency of beep
      */
     static final int DEFAULT_BEEP_FREQUENCY=610;
-
     /**
      * Frequenza della sinusoide
      * sin frequency OF boop
@@ -46,8 +44,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * Total length in bytes of the "beep", it must be shorter than minimum period, so when bpm are higher
      */
     static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
-
-
+    private Thread writeAt;
+    private boolean goThread = true;
     private AudioTrack at;
     /**
      * The name of song is key
@@ -218,27 +216,39 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @throws Exception
      */
 
-    public void write(Song[] songs) throws Exception {
+    public void write(final Song[] songs) throws Exception {
 
 
-        Thread writeAt = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
 
                 byte[] arraySong;
 
+                while (!goThread) {
+                }  //Attesa!
+
+                //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
+                goThread = false;
+
                 for (int i = 0; i < songs.length; i++) {
 
-
                     if (hashMap.containsKey(songs[i].getName())) {
+
                         arraySong = hashMap.get(songs[i].getName());
-                        int bytesWritten = at.write(arraySong, 0, arraySong.length);
-                        //just to know how to works, to the first test.
-                        //if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
+                        int indexWrite = 0;
+
+                        while (indexWrite <= arraySong.length) {
+
+                            int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
+                            indexWrite += bytesWritten;
+                        }
                     }
                 }
+
+                //Ho finito la scrittura nel buffer
+                goThread = true;
             }
         }).start();
-
     }
 }
