@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
+import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
@@ -22,6 +23,29 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 
 public class AudioTrackSongPlayer implements SongPlayer {
 
+    static final int SAMPLE_RATE_IN_HERTZ = 8000;
+    static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
+    static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
+    static final int FRAME_SIZE = 2;
+    static final int SECS_IN_MIN = 60;
+    /**
+     * Frequenza della sinusoide
+     * sin frequency of beep
+     */
+    static final int DEFAULT_BEEP_FREQUENCY=610;
+    /**
+     * Frequenza della sinusoide
+     * sin frequency OF boop
+     */
+    static final int DEFAULT_BOOP_FREQUENCY=400;
+    /**
+     * Lunghezza totale della sinusoide in bytes questa lunghezza deve essere molto più breve dei max bpm, che attualmente son 300
+     * per decisione di struttura
+     * Total length in bytes of the "beep", it must be shorter than minimum period, so when bpm are higher
+     */
+    static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
+    private Thread writeAt;
+    private boolean goThread;
     private AudioTrack at;
     /**
      * The name of song is key
@@ -68,6 +92,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
                 audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
 
+        goThread = true;
     }
 
     @Override
@@ -141,23 +166,28 @@ public class AudioTrackSongPlayer implements SongPlayer {
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
-            int PeriodLengthInBytes = (SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / bpm_slice));
+            int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
-            numBytes+=PeriodLengthInBytes;
 
             //Aggiungo arraySlice in coda alla lista che contiene tutti gli slices della canzone
-            for(int count=0;count<ts.getDurationInBeats();count++) {
+
+            for (int count = 0; count < ts.getDurationInBeats(); count++) {
                 listSong.add(sound);
                 listSong.add(silence);
+                numBytes += PeriodLengthInBytes;
             }
         }
+
         byte[] arraySong = new byte[numBytes];
-        int indexOfArraySong=0;
+        int indexOfArraySong = 0;
+
         for (byte[] sliceTemp : listSong) {
-            System.arraycopy(sliceTemp,0,arraySong,indexOfArraySong,sliceTemp.length);
-            indexOfArraySong+=sliceTemp.length;
+
+            System.arraycopy(sliceTemp, 0, arraySong, indexOfArraySong, sliceTemp.length);
+            indexOfArraySong += sliceTemp.length;
         }
+
         return arraySong;
     }
 
@@ -187,20 +217,40 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @throws Exception
      */
 
-    public void write(Song[] songs) throws Exception {
+    public void write(final Song[] songs) throws Exception {
 
 
-        byte[] arraySong;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
+                byte[] arraySong;
 
-        for (int i = 0; i < songs.length; i++) {
+                while (!goThread) {
+                }  //Attesa!
 
-            if (hashMap.containsKey(songs[i].getName())) {
-                arraySong = hashMap.get(songs[i].getName());
-                int bytesWritten=at.write(arraySong, 0, arraySong.length);
-                //just to know how to works, to the first test.
-                if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
+                //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
+                goThread = false;
+
+                for (int i = 0; i < songs.length; i++) {
+
+                    if (hashMap.containsKey(songs[i].getName())) {
+
+                        arraySong = hashMap.get(songs[i].getName());
+                        int indexWrite = 0;
+
+                        while (indexWrite <= arraySong.length) {
+
+                            int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
+                            indexWrite += bytesWritten;
+                        }
+                    }
+                }
+
+                //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
+                goThread = true;
             }
-        }
+        }).start();
     }
+
 }

@@ -3,16 +3,21 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioTrack;
-import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
+import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -89,5 +94,36 @@ public class ExampleInstrumentedTest {
 
         atc.play();
         assertEquals(atc.getAudioTrack().getState(), AudioTrack.PLAYSTATE_STOPPED);
+    }
+
+    @Test
+    public void songTest() throws Exception {
+
+        TimeSlice t1, t2, t3;
+
+        t1 = new TimeSlice();
+        t2 = new TimeSlice();
+        t3 = new TimeSlice();
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(80);
+        t2.setDurationInBeats(20);
+        t3.setBpm(100);
+        t3.setDurationInBeats(20);
+
+
+        Song s = new ParcelableSong();
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+
+        SongPlayer atsp = new AudioTrackSongPlayer();
+        atsp.load(s);
+
+        Song[] arrayS = new Song[1];
+        arrayS[0] = s;
+
+        ((AudioTrackSongPlayer)atsp).write(arrayS);
+        //atsp.play();
     }
 }
