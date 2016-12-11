@@ -124,5 +124,6 @@ public class ExampleInstrumentedTest {
         arrayS[0] = s;
 
         ((AudioTrackSongPlayer)atsp).write(arrayS);
+        //atsp.play();
     }
 }

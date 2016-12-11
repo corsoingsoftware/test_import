@@ -45,7 +45,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
     private Thread writeAt;
-    private boolean goThread = true;
+    private boolean goThread;
     private AudioTrack at;
     /**
      * The name of song is key
@@ -92,6 +92,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
                 audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
 
+        goThread = true;
     }
 
     @Override
@@ -246,9 +247,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
                     }
                 }
 
-                //Ho finito la scrittura nel buffer
+                //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
             }
         }).start();
     }
+
 }
