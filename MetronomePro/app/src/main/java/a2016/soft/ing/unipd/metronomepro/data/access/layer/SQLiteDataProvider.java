@@ -87,23 +87,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         return getSongs(null, null);
     }
 
-    /**
-     * @param searchName search parameter, ignore if null
-     * @return un arraylist di tutte le cazoni con quel nome
-     */
-    public List<Playlist> getPlaylists(String searchName) {
-        ArrayList<Playlist> playlists = new ArrayList<>(1);
-        String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
-        if (searchName != null) {
-            query += " WHERE " +
-                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE %\'" + searchName + "\'%;";
-        }
-        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
-        return playlists;
-    }
-
-    /**
+     /**
      * la ricerca like sarà implementata più avanti
      *
      * @param searchName research parameter "like" for name of songs if null=all songs
@@ -157,6 +141,22 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      */
     public void deleteSong(Song song) {
         this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME + "='" + song.getName() + "'", null);
+    }
+
+    /**
+     * @param searchName search parameter, ignore if null
+     * @return un arraylist di tutte le cazoni con quel nome
+     */
+    public List<Playlist> getPlaylists(String searchName) {
+        ArrayList<Playlist> playlists = new ArrayList<>(1);
+        String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
+        if (searchName != null) {
+            query += " WHERE " +
+                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE %\'" + searchName + "\'%;";
+        }
+        Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
+        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
+        return playlists;
     }
 
     /**

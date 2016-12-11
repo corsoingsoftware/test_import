@@ -6,13 +6,17 @@ import android.database.sqlite.SQLiteDatabase;
 import org.junit.Test;
 
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.SQLiteDataProvider;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
+
 
 /**
  * Created by Francesco on 10/12/2016.
  */
 
-public class SQLiteDataProviderTest {
+public class SQLiteDataProviderTest{
     Context c;
 
     /**
@@ -35,10 +39,9 @@ public class SQLiteDataProviderTest {
     @Test
     public void saveTrackTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Song s = new Song();
-        String name = "Traccia0";
-        dataProvider.save(name, s);
-        dataProvider.getSongs(name,null);
+        Song s = EntitiesBuilder.getSong();
+        dataProvider.save(s);
+        dataProvider.getSongs(s.getName(),null);
     }
 
     /**
@@ -50,9 +53,8 @@ public class SQLiteDataProviderTest {
     @Test
     public void deleteTrackTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Song s = new Song();
-        String name = "Traccia0";
-        dataProvider.save(name, s);
+        Song s = EntitiesBuilder.getSong();
+        dataProvider.save(s);
         dataProvider.deleteSong(s);
     }
 
@@ -66,9 +68,10 @@ public class SQLiteDataProviderTest {
     @Test
     public void savePlaylistTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Playlist p = new Playlist();
+        String playlistName = "Test playlist";
+        Playlist p = EntitiesBuilder.getPlaylist(playlistName);
         dataProvider.savePlaylist(p);
-        dataProvider.getPlaylists(p);       //devo dare un nome alla playlist
+        dataProvider.getPlaylists(playlistName);
     }
 
     /**
@@ -80,10 +83,11 @@ public class SQLiteDataProviderTest {
     @Test
     public void deletePlaylistTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Playlist p = new Playlist();
+        String playlistName = "Test playlist";
+        Playlist p = EntitiesBuilder.getPlaylist(playlistName);
         dataProvider.savePlaylist(p);
         dataProvider.deletePlaylist(p);
-        dataProvider.getPlaylists(p);
+        dataProvider.getPlaylists(playlistName);
     }
 
 }
