@@ -221,19 +221,25 @@ public class AudioTrackSongPlayer implements SongPlayer {
     public void write(Song[] songs) throws Exception {
 
 
-        byte[] arraySong;
+        Thread writeAt = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                byte[] arraySong;
+
+                for (int i = 0; i < songs.length; i++) {
 
 
-        for (int i = 0; i < songs.length; i++) {
+                    if (hashMap.containsKey(songs[i].getName())) {
+                        arraySong = hashMap.get(songs[i].getName());
+                        int bytesWritten = at.write(arraySong, 0, arraySong.length);
+                        //just to know how to works, to the first test.
+                        //if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
 
-            if (hashMap.containsKey(songs[i].getName())) {
-                arraySong = hashMap.get(songs[i].getName());
-                int bytesWritten=at.write(arraySong, 0, arraySong.length);
-                //just to know how to works, to the first test.
-                if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
-
-                // TODO: 10/12/2016 creare Thread 
+                    }
+                }
             }
-        }
+        }).start();
+
     }
 }
