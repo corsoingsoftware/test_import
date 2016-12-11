@@ -218,12 +218,12 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(soundManagerServiceCaller.getState()==1)
+               // if(soundManagerServiceCaller.getState()==1)
                     soundManagerServiceCaller.stop();
-                else
+               // else
                     soundManagerServiceCaller.play();
             }
-        });
+        } );
 
 //        playButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
