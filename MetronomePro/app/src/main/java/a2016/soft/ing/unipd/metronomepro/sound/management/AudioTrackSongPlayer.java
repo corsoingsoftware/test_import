@@ -235,7 +235,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
                         int bytesWritten = at.write(arraySong, 0, arraySong.length);
                         //just to know how to works, to the first test.
                         //if(bytesWritten<arraySong.length) throw new Exception("Dobbiamo mettere il Thread");
-
                     }
                 }
             }
