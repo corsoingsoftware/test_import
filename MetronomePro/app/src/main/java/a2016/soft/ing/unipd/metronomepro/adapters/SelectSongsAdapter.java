@@ -43,6 +43,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
                 p) {
             arraySongs.add(new PlayableSong(s, i++, 0));
         }
+
         this.selectedSongs = selectedSongs;
         this.maxSelectable = maxSelectable;
 
@@ -96,14 +97,15 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         Song s = arraySongs.get(position);
         holder.nameSong.setText(s.getName());
-        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+
+       /* holder.itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 onSongTouch(position);
                 return false;
             }
-        });
+        });*/
     }
 
     private void onSongTouch(int position) {
@@ -119,7 +121,9 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     }
 
     @Override
-    public int getItemCount() { return arraySongs.size(); }
+    public int getItemCount() {
+        return arraySongs.size();
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
@@ -128,7 +132,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         public ViewHolder(View itemView, TextView nameSong) {
             super(itemView);
-             this.nameSong = nameSong;
+            this.nameSong = nameSong;
         }
 
 
