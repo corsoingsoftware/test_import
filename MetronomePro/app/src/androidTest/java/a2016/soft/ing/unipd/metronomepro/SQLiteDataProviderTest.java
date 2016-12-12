@@ -37,7 +37,7 @@ public class SQLiteDataProviderTest{
      * uso il get per vedere se sono stati effetivamente salvati
      */
     @Test
-    public void saveTrackTest(){
+        public void saveTrackTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
         Song s = EntitiesBuilder.getSong();
         dataProvider.save(s);

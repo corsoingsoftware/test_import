@@ -59,9 +59,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 "(" + DataProviderConstants.FIELD_ASSOCIATION_POSITION + " INTEGER AUTOINCREMENT" +
                 DataProviderConstants.FIELD_ASSOCIATION_SONGS + " BLOB," +
                 DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " TEXT," +
-                "FOREIGN KEY(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ") REFERENCES " +
+                " FOREIGN KEY(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ") REFERENCES " +
                 DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")," +
-                "FOREIGN KEY(" + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ") REFERENCES " +
+                " FOREIGN KEY(" + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ") REFERENCES " +
                 DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + "));";
         db.execSQL(e);
     }
@@ -101,16 +101,16 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         if (playlist != null) {
             query = "SELECT " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_SONG +
                     " FROM " + DataProviderConstants.TBL_ASSOCIATION
-                    + " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " IS " + searchName + "AND"
-                    + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " IS" + playlist + ";";
+                    + " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " LIKE '% " + searchName + " %' AND"
+                    + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlist + ";";
         } else {
             query = "SELECT " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_SONG +
                     " FROM " + DataProviderConstants.TBL_TRACK;
-            query += " WHERE " + DataProviderConstants.FIELD_TRACK_NAME + " LIKE %\'" + searchName + "\'%;";
+            query += " WHERE " + DataProviderConstants.FIELD_TRACK_NAME + " LIKE '% " + searchName + " %' ;";
         }
         query += " JOIN " + DataProviderConstants.TBL_TRACK + " ON " + DataProviderConstants.TBL_ASSOCIATION +
-                 ". " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " = " + DataProviderConstants.TBL_TRACK +
-                 ". " + DataProviderConstants.FIELD_TRACK_SONG;
+                 "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " = " + DataProviderConstants.TBL_TRACK +
+                 "." + DataProviderConstants.FIELD_TRACK_SONG;
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
         int i = 0;
         while (cursor.moveToNext()) {
@@ -152,7 +152,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
         if (searchName != null) {
             query += " WHERE " +
-                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE %\'" + searchName + "\'%;";
+                    DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE '%" + searchName + "%' ;";
         }
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
         playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
@@ -166,9 +166,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to save or update!
      */
     public void savePlaylist(Playlist playlist) {
-//        ContentValues cv = new ContentValues();
-//        cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist);
-//        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
+        ContentValues cv = new ContentValues();
+        cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist.getName());
+        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
     }
 
     /**
@@ -188,7 +188,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public void orderPlaylist(Playlist playlistName) {
         String selectQuery = "SELECT " + DataProviderConstants.TBL_PLAYLIST + "." +
                 DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
-                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " IS " + playlistName + ";";
+                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
         ContentValues cv = new ContentValues();
         int songPosition = 1;
         for(Song song:playlistName){
