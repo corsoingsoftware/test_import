@@ -196,7 +196,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
 
         ContentValues cv = new ContentValues();
-        Cursor cursor = getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+
         for(Song song:playlistName){
             cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
             //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
