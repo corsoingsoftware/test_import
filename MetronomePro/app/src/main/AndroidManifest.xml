@@ -31,8 +31,8 @@
             android:exported="true" />
 
         <activity
-            android:name=".SongCreator"
-            android:label="@string/title_activity_song_creator"
+            android:name=".ModifyPlaylistActivity"
+            android:label="@string/title_activity_modify_playlist"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
