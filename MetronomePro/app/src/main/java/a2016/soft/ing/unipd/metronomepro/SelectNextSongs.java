@@ -13,6 +13,9 @@ import android.view.View;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class SelectNextSongs extends AppCompatActivity {
 
@@ -28,12 +31,23 @@ public class SelectNextSongs extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Playlist p = EntitiesBuilder.getPlaylist("pippo");
+        Song s1 = new ParcelableSong();
+        Song s2 = new ParcelableSong();
+        Song s3 = new ParcelableSong();
+        Song s4 = new ParcelableSong();
+        p.add(s1);
+        p.add(s2);
+        p.add(s3);
+        p.add(s4);
+
         rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
 
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
-        selectSongsAdapter = new SelectSongsAdapter(this, EntitiesBuilder.getPlaylist(""), 0, MAX_SELECTABLE);
+        selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
         rVNextSongs.setAdapter(selectSongsAdapter);
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
