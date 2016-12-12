@@ -38,8 +38,8 @@ public class ParcelableSong implements Song, Parcelable {
      * @param in
      */
 
-    private String name;
-    private ArrayList<TimeSlice> timeSliceList;
+    protected String name;
+    protected ArrayList<TimeSlice> timeSliceList;
 
     public ParcelableSong() {
         this("");
