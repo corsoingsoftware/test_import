@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/handle"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_handler"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="BIT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bit_text_view"
+        android:layout_alignBottom="@+id/bpm_text_view"
+        android:layout_toStartOf="@+id/handle" />
+
+    <TextView
+        android:text="4/4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/metric_text_view"
+        android:layout_above="@+id/bit_text_view"
+        android:layout_toStartOf="@+id/handle" />
+
+    <TextView
+        android:text="BPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/bpm_text_view"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:padding="@dimen/default_item_padding"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
