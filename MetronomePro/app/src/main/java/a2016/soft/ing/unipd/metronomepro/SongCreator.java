@@ -14,6 +14,10 @@ import android.view.View;
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 public class SongCreator extends AppCompatActivity implements OnStartDragListener {
 
@@ -28,12 +32,13 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         setContentView(R.layout.activity_song_creator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
         //sarà a false
         rVTimeSlices.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
-        timeSlicesAdapter = new TimeSlicesAdapter(this, this);
+        timeSlicesAdapter = new TimeSlicesAdapter(this, this, createTestSong());
         rVTimeSlices.setAdapter(timeSlicesAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(timeSlicesAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
@@ -46,6 +51,27 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private Song createTestSong(){
+        TimeSlice t1, t2, t3;
+
+        t1 = new TimeSlice();
+        t2 = new TimeSlice();
+        t3 = new TimeSlice();
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(80);
+        t2.setDurationInBeats(20);
+        t3.setBpm(100);
+        t3.setDurationInBeats(20);
+
+
+        Song s =EntitiesBuilder.getSong("pippo");
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        return s;
     }
 
 
