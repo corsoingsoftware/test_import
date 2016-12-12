@@ -12,6 +12,7 @@ import a2016.soft.ing.unipd.metronomepro.ModifyPlaylistActivity;
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
@@ -22,6 +23,12 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Playlist playlistToModify;
+    private final OnStartDragListener dragListener;
+
+    public ModifyPlaylistAdapter(Playlist playlistToModify, OnStartDragListener startDragListener) {
+        this.playlistToModify = playlistToModify;
+        this.dragListener = startDragListener;
+    }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
