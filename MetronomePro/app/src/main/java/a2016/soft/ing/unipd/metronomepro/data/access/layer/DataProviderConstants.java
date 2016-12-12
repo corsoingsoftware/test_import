@@ -16,4 +16,5 @@ public interface DataProviderConstants {
     public static final String TBL_ASSOCIATION = "Include";
     public static final String FIELD_ASSOCIATION_SONGS = "Tracce";
     public static final String FIELD_ASSOCIATION_PLAYLIST = "Playlist";
+    public static final String FIELD_ASSOCIATION_POSITION = "Posizione";
 }
