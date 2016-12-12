@@ -45,6 +45,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         }
         this.selectedSongs = selectedSongs;
         this.maxSelectable = maxSelectable;
+
     }
 
     @Override
