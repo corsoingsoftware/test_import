@@ -27,7 +27,8 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         setContentView(R.layout.activity_song_creator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        rVTimeSlices = (RecyclerView)  findViewById(R.id.recycler_view_time_slices);
+        rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
+        //sarà a false
         rVTimeSlices.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
