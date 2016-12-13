@@ -32,15 +32,16 @@ public class SelectNextSongs extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Playlist p = EntitiesBuilder.getPlaylist("pippo");
-        Song s1 = EntitiesBuilder.getSong("s1");
-        Song s2 = EntitiesBuilder.getSong("s2");
-        Song s3 = EntitiesBuilder.getSong("s3");
-        Song s4 = EntitiesBuilder.getSong("s4");
+        Song s1 = EntitiesBuilder.getSong("S1");
+        Song s2 = EntitiesBuilder.getSong("S2");
+        Song s3 = EntitiesBuilder.getSong("S3");
+        Song s4 = EntitiesBuilder.getSong("S4");
+        Song s5 = EntitiesBuilder.getSong("S5");
         p.add(s1);
         p.add(s2);
         p.add(s3);
         p.add(s4);
-
+        p.add(s5);
 
         rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
         rVNextSongs.setHasFixedSize(true);
