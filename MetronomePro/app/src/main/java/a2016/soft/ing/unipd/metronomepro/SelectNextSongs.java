@@ -43,7 +43,6 @@ public class SelectNextSongs extends AppCompatActivity {
 
 
         rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
-
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
@@ -61,7 +60,5 @@ public class SelectNextSongs extends AppCompatActivity {
             }
         });
     }
-
-
 
 }
