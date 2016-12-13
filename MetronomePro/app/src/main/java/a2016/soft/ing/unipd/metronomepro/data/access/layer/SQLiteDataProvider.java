@@ -186,16 +186,22 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlistName nome della playlist da ordinare
      */
     public void orderPlaylist(Playlist playlistName) {
-        String selectQuery = "SELECT " + DataProviderConstants.TBL_PLAYLIST + "." +
+        String selectQuery = "SELECT " + DataProviderConstants.TBL_ASSOCIATION + "." +
                 DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
                 " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
+
+        //qui cancella i dati in tbl_association dati da strigquery
+        String deleteSelected = "DELETE FROM " + DataProviderConstants.TBL_ASSOCIATION + "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS
+                + " WHERE " + playlistName + " = " + DataProviderConstants.TBL_ASSOCIATION + "."
+                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
+
         ContentValues cv = new ContentValues();
-        int songPosition = 1;
+        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+
         for(Song song:playlistName){
-        String replaceQuery = "UPDATE " + DataProviderConstants.TBL_PLAYLIST + " SET " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST +
-                " = " + songPosition + " WHERE " + song + " = " + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ";";
-        songPosition++;
-        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+            cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
+            //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
+            //quindi ad ogni giro metto dentro una canzone il forach me le itera gia di suo
         }
     }
 }
