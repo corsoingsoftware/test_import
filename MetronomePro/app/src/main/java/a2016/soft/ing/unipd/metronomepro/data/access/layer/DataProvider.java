@@ -42,7 +42,7 @@ public interface DataProvider {
      * Delete the song throw exception if fails
      * @param song to delete
      */
-    void delete(Song song);
+    void deleteSong(Song song);
 
     /**
      * save the playlist, and the songs in it if they aren't in database already

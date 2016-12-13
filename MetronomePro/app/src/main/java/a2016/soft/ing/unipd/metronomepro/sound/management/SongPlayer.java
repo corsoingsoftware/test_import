@@ -1,12 +1,18 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
+import android.media.AudioFormat;
+
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
  * Created by feder on 08/12/2016.
  */
 
+
 public interface SongPlayer {
+
+
+
     /**
      * Start the current song
      */
@@ -15,18 +21,18 @@ public interface SongPlayer {
     /**
      * Initialize the player with all parameter
      * @param frequencyBeep frequency of higher tone beep
-     * @param lenghtBeep length of higher tone beep
+     * @param lengthBeep length of higher tone beep
      * @param frequencyBoop frequency of lower tone boop
-     * @param lenghtBoop length of lower tone boop
+     * @param lengthBoop length of lower tone boop
      * @param sampleRate rate of audio signal
      * @param audioFormat format of audio signal
      * @param channelConfig config of channels
      */
-    void initialize(long frequencyBeep,
-                    long lenghtBeep,
-                    long frequencyBoop,
-                    long lenghtBoop,
-                    long sampleRate,
+    void initialize(int frequencyBeep,
+                    int lengthBeep,
+                    int frequencyBoop,
+                    int lengthBoop,
+                    int sampleRate,
                     int audioFormat,
                     int channelConfig);
 
@@ -36,7 +42,7 @@ public interface SongPlayer {
      * @param audioFormat format of audio signal
      * @param channelConfig config of channels
      */
-    void initialize(long sampleRate,
+    void initialize(int sampleRate,
                     int audioFormat,
                     int channelConfig);
 

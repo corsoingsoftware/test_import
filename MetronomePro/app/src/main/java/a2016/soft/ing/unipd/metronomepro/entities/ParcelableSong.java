@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -14,13 +15,6 @@ import java.util.ListIterator;
  */
 
 public class ParcelableSong implements Song, Parcelable {
-
-    /**
-     * Unparcel the song
-     * @param in
-     */
-    protected ParcelableSong(Parcel in) {
-    }
 
     public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
         /**
@@ -38,6 +32,28 @@ public class ParcelableSong implements Song, Parcelable {
             return new ParcelableSong[size];
         }
     };
+    /**
+     * Unparcel the song
+     *
+     * @param in
+     */
+
+    protected String name;
+    protected ArrayList<TimeSlice> timeSliceList;
+
+    public ParcelableSong() {
+        this("");
+    }
+
+    ParcelableSong(String name) {
+        this.name = name;
+        timeSliceList = new ArrayList<TimeSlice>();
+    }
+
+
+    protected ParcelableSong(Parcel in) {
+
+    }
 
     @Override
     public byte[] encode() {
@@ -65,121 +81,126 @@ public class ParcelableSong implements Song, Parcelable {
 
     @Override
     public int size() {
-        return 0;
+        return timeSliceList.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return timeSliceList.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return timeSliceList.contains(o);
     }
 
     @NonNull
     @Override
     public Iterator<TimeSlice> iterator() {
-        return null;
+        return timeSliceList.iterator();
     }
 
     @NonNull
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return timeSliceList.toArray();
     }
 
     @NonNull
     @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    public <TimeSlice> TimeSlice[] toArray(TimeSlice[] a) {
+        return timeSliceList.toArray(a);
     }
 
     @Override
     public boolean add(TimeSlice timeSlice) {
-        return false;
+        return timeSliceList.add(timeSlice);
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        return timeSliceList.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        return timeSliceList.containsAll(c);
     }
 
     @Override
     public boolean addAll(Collection<? extends TimeSlice> c) {
-        return false;
+        return timeSliceList.addAll(c);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends TimeSlice> c) {
-        return false;
+        return timeSliceList.addAll(index, c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        return timeSliceList.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return timeSliceList.retainAll(c);
     }
 
     @Override
     public void clear() {
-
+        timeSliceList.clear();
     }
 
     @Override
     public TimeSlice get(int index) {
-        return null;
+        return timeSliceList.get(index);
     }
 
     @Override
     public TimeSlice set(int index, TimeSlice element) {
-        return null;
+        return timeSliceList.set(index, element);
     }
 
     @Override
     public void add(int index, TimeSlice element) {
-
+        timeSliceList.add(index, element);
     }
 
     @Override
     public TimeSlice remove(int index) {
-        return null;
+        return timeSliceList.remove(index);
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        return timeSliceList.indexOf(o);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        return timeSliceList.lastIndexOf(o);
     }
 
     @Override
     public ListIterator<TimeSlice> listIterator() {
-        return null;
+        return timeSliceList.listIterator();
     }
 
     @NonNull
     @Override
     public ListIterator<TimeSlice> listIterator(int index) {
-        return null;
+        return timeSliceList.listIterator();
     }
 
     @NonNull
     @Override
     public List<TimeSlice> subList(int fromIndex, int toIndex) {
-        return null;
+        return timeSliceList.subList(fromIndex, toIndex);
     }
+
+    public String getName() {
+        return name;
+    }
+
 }
