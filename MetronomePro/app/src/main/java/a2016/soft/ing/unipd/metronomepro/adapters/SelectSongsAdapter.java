@@ -113,8 +113,16 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         if(position < selectedSongs) {
 
+            PlayableSong toMove = arraySongs.get(position);
+            int i = selectedSongs;
+            PlayableSong current = arraySongs.get(i);
+
+            while(current.getPlaylistPosition() < toMove.getPlaylistPosition()) {
+                i++;
+            }
+
             selectedSongs--;
-            onSongPositionChange(position, arraySongs.get(position).getPlaylistPosition());
+            onSongPositionChange(position, i);
         }
         else
         {
