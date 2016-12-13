@@ -33,6 +33,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     private Song songToShow;
     private final OnStartDragListener dragListener;
     private Context context;
+    private ArrayList<Song> songList;
 
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
@@ -43,12 +44,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener, Song song) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
+        this.songToShow = song;
         this.context = c;
-        songList = new ArrayList<>(playlistToModify.size());
-        int i = 0;
-        for (Song s: playlistToModify) {
-            songList.add(new PlayableSong(s, i++, 0));
-        }
     }
 
     public void addSong(Song song) {
