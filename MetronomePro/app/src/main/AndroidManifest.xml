@@ -19,9 +19,7 @@
         <activity
             android:name=".MetronomeActivity"
             android:label="@string/title_activity_metronome"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".DeviceListActivity"
             android:configChanges="orientation|keyboardHidden" />
@@ -38,8 +36,7 @@
         <activity
             android:name=".SelectNextSongs"
             android:label="@string/title_activity_select_next_songs"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
@@ -50,6 +47,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PlaylistView"
+            android:label="@string/title_activity_playlist_view"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
