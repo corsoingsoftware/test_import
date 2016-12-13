@@ -90,8 +90,8 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     }
 
     @Override
-    public boolean add(Song timeSlices) {
-        return songList.add(timeSlices);
+    public boolean add(Song song) {
+        return songList.add(song);
     }
 
     @Override

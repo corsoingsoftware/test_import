@@ -32,19 +32,20 @@ public class SelectNextSongs extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Playlist p = EntitiesBuilder.getPlaylist("pippo");
-        Song s1 = new ParcelableSong();
-        Song s2 = new ParcelableSong();
-        Song s3 = new ParcelableSong();
-        Song s4 = new ParcelableSong();
+        Song s1 = EntitiesBuilder.getSong("s1");
+        Song s2 = EntitiesBuilder.getSong("s2");
+        Song s3 = EntitiesBuilder.getSong("s3");
+        Song s4 = EntitiesBuilder.getSong("s4");
         p.add(s1);
         p.add(s2);
         p.add(s3);
         p.add(s4);
 
-        rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
 
+        rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
+        rVNextSongs.setLayoutManager(rVLayoutManager);
         selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
         rVNextSongs.setAdapter(selectSongsAdapter);
 
@@ -59,7 +60,5 @@ public class SelectNextSongs extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

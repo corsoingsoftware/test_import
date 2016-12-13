@@ -18,7 +18,6 @@ import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnTimeSliceSelectedL
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
-import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -30,23 +29,23 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Playlist playlistToModify;
-    private Song songToShow;
+    private ArrayList<Song> songList;
     private final OnStartDragListener dragListener;
     private Context context;
-    private ArrayList<Song> songList;
 
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
     }
-
+/*
     //è solo un costruttore di prova
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener, Song song) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
-        this.songToShow = song;
         this.context = c;
-    }
+        songList = new ArrayList<Song>();
+        songList.add(song);
+    }*/
 
     public void addSong(Song song) {
         songList.add(song);
@@ -69,7 +68,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.modify_playlist_item_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.song_layout, parent, false);
         ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.song_title_text_view));
         return vh;
     }
