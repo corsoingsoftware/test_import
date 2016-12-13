@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class PlayableSong extends ParcelableSong{
 
+    public static final int STATE_TOPLAY = 0;
+    public static final int STATE_READYTOPLAY = 1;
+    public static final int STATE_PLAYED = 2;
+
     public int getPlaylistPosition() {
         return playlistPosition;
     }
