@@ -12,12 +12,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnTimeSliceSelectedListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -69,7 +72,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.modify_playlist_item_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.song_title_text_view));
+        ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.song_title_text_view), v.findViewById((R.id.handle)));
         return vh;
     }
 
@@ -82,10 +85,20 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Song s = playlistToModify.get(position);
-
+        holder.songTitle.setText(s.getName());
+        holder.motionView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+                    public boolean onTouch(View v, MotionEvent event){
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                    dragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -99,9 +112,10 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         View motionView;
 
 
-        ViewHolder(View itemView, TextView songTitle) {
+        ViewHolder(View itemView, TextView songTitle, View motionView) {
             super(itemView);
             this.songTitle = songTitle;
+            this.motionView = motionView;
         }
 
 

@@ -25,7 +25,6 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private RecyclerView.LayoutManager rVLayoutManager;
     private ModifyPlaylistAdapter ModifyPalylistAdapter;
     private ItemTouchHelper itemTouchHelper;
-    private Playlist playlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
