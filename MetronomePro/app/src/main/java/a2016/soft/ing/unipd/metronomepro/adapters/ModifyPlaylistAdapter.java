@@ -37,7 +37,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
     }
-
+/*
     //è solo un costruttore di prova
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener, Song song) {
         this.playlistToModify = playlistToModify;
@@ -45,7 +45,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.context = c;
         songList = new ArrayList<Song>();
         songList.add(song);
-    }
+    }*/
 
     public void addSong(Song song) {
         songList.add(song);

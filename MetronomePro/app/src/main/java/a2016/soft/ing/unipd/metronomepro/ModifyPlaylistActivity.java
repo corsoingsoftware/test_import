@@ -37,7 +37,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVModifyPlaylist.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
-        ModifyPalylistAdapter = new ModifyPlaylistAdapter(playlist, this, this, createTest());
+        ModifyPalylistAdapter = new ModifyPlaylistAdapter(createTest(),this,this);
         rVModifyPlaylist.setAdapter(ModifyPalylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(ModifyPalylistAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
@@ -56,12 +56,12 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             itemTouchHelper.startDrag(viewHolder);
         }
 //solo una prova
-    private Song createTest(){
+    private Playlist createTest(){
         Playlist playlist = EntitiesBuilder.getPlaylist("playlist di prova");
-        Song song1 = EntitiesBuilder.getSong("Canzone 1");
-        Song song2 = EntitiesBuilder.getSong("Canzone 2");
-        Song song3 = EntitiesBuilder.getSong("Canzone 3");
-        return song1;
+        playlist.add(EntitiesBuilder.getSong("Canzone 1"));
+        playlist.add(EntitiesBuilder.getSong("Canzone 2"));
+        playlist.add(EntitiesBuilder.getSong("Canzone 3"));
+        return playlist;
     }
 
     @Override
