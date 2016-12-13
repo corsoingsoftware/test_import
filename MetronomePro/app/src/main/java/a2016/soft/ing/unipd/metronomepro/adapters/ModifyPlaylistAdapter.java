@@ -68,7 +68,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.song_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.modify_playlist_item_layout, parent, false);
         ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.song_title_text_view));
         return vh;
     }
@@ -76,6 +76,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     @Override
     public void onViewRecycled(ViewHolder holder) {
         //deregistrati dagli eventi
+        holder.itemView.setOnClickListener(null);
+        holder.motionView.setOnTouchListener(null);
         super.onViewRecycled(holder);
     }
 
@@ -94,8 +96,10 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
             ItemTouchHelperViewHolder {
 
         TextView songTitle;
+        View motionView;
 
-        public ViewHolder(View itemView, TextView songTitle) {
+
+        ViewHolder(View itemView, TextView songTitle) {
             super(itemView);
             this.songTitle = songTitle;
         }
