@@ -74,10 +74,15 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         this.onTimeSliceSelectedListeners.add(onTimeSliceSelectedListener);
     }
 
+    public void addTimeSlice(int position, TimeSlice newTS){
+
+    }
+
     @Override
     public void onViewRecycled(ViewHolder holder) {
         //Unregister from listeners
         holder.itemView.setOnClickListener(null);
+        holder.motionView.setOnTouchListener(null);
         super.onViewRecycled(holder);
     }
 
@@ -89,8 +94,9 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     @Override
     public void onItemSwiped(int position) {
-        //Maybe some action with swipe
-        notifyItemChanged(position);
+        //Maybe some action with swipe like a timeslice remove
+        songToEdit.remove(position);
+        notifyItemRemoved(position);
     }
 
 
@@ -112,7 +118,8 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         final TimeSlice ts=songToEdit.get(position);
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
-        holder.rhythmicsTextView.setText(ts.getTimeFigureNumerator()+"/"+ts.getTimeFigureDenominator());
+        //At the moment i will not visualize metric cause it doesn't count
+        holder.rhythmicsTextView.setText("");//ts.getTimeFigureNumerator()+"/"+ts.getTimeFigureDenominator());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +149,8 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     public void setSongToEdit(Song songToEdit) {
         this.songToEdit = songToEdit;
+        //I must notify the collection changed
+        this.notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
