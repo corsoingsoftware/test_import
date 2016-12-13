@@ -91,7 +91,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        if(position >= selectedSongs )
+        if(position >= selectedSongs)
             holder.nameSong.setTextColor(Color.BLUE);
         else
             holder.nameSong.setTextColor(Color.BLACK);
