@@ -62,13 +62,13 @@ public class SongPlayerServiceCaller implements SongPlayer {
     }
 
     @Override
-    public void initialize(long frequencyBeep, long lenghtBeep, long frequencyBoop, long lenghtBoop, long sampleRate, int audioFormat, int channelConfig){
+    public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(7param)");
         pService.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
     }
 
     @Override
-    public void initialize(long sampleRate, int audioFormat, int channelConfig){
+    public void initialize(int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(3param)");
         pService.initialize(sampleRate,audioFormat,channelConfig);
     }

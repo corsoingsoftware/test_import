@@ -29,12 +29,12 @@ public class SongPlayerService extends Service {
         return mBinder;
     }
 
-    public void initialize(long frequencyBeep, long lenghtBeep, long frequencyBoop, long lenghtBoop, long sampleRate, int audioFormat, int channelConfig){
+    public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
         atsp.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
         Log.v(LOG_TAG,"in initialize(7param)");
     }
 
-    public void initialize(long sampleRate, int audioFormat, int channelConfig){
+    public void initialize(int sampleRate, int audioFormat, int channelConfig){
         atsp.initialize(sampleRate,audioFormat,channelConfig);
         Log.v(LOG_TAG,"in initialize(3param)");
     }
