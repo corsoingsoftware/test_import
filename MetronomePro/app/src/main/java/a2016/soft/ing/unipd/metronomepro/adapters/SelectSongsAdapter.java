@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -52,23 +53,17 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
 
+        notifyItemMoved(fromPosition, toPosition);
+
     }
 
     private void onSongPositionChange(int from, int to) {
 
-        if(from < to) {
-            for(int i = from+1; i < to; i++) {
-                Collections.swap(arraySongs, i, i-1);
-            }
-        }
-        else
-        {
-            for(int i = from-1; i > to; i--) {
-                Collections.swap(arraySongs, i, i+1);
-            }
-        }
-
-        notifyItemRangeChanged(Math.min(from,to), Math.abs(from-to));
+        PlayableSong ps = arraySongs.get(from);
+        arraySongs.remove(from);
+        notifyItemRemoved(from);
+        arraySongs.add(to, ps);
+        notifyItemInserted(to);
     }
 
     @Override
@@ -80,6 +75,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     public void onViewRecycled(ViewHolder holder) {
 
         //Unregister from listeners
+        holder.itemView.setOnTouchListener(null);
         super.onViewRecycled(holder);
     }
 
@@ -90,34 +86,40 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         ViewHolder vh = new ViewHolder(v, (TextView)v.findViewById(R.id.song_title_text_view));
 
         return vh;
-
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
+        if(position >= selectedSongs )
+            holder.nameSong.setTextColor(Color.BLUE);
+        else
+            holder.nameSong.setTextColor(Color.BLACK);
+
         Song s = arraySongs.get(position);
         holder.nameSong.setText(s.getName());
 
-       /* holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 onSongTouch(position);
                 return false;
             }
-        });*/
+        });
     }
 
     private void onSongTouch(int position) {
 
         if(position < selectedSongs) {
+
             selectedSongs--;
-            onItemMove(position, arraySongs.get(position).getPlaylistPosition());
+            onSongPositionChange(position, arraySongs.get(position).getPlaylistPosition());
         }
         else
         {
-            onItemMove(position, selectedSongs++);
+
+            onSongPositionChange(position, selectedSongs++);
         }
     }
 
