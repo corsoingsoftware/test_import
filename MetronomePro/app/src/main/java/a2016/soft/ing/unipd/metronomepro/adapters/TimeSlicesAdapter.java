@@ -164,7 +164,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
             super(itemView);
             this.bpmTextView = bpmTextView;
             this.bitTextView = bitTextView;
-            this.motionView=motionView;
+            this.motionView = motionView;
             this.rhythmicsTextView = rhythmicsTextView;
         }
 

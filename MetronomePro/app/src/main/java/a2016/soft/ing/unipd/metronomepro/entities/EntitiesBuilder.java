@@ -12,6 +12,6 @@ public class EntitiesBuilder {
         return new ParcelableSong(name);
     }
     public static Playlist getPlaylist(String name){
-        return null;
+        return new ParcelablePlaylist(name);
     }
 }
