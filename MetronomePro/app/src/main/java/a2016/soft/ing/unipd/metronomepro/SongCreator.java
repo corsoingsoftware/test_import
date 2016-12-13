@@ -14,6 +14,7 @@ import android.view.View;
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.HorizontalDragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -36,11 +37,11 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
         //sarà a false
         rVTimeSlices.setHasFixedSize(true);
-        rVLayoutManager =  new LinearLayoutManager(this);
+        rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
         timeSlicesAdapter = new TimeSlicesAdapter(this, this, createTestSong());
         rVTimeSlices.setAdapter(timeSlicesAdapter);
-        DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(timeSlicesAdapter);
+        HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

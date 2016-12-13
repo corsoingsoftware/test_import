@@ -61,9 +61,8 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         PlayableSong ps = arraySongs.get(from);
         arraySongs.remove(from);
-        notifyItemRemoved(from);
         arraySongs.add(to, ps);
-        notifyItemInserted(to);
+        notifyItemRangeChanged(Math.min(from,to),Math.abs(from-to)+1);
     }
 
     @Override
