@@ -33,6 +33,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         setContentView(R.layout.activity_modify_playlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         rVModifyPlaylist = (RecyclerView) findViewById(R.id.recycler_view_songs_list);
         rVModifyPlaylist.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
@@ -55,17 +56,17 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
             itemTouchHelper.startDrag(viewHolder);
         }
-//solo una prova
-    private Song createTest(){
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        //solo una prova
+    } private Song createTest(){
         Playlist playlist = EntitiesBuilder.getPlaylist("playlist di prova");
         Song song1 = EntitiesBuilder.getSong("Canzone 1");
         Song song2 = EntitiesBuilder.getSong("Canzone 2");
         Song song3 = EntitiesBuilder.getSong("Canzone 3");
         return song1;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
     }
     }
