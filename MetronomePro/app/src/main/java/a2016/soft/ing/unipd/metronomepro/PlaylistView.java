@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
@@ -7,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class PlaylistView extends AppCompatActivity {
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
 
-
+    }
 }
