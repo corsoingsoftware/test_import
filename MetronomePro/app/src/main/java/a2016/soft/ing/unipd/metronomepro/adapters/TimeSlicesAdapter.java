@@ -119,7 +119,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
         //At the moment i will not visualize metric cause it doesn't count
-        holder.rhythmicsTextView.setText("");//ts.getTimeFigureNumerator()+"/"+ts.getTimeFigureDenominator());
+        holder.rhythmicsTextView.setText(ts.getTimeFigureNumerator()+"/"+ts.getTimeFigureDenominator());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

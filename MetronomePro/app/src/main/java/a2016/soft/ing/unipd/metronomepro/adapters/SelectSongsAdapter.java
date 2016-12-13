@@ -98,7 +98,6 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         Song s = arraySongs.get(position);
         holder.nameSong.setText(s.getName());
-
        /* holder.itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
