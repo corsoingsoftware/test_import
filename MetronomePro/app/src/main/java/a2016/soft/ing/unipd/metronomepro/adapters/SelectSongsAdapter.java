@@ -90,6 +90,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         ViewHolder vh = new ViewHolder(v, (TextView)v.findViewById(R.id.song_title_text_view));
 
         return vh;
+
     }
 
     @Override
