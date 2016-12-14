@@ -54,7 +54,7 @@ public class SelectNextSongs extends AppCompatActivity {
 
         if(savedInstanceState.containsKey("Adapter")) {
 
-            //Devo riscotruire il list adapter in modo che sia uguale a prima
+            //Devo ricostruire il list adapter in modo che sia uguale a prima
 
             ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList("Adapter");
             int selectedSongs = savedInstanceState.getInt("Adapter");
