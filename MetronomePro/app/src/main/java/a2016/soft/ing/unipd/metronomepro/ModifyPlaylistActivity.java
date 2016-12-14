@@ -23,7 +23,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
 
     private RecyclerView rVModifyPlaylist;
     private RecyclerView.LayoutManager rVLayoutManager;
-    private ModifyPlaylistAdapter ModifyPalylistAdapter;
+    private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
 
     @Override
@@ -36,9 +36,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVModifyPlaylist.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
-        ModifyPalylistAdapter = new ModifyPlaylistAdapter(createTest(),this,this);
-        rVModifyPlaylist.setAdapter(ModifyPalylistAdapter);
-        DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(ModifyPalylistAdapter);
+        modifyPlaylistAdapter = new ModifyPlaylistAdapter(createTest(),this,this);
+        rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
+        DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rVModifyPlaylist);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
