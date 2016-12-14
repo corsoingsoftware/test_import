@@ -7,7 +7,7 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 public class TimeSlice implements Streamable {
 
     private int bpm;
-    private long durationInBeats;
+    private int durationInBeats;
     private int timeFigureNumerator;
     private int timeFigureDenominator;
 
@@ -29,11 +29,11 @@ public class TimeSlice implements Streamable {
         this.bpm = bpm;
     }
 
-    public long getDurationInBeats() {
+    public int getDurationInBeats() {
         return durationInBeats;
     }
 
-    public void setDurationInBeats(long durationInBeats) {
+    public void setDurationInBeats(int durationInBeats) {
         this.durationInBeats = durationInBeats;
     }
 

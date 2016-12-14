@@ -9,5 +9,7 @@
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="fab_padding">6dp</dimen>
     <dimen name="default_item_padding">6dp</dimen>
+    <dimen name="min_item_ts_width">100dp</dimen>
+    <dimen name="max_item_ts_width">200dp</dimen>
 
 </resources>

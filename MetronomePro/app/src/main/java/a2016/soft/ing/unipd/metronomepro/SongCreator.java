@@ -36,7 +36,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
         rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
         //sarà a false
-        rVTimeSlices.setHasFixedSize(true);
+        rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
         timeSlicesAdapter = new TimeSlicesAdapter(this, this, createTestSong());
