@@ -130,9 +130,7 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     }
 
     @Override
-    public Song get(int index) {
-        return songList.get(index);
-    }
+    public Song get(int index) {return songList.get(index);}
 
     @Override
     public Song set(int index, Song element) {

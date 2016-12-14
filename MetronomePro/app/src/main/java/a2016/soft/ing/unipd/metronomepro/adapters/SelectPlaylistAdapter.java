@@ -24,6 +24,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private Context context;
     private ArrayList<Playlist> arrayPlaylist;
     private int selectPlaylist;
+    private Playlist PlaylistToEdit;
 
     public SelectPlaylistAdapter(Context context) {
         this.context = context;
@@ -33,18 +34,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        /**
-         *  View v = LayoutInflater.from(parent.getContext())
-         .inflate(R.layout.time_slice_item_layout, parent, false);
-         // set the view's size, margins, paddings and layout parameters
-
-         ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.bpm_text_view),
-         (TextView)v.findViewById(R.id.bit_text_view),
-         (TextView)v.findViewById(R.id.metric_text_view),
-         v.findViewById(R.id.handle));
-         return vh;
-         */
+        //creo una View..
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_viewer_item_layout,parent,false);
+        //e la passo al ViewHolder
         ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.textViewItem));
         return vh;
     }
@@ -52,8 +44,11 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-    }
+        PlaylistToEdit = arrayPlaylist.get(position);
+        String name = PlaylistToEdit.getName();
+        holder.nameOfPlaylist.setText(name);
 
+    }
 
     @Override
     public int getItemCount() {
