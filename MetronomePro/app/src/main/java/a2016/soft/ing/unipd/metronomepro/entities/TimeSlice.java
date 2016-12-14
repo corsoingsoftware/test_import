@@ -4,7 +4,7 @@ package a2016.soft.ing.unipd.metronomepro.entities;
  * Created by feder on 07/12/2016.
  */
 
-public class TimeSlice implements Streamable {
+public class TimeSlice implements Streamable{
 
     private int bpm;
     private int durationInBeats;
