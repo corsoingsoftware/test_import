@@ -38,6 +38,10 @@ public class ParcelableSong implements Song, Parcelable {
      * @param in
      */
 
+    protected ParcelableSong(Parcel in) {
+
+    }
+
     protected String name;
     protected ArrayList<TimeSlice> timeSliceList;
 
@@ -50,10 +54,6 @@ public class ParcelableSong implements Song, Parcelable {
         timeSliceList = new ArrayList<TimeSlice>();
     }
 
-
-    protected ParcelableSong(Parcel in) {
-
-    }
 
     @Override
     public byte[] encode() {
