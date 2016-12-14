@@ -1,10 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.view.menu.ShowableListMenu;
 import android.support.v7.widget.ForwardingListener;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +41,38 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
      * It must be final cause can't change
      */
     private final OnStartDragListener dragListener;
+    /**
+     * the song to edit
+     */
     private Song songToEdit;
+    /**
+     * max width from resources
+     */
+    private int maxWidth;
+    /**
+     * min width from resources
+     */
+    private int minWidth;
+    /**
+     * min bpm of track, it must be refresh on every track edit
+     */
+    private int minBPM;
+    /**
+     * max bpm of track, it must be refresh on track edit
+     */
+    private int maxBPM;
+    /**
+     * min bits of track
+     */
+    private int minBITS;
+    /**
+     * max bit of tracks
+     */
+    private int maxBITS;
+    /**
+     * The revision of maximum and minimum of color and width
+     */
+    private int actualRevision;
 
     private ArrayList<OnTimeSliceSelectedListener> onTimeSliceSelectedListeners;
 
@@ -51,7 +85,25 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         this.dragListener=dragListener;
         this.context=context;
         this.songToEdit=song;
+        this.actualRevision=0;
         this.onTimeSliceSelectedListeners= new ArrayList<>();
+        calculateAllWidthsAndColors();
+    }
+
+    private void calculateAllWidthsAndColors() {
+        //It must be called one time, to not decrease performance too much
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        minWidth = (int)(context.getResources().getDimension(R.dimen.min_item_ts_width)*displayMetrics.density + 0.5);
+        maxWidth = (int)(context.getResources().getDimension(R.dimen.max_item_ts_width)*displayMetrics.density + 0.5);
+        minBPM=minBITS=Integer.MAX_VALUE;
+        maxBPM=maxBITS=Integer.MIN_VALUE;
+        actualRevision++;
+        for (TimeSlice ts :
+                songToEdit) {
+            int bpm=ts.getBpm();
+            int bits=ts.getDurationInBeats();
+
+        }
     }
 
     private void onTimeSliceSelected(TimeSlice ts, int position) {
@@ -62,7 +114,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
                 try{
                     current.onTimeSliceSelected(ts,position);
                 }catch (Exception ex){
-                    //unhandledException from listen
+                    //unhandledException from listener
                 }
             }else{
                 iterator.remove();
@@ -116,6 +168,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final TimeSlice ts=songToEdit.get(position);
+        //holder.itemView.setLayoutParams(new RecyclerView.LayoutParams());
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
         //At the moment i will not visualize metric cause it doesn't count
@@ -153,6 +206,9 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         this.notifyDataSetChanged();
     }
 
+    /**
+     * ViewHolder for recycler view, it can be recycled
+     */
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
 
@@ -178,5 +234,26 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         public void onItemClear() {
 
         }
+    }
+
+    /**
+     * This class has some additional info for time slices
+     * This method needs more memory, but prevent a lot of calcs real time while user scroll the listView
+     */
+    static class TimeSliceState {
+        /**
+         * if a time slice change the max or min of something in song, all tme slices must be refresh,
+         * it's a very large cost to do so every time, so with revision I can refresh just few additional TimeSliceStates,
+         * So i will refresh only visible timeslices
+         */
+        int timeSliceRevision;
+        /**
+         * The width calculated for TimeSlice
+         */
+        int timeSliceWidth;
+        /**
+         * The timeSlice color calculated in timeSliceRevision
+         */
+        Color timeSliceColor;
     }
 }
