@@ -36,7 +36,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
         rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
         //sarà a false
-        rVTimeSlices.setHasFixedSize(true);
+        rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
         timeSlicesAdapter = new TimeSlicesAdapter(this, this, createTestSong());
@@ -56,7 +56,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
     private Song createTestSong(){
         TimeSlice t1, t2, t3;
-
+        Song s =EntitiesBuilder.getSong("pippo");
         t1 = new TimeSlice();
         t2 = new TimeSlice();
         t3 = new TimeSlice();
@@ -66,9 +66,33 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         t2.setDurationInBeats(20);
         t3.setBpm(100);
         t3.setDurationInBeats(20);
-
-
-        Song s =EntitiesBuilder.getSong("pippo");
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(80);
+        t2.setDurationInBeats(20);
+        t3.setBpm(100);
+        t3.setDurationInBeats(20);
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(80);
+        t2.setDurationInBeats(20);
+        t3.setBpm(100);
+        t3.setDurationInBeats(20);
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(80);
+        t2.setDurationInBeats(20);
+        t3.setBpm(100);
+        t3.setDurationInBeats(20);
         s.add(t1);
         s.add(t2);
         s.add(t3);
