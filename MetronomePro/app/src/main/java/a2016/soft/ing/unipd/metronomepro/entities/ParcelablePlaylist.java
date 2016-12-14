@@ -18,8 +18,8 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
 
     protected ParcelablePlaylist(Parcel in) {
-
-
+        this.name = in.readString();
+        this.songList = in.readArrayList();
     }
 
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {
@@ -50,7 +50,13 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-
+        ArrayList<byte[]> arrayByte= new ArrayList<>();
+        int i = 0;
+        for (Song s: songList) {
+            arrayByte = (byte)songList.get(i);
+            //prendo la song e la metto in array list convertita in array di byte
+            //passo al parser aray di byte quando li riprendo li devo riconvertire in song
+        };
     }
 
     @Override

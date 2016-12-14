@@ -60,6 +60,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         playlist.add(EntitiesBuilder.getSong("Canzone 1"));
         playlist.add(EntitiesBuilder.getSong("Canzone 2"));
         playlist.add(EntitiesBuilder.getSong("Canzone 3"));
+        playlist.add(EntitiesBuilder.getSong("Canzone 4"));
+        playlist.add(EntitiesBuilder.getSong("Canzone 5"));
+        playlist.add(EntitiesBuilder.getSong("Canzone 6"));
         return playlist;
     }
 
