@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
@@ -52,13 +54,14 @@ public class SelectNextSongs extends AppCompatActivity {
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
 
+
         if(savedInstanceState.containsKey("Adapter")) {
 
             //Devo ricostruire il list adapter in modo che sia uguale a prima
 
             ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList("Adapter");
             int selectedSongs = savedInstanceState.getInt("Adapter");
-            selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs,MAX_SELECTABLE);
+            selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs, MAX_SELECTABLE);
             rVNextSongs.setAdapter(selectSongsAdapter);
 
         }
@@ -83,8 +86,8 @@ public class SelectNextSongs extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("Adapter", selectSongsAdapter.getArraySongs());
         outState.putInt("Adapter", selectSongsAdapter.getSelectedSongs());
+        super.onSaveInstanceState(outState);
     }
 }
