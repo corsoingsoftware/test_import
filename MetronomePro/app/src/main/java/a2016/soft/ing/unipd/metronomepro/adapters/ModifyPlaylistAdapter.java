@@ -32,14 +32,14 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Playlist playlistToModify;
-    private ArrayList<Song> songList;
     private final OnStartDragListener dragListener;
     private Context context;
 
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
-    }
+        this.context = c;
+        }
 /*
     //è solo un costruttore di prova
     public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener, Song song) {
@@ -51,11 +51,11 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     }*/
 
     public void addSong(Song song) {
-        songList.add(song);
+        playlistToModify.add(song);
     }
 
     public void delete(Song song) {
-        songList.remove(song);
+        playlistToModify.remove(song);
     }
 
     @Override
@@ -66,13 +66,14 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     @Override
     public void onItemSwiped(int position) {
-        notifyItemChanged(position);
+        playlistToModify.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.modify_playlist_item_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.song_title_text_view), v.findViewById((R.id.handle)));
+        ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.song_text_view), v.findViewById((R.id.handle)));
         return vh;
     }
 
