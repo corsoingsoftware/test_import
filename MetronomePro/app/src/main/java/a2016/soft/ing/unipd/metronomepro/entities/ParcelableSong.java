@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -40,6 +41,8 @@ public class ParcelableSong implements Song, Parcelable {
 
     protected ParcelableSong(Parcel in) {
 
+        this.timeSliceList = (ArrayList<TimeSlice>) in.readSerializable();
+        this.name = in.readString();
     }
 
     protected String name;
@@ -67,7 +70,7 @@ public class ParcelableSong implements Song, Parcelable {
 
     @Override
     public int describeContents() {
-        return 0;
+        return this.hashCode();
     }
 
     /**
