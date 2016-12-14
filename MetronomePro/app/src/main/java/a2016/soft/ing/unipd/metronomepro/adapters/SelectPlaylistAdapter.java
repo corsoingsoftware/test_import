@@ -33,7 +33,20 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        /**
+         *  View v = LayoutInflater.from(parent.getContext())
+         .inflate(R.layout.time_slice_item_layout, parent, false);
+         // set the view's size, margins, paddings and layout parameters
+
+         ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.bpm_text_view),
+         (TextView)v.findViewById(R.id.bit_text_view),
+         (TextView)v.findViewById(R.id.metric_text_view),
+         v.findViewById(R.id.handle));
+         return vh;
+         */
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_viewer_item_layout,parent,false);
+        ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.textViewItem));
+        return vh;
     }
 
     @Override
@@ -59,7 +72,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
+
         TextView nameOfPlaylist;
+
         ViewHolder(View itemView,TextView nameOfPlaylist) {
             super(itemView);
             this.nameOfPlaylist=nameOfPlaylist;
