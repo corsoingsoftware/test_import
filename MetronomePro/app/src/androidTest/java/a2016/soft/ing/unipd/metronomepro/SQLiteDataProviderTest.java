@@ -39,7 +39,6 @@ public class SQLiteDataProviderTest{
     @Test
         public void saveTrackTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-
         Song s = EntitiesBuilder.getSong();
         dataProvider.save(s);
         dataProvider.getSongs(s.getName(),null);

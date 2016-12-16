@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Button b = (Button) v;
             int toAdd = 0;
             switch (b.getId()) {
-
                 case R.id.button_faster:
                     toAdd = 1;
                     break;

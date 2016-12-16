@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF5722</color>
-    <color name="colorPrimaryDark">#E64A19</color>
     <color name="colorPrimaryDarkest">#C62A00</color>
-    <color name="colorAccent">#FF9800</color>
     <color name="coloreBottoni">#ccc5c5</color>
     <color name="coloreScritte">#212121</color>
     <color name="coloreScrittaPlay">#212121</color>
     <color name="coloreAvantiIndietroVeloce">#000000</color>
     <color name="coloreAvantiIndietroLento">#000000</color>
     <color name="coloreSfondo">#fafafa</color>
+    <color name="colorPrimary">#9E9E9E</color>
+    <color name="colorPrimaryDark">#616161</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="colorSeparator">#000000</color>
+    <color name="year">#999999</color>
+    <color name="title">#222222</color>
+    <array name="bPMColors">
+        <item>#FFF8E1</item>
+        <item>#FFECB3</item>
+        <item>#FFE082</item>
+        <item>#FFD54F</item>
+        <item>#FFCA28</item>
+        <item>#FFC107</item>
+        <item>#FFB300</item>
+        <item>#FFA000</item>
+        <item>#FF8F00</item>
+        <item>#FF6F00</item>
+    </array>
 
 </resources>
