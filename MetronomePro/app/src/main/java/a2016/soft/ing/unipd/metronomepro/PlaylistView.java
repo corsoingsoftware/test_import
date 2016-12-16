@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -34,20 +35,12 @@ public class PlaylistView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //per test
-        Playlist p1 = EntitiesBuilder.getPlaylist("prova di playlist 1");
-        Playlist p2 = EntitiesBuilder.getPlaylist("prova di playlist 2");
-        Playlist p3 = EntitiesBuilder.getPlaylist("prova di playlist 3");
 
         rVPlaylistItem = (RecyclerView)findViewById(R.id.recicle_view_playlist);
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-        //per test
-        playListAdapter= new SelectPlaylistAdapter(this,p1);
-        playListAdapter.addPlaylist(p2);
-        playListAdapter.addPlaylist(p3);
-        //speriamo bene
+        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
         rVPlaylistItem.setAdapter(playListAdapter);
 
 
@@ -60,15 +53,19 @@ public class PlaylistView extends AppCompatActivity {
             }
         });
     }
-    private Playlist createTestPlaylist(){
+    //metodo di test per vedere se funziona
+    private ArrayList<Playlist> createTestPlaylist(){
+        Playlist p1 = EntitiesBuilder.getPlaylist("prova di playlist 1");
+        Playlist p2 = EntitiesBuilder.getPlaylist("prova di playlist 2");
+        Playlist p3 = EntitiesBuilder.getPlaylist("prova di playlist 3");
 
+        ArrayList<Playlist> arrayList = new ArrayList<>();
+        //HARDCODED FOR TEST
+        arrayList.add(0,p1);
+        arrayList.add(1,p2);
+        arrayList.add(2,p3);
 
-        Playlist p = EntitiesBuilder.getPlaylist("prova di playlist");
-
-
-        return p;
-
-
+        return arrayList;
     }
 
 }

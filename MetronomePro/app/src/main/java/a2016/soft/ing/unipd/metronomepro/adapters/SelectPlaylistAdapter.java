@@ -24,20 +24,26 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<Playlist> arrayPlaylist;
+    private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
     private int selectPlaylist;
-    private Playlist PlaylistToEdit;
+    private Playlist PlaylistToEdit; //eventualmente..
 
-    public SelectPlaylistAdapter(Context context, Playlist playlist) {
+
+    //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
+   /** public SelectPlaylistAdapter(Context context, Playlist playlist) {
         this.context = context;
         PlaylistToEdit = playlist;
         arrayPlaylist = new ArrayList<>();
         selectPlaylist = 0;
         arrayPlaylist.add(selectPlaylist,playlist);
         selectPlaylist++;
-
-
-    }
+    }*/
+   //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
+   public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist){
+       this.context = context;
+       this.arrayPlaylist=arrayPlaylist;
+       selectPlaylist=0;
+   }
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -47,35 +53,11 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         selectPlaylist++;
     }
 
-    /**
-     * private void onTimeSliceSelected(TimeSlice ts, int position) {
-     Iterator<OnTimeSliceSelectedListener> iterator= onTimeSliceSelectedListeners.iterator();
-     while(iterator.hasNext()) {
-     OnTimeSliceSelectedListener current=iterator.next();
-     if(current!=null){
-     try{
-     current.onTimeSliceSelected(ts,position);
-     }catch (Exception ex){
-     //unhandledException from listen
-     }
-     }else{
-     iterator.remove();
-     }
-     }
-     }
-     *
-     */
-   /** private void onPlaylistSelected(Playlist pl, int position){
-        Iterator<Playlist> iterator = arrayPlaylist.iterator();
-        while(iterator.hasNext()){
-            Playlist current = iterator.next();
-            if(current!=null){
-                try{
-                    current.
-                }
-            }
-        }
-    }*/
+    public void remuvePlaylist(int position){
+        arrayPlaylist.remove(position);
+        selectPlaylist--;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //creo una View..
@@ -102,13 +84,10 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(PlaylistToEdit, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
     public void onItemSwiped(int position) {
-        notifyItemChanged(position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
