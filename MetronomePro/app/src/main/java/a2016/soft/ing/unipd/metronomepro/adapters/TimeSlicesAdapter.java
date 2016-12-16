@@ -45,10 +45,15 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
      * the song to edit
      */
     private Song songToEdit;
+    private ArrayList<TimeSliceState> songToEditState;
     /**
      * max width from resources
      */
     private int maxWidth;
+    /**
+     * height of items
+     */
+    private int itemsHeigth;
     /**
      * min width from resources
      */
@@ -98,11 +103,17 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         minBPM=minBITS=Integer.MAX_VALUE;
         maxBPM=maxBITS=Integer.MIN_VALUE;
         actualRevision++;
+        songToEditState=new ArrayList<>(songToEdit.size());
         for (TimeSlice ts :
                 songToEdit) {
             int bpm=ts.getBpm();
             int bits=ts.getDurationInBeats();
-
+            if(bits>maxBITS) maxBITS=bits;
+            if(bits<minBITS) minBITS=bits;
+            if(bpm>maxBPM) maxBPM=bpm;
+            if(bpm<minBPM) minBPM=bpm;
+            //initialized with 0
+            songToEditState.add(new TimeSliceState());
         }
     }
 
@@ -126,7 +137,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         this.onTimeSliceSelectedListeners.add(onTimeSliceSelectedListener);
     }
 
-    public void addTimeSlice(int position, TimeSlice newTS){
+    public void addTimeSlice(int position, TimeSlice newTS) {
 
     }
 
@@ -141,14 +152,26 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(songToEdit,fromPosition,toPosition);
+        Collections.swap(songToEditState,fromPosition,toPosition);
         notifyItemMoved(fromPosition,toPosition);
     }
 
     @Override
     public void onItemSwiped(int position) {
         //Maybe some action with swipe like a timeslice remove
-        songToEdit.remove(position);
+        removeTimeSlice(position);
         notifyItemRemoved(position);
+
+    }
+
+    /**
+     * remove time slice and check parameters
+     * @param position
+     */
+    private void removeTimeSlice(int position){
+        songToEdit.remove(position);
+        songToEditState.remove(position);
+        //check max and min
     }
 
 
@@ -168,7 +191,12 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final TimeSlice ts=songToEdit.get(position);
-        //holder.itemView.setLayoutParams(new RecyclerView.LayoutParams());
+        TimeSliceState tSState=songToEditState.get(position);
+        if(tSState.timeSliceRevision<actualRevision){
+            refreshTimeSliceState(tSState, ts);
+        }
+        //holder.itemView.setBackgroundColor(tSState.timeSliceColor);
+        holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(tSState.timeSliceWidth,itemsHeigth));
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
         //At the moment i will not visualize metric cause it doesn't count
@@ -189,6 +217,17 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
                  }
              }
         );
+    }
+
+    /**
+     * refresh current time slice state
+     * @param timeSliceState the old state
+     * @param timeSliceAssociated the time slice associated
+     */
+    private void refreshTimeSliceState(TimeSliceState timeSliceState, TimeSlice timeSliceAssociated) {
+        timeSliceState.timeSliceRevision=actualRevision;
+        timeSliceState.timeSliceWidth=(((maxWidth-minWidth)*(timeSliceAssociated.getDurationInBeats()-minBITS))/
+                (maxBITS-minBITS))+minWidth;
     }
 
     @Override
@@ -254,6 +293,19 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         /**
          * The timeSlice color calculated in timeSliceRevision
          */
-        Color timeSliceColor;
+        int timeSliceColor;
+
+        public TimeSliceState(int timeSliceRevision, int timeSliceWidth, int timeSliceColor) {
+            this.timeSliceRevision = timeSliceRevision;
+            this.timeSliceWidth = timeSliceWidth;
+            this.timeSliceColor = timeSliceColor;
+        }
+
+        /**
+         * Initialize with default values: 0,0,BLACK
+         */
+        public TimeSliceState(){
+            this(0,0, Color.BLACK);
+        }
     }
 }
