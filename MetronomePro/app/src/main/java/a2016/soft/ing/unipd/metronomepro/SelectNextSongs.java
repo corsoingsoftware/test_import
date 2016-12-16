@@ -11,9 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
@@ -26,6 +29,7 @@ public class SelectNextSongs extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_next_songs);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -47,9 +51,23 @@ public class SelectNextSongs extends AppCompatActivity {
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
-        selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
-        rVNextSongs.setAdapter(selectSongsAdapter);
 
+        if(savedInstanceState.containsKey("Adapter")) {
+
+            //Devo riscotruire il list adapter in modo che sia uguale a prima
+
+            ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList("Adapter");
+            int selectedSongs = savedInstanceState.getInt("Adapter");
+            selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs,MAX_SELECTABLE);
+            rVNextSongs.setAdapter(selectSongsAdapter);
+
+        }
+        else if (savedInstanceState.containsKey("Playlist")) {
+
+            p = savedInstanceState.getParcelable("Playlist");
+            selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
+            rVNextSongs.setAdapter(selectSongsAdapter);
+        }
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,4 +80,11 @@ public class SelectNextSongs extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("Adapter", selectSongsAdapter.getArraySongs());
+        outState.putInt("Adapter", selectSongsAdapter.getSelectedSongs());
+    }
 }

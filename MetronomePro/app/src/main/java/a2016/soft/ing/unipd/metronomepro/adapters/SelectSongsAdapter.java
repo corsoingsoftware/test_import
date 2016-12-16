@@ -42,11 +42,21 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         int i = 0;
         for (Song s :
                 p) {
-            arraySongs.add(new PlayableSong(s, i++, 0));
+            arraySongs.add(new PlayableSong(s, i++, PlayableSong.STATE_READYTOPLAY));
         }
 
         this.selectedSongs = selectedSongs;
         this.maxSelectable = maxSelectable;
+
+    }
+
+    public SelectSongsAdapter(ArrayList<PlayableSong> savedArray, int selectedSongs, int maxSelectable) {
+
+        arraySongs = new ArrayList<>(savedArray.size());
+        int i = 0;
+        for(PlayableSong s : savedArray){
+            arraySongs.add(new PlayableSong(s, i++, s.getSongState()));
+        }
 
     }
 
@@ -90,12 +100,19 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        if(position >= selectedSongs )
-            holder.nameSong.setTextColor(Color.BLUE);
-        else
-            holder.nameSong.setTextColor(Color.BLACK);
+        PlayableSong s = arraySongs.get(position);
 
-        Song s = arraySongs.get(position);
+        switch (s.getSongState()){
+            case PlayableSong.STATE_TOPLAY: holder.nameSong.setTextColor(Color.BLACK);
+                break;
+
+            case PlayableSong.STATE_READYTOPLAY: holder.nameSong.setTextColor(Color.BLUE);
+                break;
+
+            case PlayableSong.STATE_PLAYED: holder.nameSong.setTextColor(Color.RED);
+                break;
+        }
+
         holder.nameSong.setText(s.getName());
 
         holder.itemView.setOnTouchListener(new View.OnTouchListener() {
@@ -112,12 +129,27 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         if(position < selectedSongs) {
 
+            PlayableSong toMove = arraySongs.get(position);
+            int i = selectedSongs;
+            PlayableSong current = arraySongs.get(i);
+
+            while(i < arraySongs.size() &&
+                    current.getSongState()== PlayableSong.STATE_READYTOPLAY &&
+                    current.getPlaylistPosition() < toMove.getPlaylistPosition() ) {
+
+                i++;
+                if(i < arraySongs.size()) {
+                    current = arraySongs.get(i);
+                }
+            }
+
+            toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
             selectedSongs--;
-            onSongPositionChange(position, arraySongs.get(position).getPlaylistPosition());
+            onSongPositionChange(position, i-1);
         }
         else
         {
-
+            arraySongs.get(position).setSongState(PlayableSong.STATE_TOPLAY);
             onSongPositionChange(position, selectedSongs++);
         }
     }
@@ -147,5 +179,14 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         public void onItemClear() {
 
         }
+    }
+
+    public ArrayList<PlayableSong> getArraySongs() {
+        return arraySongs;
+    }
+
+    public int getSelectedSongs() {
+
+        return selectedSongs;
     }
 }
