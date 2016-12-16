@@ -11,13 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import java.io.Serializable;
+
 import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
-import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
-import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class ModifyPlaylistActivity extends AppCompatActivity implements OnStartDragListener {
 
@@ -25,6 +26,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private RecyclerView.LayoutManager rVLayoutManager;
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
+    private Playlist playlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVModifyPlaylist.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
-        modifyPlaylistAdapter = new ModifyPlaylistAdapter(createTest(),this,this);
+        modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
@@ -49,25 +51,46 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                         .setAction("Action", null).show();
             }
         });
-    }
-        @Override
-        public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-            itemTouchHelper.startDrag(viewHolder);
-        }
-//solo una prova
-    private Playlist createTest(){
-        Playlist playlist = EntitiesBuilder.getPlaylist("playlist di prova");
+
+
+        playlist = EntitiesBuilder.getPlaylist("playlist di prova");
         playlist.add(EntitiesBuilder.getSong("Canzone 1"));
         playlist.add(EntitiesBuilder.getSong("Canzone 2"));
         playlist.add(EntitiesBuilder.getSong("Canzone 3"));
         playlist.add(EntitiesBuilder.getSong("Canzone 4"));
         playlist.add(EntitiesBuilder.getSong("Canzone 5"));
         playlist.add(EntitiesBuilder.getSong("Canzone 6"));
-        return playlist;
+
+        savedInstanceState.putSerializable("Adapter", (Serializable)playlist);
+        if(savedInstanceState.containsKey("Adapter")){
+            Playlist savedPlaylist = savedInstanceState.getParcelable("Adapter");
+            modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
+            rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
+        }
+
+        else if(savedInstanceState.containsKey("Playlist")){
+            playlist = savedInstanceState.getParcelable("Playlist");
+            modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
+            rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
+        }
+
+
     }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+
+
+
+    //solo una prova
+
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable("Adapter", (Serializable) modifyPlaylistAdapter.getPlaylistToModify());
+
     }
-    }
+}

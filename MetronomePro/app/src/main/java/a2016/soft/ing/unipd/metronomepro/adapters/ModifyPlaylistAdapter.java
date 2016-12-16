@@ -20,6 +20,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperA
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -31,11 +32,11 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
-    private Playlist playlistToModify;
+    private ParcelablePlaylist playlistToModify;
     private final OnStartDragListener dragListener;
     private Context context;
 
-    public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
+    public ModifyPlaylistAdapter(ParcelablePlaylist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
@@ -47,6 +48,11 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     public void delete(Song song) {
         playlistToModify.remove(song);
+    }
+
+    public ParcelablePlaylist getPlaylistToModify() {
+
+        return playlistToModify;
     }
 
     @Override
