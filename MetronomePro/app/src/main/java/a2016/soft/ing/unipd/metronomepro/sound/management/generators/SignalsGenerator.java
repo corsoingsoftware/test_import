@@ -45,7 +45,7 @@ public class SignalsGenerator {
      * default constructor
      */
     public SignalsGenerator() {
-        this(DEFAULT_SAMPLE_RATE_IN_HERTZ, DEFAULT_BYTES_PER_SAMPLE, DEFAULT_CHANNELS_COUNT);
+        this(DEFAULT_CHANNELS_COUNT, DEFAULT_SAMPLE_RATE_IN_HERTZ, DEFAULT_BYTES_PER_SAMPLE);
     }
 
     /**
@@ -69,8 +69,8 @@ public class SignalsGenerator {
 
         byte[] sinusoid = new byte[lengthInBytes];
 
-        for (int i = 0; i < lengthInBytes - 1; i++) {
-            double b = Math.sin(2 * Math.PI * i / (sampleRate / sinFrequency));
+        for (int i = 0; i < lengthInBytes - 2; i++) {
+            double b = Math.sin(2 * Math.PI * i / ( sampleRate / (double)sinFrequency));
             ByteBuffer bb = ByteBuffer.allocate(SHORT_SIZE);
             bb.order(ByteOrder.LITTLE_ENDIAN);
             bb.putShort((short) (b * Short.MIN_VALUE));
@@ -88,6 +88,7 @@ public class SignalsGenerator {
      * @return array of bytes to play
      */
     public byte[] silence(int lengthInByte){
+
         byte[] toReturn= new byte[lengthInByte];
         ByteBuffer bb = ByteBuffer.allocate(SHORT_SIZE);
         bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -95,10 +96,12 @@ public class SignalsGenerator {
         bb.position(0);
         byte first=bb.get();
         byte second=bb.get();
-        for(int i=0;i<toReturn.length-1;i++){
+
+        for(int i=0; i < toReturn.length - 2; i++){
             toReturn[i++]=first;
             toReturn[i]=second;
         }
+
         return toReturn;
     }
 }

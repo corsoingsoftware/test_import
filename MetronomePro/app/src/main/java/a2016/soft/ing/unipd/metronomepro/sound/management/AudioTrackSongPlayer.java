@@ -163,6 +163,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
          */
 
         byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
+
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
@@ -217,7 +218,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @throws Exception
      */
 
-    public void write(final Song[] songs) throws Exception {
+    public void write(final Song[] songs) {
 
 
         new Thread(new Runnable() {
@@ -236,10 +237,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                     if (hashMap.containsKey(songs[i].getName())) {
 
-                        arraySong = hashMap.get(songs[i].getName());
+                        arraySong = (byte[])hashMap.get(songs[i].getName());
                         int indexWrite = 0;
 
-                        while (indexWrite <= arraySong.length) {
+                        while (indexWrite < arraySong.length) {
 
                             int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
                             indexWrite += bytesWritten;
@@ -249,8 +250,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
+
             }
         }).start();
+
     }
 
 }
