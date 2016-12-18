@@ -7,6 +7,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +27,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * average playlist size
      */
     public static final int DEFAULT_PLAYLIST_SIZE = 20;
+    private SQLiteDatabase db;
+    Context c;
 
     /**
      * creo il database con SQLopenhelper passandogli il contesto
@@ -41,7 +45,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     /**
      * dentro alle stringhe metto il codie sql
      *
-     * @param db passo un'istanza del database
      */
     public void onCreate(SQLiteDatabase db) {
         String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
@@ -128,10 +131,27 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param song to memorize
      */
     public void save(Song song) {
-        ContentValues cv = new ContentValues();
+       /* ContentValues cv = new ContentValues();
         cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")", song.getName());
         cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_SONG + ")", song.encode());
         this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_TRACK, "", cv);
+
+        String save ="INSERT INTO " + DataProviderConstants.TBL_TRACK +"." + DataProviderConstants.FIELD_TRACK_NAME +
+                " VALUES " + song.getName() +";" +
+                "INSERT INTO " + DataProviderConstants.TBL_TRACK +"." + DataProviderConstants.FIELD_TRACK_SONG +
+                " VALUES " + song.encode() +";";
+        db.execSQL(save);
+        */
+        File fileToSave = new File(c.getFilesDir(), song.getName());
+        String fileToWrite = song.toString();
+        FileOutputStream outputStream;
+        try{
+            outputStream = c.openFileOutput(song.getName(), c.MODE_PRIVATE);
+            outputStream.write(fileToWrite.getBytes());
+            outputStream.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -140,7 +160,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param song to delete
      */
     public void deleteSong(Song song) {
-        this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME + "='" + song.getName() + "'", null);
+       /* this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME +
+                "='" + song.getName() + "'", null);*/
+        File fileToDelete = new File(c.getFilesDir(), song.getName());
+        fileToDelete.delete();
     }
 
     /**
