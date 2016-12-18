@@ -89,7 +89,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         this.lenghtBoop = lengthBoop;
 
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
-                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
+                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STREAM);
 
         goThread = true;
     }
