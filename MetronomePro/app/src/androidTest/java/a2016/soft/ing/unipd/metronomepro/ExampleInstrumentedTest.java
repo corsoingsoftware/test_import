@@ -130,4 +130,18 @@ public class ExampleInstrumentedTest {
         ((AudioTrackSongPlayer)atsp).write(arrayS);
         //atsp.play();
     }
+
+    @Test
+    public void encodeDecodeTest() throws Exception {
+
+        TimeSlice t1 = new TimeSlice();
+        byte[] toreturn = t1.encode();
+        TimeSlice t2 = new TimeSlice();
+        t2.decode(toreturn);
+
+        assertEquals(t1.getBpm(), t2.getBpm());
+        assertEquals(t1.getDurationInBeats(), t2.getDurationInBeats());
+        assertEquals(t1.getTimeFigureDenominator(), t2.getTimeFigureDenominator());
+        assertEquals(t2.getTimeFigureNumerator(), t2.getTimeFigureNumerator());
+    }
 }
