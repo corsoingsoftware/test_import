@@ -20,11 +20,6 @@
             android:name=".MetronomeActivity"
             android:label="@string/title_activity_metronome"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
@@ -46,10 +41,23 @@
             android:label="@string/title_activity_select_next_songs"
             android:theme="@style/AppTheme">
         </activity>
+
         <activity
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
+            android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".AtspTest"
+            android:label="@string/title_activity_atsp_test"
             android:theme="@style/AppTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
     </application>
 

@@ -18,6 +18,8 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
 
     protected ParcelablePlaylist(Parcel in) {
+
+
     }
 
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {

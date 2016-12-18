@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -40,6 +41,16 @@ public class ParcelableSong implements Song, Parcelable {
 
     protected ParcelableSong(Parcel in) {
 
+        ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
+        this.name = in.readString();
+
+        timeSliceList = new ArrayList<>(support.size());
+
+        for(byte[] b : support){
+            TimeSlice ts = new TimeSlice();
+            ts.decode(b);
+            timeSliceList.add(ts);
+        }
     }
 
     protected String name;
@@ -63,11 +74,12 @@ public class ParcelableSong implements Song, Parcelable {
     @Override
     public void decode(byte[] toDecode) {
 
+
     }
 
     @Override
     public int describeContents() {
-        return 0;
+        return this.hashCode();
     }
 
     /**
@@ -75,8 +87,20 @@ public class ParcelableSong implements Song, Parcelable {
      * @param dest
      * @param flags
      */
+
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+        ArrayList<byte[]> timeSlicesByte = new ArrayList<>();
+
+        for(TimeSlice ts: timeSliceList){
+
+            timeSlicesByte.add(ts.encode());
+        }
+
+        dest.writeSerializable(timeSlicesByte);
+        dest.writeString(name);
     }
 
     @Override
