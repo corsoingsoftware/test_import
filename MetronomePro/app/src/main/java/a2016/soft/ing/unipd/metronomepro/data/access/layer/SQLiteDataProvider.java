@@ -48,7 +48,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     /**
      * dentro alle stringhe metto il codie sql
-     *
      */
     public void onCreate(SQLiteDatabase db) {
      /*   String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
@@ -94,7 +93,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         return getSongs(null, null);
     }
 
-     /**
+    /**
      * la ricerca like sarà implementata più avanti
      *
      * @param searchName research parameter "like" for name of songs if null=all songs
@@ -102,7 +101,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @return arraylist delle canzoni con esattamente quel titolo presenti el db
      */
     public List<Song> getSongs(String searchName, Playlist playlist) {
-        /*ArrayList<Song> songs = new ArrayList<>(DEFAULT_PLAYLIST_SIZE);
+        ArrayList<Song> songs = new ArrayList<>(DEFAULT_PLAYLIST_SIZE);
         if (searchName == null) searchName = "";
         String query = "";
         if (playlist != null) {
@@ -116,8 +115,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             query += " WHERE " + DataProviderConstants.FIELD_TRACK_NAME + " LIKE '% " + searchName + " %' ;";
         }
         query += " JOIN " + DataProviderConstants.TBL_TRACK + " ON " + DataProviderConstants.TBL_ASSOCIATION +
-                 "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " = " + DataProviderConstants.TBL_TRACK +
-                 "." + DataProviderConstants.FIELD_TRACK_SONG;
+                "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS + " = " + DataProviderConstants.TBL_TRACK +
+                "." + DataProviderConstants.FIELD_TRACK_SONG;
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
         int i = 0;
         while (cursor.moveToNext()) {
@@ -125,20 +124,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             s.decode(cursor.getBlob(0));
             songs.add(s);
             i++;
-        }*/
-
-        ArrayList<Song> songs = new ArrayList<Song>();
-        try {
-            FileInputStream openFileInput = new FileInputStream(searchName);
-            byte[] arrayToConvert = new byte[openFileInput.available()];
-            openFileInput.read(arrayToConvert);
-            Song s = EntitiesBuilder.getSong();
-            s.decode(arrayToConvert);
-            songs.add(s);
-        }catch(Exception e)
-        {e.printStackTrace();}
+        }
         return songs;
     }
+
+
 
     /**
      * memorizza la traccia nel db, il db non mi lascia inserire una traccia con nome null perchè è chiave primaria
@@ -146,27 +136,17 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param song to memorize
      */
     public void save(Song song) {
-       /* ContentValues cv = new ContentValues();
+        ContentValues cv = new ContentValues();
         cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")", song.getName());
         cv.put(DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_SONG + ")", song.encode());
         this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_TRACK, "", cv);
 
-        String save ="INSERT INTO " + DataProviderConstants.TBL_TRACK +"." + DataProviderConstants.FIELD_TRACK_NAME +
-                " VALUES " + song.getName() +";" +
-                "INSERT INTO " + DataProviderConstants.TBL_TRACK +"." + DataProviderConstants.FIELD_TRACK_SONG +
-                " VALUES " + song.encode() +";";
+        String save = "INSERT INTO " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_NAME +
+                " VALUES " + song.getName() + ";" +
+                "INSERT INTO " + DataProviderConstants.TBL_TRACK + "." + DataProviderConstants.FIELD_TRACK_SONG +
+                " VALUES " + song.encode() + ";";
         db.execSQL(save);
-        */
-        File myDirectory = c.getDir(DataProviderConstants.DEFAULT_PLAYLIST,c.MODE_PRIVATE);
-        File fileToSave = new File(myDirectory, song_position + "_" +song.getName());
-        song_position++;
-        try{
-            FileOutputStream outputStream = new FileOutputStream(fileToSave);
-            outputStream.write(song.encode());
-            outputStream.close();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     /**
@@ -175,12 +155,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param song to delete
      */
     public void deleteSong(Song song) {
-       /* this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME +
-                "='" + song.getName() + "'", null);*/
+        this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME +
+                "='" + song.getName() + "'", null);
 
-        // file to delete va cercato non creato
-        File fileToDelete = new File(c.getFilesDir(), song.getName());
-        fileToDelete.delete();
     }
 
     /**
@@ -188,21 +165,14 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @return un arraylist di tutte le cazoni con quel nome
      */
     public List<Playlist> getPlaylists(String searchName) {
-       /* ArrayList<Playlist> playlists = new ArrayList<>(1);
+        ArrayList<Playlist> playlists = new ArrayList<>(1);
         String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
         if (searchName != null) {
             query += " WHERE " +
                     DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE '%" + searchName + "%' ;";
         }
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));*/
-      /*  try {
-            FileInputStream openFileInput = new FileInputStream(searchName);
-        }catch(Exception e)
-        {e.printStackTrace();}
-
-        return playlists;*/
-        List<Playlist> playlists = new ArrayList<Playlist>();
+        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
         return playlists;
     }
 
@@ -213,11 +183,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to save or update!
      */
     public void savePlaylist(Playlist playlist) {
-       /* ContentValues cv = new ContentValues();
+        ContentValues cv = new ContentValues();
         cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist.getName());
-        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);*/
-
-        File newDirectory = c.getDir(playlist.getName(),c.MODE_PRIVATE);
+        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
     }
 
     /**
@@ -226,32 +194,33 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to delete
      */
     public void deletePlaylist(Playlist playlist) {
-        /*this.getWritableDatabase().delete(DataProviderConstants.TBL_PLAYLIST, DataProviderConstants.FIELD_PLAYLIST_NAME +
-                "='" + playlist + "'", null);*/
-        //devo cercare la cartella
+        this.getWritableDatabase().delete(DataProviderConstants.TBL_PLAYLIST, DataProviderConstants.FIELD_PLAYLIST_NAME +
+                "='" + playlist + "'", null);
 
     }
 
     /**
      * metodo per ordinare le song all'interno di una playlist
+     *
      * @param playlistName nome della playlist da ordinare
      */
     public void orderPlaylist(Playlist playlistName) {
-//        String selectQuery = "SELECT " + DataProviderConstants.TBL_ASSOCIATION + "." +
-//                DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
-//                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
-//
-//        //qui cancella i dati in tbl_association dati da strigquery
-//        String deleteSelected = "DELETE FROM " + DataProviderConstants.TBL_ASSOCIATION + "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS
-//                + " WHERE " + playlistName + " = " + DataProviderConstants.TBL_ASSOCIATION + "."
-//                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
-//
-//        ContentValues cv = new ContentValues();
-//        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
-//
-//        for(Song song:playlistName){
-//            cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
-//            //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
-//            //quindi ad ogni giro metto dentro una canzone il forach me le itera gia di suo
+        String selectQuery = "SELECT " + DataProviderConstants.TBL_ASSOCIATION + "." +
+                DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
+                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
+
+        //qui cancella i dati in tbl_association dati da strigquery
+        String deleteSelected = "DELETE FROM " + DataProviderConstants.TBL_ASSOCIATION + "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS
+                + " WHERE " + playlistName + " = " + DataProviderConstants.TBL_ASSOCIATION + "."
+                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
+
+        ContentValues cv = new ContentValues();
+        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+
+        for (Song song : playlistName) {
+            cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
+            //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
+            //quindi ad ogni giro metto dentro una canzone il forach me le itera gia di suo
         }
     }
+}
