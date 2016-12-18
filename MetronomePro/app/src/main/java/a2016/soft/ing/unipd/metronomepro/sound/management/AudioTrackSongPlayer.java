@@ -20,7 +20,6 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
  * Created by feder on 08/12/2016.
  * This class uses AudioTrack to create song in bytes from a Song, and provides methods to play the track!
  */
-
 public class AudioTrackSongPlayer implements SongPlayer {
 
     static final int SAMPLE_RATE_IN_HERTZ = 8000;
