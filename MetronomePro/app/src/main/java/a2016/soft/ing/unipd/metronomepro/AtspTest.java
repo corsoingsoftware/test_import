@@ -13,6 +13,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
+/**
+ * This class is for testing android functions not testable by unit testing
+ */
 public class AtspTest extends AppCompatActivity {
 
     @Override
