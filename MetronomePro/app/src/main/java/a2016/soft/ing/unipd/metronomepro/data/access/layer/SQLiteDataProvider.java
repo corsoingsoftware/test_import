@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
+import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +32,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public static final int DEFAULT_PLAYLIST_SIZE = 20;
     private SQLiteDatabase db;
     Context c;
+    private int song_position = 0;
 
     /**
      * creo il database con SQLopenhelper passandogli il contesto
@@ -47,7 +51,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      *
      */
     public void onCreate(SQLiteDatabase db) {
-        String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
+     /*   String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
                 " (" +
                 DataProviderConstants.FIELD_TRACK_NAME + " TEXT PRIMARY KEY," +
                 DataProviderConstants.FIELD_TRACK_SONG + " BLOB);";
@@ -66,7 +70,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 DataProviderConstants.TBL_TRACK + "(" + DataProviderConstants.FIELD_TRACK_NAME + ")," +
                 " FOREIGN KEY(" + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ") REFERENCES " +
                 DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + "));";
-        db.execSQL(e);
+        db.execSQL(e);*/
     }
 
     /**
@@ -98,7 +102,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @return arraylist delle canzoni con esattamente quel titolo presenti el db
      */
     public List<Song> getSongs(String searchName, Playlist playlist) {
-        ArrayList<Song> songs = new ArrayList<>(DEFAULT_PLAYLIST_SIZE);
+        /*ArrayList<Song> songs = new ArrayList<>(DEFAULT_PLAYLIST_SIZE);
         if (searchName == null) searchName = "";
         String query = "";
         if (playlist != null) {
@@ -121,7 +125,18 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             s.decode(cursor.getBlob(0));
             songs.add(s);
             i++;
-        }
+        }*/
+
+        ArrayList<Song> songs = new ArrayList<Song>();
+        try {
+            FileInputStream openFileInput = new FileInputStream(searchName);
+            byte[] arrayToConvert = new byte[openFileInput.available()];
+            openFileInput.read(arrayToConvert);
+            Song s = EntitiesBuilder.getSong();
+            s.decode(arrayToConvert);
+            songs.add(s);
+        }catch(Exception e)
+        {e.printStackTrace();}
         return songs;
     }
 
@@ -142,12 +157,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 " VALUES " + song.encode() +";";
         db.execSQL(save);
         */
-        File fileToSave = new File(c.getFilesDir(), song.getName());
-        String fileToWrite = song.toString();
-        FileOutputStream outputStream;
+        File myDirectory = c.getDir(DataProviderConstants.DEFAULT_PLAYLIST,c.MODE_PRIVATE);
+        File fileToSave = new File(myDirectory, song_position + "_" +song.getName());
+        song_position++;
         try{
-            outputStream = c.openFileOutput(song.getName(), c.MODE_PRIVATE);
-            outputStream.write(fileToWrite.getBytes());
+            FileOutputStream outputStream = new FileOutputStream(fileToSave);
+            outputStream.write(song.encode());
             outputStream.close();
         } catch (Exception e){
             e.printStackTrace();
@@ -162,6 +177,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public void deleteSong(Song song) {
        /* this.getWritableDatabase().delete(DataProviderConstants.TBL_TRACK, DataProviderConstants.FIELD_TRACK_NAME +
                 "='" + song.getName() + "'", null);*/
+
+        // file to delete va cercato non creato
         File fileToDelete = new File(c.getFilesDir(), song.getName());
         fileToDelete.delete();
     }
@@ -171,14 +188,21 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @return un arraylist di tutte le cazoni con quel nome
      */
     public List<Playlist> getPlaylists(String searchName) {
-        ArrayList<Playlist> playlists = new ArrayList<>(1);
+       /* ArrayList<Playlist> playlists = new ArrayList<>(1);
         String query = "SELECT " + DataProviderConstants.FIELD_PLAYLIST_NAME + " FROM " + DataProviderConstants.TBL_PLAYLIST;
         if (searchName != null) {
             query += " WHERE " +
                     DataProviderConstants.FIELD_PLAYLIST_NAME + " LIKE '%" + searchName + "%' ;";
         }
         Cursor cursor = this.getReadableDatabase().rawQuery(query, null);
-        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));
+        playlists.add(EntitiesBuilder.getPlaylist(cursor.getString(0)));*/
+      /*  try {
+            FileInputStream openFileInput = new FileInputStream(searchName);
+        }catch(Exception e)
+        {e.printStackTrace();}
+
+        return playlists;*/
+        List<Playlist> playlists = new ArrayList<Playlist>();
         return playlists;
     }
 
@@ -189,9 +213,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to save or update!
      */
     public void savePlaylist(Playlist playlist) {
-        ContentValues cv = new ContentValues();
+       /* ContentValues cv = new ContentValues();
         cv.put(DataProviderConstants.TBL_PLAYLIST + "(" + DataProviderConstants.FIELD_PLAYLIST_NAME + ")", playlist.getName());
-        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);
+        this.getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_PLAYLIST, "", cv);*/
+
+        File newDirectory = c.getDir(playlist.getName(),c.MODE_PRIVATE);
     }
 
     /**
@@ -200,8 +226,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlist to delete
      */
     public void deletePlaylist(Playlist playlist) {
-        this.getWritableDatabase().delete(DataProviderConstants.TBL_PLAYLIST, DataProviderConstants.FIELD_PLAYLIST_NAME +
-                "='" + playlist + "'", null);
+        /*this.getWritableDatabase().delete(DataProviderConstants.TBL_PLAYLIST, DataProviderConstants.FIELD_PLAYLIST_NAME +
+                "='" + playlist + "'", null);*/
+        //devo cercare la cartella
+
     }
 
     /**
@@ -209,22 +237,21 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * @param playlistName nome della playlist da ordinare
      */
     public void orderPlaylist(Playlist playlistName) {
-        String selectQuery = "SELECT " + DataProviderConstants.TBL_ASSOCIATION + "." +
-                DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
-                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
-
-        //qui cancella i dati in tbl_association dati da strigquery
-        String deleteSelected = "DELETE FROM " + DataProviderConstants.TBL_ASSOCIATION + "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS
-                + " WHERE " + playlistName + " = " + DataProviderConstants.TBL_ASSOCIATION + "."
-                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
-
-        ContentValues cv = new ContentValues();
-        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
-
-        for(Song song:playlistName){
-            cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
-            //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
-            //quindi ad ogni giro metto dentro una canzone il forach me le itera gia di suo
+//        String selectQuery = "SELECT " + DataProviderConstants.TBL_ASSOCIATION + "." +
+//                DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " FROM " + DataProviderConstants.TBL_ASSOCIATION +
+//                " WHERE " + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + " = " + playlistName + ";";
+//
+//        //qui cancella i dati in tbl_association dati da strigquery
+//        String deleteSelected = "DELETE FROM " + DataProviderConstants.TBL_ASSOCIATION + "." + DataProviderConstants.FIELD_ASSOCIATION_SONGS
+//                + " WHERE " + playlistName + " = " + DataProviderConstants.TBL_ASSOCIATION + "."
+//                + DataProviderConstants.FIELD_ASSOCIATION_PLAYLIST + ";";
+//
+//        ContentValues cv = new ContentValues();
+//        getWritableDatabase().insertOrThrow(DataProviderConstants.TBL_ASSOCIATION, "", cv);
+//
+//        for(Song song:playlistName){
+//            cv.put(DataProviderConstants.TBL_ASSOCIATION + "(" + DataProviderConstants.FIELD_ASSOCIATION_SONGS + ")", song.encode());
+//            //metti dentro a tbl association la canzoni date da playlist col foreach che tanto sono gia rdinate
+//            //quindi ad ogni giro metto dentro una canzone il forach me le itera gia di suo
         }
     }
-}

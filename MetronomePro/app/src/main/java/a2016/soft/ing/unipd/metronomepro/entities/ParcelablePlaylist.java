@@ -45,12 +45,12 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     public ParcelablePlaylist(String name) {
         this.name = name;
         songList = new ArrayList<Song>();
-        int i = 0;
+        int indexToInsert = 0;
         for(byte[] bt: arrayByte){
             Song s = EntitiesBuilder.getSong();
             s.decode(bt);
-            songList.add(i, s);
-            i++;
+            songList.add(indexToInsert, s);
+            indexToInsert++;
         }
     }
 
