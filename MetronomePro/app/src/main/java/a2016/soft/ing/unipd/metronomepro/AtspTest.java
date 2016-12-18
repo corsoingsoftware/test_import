@@ -13,6 +13,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
+/**
+ * This class is for testing android functions not testable by unit testing
+ */
 public class AtspTest extends AppCompatActivity {
 
     @Override
@@ -33,21 +36,29 @@ public class AtspTest extends AppCompatActivity {
 
         TimeSlice t1, t2, t3;
 
-        t1 = new TimeSlice();
-        t2 = new TimeSlice();
-        t3 = new TimeSlice();
-        t1.setBpm(121);
-        t1.setDurationInBeats(20);
-        t2.setBpm(80);
-        t2.setDurationInBeats(20);
-        t3.setBpm(100);
-        t3.setDurationInBeats(20);
-
-
         Song s = new ParcelableSong();
+        t1 = new TimeSlice();
+        t1.setBpm(121);
+        t1.setDurationInBeats(10);
         s.add(t1);
+        t2 = new TimeSlice();
+        t2.setBpm(300);
+        t2.setDurationInBeats(10);
         s.add(t2);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
         s.add(t3);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
+        s.add(t3);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
+        s.add(t3);
+
+
 
         SongPlayer atsp = new AudioTrackSongPlayer();
         atsp.load(s);

@@ -166,7 +166,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
-            int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
+            int PeriodLengthInBytes = (int)((SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice))+0.5);
+            if(PeriodLengthInBytes%2==1){
+                //It can't be odd!!!!!
+                PeriodLengthInBytes--;
+            }
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
 
