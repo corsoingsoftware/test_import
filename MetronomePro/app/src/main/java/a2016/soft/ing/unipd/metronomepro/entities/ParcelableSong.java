@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.sql.Array;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,13 +69,30 @@ public class ParcelableSong implements Song, Parcelable {
 
     @Override
     public byte[] encode() {
-        return new byte[0];
+        byte[] toReturn= new byte[getStreamedSize()];
+        int i=0;
+        for(TimeSlice timeSlice : timeSliceList){
+            byte[] b= timeSlice.encode();
+            System.arraycopy(b,0,toReturn,i,TimeSlice.STREAMED_SIZE);
+            i+=TimeSlice.STREAMED_SIZE;
+        }
+        return toReturn;
     }
 
     @Override
     public void decode(byte[] toDecode) {
+        for (int i=0;i<toDecode.length;i+=TimeSlice.STREAMED_SIZE){
+            TimeSlice toAdd= new TimeSlice();
+            byte[] support= new byte[TimeSlice.STREAMED_SIZE];
+            System.arraycopy(toDecode,i,support,0,TimeSlice.STREAMED_SIZE);
+            toAdd.decode(support);
+            timeSliceList.add(toAdd);
+        }
+    }
 
-
+    @Override
+    public int getStreamedSize() {
+        return timeSliceList.size()*TimeSlice.STREAMED_SIZE;
     }
 
     @Override

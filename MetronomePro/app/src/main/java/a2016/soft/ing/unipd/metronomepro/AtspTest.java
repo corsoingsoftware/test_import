@@ -36,21 +36,29 @@ public class AtspTest extends AppCompatActivity {
 
         TimeSlice t1, t2, t3;
 
-        t1 = new TimeSlice();
-        t2 = new TimeSlice();
-        t3 = new TimeSlice();
-        t1.setBpm(60);
-        t1.setDurationInBeats(20);
-        t2.setBpm(80);
-        t2.setDurationInBeats(20);
-        t3.setBpm(100);
-        t3.setDurationInBeats(20);
-
-
         Song s = new ParcelableSong();
+        t1 = new TimeSlice();
+        t1.setBpm(189);
+        t1.setDurationInBeats(10);
         s.add(t1);
+        t2 = new TimeSlice();
+        t2.setBpm(300);
+        t2.setDurationInBeats(10);
         s.add(t2);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
         s.add(t3);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
+        s.add(t3);
+        t3 = new TimeSlice();
+        t3.setBpm(30);
+        t3.setDurationInBeats(10);
+        s.add(t3);
+
+
 
         SongPlayer atsp = new AudioTrackSongPlayer();
         atsp.load(s);
