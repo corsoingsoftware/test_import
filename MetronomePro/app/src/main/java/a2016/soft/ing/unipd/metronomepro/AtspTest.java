@@ -27,7 +27,7 @@ public class AtspTest extends AppCompatActivity {
 
         final SongPlayer atsp = new AudioTrackSongPlayer();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

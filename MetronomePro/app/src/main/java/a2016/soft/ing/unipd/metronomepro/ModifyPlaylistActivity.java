@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,21 +12,33 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+
 public class ModifyPlaylistActivity extends AppCompatActivity implements OnStartDragListener {
+
+    private static final String PLAYLIST_DEFAULT_NAME="def-playlist";
 
     private RecyclerView rVModifyPlaylist;
     private RecyclerView.LayoutManager rVLayoutManager;
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
+    //All results:
+    private static final int START_EDIT_NEW_SONG=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,38 +56,32 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
-                String title = "Titolo della canzone di prova";
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(title, (Parcelable) songToEdit);
+                bundle.putParcelable(SONG_TO_EDIT, (Parcelable) songToEdit);
                 Intent intent = new Intent();
-                startActivityForResult(intent, 0 ,bundle);
+                startActivityForResult(intent, START_EDIT_NEW_SONG,bundle);
 
             }
         });
 
 
-        playlist = EntitiesBuilder.getPlaylist("playlist di prova");
+        playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
 //        Song s = EntitiesBuilder.getSong();
 //        TimeSlice ts = new TimeSlice();
 //        s.add(ts);
 //        playlist.add(s);
+        if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
+            playlist = savedInstanceState.getParcelable(PLAYLIST);
 
-
-        if (savedInstanceState != null && savedInstanceState.containsKey("Adapter")) {
-            playlist = savedInstanceState.getParcelable("Adapter");
-
-        } else if (savedInstanceState != null && savedInstanceState.containsKey("Playlist")) {
+        }/* Federico: ho tolto un if in più che attualmente non serve
+        else if (savedInstanceState != null && savedInstanceState.containsKey("Playlist")) {
             playlist = savedInstanceState.getParcelable("Playlist");
-
-
-
-        } else {
-            playlist.add(EntitiesBuilder.getSong("Canzone 1"));
-            playlist.add(EntitiesBuilder.getSong("Canzone 2"));
-            playlist.add(EntitiesBuilder.getSong("Canzone 3"));
-            playlist.add(EntitiesBuilder.getSong("Canzone 4"));
-            playlist.add(EntitiesBuilder.getSong("Canzone 5"));
-            playlist.add(EntitiesBuilder.getSong("Canzone 6"));
+        } */
+        else {
+            //Default
+            DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
+            List<Song> songs=dp.getSongs(null,playlist);
+            playlist.addAll(songs);
         }
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
@@ -93,13 +100,18 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("Adapter", (Parcelable) playlist);
+        outState.putParcelable(PLAYLIST, (Parcelable) playlist);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Song s = data.getParcelableArrayExtra("SongEdited");
-        //playlist.add(s);
+        if(resultCode==RESULT_OK){
+            switch (requestCode){
+                case START_EDIT_NEW_SONG:
+                    modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+                    break;
+            }
+        }
     }
 }
