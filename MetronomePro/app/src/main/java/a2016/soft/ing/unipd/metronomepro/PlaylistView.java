@@ -51,6 +51,7 @@ public class PlaylistView extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                playListAdapter.remuvePlaylist(1);
             }
         });
     }
@@ -69,6 +70,7 @@ public class PlaylistView extends AppCompatActivity {
         return arrayList;
     }
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putParcelableArrayList("adapter",playListAdapter.getArrayPlaylist());
         super.onSaveInstanceState(outState, outPersistentState);
     }
 }

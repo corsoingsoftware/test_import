@@ -57,6 +57,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         arrayPlaylist.remove(position);
         selectPlaylist--;
     }
+    public ArrayList getArrayPlaylist(){
+        return arrayPlaylist;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
