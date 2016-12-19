@@ -23,6 +23,8 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 public class AudioTrackSongPlayer implements SongPlayer {
 
     static final int SAMPLE_RATE_IN_HERTZ = 8000;
+    private static final String THREAD_NAME = "bufferT";
+
     static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
     static final int FRAME_SIZE = 2;
@@ -46,6 +48,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
     private Thread writeAt;
     private boolean goThread;
     private AudioTrack at;
+    /**
+     * The current thread that's writing the buffer
+     */
+    private Thread currentThread;
     /**
      * The name of song is key
      */
@@ -119,7 +125,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public void stop() {
-
+        if(currentThread!=null){
+            if(!goThread){
+                currentThread.interrupt();
+            }
+        }
         at.stop();
     }
 
@@ -222,8 +232,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     public void write(final Song[] songs) {
 
-
-        new Thread(new Runnable() {
+        Runnable toDo= new Runnable() {
             @Override
             public void run() {
 
@@ -253,9 +262,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
 
-            }
-        }).start();
 
+            }
+        };
+        if(goThread){
+            currentThread= new Thread(toDo,  THREAD_NAME);
+            currentThread.start();
+        }
     }
 
 }
