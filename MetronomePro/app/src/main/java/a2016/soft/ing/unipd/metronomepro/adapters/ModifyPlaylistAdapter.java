@@ -36,6 +36,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     public void addSong(Song song) {
         playlistToModify.add(song);
+        notifyItemInserted(playlistToModify.size()-1);
     }
 
     public void delete(Song song) {

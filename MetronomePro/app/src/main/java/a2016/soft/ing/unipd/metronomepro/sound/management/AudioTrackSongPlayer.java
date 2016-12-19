@@ -58,11 +58,17 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     private HashMap<String, byte[]> hashMap;
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
+    private AudioTrackSongPlayerCallback callback;
 
-    public AudioTrackSongPlayer() {
+    public AudioTrackSongPlayer(AudioTrackSongPlayerCallback callback) {
         hashMap = new HashMap<String, byte[]>();
         this.initialize();
         stop = true;
+        this.callback = callback;
+    }
+
+    public interface AudioTrackSongPlayerCallback {
+        void writeEnd();
     }
 
     @Override
@@ -274,7 +280,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
-
+                callback.writeEnd();
 
             }
         };

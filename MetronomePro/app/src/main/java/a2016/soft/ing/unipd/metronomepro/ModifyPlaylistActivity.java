@@ -1,10 +1,12 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,19 +53,27 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-
+        final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(SONG_TO_EDIT, (Parcelable) songToEdit);
-                Intent intent = new Intent();
-                startActivityForResult(intent, START_EDIT_NEW_SONG,bundle);
+                Intent intent = new Intent(activity, SongCreator.class);
+                intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
 
             }
         });
 
+        FloatingActionButton floatingActionButtonPlay= (FloatingActionButton)findViewById(R.id.fabPlay);
+        floatingActionButtonPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, SelectNextSongs.class);
+                intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
+                startActivity(intent);
+            }
+        });
 
         playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
 //        Song s = EntitiesBuilder.getSong();
@@ -71,6 +81,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
 //        s.add(ts);
 //        playlist.add(s);
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
+            //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);
 
         }/* Federico: ho tolto un if in più che attualmente non serve

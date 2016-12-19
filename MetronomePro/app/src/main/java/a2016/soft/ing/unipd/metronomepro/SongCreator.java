@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import java.security.spec.ECField;
+
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.HorizontalDragTouchHelperCallback;
@@ -45,6 +47,13 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         Song songToEdit= createTestSong();
         if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
             songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
+        }else{
+            Intent intent=getIntent();
+            try {
+                songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
         rVTimeSlices.setAdapter(timeSlicesAdapter);
@@ -58,7 +67,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                 Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
                 Intent returnIntent = new Intent();
                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-                returnIntent.putExtra(SONG, ps);
+                returnIntent.putExtra(SONG_TO_EDIT, ps);
                 setResult(RESULT_OK,returnIntent);
                 finish();
             }
@@ -66,6 +75,10 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
     }
 
+    /**
+     * This method create a test song just used to test usability
+     * @return
+     */
     private Song createTestSong(){
         TimeSlice t1, t2, t3;
         Song s =EntitiesBuilder.getSong("pippo");
@@ -128,6 +141,10 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
     }
 
+    /**
+     * Called when an item start to get drag
+     * @param viewHolder The holder of the view to drag.
+     */
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);

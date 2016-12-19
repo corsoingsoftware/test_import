@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,13 +24,14 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCal
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
-public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
+public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback, AudioTrackSongPlayer.AudioTrackSongPlayerCallback {
 
     private RecyclerView rVNextSongs;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongsAdapter selectSongsAdapter;
     private final static int MAX_SELECTABLE = 3;
     SongPlayerServiceCaller spsc;
+    Playlist p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,41 +41,35 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Playlist p = EntitiesBuilder.getPlaylist("pippo");
-        Song s1 = EntitiesBuilder.getSong("S1");
-        Song s2 = EntitiesBuilder.getSong("S2");
-        Song s3 = EntitiesBuilder.getSong("S3");
-        Song s4 = EntitiesBuilder.getSong("S4");
-        Song s5 = EntitiesBuilder.getSong("S5");
-        p.add(s1);
-        p.add(s2);
-        p.add(s3);
-        p.add(s4);
-        p.add(s5);
-
         rVNextSongs = (RecyclerView) findViewById(R.id.recycler_view_next_songs);
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
-
         spsc = new SongPlayerServiceCaller(this, this);
 
-        if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
+        if(savedInstanceState!=null) {
+            if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
 
-            //Devo ricostruire il list adapter in modo che sia uguale a prima
+                //Devo ricostruire il list adapter in modo che sia uguale a prima
 
-            ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList(PLAYABLE_PLAYLIST);
-            int selectedSongs = savedInstanceState.getInt(PLAYABLE_PLAYLIST);
-            selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs, MAX_SELECTABLE);
-            rVNextSongs.setAdapter(selectSongsAdapter);
+                ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList(PLAYABLE_PLAYLIST);
+                int selectedSongs = savedInstanceState.getInt(PLAYABLE_PLAYLIST);
+                selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs, MAX_SELECTABLE);
 
-        } else if (savedInstanceState.containsKey(PLAYLIST)) {
+            } /*else if (savedInstanceState.containsKey(PLAYLIST)) {
 
-            p = savedInstanceState.getParcelable(PLAYLIST);
-            selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
-            rVNextSongs.setAdapter(selectSongsAdapter);
+                p = savedInstanceState.getParcelable(PLAYLIST);
+                selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
 
+            }*/
+        }else{
+            Intent intent=getIntent();
+            if(intent!=null){
+                p=intent.getParcelableExtra(PLAYLIST);
+                selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
+            }
         }
+        rVNextSongs.setAdapter(selectSongsAdapter);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
@@ -83,6 +79,8 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                 Song[] songs = selectSongsAdapter.getSongs();
                 spsc.write(songs);
                 spsc.play();
+
+                //Blocco tutto
             }
         });
     }
@@ -98,10 +96,19 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     public void serviceConnected() {
 
+        spsc.startAudioTrackSongPlayer(this);
+
         ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
 
         for (int i = 0; i < playlist.size(); i++) {
             spsc.load(playlist.get(i));
         }
+    }
+
+    @Override
+    public void writeEnd() {
+
+        //Scrittura terminata
+
     }
 }

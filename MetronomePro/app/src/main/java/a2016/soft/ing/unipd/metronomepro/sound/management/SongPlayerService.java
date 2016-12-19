@@ -23,7 +23,6 @@ public class SongPlayerService extends Service {
     public void onCreate(){
         Log.v(LOG_TAG,"in onCreate");
         super.onCreate();
-        this.atsp = new AudioTrackSongPlayer();
     }
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -83,5 +82,9 @@ public class SongPlayerService extends Service {
         SongPlayerService getService() {
             return SongPlayerService.this;
         }
+    }
+
+    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback){
+        this.atsp = new AudioTrackSongPlayer(callback);
     }
 }
