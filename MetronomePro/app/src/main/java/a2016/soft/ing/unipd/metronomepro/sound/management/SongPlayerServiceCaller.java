@@ -121,4 +121,9 @@ public class SongPlayerServiceCaller implements SongPlayer {
         pService.write(songs);
     }
 
+    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
+        Log.v(LOG_TAG,"in startAudioTrackSongPlayer");
+        pService.startAudioTrackSongPlayer(callback);
+    }
+
 }

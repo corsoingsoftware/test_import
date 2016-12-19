@@ -23,7 +23,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCal
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
-public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
+public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback, AudioTrackSongPlayer.AudioTrackSongPlayerCallback {
 
     private RecyclerView rVNextSongs;
     private RecyclerView.LayoutManager rVLayoutManager;
@@ -98,10 +98,19 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     public void serviceConnected() {
 
+        spsc.startAudioTrackSongPlayer(this);
+
         ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
 
         for (int i = 0; i < playlist.size(); i++) {
             spsc.load(playlist.get(i));
         }
+    }
+
+    @Override
+    public void writeEnd() {
+
+        //Scrittura terminata
+
     }
 }
