@@ -3,16 +3,12 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.TypedArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Objects;
-
-import static android.R.id.list;
 
 /**
  * Created by Omar on 12/12/2016.
@@ -22,8 +18,15 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
 
     protected ParcelablePlaylist(Parcel in) {
-        this.name = in.readString();
-        this.arrayByte = (ArrayList<byte[]>) in.readSerializable();
+        this(in.readString());
+        ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
+        int indexToInsert = 0;
+        for (byte[] bt : arrayByte) {
+            Song s = EntitiesBuilder.getSong();
+            s.decode(bt);
+            songList.add(indexToInsert, s);
+            indexToInsert++;
+        }
     }
 
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {
@@ -40,18 +43,10 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     private String name;
     private ArrayList<Song> songList;
-    private ArrayList<byte[]> arrayByte;
 
     public ParcelablePlaylist(String name) {
         this.name = name;
         songList = new ArrayList<Song>();
-        int i = 0;
-        for(byte[] bt: arrayByte){
-            Song s = EntitiesBuilder.getSong();
-            s.decode(bt);
-            songList.add(i, s);
-            i++;
-        }
     }
 
     @Override
@@ -61,14 +56,15 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        arrayByte = new ArrayList<byte[]>();
-        for(Song s: songList){
+        ArrayList<byte[]> arrayByte = new ArrayList<byte[]>();
+        for (Song s : songList) {
             arrayByte.add(s.encode());
         }
+        dest.writeString(getName());
         dest.writeSerializable(arrayByte);
         //prendo la song e la metto in array list convertita in array di byte
         //passo al parser aray di byte quando li riprendo li devo riconvertire in song
-        }
+    }
 
     @Override
     public String getName() {

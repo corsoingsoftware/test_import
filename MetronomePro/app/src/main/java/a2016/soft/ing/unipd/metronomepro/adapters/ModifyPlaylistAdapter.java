@@ -9,22 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Objects;
 
 import a2016.soft.ing.unipd.metronomepro.R;
-import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnTimeSliceSelectedListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
-import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
-import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 /**
  * Created by Francesco on 12/12/2016.
@@ -40,7 +32,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
-        }
+    }
 
     public void addSong(Song song) {
         playlistToModify.add(song);
@@ -70,7 +62,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.modify_playlist_item_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.song_text_view), v.findViewById((R.id.handle)));
+        ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.song_text_view), v.findViewById((R.id.handle)));
         return vh;
     }
 
@@ -88,7 +80,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         holder.songTitle.setText(s.getName());
         holder.motionView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-                    public boolean onTouch(View v, MotionEvent event){
+            public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(holder);
                 }
