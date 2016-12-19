@@ -93,7 +93,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             //DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
             //List<Song> songs=dp.getSongs(null,playlist);
             //playlist.addAll(songs);
-            playlist.add(EntitiesBuilder.getSong("dio cane"));
+            playlist.add(EntitiesBuilder.getSong("ops 1"));
+            playlist.add(EntitiesBuilder.getSong("ops"));
         }
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
