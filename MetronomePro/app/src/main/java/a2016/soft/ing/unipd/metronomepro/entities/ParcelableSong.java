@@ -17,6 +17,7 @@ import java.util.ListIterator;
  */
 
 public class ParcelableSong implements Song, Parcelable {
+    private static final int MIN_ARRAY_LIST_SIZE=10;
 
     public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
         /**
@@ -45,13 +46,14 @@ public class ParcelableSong implements Song, Parcelable {
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
 
-        timeSliceList = new ArrayList<>(support.size());
+        timeSliceList = new ArrayList<>(Math.min(support.size(),MIN_ARRAY_LIST_SIZE));
 
-        for(byte[] b : support){
-            TimeSlice ts = new TimeSlice();
-            ts.decode(b);
-            timeSliceList.add(ts);
-        }
+        if(support!=null)
+            for(byte[] b : support){
+                TimeSlice ts = new TimeSlice();
+                ts.decode(b);
+                timeSliceList.add(ts);
+            }
     }
 
     protected String name;

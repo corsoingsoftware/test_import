@@ -59,7 +59,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
                 Intent intent = new Intent(activity, SongCreator.class);
-                intent.putExtra(PLAYLIST, (Parcelable) songToEdit);
+                intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
 
             }
@@ -81,6 +81,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
 //        s.add(ts);
 //        playlist.add(s);
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
+            //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);
 
         }/* Federico: ho tolto un if in più che attualmente non serve
@@ -89,11 +90,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         } */
         else {
             //Default
-            //DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-            //List<Song> songs=dp.getSongs(null,playlist);
-            //playlist.addAll(songs);
-            playlist.add(EntitiesBuilder.getSong("ops 1"));
-            playlist.add(EntitiesBuilder.getSong("ops"));
+            DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
+            List<Song> songs=dp.getSongs(null,playlist);
+            playlist.addAll(songs);
         }
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
