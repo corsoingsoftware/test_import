@@ -3,6 +3,7 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
@@ -45,13 +48,13 @@ public class PlaylistView extends AppCompatActivity {
         playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
         rVPlaylistItem.setAdapter(playListAdapter);
 
-        if(savedInstanceState.containsKey("adapter")){
+        if(savedInstanceState != null && savedInstanceState.containsKey("adapter")){
             ArrayList<ParcelablePlaylist> savedPlaylist = savedInstanceState.getParcelableArrayList("adapter");
             playListAdapter = new SelectPlaylistAdapter(this,savedPlaylist);
             rVPlaylistItem.setAdapter(playListAdapter);
         }
-       /**  else if(savedInstanceState.containsKey("Playlist")){
-
+       /** else{
+           qui dovrebbe "ricaricare" la lista e l'adapter direttamente dal database e non piu dal savedinstance state
         }*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -78,8 +81,8 @@ public class PlaylistView extends AppCompatActivity {
 
         return arrayList;
     }
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("adapter",playListAdapter.getArrayPlaylist());
-        super.onSaveInstanceState(outState, outPersistentState);
+        super.onSaveInstanceState(outState);
     }
 }
