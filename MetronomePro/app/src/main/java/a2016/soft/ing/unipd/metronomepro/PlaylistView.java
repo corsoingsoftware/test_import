@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -67,5 +68,7 @@ public class PlaylistView extends AppCompatActivity {
 
         return arrayList;
     }
-
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 }

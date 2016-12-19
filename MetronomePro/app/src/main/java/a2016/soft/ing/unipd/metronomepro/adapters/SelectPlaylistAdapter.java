@@ -26,7 +26,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private Context context;
     private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
     private int selectPlaylist;
-    private Playlist PlaylistToEdit; //eventualmente..
+    private ParcelablePlaylist PlaylistToEdit; //eventualmente..
 
 
     //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
@@ -48,7 +48,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
-    public void addPlaylist(Playlist playlist){
+    public void addPlaylist(ParcelablePlaylist playlist){
         arrayPlaylist.add(selectPlaylist,playlist);
         selectPlaylist++;
     }
@@ -70,7 +70,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Playlist p = arrayPlaylist.get(position);
+        ParcelablePlaylist p = (ParcelablePlaylist)arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
 
     }
