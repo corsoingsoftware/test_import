@@ -21,13 +21,18 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 
-public class SelectNextSongs extends AppCompatActivity {
+public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
     private RecyclerView rVNextSongs;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongsAdapter selectSongsAdapter;
     private final static int MAX_SELECTABLE = 3;
+    SongPlayerServiceCaller spsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class SelectNextSongs extends AppCompatActivity {
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
 
+        spsc = new SongPlayerServiceCaller(this, this);
 
         if(savedInstanceState.containsKey("Adapter")) {
 
@@ -70,6 +76,7 @@ public class SelectNextSongs extends AppCompatActivity {
             p = savedInstanceState.getParcelable("Playlist");
             selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
             rVNextSongs.setAdapter(selectSongsAdapter);
+
         }
 
 
@@ -79,6 +86,10 @@ public class SelectNextSongs extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                Song[] songs = selectSongsAdapter.getSongs();
+                spsc.write(songs);
+                spsc.play();
             }
         });
     }
@@ -89,5 +100,15 @@ public class SelectNextSongs extends AppCompatActivity {
         outState.putParcelableArrayList("Adapter", selectSongsAdapter.getArraySongs());
         outState.putInt("Adapter", selectSongsAdapter.getSelectedSongs());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void serviceConnected() {
+
+        ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
+
+        for(int i = 0; i < playlist.size(); i++) {
+            spsc.load(playlist.get(i));
+        }
     }
 }

@@ -74,6 +74,11 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in load");
 
     }
+
+    public void write(Song[] songs) {
+        atsp.write(songs);
+    }
+
     public class MyBinder extends Binder {
         SongPlayerService getService() {
             return SongPlayerService.this;
