@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
+import a2016.soft.ing.unipd.metronomepro.SelectNextSongs;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 import android.content.ComponentName;
@@ -30,7 +31,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
                     era una cosa che facevi tu ma non posso impostare un servizio senza il contesto
 
      */
-    public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback) {
+    public SongPlayerServiceCaller(SelectNextSongs c, final SongPlayerServiceCallerCallback callback) {
         pBound = false;
         activityContext = c;
         pConnection = new ServiceConnection() {
@@ -43,6 +44,9 @@ public class SongPlayerServiceCaller implements SongPlayer {
                 pService = binder.getService();
                 //Chiamo il metodo onServiceInitialized di MetronomeActivity.
                 callback.serviceConnected();
+
+                if(pService != null)
+                    Log.i("service-bind", "Service is bonded successfully!");
             }
 
             @Override
@@ -124,6 +128,10 @@ public class SongPlayerServiceCaller implements SongPlayer {
     public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
         Log.v(LOG_TAG,"in startAudioTrackSongPlayer");
         pService.startAudioTrackSongPlayer(callback);
+    }
+
+    public SongPlayerService getService(){
+        return pService;
     }
 
 }
