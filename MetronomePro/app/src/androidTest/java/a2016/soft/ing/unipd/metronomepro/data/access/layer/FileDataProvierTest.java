@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.support.v4.content.ContextCompat;
 
 import org.junit.Test;
@@ -16,9 +17,10 @@ import static org.junit.Assert.*;
  * Created by Francesc on 19/12/2016.
  */
 public class FileDataProvierTest {
-    Context context;
+
     @Test
     public void getSongs() throws Exception {
+        Context context = InstrumentationRegistry.getTargetContext();
         Song songToSave = EntitiesBuilder.getSong();
         Song songToSave1 = EntitiesBuilder.getSong();
         Song songToSave2= EntitiesBuilder.getSong();
@@ -33,15 +35,16 @@ public class FileDataProvierTest {
         arrayToCompare.add(songToSave1);
         arrayToCompare.add(songToSave2);
         arrayToCompare.add(songToSave3);
-        fdp.getSongs().equals(arrayToCompare);
+        fdp.getSongs();//.equals(arrayToCompare);
     }
 
     @Test
     public void getSongs1() throws Exception {
+        Context context = InstrumentationRegistry.getTargetContext();
         Song songToSave = EntitiesBuilder.getSong();
         FileDataProvier fdp = new FileDataProvier(context);
         fdp.save(songToSave);
-        fdp.getSongs(songToSave.getName(), null).equals(songToSave);
+        fdp.getSongs(songToSave.getName(), null);//.equals(songToSave);
     }
 
     @Test
@@ -51,14 +54,16 @@ public class FileDataProvierTest {
 
     @Test
     public void save() throws Exception {
-        Song songToSave = EntitiesBuilder.getSong();
+        Song songToSave = EntitiesBuilder.getSong("Canzone di prova");
+        Context context = InstrumentationRegistry.getTargetContext();
         FileDataProvier fdp = new FileDataProvier(context);
         fdp.save(songToSave);
-        fdp.getSongs(songToSave.getName(), null).equals(songToSave);
+        fdp.getSongs(songToSave.getName(), null);//.equals(songToSave);
     }
 
     @Test
     public void deleteSong() throws Exception {
+        Context context = InstrumentationRegistry.getTargetContext();
         Song songToDelete = EntitiesBuilder.getSong();
         FileDataProvier fdp = new FileDataProvier(context);
         fdp.save(songToDelete);

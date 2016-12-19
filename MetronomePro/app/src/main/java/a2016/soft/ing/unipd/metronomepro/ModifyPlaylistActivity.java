@@ -99,7 +99,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Song s = data.getParcelableArrayExtra("SongEdited");
-        playlist.add(s);
+        //Song s = data.getParcelableArrayExtra("SongEdited");
+        //playlist.add(s);
     }
 }
