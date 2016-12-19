@@ -76,6 +76,10 @@ public class FileDataProvier implements DataProvider {
 
     @Override
     public void save(Song song) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root +"/"+ song.getName());
+
+
         String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist";
         File myDirectory = context.getDir(path, context.MODE_PRIVATE);
         File fileToSave = new File(myDirectory, song_position + "_" + song.getName());
