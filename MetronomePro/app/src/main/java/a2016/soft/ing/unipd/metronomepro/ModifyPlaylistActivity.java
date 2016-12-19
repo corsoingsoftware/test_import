@@ -25,8 +25,10 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -39,6 +41,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
+    SongPlayerServiceCaller spsc;
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -128,5 +131,12 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                     break;
             }
         }
+    }
+
+    public void serviceConnected(Song song) {
+        final Activity activity=this;
+        Intent intent = new Intent(activity, SelectNextSongs.class);
+        intent.putExtra(PLAYLIST, (Parcelable) song);
+        startActivity(intent);
     }
 }
