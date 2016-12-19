@@ -116,4 +116,9 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     }
 
+    public void write(Song[] songs) {
+        Log.v(LOG_TAG,"in write");
+        pService.write(songs);
+    }
+
 }
