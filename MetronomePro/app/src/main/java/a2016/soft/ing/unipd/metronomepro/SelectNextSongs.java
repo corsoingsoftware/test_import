@@ -21,6 +21,8 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+
 public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
     private RecyclerView rVNextSongs;
@@ -56,19 +58,18 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
         spsc = new SongPlayerServiceCaller(this, this);
 
-        if(savedInstanceState.containsKey("Adapter")) {
+        if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
 
             //Devo ricostruire il list adapter in modo che sia uguale a prima
 
-            ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList("Adapter");
-            int selectedSongs = savedInstanceState.getInt("Adapter");
+            ArrayList<PlayableSong> savedArray = savedInstanceState.getParcelableArrayList(PLAYABLE_PLAYLIST);
+            int selectedSongs = savedInstanceState.getInt(PLAYABLE_PLAYLIST);
             selectSongsAdapter = new SelectSongsAdapter(savedArray, selectedSongs, MAX_SELECTABLE);
             rVNextSongs.setAdapter(selectSongsAdapter);
 
-        }
-        else if (savedInstanceState.containsKey("Playlist")) {
+        } else if (savedInstanceState.containsKey(PLAYLIST)) {
 
-            p = savedInstanceState.getParcelable("Playlist");
+            p = savedInstanceState.getParcelable(PLAYLIST);
             selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
             rVNextSongs.setAdapter(selectSongsAdapter);
 
@@ -79,10 +80,6 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-
                 Song[] songs = selectSongsAdapter.getSongs();
                 spsc.write(songs);
                 spsc.play();
@@ -93,8 +90,8 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelableArrayList("Adapter", selectSongsAdapter.getArraySongs());
-        outState.putInt("Adapter", selectSongsAdapter.getSelectedSongs());
+        outState.putParcelableArrayList(PLAYABLE_PLAYLIST, selectSongsAdapter.getArraySongs());
+        outState.putInt(PLAYABLE_PLAYLIST, selectSongsAdapter.getSelectedSongs());
         super.onSaveInstanceState(outState);
     }
 
@@ -103,7 +100,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
         ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
 
-        for(int i = 0; i < playlist.size(); i++) {
+        for (int i = 0; i < playlist.size(); i++) {
             spsc.load(playlist.get(i));
         }
     }

@@ -7,4 +7,6 @@ package a2016.soft.ing.unipd.metronomepro;
 public interface ActivityExtraNames {
     String SONG="song";
     String SONG_TO_EDIT="song_to_edit";
+    String PLAYABLE_PLAYLIST="playable_playlist";
+    String PLAYLIST="playlist";
 }

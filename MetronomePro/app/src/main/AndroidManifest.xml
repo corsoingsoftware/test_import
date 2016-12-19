@@ -46,11 +46,6 @@
         <activity
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
-            android:theme="@style/AppTheme"></activity>
-
-        <activity
-            android:name=".AtspTest"
-            android:label="@string/title_activity_atsp_test"
             android:theme="@style/AppTheme">
 
             <intent-filter>
@@ -58,6 +53,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AtspTest"
+            android:label="@string/title_activity_atsp_test"
+            android:theme="@style/AppTheme">
 
         </activity>
     </application>
