@@ -1,10 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,27 @@ public class FileDataProvier implements DataProvider {
 
     @Override
     public List<Song> getSongs(String searchName, Playlist playlist) {
+        try {
+            //chiedi tutti i file che sono nella cartella li leggo e ritorno arraylist di song
+            File directory = new File(Environment.getExternalStorageDirectory().toString() + "/" + playlist.getName());
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
+            File[] files = directory.listFiles();
+            ArrayList<Song> arrayToReturn = new ArrayList<>();
+
+            for (int i = 0; i < files.length; i++) {
+                FileInputStream fileInputStream = new FileInputStream(searchName);
+                Song song = EntitiesBuilder.getSong();
+                byte[] byteToConvert = new byte[fileInputStream.available()];
+                fileInputStream.read(byteToConvert);
+                song.decode(byteToConvert);
+                arrayToReturn.add(song);
+            }
+            return arrayToReturn;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -52,14 +76,15 @@ public class FileDataProvier implements DataProvider {
 
     @Override
     public void save(Song song) {
-        File myDirectory = context.getDir(DataProviderConstants.DEFAULT_PLAYLIST,context.MODE_PRIVATE);
-        File fileToSave = new File(myDirectory, song_position + "_" +song.getName());
+        String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist";
+        File myDirectory = context.getDir(path, context.MODE_PRIVATE);
+        File fileToSave = new File(myDirectory, song_position + "_" + song.getName());
         song_position++;
-        try{
+        try {
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
             outputStream.write(song.encode());
             outputStream.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -67,13 +92,17 @@ public class FileDataProvier implements DataProvider {
 
     @Override
     public void deleteSong(Song song) {
+        File directory = new File(Environment.getExternalStorageDirectory().toString() + "/def-playlist");
+        File[] files = directory.listFiles();
+
         File fileToDelete = new File(context.getFilesDir(), song.getName());
         fileToDelete.delete();
     }
 
     @Override
     public void savePlaylist(Playlist playlist) {
-        File newDirectory = context.getDir(playlist.getName(),context.MODE_PRIVATE);
+        File newPlaylist = new File(Environment.getExternalStorageDirectory().toString() + "/" + playlist.getName());
+        newPlaylist.mkdir();
     }
 
     @Override
