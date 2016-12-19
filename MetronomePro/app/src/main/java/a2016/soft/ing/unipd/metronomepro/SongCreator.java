@@ -1,6 +1,8 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +17,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.HorizontalDragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
@@ -39,12 +42,16 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
-        timeSlicesAdapter = new TimeSlicesAdapter(this, this, createTestSong());
+        Song songToEdit= createTestSong();
+        if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
+            songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
+        }
+        timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
         rVTimeSlices.setAdapter(timeSlicesAdapter);
         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,8 +122,10 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SONG_TO_EDIT,(Parcelable) timeSlicesAdapter.getSongToEdit());
+
     }
 
     @Override

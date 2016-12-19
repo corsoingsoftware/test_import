@@ -5,5 +5,6 @@ package a2016.soft.ing.unipd.metronomepro;
  */
 
 public interface ActivityExtraNames {
-    public static final String SONG="song";
+    String SONG="song";
+    String SONG_TO_EDIT="song_to_edit";
 }
