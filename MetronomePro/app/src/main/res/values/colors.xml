@@ -13,6 +13,7 @@
     <color name="colorSeparator">#000000</color>
     <color name="year">#999999</color>
     <color name="title">#222222</color>
+    <color name="timeSliceSelectedColor">#039BE5</color>
     <array name="bPMColors">
         <item>#FFF8E1</item>
         <item>#FFECB3</item>

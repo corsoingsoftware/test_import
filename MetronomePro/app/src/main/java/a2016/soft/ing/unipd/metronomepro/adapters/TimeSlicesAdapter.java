@@ -25,6 +25,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListe
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 
 /**
  * Created by feder on 12/12/2016.
@@ -34,12 +35,17 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     private static final int DEF_COLOR=0xFFFFFFFF;
 
+
     private Context context;
     /**
      * It must be final cause can't change
      */
     private final OnStartDragListener dragListener;
     private final int[] timeSliceBackgroundColors;
+    /**
+     * The current selected timeslice
+     */
+    private TimeSlice timeSliceSelected;
     /**
      * the song to edit
      */
@@ -66,13 +72,13 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
      */
     private int maxBPM;
     /**
-     * min bits of track
+     * min length of the slices
      */
-    private int minBeats;
+    private double minLengthInSecs;
     /**
-     * max bit of tracks
+     * max length of the slices
      */
-    private int maxBeats;
+    private double maxLengthInSecs;
     /**
      * The revision of maximum and minimum of color and width
      */
@@ -107,16 +113,18 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         itemsHeigth=(int)(150.0*displayMetrics.density + 0.5);
         minWidth = (int)(context.getResources().getDimension(R.dimen.min_item_ts_width)*displayMetrics.density + 0.5);
         maxWidth = (int)(context.getResources().getDimension(R.dimen.max_item_ts_width)*displayMetrics.density + 0.5);
-        minBPM= minBeats =Integer.MAX_VALUE;
-        maxBPM= maxBeats =Integer.MIN_VALUE;
+        minBPM =Integer.MAX_VALUE;
+        maxBPM =Integer.MIN_VALUE;
+        minLengthInSecs=Double.MAX_VALUE;
+        maxLengthInSecs=Double.MIN_VALUE;
         actualRevision++;
         songToEditState=new ArrayList<>(songToEdit.size());
         for (TimeSlice ts :
                 songToEdit) {
             int bpm=ts.getBpm();
-            int bits=ts.getDurationInBeats();
-            if(bits> maxBeats) maxBeats =bits;
-            if(bits< minBeats) minBeats =bits;
+            double lenght=ts.getDurationInBeats()*((double)bpm / Constants.SECS_IN_MIN);
+            if(lenght > maxLengthInSecs) maxLengthInSecs =lenght;
+            if(lenght< minLengthInSecs) minLengthInSecs =lenght;
             if(bpm>maxBPM) maxBPM=bpm;
             if(bpm<minBPM) minBPM=bpm;
             //initialized with 0
@@ -125,6 +133,10 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     }
 
     private void onTimeSliceSelected(TimeSlice ts, int position) {
+        int oldPosition=songToEdit.indexOf(timeSliceSelected);
+        timeSliceSelected=ts;
+        notifyItemChanged(oldPosition);
+        notifyItemChanged(position);
         Iterator<OnTimeSliceSelectedListener> iterator = onTimeSliceSelectedListeners.iterator();
         while (iterator.hasNext()) {
             OnTimeSliceSelectedListener current = iterator.next();
@@ -206,6 +218,11 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         }
         holder.viewToColor.setBackgroundColor(tSState.timeSliceColor);
         holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(tSState.timeSliceWidth,itemsHeigth));
+        if(timeSliceSelected==ts){
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.timeSliceSelectedColor));
+        }else{
+            holder.itemView.setBackgroundColor(0x00000000);
+        }
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
         //At the moment i will not visualize metric cause it doesn't count
@@ -245,11 +262,10 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
             timeSliceState.timeSliceColor=timeSliceBackgroundColors[colorIndex];
         else //saturation of array
             timeSliceState.timeSliceColor=timeSliceBackgroundColors[colorIndex-1];
-        //// TODO: 19/12/2016 to correct next instruction!
         span=maxWidth-minWidth;
-        int beats=timeSliceAssociated.getDurationInBeats();
-        double singleBeatLength=span/(maxBeats-minBeats);
-        timeSliceState.timeSliceWidth = minWidth+(int)((beats-(double)minBeats)*singleBeatLength+0.5);
+        double lengthInSec=timeSliceAssociated.getDurationInBeats()*(bpm/Constants.SECS_IN_MIN);
+        double singleTSLength =span/(maxLengthInSecs-minLengthInSecs);
+        timeSliceState.timeSliceWidth = minWidth+(int)((lengthInSec-(double)minLengthInSecs)*singleTSLength+0.5);
     }
 
     @Override

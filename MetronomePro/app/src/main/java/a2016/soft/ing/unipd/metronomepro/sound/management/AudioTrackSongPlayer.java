@@ -220,7 +220,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @param songs array contenente le canzoni
      * @throws Exception
      */
-
     public void write(final Song[] songs) {
 
 
