@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
@@ -52,6 +53,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                         .setAction("Action", null).show();
             }
         });
+
     }
 
     private Song createTestSong(){
@@ -63,35 +65,44 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         t1.setBpm(60);
         t1.setDurationInBeats(20);
         t2.setBpm(80);
-        t2.setDurationInBeats(20);
+        t2.setDurationInBeats(40);
         t3.setBpm(100);
+        t3.setDurationInBeats(50);
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        t1 = new TimeSlice();
+        t2 = new TimeSlice();
+        t3 = new TimeSlice();
+        t1.setBpm(110);
+        t1.setDurationInBeats(60);
+        t2.setBpm(140);
+        t2.setDurationInBeats(100);
+        t3.setBpm(100);
+        t3.setDurationInBeats(60);
+        s.add(t1);
+        s.add(t2);
+        s.add(t3);
+        t1 = new TimeSlice();
+        t2 = new TimeSlice();
+        t3 = new TimeSlice();
+        t1.setBpm(60);
+        t1.setDurationInBeats(20);
+        t2.setBpm(248);
+        t2.setDurationInBeats(100);
+        t3.setBpm(280);
         t3.setDurationInBeats(20);
         s.add(t1);
         s.add(t2);
         s.add(t3);
+        t1 = new TimeSlice();
+        t2 = new TimeSlice();
+        t3 = new TimeSlice();
         t1.setBpm(60);
         t1.setDurationInBeats(20);
         t2.setBpm(80);
         t2.setDurationInBeats(20);
-        t3.setBpm(100);
-        t3.setDurationInBeats(20);
-        s.add(t1);
-        s.add(t2);
-        s.add(t3);
-        t1.setBpm(60);
-        t1.setDurationInBeats(20);
-        t2.setBpm(80);
-        t2.setDurationInBeats(20);
-        t3.setBpm(100);
-        t3.setDurationInBeats(20);
-        s.add(t1);
-        s.add(t2);
-        s.add(t3);
-        t1.setBpm(60);
-        t1.setDurationInBeats(20);
-        t2.setBpm(80);
-        t2.setDurationInBeats(20);
-        t3.setBpm(100);
+        t3.setBpm(300);
         t3.setDurationInBeats(20);
         s.add(t1);
         s.add(t2);

@@ -56,7 +56,6 @@ public class PlayableSong extends ParcelableSong implements Parcelable {
     public PlayableSong(Song song, int playlistPosition, int songState){
 
         super(song.getName());
-        this.name = song.getName();
         this.timeSliceList = new ArrayList<>(song);
         this.playlistPosition = playlistPosition;
         this.songState = songState;

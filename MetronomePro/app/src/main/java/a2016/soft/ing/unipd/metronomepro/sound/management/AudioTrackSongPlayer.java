@@ -20,7 +20,6 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
  * Created by feder on 08/12/2016.
  * This class uses AudioTrack to create song in bytes from a Song, and provides methods to play the track!
  */
-
 public class AudioTrackSongPlayer implements SongPlayer {
 
     static final int SAMPLE_RATE_IN_HERTZ = 8000;
@@ -90,7 +89,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         this.lenghtBoop = lengthBoop;
 
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
-                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
+                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STREAM);
 
         goThread = true;
     }
@@ -163,10 +162,15 @@ public class AudioTrackSongPlayer implements SongPlayer {
          */
 
         byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
+
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
-            int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
+            int PeriodLengthInBytes = (int)((SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice))+0.5);
+            if(PeriodLengthInBytes%2==1){
+                //It can't be odd!!!!!
+                PeriodLengthInBytes--;
+            }
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
 
@@ -217,7 +221,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @throws Exception
      */
 
-    public void write(final Song[] songs) throws Exception {
+    public void write(final Song[] songs) {
 
 
         new Thread(new Runnable() {
@@ -236,10 +240,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                     if (hashMap.containsKey(songs[i].getName())) {
 
-                        arraySong = hashMap.get(songs[i].getName());
+                        arraySong = (byte[])hashMap.get(songs[i].getName());
                         int indexWrite = 0;
 
-                        while (indexWrite <= arraySong.length) {
+                        while (indexWrite < arraySong.length) {
 
                             int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
                             indexWrite += bytesWritten;
@@ -249,8 +253,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
+
             }
         }).start();
+
     }
 
 }

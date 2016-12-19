@@ -96,6 +96,10 @@ public class ExampleInstrumentedTest {
         assertEquals(atc.getAudioTrack().getState(), AudioTrack.PLAYSTATE_STOPPED);
     }
 
+    /**
+     * This test doesn't work, cause it use android library to produce a sound
+     * @throws Exception
+     */
     @Test
     public void songTest() throws Exception {
 

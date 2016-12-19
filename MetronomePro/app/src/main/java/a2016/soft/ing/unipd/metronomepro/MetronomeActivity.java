@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
+import a2016.soft.ing.unipd.metronomepro.sound.management.PlayState;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 
@@ -212,10 +213,10 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(soundManagerServiceCaller.getState()==1)
+                if(soundManagerServiceCaller.getState().equals(PlayState.PLAYSTATE_PLAYING))
                     soundManagerServiceCaller.stop();
                 else
-                    soundManagerServiceCaller.play();*/
+                    soundManagerServiceCaller.play();
             }
         });
 
