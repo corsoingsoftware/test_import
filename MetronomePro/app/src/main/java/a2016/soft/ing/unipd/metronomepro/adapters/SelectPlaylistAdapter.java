@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
+    private ArrayList<ParcelablePlaylist> arrayPlaylist= new ArrayList<>();
     private int selectPlaylist;
     private ParcelablePlaylist PlaylistToEdit; //eventualmente..
 
@@ -39,7 +40,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         selectPlaylist++;
     }*/
    //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
-   public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist){
+   public SelectPlaylistAdapter(Context context, ArrayList<ParcelablePlaylist> arrayPlaylist){
        this.context = context;
        this.arrayPlaylist=arrayPlaylist;
        selectPlaylist=0;
@@ -73,7 +74,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        ParcelablePlaylist p = (ParcelablePlaylist)arrayPlaylist.get(position);
+        ParcelablePlaylist p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
 
     }

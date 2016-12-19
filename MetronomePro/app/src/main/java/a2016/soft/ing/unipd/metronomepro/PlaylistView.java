@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -44,6 +45,14 @@ public class PlaylistView extends AppCompatActivity {
         playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
         rVPlaylistItem.setAdapter(playListAdapter);
 
+        if(savedInstanceState.containsKey("adapter")){
+            ArrayList<ParcelablePlaylist> savedPlaylist = savedInstanceState.getParcelableArrayList("adapter");
+            playListAdapter = new SelectPlaylistAdapter(this,savedPlaylist);
+            rVPlaylistItem.setAdapter(playListAdapter);
+        }
+       /**  else if(savedInstanceState.containsKey("Playlist")){
+
+        }*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -56,16 +65,16 @@ public class PlaylistView extends AppCompatActivity {
         });
     }
     //metodo di test per vedere se funziona
-    private ArrayList<Playlist> createTestPlaylist(){
+    private ArrayList<ParcelablePlaylist> createTestPlaylist(){
         Playlist p1 = EntitiesBuilder.getPlaylist("prova di playlist 1");
         Playlist p2 = EntitiesBuilder.getPlaylist("prova di playlist 2");
         Playlist p3 = EntitiesBuilder.getPlaylist("prova di playlist 3");
 
-        ArrayList<Playlist> arrayList = new ArrayList<>();
+        ArrayList<ParcelablePlaylist> arrayList = new ArrayList<>();
         //HARDCODED FOR TEST
-        arrayList.add(0,p1);
-        arrayList.add(1,p2);
-        arrayList.add(2,p3);
+        arrayList.add(0, (ParcelablePlaylist) p1);
+        arrayList.add(1, (ParcelablePlaylist) p2);
+        arrayList.add(2, (ParcelablePlaylist) p3);
 
         return arrayList;
     }
