@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -61,14 +62,12 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         playlist.add(EntitiesBuilder.getSong("Canzone 5"));
         playlist.add(EntitiesBuilder.getSong("Canzone 6"));
 
-        savedInstanceState.putSerializable("Adapter", (Serializable)playlist);
-        if(savedInstanceState.containsKey("Adapter")){
+        savedInstanceState.putParcelable("Adapter", (Parcelable) playlist);
+        if (savedInstanceState.containsKey("Adapter")) {
             Playlist savedPlaylist = savedInstanceState.getParcelable("Adapter");
             modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
             rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
-        }
-
-        else if(savedInstanceState.containsKey("Playlist")){
+        } else if (savedInstanceState.containsKey("Playlist")) {
             playlist = savedInstanceState.getParcelable("Playlist");
             modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
             rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
@@ -81,11 +80,6 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
     }
-
-
-
-    //solo una prova
-
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
