@@ -83,6 +83,8 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                 Song[] songs = selectSongsAdapter.getSongs();
                 spsc.write(songs);
                 spsc.play();
+
+                //Blocco tutto
             }
         });
     }
