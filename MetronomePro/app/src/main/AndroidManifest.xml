@@ -36,11 +36,6 @@
             android:label="@string/title_activity_song_creator"
             android:theme="@style/AppTheme" >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SelectNextSongs"
@@ -57,6 +52,12 @@
             android:name=".AtspTest"
             android:label="@string/title_activity_atsp_test"
             android:theme="@style/AppTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
     </application>

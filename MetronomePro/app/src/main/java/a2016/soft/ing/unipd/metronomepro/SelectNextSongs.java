@@ -87,6 +87,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
+
                 Song[] songs = selectSongsAdapter.getSongs();
                 spsc.write(songs);
                 spsc.play();
