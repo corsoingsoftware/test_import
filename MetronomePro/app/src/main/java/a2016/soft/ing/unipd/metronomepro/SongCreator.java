@@ -45,6 +45,9 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         Song songToEdit= createTestSong();
         if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
             songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
+        }else{
+            Intent intent=getIntent();
+            songToEdit=intent.getParcelableExtra(SONG_TO_EDIT);
         }
         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
         rVTimeSlices.setAdapter(timeSlicesAdapter);

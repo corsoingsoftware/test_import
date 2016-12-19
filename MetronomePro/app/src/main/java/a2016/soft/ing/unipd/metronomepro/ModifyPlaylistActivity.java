@@ -58,10 +58,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(SONG_TO_EDIT, (Parcelable) songToEdit);
                 Intent intent = new Intent(activity, SongCreator.class);
-                startActivityForResult(intent, START_EDIT_NEW_SONG,bundle);
+                intent.putExtra(PLAYLIST, (Parcelable) songToEdit);
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
 
             }
         });
@@ -72,7 +71,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             public void onClick(View v) {
                 Intent intent = new Intent(activity, SelectNextSongs.class);
                 intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
-                startActivityForResult(intent, START_EDIT_NEW_SONG);
+                startActivity(intent);
             }
         });
 
