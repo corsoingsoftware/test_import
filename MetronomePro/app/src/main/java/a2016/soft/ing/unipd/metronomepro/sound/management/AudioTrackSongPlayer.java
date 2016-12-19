@@ -52,6 +52,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * The current thread that's writing the buffer
      */
     private Thread currentThread;
+    private boolean stop;
     /**
      * The name of song is key
      */
@@ -61,6 +62,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
     public AudioTrackSongPlayer() {
         hashMap = new HashMap<String, byte[]>();
         this.initialize();
+        stop = true;
     }
 
     @Override
@@ -125,12 +127,19 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public void stop() {
+
+        stop = true;
         if(currentThread!=null){
             if(!goThread){
                 currentThread.interrupt();
             }
         }
+
+
+        at.pause();
+        at.flush();
         at.stop();
+
     }
 
     /**
@@ -232,6 +241,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     public void write(final Song[] songs) {
 
+
         Runnable toDo= new Runnable() {
             @Override
             public void run() {
@@ -243,6 +253,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
                 goThread = false;
+                stop = false;
 
                 for (int i = 0; i < songs.length; i++) {
 
@@ -255,6 +266,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                             int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
                             indexWrite += bytesWritten;
+                            if(stop)
+                                return;
                         }
                     }
                 }

@@ -25,12 +25,16 @@ public class AtspTest extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        final SongPlayer atsp = new AudioTrackSongPlayer();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                atsp.stop();
             }
         });
 
@@ -51,8 +55,6 @@ public class AtspTest extends AppCompatActivity {
         s.add(t3);
 
 
-
-        SongPlayer atsp = new AudioTrackSongPlayer();
         atsp.load(s);
 
         Song[] arrayS = new Song[1];
