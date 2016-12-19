@@ -33,7 +33,7 @@ import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 
 public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
-    private static final int DEF_COLOR=0xFFFFFFFF;
+    private static final int DEF_COLOR = 0xFFFFFFFF;
 
 
     private Context context;
@@ -99,10 +99,10 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         this.onTimeSliceSelectedListeners = new ArrayList<>();
         Resources res = context.getResources();
         TypedArray colors = res.obtainTypedArray(R.array.bPMColors);
-        int color = colors.getColor(0,0);
-        timeSliceBackgroundColors= new int[colors.length()];
+        int color = colors.getColor(0, 0);
+        timeSliceBackgroundColors = new int[colors.length()];
         for (int i = 0; i < timeSliceBackgroundColors.length; i++) {
-            timeSliceBackgroundColors[i]=colors.getInt(i,DEF_COLOR);
+            timeSliceBackgroundColors[i] = colors.getInt(i, DEF_COLOR);
         }
         calculateAllWidthsAndColors();
     }
@@ -110,31 +110,31 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     private void calculateAllWidthsAndColors() {
         //It must be called one time, to not decrease performance too much
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        itemsHeigth=(int)(150.0*displayMetrics.density + 0.5);
-        minWidth = (int)(context.getResources().getDimension(R.dimen.min_item_ts_width)*displayMetrics.density + 0.5);
-        maxWidth = (int)(context.getResources().getDimension(R.dimen.max_item_ts_width)*displayMetrics.density + 0.5);
-        minBPM =Integer.MAX_VALUE;
-        maxBPM =Integer.MIN_VALUE;
-        minLengthInSecs=Double.MAX_VALUE;
-        maxLengthInSecs=Double.MIN_VALUE;
+        itemsHeigth = (int) (150.0 * displayMetrics.density + 0.5);
+        minWidth = (int) (context.getResources().getDimension(R.dimen.min_item_ts_width) * displayMetrics.density + 0.5);
+        maxWidth = (int) (context.getResources().getDimension(R.dimen.max_item_ts_width) * displayMetrics.density + 0.5);
+        minBPM = Integer.MAX_VALUE;
+        maxBPM = Integer.MIN_VALUE;
+        minLengthInSecs = Double.MAX_VALUE;
+        maxLengthInSecs = Double.MIN_VALUE;
         actualRevision++;
-        songToEditState=new ArrayList<>(songToEdit.size());
+        songToEditState = new ArrayList<>(songToEdit.size());
         for (TimeSlice ts :
                 songToEdit) {
-            int bpm=ts.getBpm();
-            double lenght=ts.getDurationInBeats()*((double)bpm / Constants.SECS_IN_MIN);
-            if(lenght > maxLengthInSecs) maxLengthInSecs =lenght;
-            if(lenght< minLengthInSecs) minLengthInSecs =lenght;
-            if(bpm>maxBPM) maxBPM=bpm;
-            if(bpm<minBPM) minBPM=bpm;
+            int bpm = ts.getBpm();
+            double lenght = ts.getDurationInBeats() * ((double) bpm / Constants.SECS_IN_MIN);
+            if (lenght > maxLengthInSecs) maxLengthInSecs = lenght;
+            if (lenght < minLengthInSecs) minLengthInSecs = lenght;
+            if (bpm > maxBPM) maxBPM = bpm;
+            if (bpm < minBPM) minBPM = bpm;
             //initialized with 0
             songToEditState.add(new TimeSliceState());
         }
     }
 
     private void onTimeSliceSelected(TimeSlice ts, int position) {
-        int oldPosition=songToEdit.indexOf(timeSliceSelected);
-        timeSliceSelected=ts;
+        int oldPosition = songToEdit.indexOf(timeSliceSelected);
+        timeSliceSelected = ts;
         notifyItemChanged(oldPosition);
         notifyItemChanged(position);
         Iterator<OnTimeSliceSelectedListener> iterator = onTimeSliceSelectedListeners.iterator();
@@ -217,10 +217,10 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
             refreshTimeSliceState(tSState, ts);
         }
         holder.viewToColor.setBackgroundColor(tSState.timeSliceColor);
-        holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(tSState.timeSliceWidth,itemsHeigth));
-        if(timeSliceSelected==ts){
+        holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(tSState.timeSliceWidth, itemsHeigth));
+        if (timeSliceSelected == ts) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.timeSliceSelectedColor));
-        }else{
+        } else {
             holder.itemView.setBackgroundColor(0x00000000);
         }
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
@@ -255,17 +255,17 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         timeSliceState.timeSliceRevision = actualRevision;
         int colorIndex = 0;
         int span = (maxBPM - minBPM);
-        int bpm=timeSliceAssociated.getBpm();
-        double unit = span / (timeSliceBackgroundColors.length-1);
-        colorIndex=(int)(((bpm-minBPM)/unit));
-        if(colorIndex<timeSliceBackgroundColors.length)
-            timeSliceState.timeSliceColor=timeSliceBackgroundColors[colorIndex];
+        int bpm = timeSliceAssociated.getBpm();
+        double unit = span / (timeSliceBackgroundColors.length - 1);
+        colorIndex = (int) (((bpm - minBPM) / unit));
+        if (colorIndex < timeSliceBackgroundColors.length)
+            timeSliceState.timeSliceColor = timeSliceBackgroundColors[colorIndex];
         else //saturation of array
-            timeSliceState.timeSliceColor=timeSliceBackgroundColors[colorIndex-1];
-        span=maxWidth-minWidth;
-        double lengthInSec=timeSliceAssociated.getDurationInBeats()*(bpm/Constants.SECS_IN_MIN);
-        double singleTSLength =span/(maxLengthInSecs-minLengthInSecs);
-        timeSliceState.timeSliceWidth = minWidth+(int)((lengthInSec-(double)minLengthInSecs)*singleTSLength+0.5);
+            timeSliceState.timeSliceColor = timeSliceBackgroundColors[colorIndex - 1];
+        span = maxWidth - minWidth;
+        double lengthInSec = timeSliceAssociated.getDurationInBeats() * (bpm / Constants.SECS_IN_MIN);
+        double singleTSLength = span / (maxLengthInSecs - minLengthInSecs);
+        timeSliceState.timeSliceWidth = minWidth + (int) ((lengthInSec - (double) minLengthInSecs) * singleTSLength + 0.5);
     }
 
     @Override
@@ -273,12 +273,22 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         return songToEdit.size();
     }
 
+    /**
+     * Return the current song to edit...
+     * @return the song
+     */
     public Song getSongToEdit() {
         return songToEdit;
     }
 
+    /**
+     * Change dataset
+     * @param songToEdit
+     */
     public void setSongToEdit(Song songToEdit) {
         this.songToEdit = songToEdit;
+        timeSliceSelected=null;
+        calculateAllWidthsAndColors();
         //I must notify the collection changed
         this.notifyDataSetChanged();
     }
@@ -300,7 +310,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
             this.bitTextView = bitTextView;
             this.motionView = motionView;
             this.rhythmicsTextView = rhythmicsTextView;
-            this.viewToColor=viewToColor;
+            this.viewToColor = viewToColor;
         }
 
 

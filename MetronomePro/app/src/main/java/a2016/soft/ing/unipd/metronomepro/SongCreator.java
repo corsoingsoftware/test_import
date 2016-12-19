@@ -21,6 +21,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+
 public class SongCreator extends AppCompatActivity implements OnStartDragListener {
 
     private RecyclerView rVTimeSlices;
@@ -49,8 +51,12 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
+                Intent returnIntent = new Intent();
+                ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
+                returnIntent.putExtra(SONG, ps);
+                setResult(RESULT_OK,returnIntent);
+                finish();
             }
         });
 

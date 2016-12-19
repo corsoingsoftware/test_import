@@ -19,8 +19,9 @@
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
-    <string name="title_activity_song_creator">SongCreator</string>
+    <string name="title_activity_song_creator">Editor</string>
     <string name="title_activity_select_next_songs">SelectNextSongs</string>
     <string name="title_activity_modify_playlist">ModifyPlaylistActivity</string>
     <string name="title_activity_atsp_test">AtspTest</string>
+    <string name="saved_string">Saved</string>
 </resources>
