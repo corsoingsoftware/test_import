@@ -30,6 +30,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     private SelectSongsAdapter selectSongsAdapter;
     private final static int MAX_SELECTABLE = 3;
     SongPlayerServiceCaller spsc;
+    Playlist p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,6 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
         spsc = new SongPlayerServiceCaller(this, this);
-        Playlist p;
 
         if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
 
