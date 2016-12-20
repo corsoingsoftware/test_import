@@ -56,6 +56,10 @@ public class ParcelableSong implements Song, Parcelable {
             }
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     protected String name;
     protected ArrayList<TimeSlice> timeSliceList;
 
