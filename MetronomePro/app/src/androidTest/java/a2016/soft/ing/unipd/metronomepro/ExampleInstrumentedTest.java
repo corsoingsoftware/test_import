@@ -121,13 +121,13 @@ public class ExampleInstrumentedTest {
         s.add(t2);
         s.add(t3);
 
-        SongPlayer atsp = new AudioTrackSongPlayer();
-        atsp.load(s);
+        //SongPlayer atsp = new AudioTrackSongPlayer();
+      //  atsp.load(s);
 
         Song[] arrayS = new Song[1];
         arrayS[0] = s;
 
-        ((AudioTrackSongPlayer)atsp).write(arrayS);
+      //  ((AudioTrackSongPlayer)atsp).write(arrayS);
         //atsp.play();
     }
 

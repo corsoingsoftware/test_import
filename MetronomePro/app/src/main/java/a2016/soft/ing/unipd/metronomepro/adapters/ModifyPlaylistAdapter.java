@@ -27,11 +27,16 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     private ParcelablePlaylist playlistToModify;
     private final OnStartDragListener dragListener;
     private Context context;
+    private Song songSelected;
 
     public ModifyPlaylistAdapter(ParcelablePlaylist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
+    }
+
+    public interface ModifyPlaylistAdapterCallback {
+        void serviceConnected();
     }
 
     public void addSong(Song song) {
@@ -44,7 +49,6 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     }
 
     public ParcelablePlaylist getPlaylistToModify() {
-
         return playlistToModify;
     }
 
@@ -89,7 +93,6 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
             }
         });
     }
-
 
     @Override
     public int getItemCount() {
