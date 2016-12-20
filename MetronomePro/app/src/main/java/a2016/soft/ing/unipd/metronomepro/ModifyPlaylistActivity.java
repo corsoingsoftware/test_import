@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
-    SongPlayerServiceCaller spsc;
+    private DataProvider dataProvider;
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -95,8 +96,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
+                dataProvider= DataProviderBuilder.getDefaultDataProvider(this);
+                List<Song> songs=dataProvider.getSongs(null,playlist);
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -133,7 +134,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
-                    modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+                    ParcelableSong ps=(ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT);
+                    modifyPlaylistAdapter.addSong(ps);
+                    dataProvider.save(ps);
                     break;
             }
         }

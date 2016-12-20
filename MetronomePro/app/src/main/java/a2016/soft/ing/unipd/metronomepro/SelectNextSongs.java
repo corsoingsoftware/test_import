@@ -79,17 +79,14 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
             @Override
             public void onClick(View view) {
 
-                if(spsc.getService() != null){
+
+                if(spsc.getService() != null) {
+
                     //do whatever you want to do after successful binding
+
                     Song[] songs = selectSongsAdapter.getSongs();
                     spsc.write(songs);
                     spsc.play();
-
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.recycler_view_next_songs);
-                    for (int i = 0; i < layout.getChildCount(); i++) {
-                        View child = layout.getChildAt(i);
-                        child.setEnabled(false);
-                    }
                 }
 
                 //Blocco tutto
@@ -101,7 +98,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelableArrayList(PLAYABLE_PLAYLIST, selectSongsAdapter.getArraySongs());
+        outState.putParcelableArrayList(PLAYABLE_PLAYLIST, (ArrayList<PlayableSong>) selectSongsAdapter.getArraySongs());
         outState.putInt(PLAYABLE_PLAYLIST, selectSongsAdapter.getSelectedSongs());
         super.onSaveInstanceState(outState);
     }
