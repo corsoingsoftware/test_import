@@ -27,6 +27,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -96,11 +97,25 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getSong("song 0"));
-                playlist.add(EntitiesBuilder.getSong("song 1"));
-                playlist.add(EntitiesBuilder.getSong("song 2"));
-                playlist.add(EntitiesBuilder.getSong("song 3"));
-                playlist.add(EntitiesBuilder.getSong("song 4"));
+
+                Song s0 = EntitiesBuilder.getSong("song 0");
+                TimeSlice t0 = new TimeSlice();
+                t0.setBpm(300);
+                t0.setDurationInBeats(20);
+                s0.add(t0);
+                playlist.add(s0);
+                Song s1 = EntitiesBuilder.getSong("song 1");
+                TimeSlice t1 = new TimeSlice();
+                t1.setBpm(100);
+                t1.setDurationInBeats(20);
+                s1.add(t1);
+                playlist.add(s1);
+                Song s2 = EntitiesBuilder.getSong("song 2");
+                TimeSlice t2 = new TimeSlice();
+                t2.setBpm(50);
+                t2.setDurationInBeats(20);
+                s2.add(t2);
+                playlist.add(s2);
             }
         }
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);

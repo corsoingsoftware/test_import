@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -70,24 +71,29 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                 selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
             }
         }
+
+
         rVNextSongs.setAdapter(selectSongsAdapter);
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 if(spsc.getService() != null){
-
                     //do whatever you want to do after successful binding
+                    Song[] songs = selectSongsAdapter.getSongs();
+                    spsc.write(songs);
+                    spsc.play();
 
-                Song[] songs = selectSongsAdapter.getSongs();
-                spsc.write(songs);
-                spsc.play();}
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.recycler_view_next_songs);
+                    for (int i = 0; i < layout.getChildCount(); i++) {
+                        View child = layout.getChildAt(i);
+                        child.setEnabled(false);
+                    }
+                }
 
                 //Blocco tutto
+
             }
         });
     }
