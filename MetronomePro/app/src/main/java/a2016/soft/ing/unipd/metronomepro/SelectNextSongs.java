@@ -84,12 +84,6 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     Song[] songs = selectSongsAdapter.getSongs();
                     spsc.write(songs);
                     spsc.play();
-
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.recycler_view_next_songs);
-                    for (int i = 0; i < layout.getChildCount(); i++) {
-                        View child = layout.getChildAt(i);
-                        child.setEnabled(false);
-                    }
                 }
 
                 //Blocco tutto
