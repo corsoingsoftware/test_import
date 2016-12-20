@@ -131,23 +131,32 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         if(position < selectedSongs) {
 
-            PlayableSong toMove = arraySongs.get(position);
-            int i = selectedSongs;
-            PlayableSong current = arraySongs.get(i);
+            if(selectedSongs!=arraySongs.size()) {
+                PlayableSong toMove = arraySongs.get(position);
+                int i = selectedSongs;
+                PlayableSong current = arraySongs.get(i);
 
-            while(i < arraySongs.size() &&
-                    current.getSongState()== PlayableSong.STATE_READYTOPLAY &&
-                    current.getPlaylistPosition() < toMove.getPlaylistPosition() ) {
+                while (i < arraySongs.size() &&
+                        current.getSongState() == PlayableSong.STATE_READYTOPLAY &&
+                        current.getPlaylistPosition() < toMove.getPlaylistPosition()) {
 
-                i++;
-                if(i < arraySongs.size()) {
-                    current = arraySongs.get(i);
+                    i++;
+                    if (i < arraySongs.size()) {
+                        current = arraySongs.get(i);
+                    }
                 }
-            }
 
-            toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
-            selectedSongs--;
-            onSongPositionChange(position, i-1);
+                toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
+                selectedSongs--;
+                onSongPositionChange(position, i - 1);
+            }
+            else
+            {
+                PlayableSong toMove = arraySongs.get(position);
+                toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
+                selectedSongs--;
+                onSongPositionChange(position, arraySongs.size() - 1);
+            }
         }
         else
         {

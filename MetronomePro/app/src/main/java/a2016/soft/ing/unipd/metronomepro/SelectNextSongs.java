@@ -19,6 +19,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerService;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 
@@ -76,9 +77,15 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                if(spsc.getService() != null){
+
+                    //do whatever you want to do after successful binding
+
                 Song[] songs = selectSongsAdapter.getSongs();
                 spsc.write(songs);
-                spsc.play();
+                spsc.play();}
 
                 //Blocco tutto
             }

@@ -16,12 +16,60 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true" />
 
-    <GridLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/background_relative_layout"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/recycler_view_time_slices">
 
-    </GridLayout>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editText_bpm"
+            android:layout_marginBottom="17dp"
+            android:layout_alignBottom="@+id/beats_text_view"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="@string/beats_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/beats_text_view"
+            android:layout_above="@+id/editText_beats"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="@string/BPM_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bpm_text_view"
+            android:layout_above="@+id/editText_bpm"
+            android:layout_alignStart="@+id/beats_text_view" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_add_or_save_timeslice"
+            android:src="@mipmap/ic_add"
+            android:elevation="@dimen/activity_song_creator_elevation"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned"
+            android:ems="10"
+            android:id="@+id/editText_beats"
+            android:layout_above="@+id/button_add_or_save_timeslice"
+            android:layout_alignStart="@+id/editText_bpm" />
+    </RelativeLayout>
 </RelativeLayout>
