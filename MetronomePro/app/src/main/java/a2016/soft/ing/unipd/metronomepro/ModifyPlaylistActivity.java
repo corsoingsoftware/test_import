@@ -29,6 +29,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 

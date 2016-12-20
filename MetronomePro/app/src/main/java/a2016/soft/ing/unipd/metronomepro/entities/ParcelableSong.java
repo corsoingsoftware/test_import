@@ -46,7 +46,7 @@ public class ParcelableSong implements Song, Parcelable {
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
 
-        timeSliceList = new ArrayList<>(Math.min(support.size(),MIN_ARRAY_LIST_SIZE));
+        timeSliceList = new ArrayList<>(Math.min(support.size(), MIN_ARRAY_LIST_SIZE));
 
         if(support!=null)
             for(byte[] b : support){
@@ -112,7 +112,7 @@ public class ParcelableSong implements Song, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        ArrayList<byte[]> timeSlicesByte = new ArrayList<>();
+        ArrayList<byte[]> timeSlicesByte = new ArrayList<byte[]>();
 
         for(TimeSlice ts: timeSliceList){
 

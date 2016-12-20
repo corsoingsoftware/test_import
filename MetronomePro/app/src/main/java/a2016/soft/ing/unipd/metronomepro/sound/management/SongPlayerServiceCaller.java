@@ -34,6 +34,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
     public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback) {
         pBound = false;
         activityContext = c;
+
         pConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -44,9 +45,6 @@ public class SongPlayerServiceCaller implements SongPlayer {
                 pService = binder.getService();
                 //Chiamo il metodo onServiceInitialized di MetronomeActivity.
                 callback.serviceConnected();
-
-                if(pService != null)
-                    Log.i("service-bind", "Service is bonded successfully!");
             }
 
             @Override
