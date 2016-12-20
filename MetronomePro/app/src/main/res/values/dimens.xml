@@ -12,5 +12,6 @@
     <dimen name="min_item_ts_width">30dp</dimen>
     <dimen name="max_item_ts_width">70dp</dimen>
     <dimen name="time_slice_margin">1dp</dimen>
+    <dimen name="activity_song_creator_elevation">2dp</dimen>
 
 </resources>
