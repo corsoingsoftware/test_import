@@ -5,7 +5,6 @@ import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,8 +36,16 @@ public class FileDataProvier implements DataProvider {
     public List<Song> getSongs(String searchName, Playlist playlist) {
         try {
             //chiedi tutti i file che sono nella cartella li leggo e ritorno arraylist di song
-            File directory = new File(Environment.getExternalStorageDirectory().toString() + "/" + playlist.getName());
-            if(!directory.exists()) {
+
+            /*if(playlist == null) {
+                String playlistName = "/def-playlist";
+            }
+            else {
+                String playlistName = playlist.getName();
+            }*/
+            File directory = new File(Environment.getExternalStorageDirectory().toString() + "/def-playlist");
+
+            if (!directory.exists()) {
                 directory.mkdir();
             }
             File[] files = directory.listFiles();
@@ -76,14 +83,15 @@ public class FileDataProvier implements DataProvider {
 
     @Override
     public void save(Song song) {
-        String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist";
-        File myDirectory = context.getDir(path, context.MODE_PRIVATE);
-        File fileToSave = new File(myDirectory, song_position + "_" + song.getName());
-        song_position++;
+
+//        File myDirectory = context.getDir(path, context.MODE_PRIVATE);
+        File fileToSave = new File(song_position + "_" + song.getName());
         try {
+            String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist";
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
             outputStream.write(song.encode());
             outputStream.close();
+            song_position++;
         } catch (Exception e) {
             e.printStackTrace();
         }
