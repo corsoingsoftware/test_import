@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -12,10 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
-import java.security.spec.ECField;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
+import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnTimeSliceSelectedListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.HorizontalDragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
@@ -25,12 +29,17 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
-public class SongCreator extends AppCompatActivity implements OnStartDragListener {
+public class SongCreator extends AppCompatActivity implements OnStartDragListener, OnTimeSliceSelectedListener {
 
     private RecyclerView rVTimeSlices;
     private RecyclerView.LayoutManager rVLayoutManager;
     private TimeSlicesAdapter timeSlicesAdapter;
     private ItemTouchHelper itemTouchHelper;
+    private EditText bpmEditText;
+    private EditText beatsEditText;
+    private EditText songNameEditText;
+    private ImageButton addEditTimeSliceButton;
+    private View backgroundView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,11 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         setSupportActionBar(toolbar);
 
         rVTimeSlices = (RecyclerView) findViewById(R.id.recycler_view_time_slices);
+        bpmEditText=(EditText)findViewById(R.id.editText_bpm);
+        beatsEditText=(EditText)findViewById(R.id.editText_beats);
+        addEditTimeSliceButton=(ImageButton)findViewById(R.id.button_add_or_save_timeslice);
+        backgroundView=findViewById(R.id.background_relative_layout);
+        songNameEditText=(EditText)findViewById(R.id.name_song_edit_text);
         //sarà a false
         rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -67,17 +81,74 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                 Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
                 Intent returnIntent = new Intent();
                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
+                ps.setName(songNameEditText.getText().toString());
                 returnIntent.putExtra(SONG_TO_EDIT, ps);
                 setResult(RESULT_OK,returnIntent);
                 finish();
+            }
+        });
+        //register listener for selected timeslice
+        timeSlicesAdapter.addOnTimeSliceSelectedListener(this);
+        backgroundView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeSlicesAdapter.setSelectedItem(null);
+            }
+        });
+        addEditTimeSliceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddOrEditClicked(v);
             }
         });
 
     }
 
     /**
+     * Used when a timeslice be edited or clicked
+     * @param v the v called
+     */
+    private void onAddOrEditClicked(View v) {
+        if(timeSlicesAdapter.getTimeSliceSelected()!=null){
+            //edit
+        }else{
+            TimeSlice ts= new TimeSlice();
+            ts.setBpm(Integer.parseInt(bpmEditText.getText().toString()));
+            ts.setDurationInBeats(Integer.parseInt(beatsEditText.getText().toString()));
+            timeSlicesAdapter.addTimeSlice(timeSlicesAdapter.getItemCount(),ts);
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SONG_TO_EDIT,(Parcelable) timeSlicesAdapter.getSongToEdit());
+
+    }
+
+    /**
+     * Called when an item start to get drag
+     * @param viewHolder The holder of the view to drag.
+     */
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+
+    /**
+     * Called when selected item change
+     * @param timeSlice the new timeSlice
+     * @param position the position
+     */
+    @Override
+    public void onTimeSliceSelected(TimeSlice timeSlice, int position) {
+
+    }
+
+    /**
      * This method create a test song just used to test usability
-     * @return
+     * @return a demo song
      */
     private Song createTestSong(){
         TimeSlice t1, t2, t3;
@@ -134,19 +205,5 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(SONG_TO_EDIT,(Parcelable) timeSlicesAdapter.getSongToEdit());
 
-    }
-
-    /**
-     * Called when an item start to get drag
-     * @param viewHolder The holder of the view to drag.
-     */
-    @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        itemTouchHelper.startDrag(viewHolder);
-    }
 }

@@ -35,7 +35,9 @@ public class FileDataProvierTest {
         arrayToCompare.add(songToSave1);
         arrayToCompare.add(songToSave2);
         arrayToCompare.add(songToSave3);
-        fdp.getSongs();//.equals(arrayToCompare);
+        fdp.getSongs();
+
+        //.equals(arrayToCompare);
     }
 
     @Test

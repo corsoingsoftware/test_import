@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +26,10 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
@@ -40,6 +43,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
+    private DataProvider dataProvider;
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -92,30 +96,16 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
+                dataProvider= DataProviderBuilder.getDefaultDataProvider(this);
+                List<Song> songs=dataProvider.getSongs(null,playlist);
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-
-                Song s0 = EntitiesBuilder.getSong("song 0");
-                TimeSlice t0 = new TimeSlice();
-                t0.setBpm(300);
-                t0.setDurationInBeats(20);
-                s0.add(t0);
-                playlist.add(s0);
-                Song s1 = EntitiesBuilder.getSong("song 1");
-                TimeSlice t1 = new TimeSlice();
-                t1.setBpm(100);
-                t1.setDurationInBeats(20);
-                s1.add(t1);
-                playlist.add(s1);
-                Song s2 = EntitiesBuilder.getSong("song 2");
-                TimeSlice t2 = new TimeSlice();
-                t2.setBpm(50);
-                t2.setDurationInBeats(20);
-                s2.add(t2);
-                playlist.add(s2);
+                playlist.add(EntitiesBuilder.getSong("song 0"));
+                playlist.add(EntitiesBuilder.getSong("song 1"));
+                playlist.add(EntitiesBuilder.getSong("song 2"));
+                playlist.add(EntitiesBuilder.getSong("song 3"));
+                playlist.add(EntitiesBuilder.getSong("song 4"));
             }
         }
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
@@ -144,9 +134,18 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
-                    modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+                    ParcelableSong ps=(ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT);
+                    modifyPlaylistAdapter.addSong(ps);
+                    dataProvider.save(ps);
                     break;
             }
         }
+    }
+
+    public void serviceConnected(Song song) {
+        final Activity activity=this;
+        Intent intent = new Intent(activity, SelectNextSongs.class);
+        intent.putExtra(PLAYLIST, (Parcelable) song);
+        startActivity(intent);
     }
 }
