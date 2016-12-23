@@ -62,7 +62,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         return arrayPlaylist;
     }
 
-    @Override
+    @Override//
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //creo una View..
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_viewer_item_layout,parent,false);
