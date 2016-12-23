@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.generators.SignalsGenerator;
 
 import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PAUSE;
@@ -23,6 +24,8 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 public class AudioTrackSongPlayer implements SongPlayer {
 
     static final int SAMPLE_RATE_IN_HERTZ = 8000;
+    private static final String THREAD_NAME = "bufferT";
+
     static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
     static final int FRAME_SIZE = 2;
@@ -47,14 +50,26 @@ public class AudioTrackSongPlayer implements SongPlayer {
     private boolean goThread;
     private AudioTrack at;
     /**
+     * The current thread that's writing the buffer
+     */
+    private Thread currentThread;
+    private boolean stop;
+    /**
      * The name of song is key
      */
     private HashMap<String, byte[]> hashMap;
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
+    private AudioTrackSongPlayerCallback callback;
 
-    public AudioTrackSongPlayer() {
+    public AudioTrackSongPlayer(AudioTrackSongPlayerCallback callback) {
         hashMap = new HashMap<String, byte[]>();
         this.initialize();
+        stop = true;
+        this.callback = callback;
+    }
+
+    public interface AudioTrackSongPlayerCallback {
+        void writeEnd();
     }
 
     @Override
@@ -89,7 +104,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
         this.lenghtBoop = lengthBoop;
 
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
-                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STATIC);
+                audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STREAM);
 
         goThread = true;
     }
@@ -120,7 +135,18 @@ public class AudioTrackSongPlayer implements SongPlayer {
     @Override
     public void stop() {
 
+        stop = true;
+        if(currentThread!=null){
+            if(!goThread){
+                currentThread.interrupt();
+            }
+        }
+
+
+        at.pause();
+        at.flush();
         at.stop();
+
     }
 
     /**
@@ -151,7 +177,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public byte[] getSong(Song s) {
-
         SignalsGenerator sGenerator = new SignalsGenerator();
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
         int numBytes = 0;
@@ -162,10 +187,15 @@ public class AudioTrackSongPlayer implements SongPlayer {
          */
 
         byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
+
         for (TimeSlice ts : s) {
 
             int bpm_slice = ts.getBpm();
-            int PeriodLengthInBytes = (int)(SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice));
+            int PeriodLengthInBytes = (int)((SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice))+0.5);
+            if(PeriodLengthInBytes%2==1){
+                //It can't be odd!!!!!
+                PeriodLengthInBytes--;
+            }
 
             byte[] silence = sGenerator.silence(PeriodLengthInBytes - lengthBeep);
 
@@ -215,11 +245,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @param songs array contenente le canzoni
      * @throws Exception
      */
+    public void write(final Song[] songs) {
 
-    public void write(final Song[] songs) throws Exception {
 
-
-        new Thread(new Runnable() {
+        Runnable toDo= new Runnable() {
             @Override
             public void run() {
 
@@ -230,26 +259,35 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
                 goThread = false;
+                stop = false;
 
                 for (int i = 0; i < songs.length; i++) {
 
                     if (hashMap.containsKey(songs[i].getName())) {
 
-                        arraySong = hashMap.get(songs[i].getName());
+                        arraySong = (byte[])hashMap.get(songs[i].getName());
                         int indexWrite = 0;
 
-                        while (indexWrite <= arraySong.length) {
+                        while (indexWrite < arraySong.length) {
 
                             int bytesWritten = at.write(arraySong, indexWrite, arraySong.length - indexWrite);
                             indexWrite += bytesWritten;
+                            if(stop)
+                                return;
                         }
                     }
                 }
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
+                callback.writeEnd();
+
             }
-        }).start();
+        };
+        if(goThread){
+            currentThread= new Thread(toDo,  THREAD_NAME);
+            currentThread.start();
+        }
     }
 
 }

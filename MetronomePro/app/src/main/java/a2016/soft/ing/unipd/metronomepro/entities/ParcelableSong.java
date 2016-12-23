@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.sql.Array;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,6 +17,7 @@ import java.util.ListIterator;
  */
 
 public class ParcelableSong implements Song, Parcelable {
+    private static final int MIN_ARRAY_LIST_SIZE=10;
 
     public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
         /**
@@ -38,6 +41,25 @@ public class ParcelableSong implements Song, Parcelable {
      * @param in
      */
 
+    protected ParcelableSong(Parcel in) {
+
+        ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
+        this.name = in.readString();
+
+        timeSliceList = new ArrayList<>(Math.min(support.size(), MIN_ARRAY_LIST_SIZE));
+
+        if(support!=null)
+            for(byte[] b : support){
+                TimeSlice ts = new TimeSlice();
+                ts.decode(b);
+                timeSliceList.add(ts);
+            }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     protected String name;
     protected ArrayList<TimeSlice> timeSliceList;
 
@@ -51,23 +73,37 @@ public class ParcelableSong implements Song, Parcelable {
     }
 
 
-    protected ParcelableSong(Parcel in) {
-
-    }
-
     @Override
     public byte[] encode() {
-        return new byte[0];
+        byte[] toReturn= new byte[getStreamedSize()];
+        int i=0;
+        for(TimeSlice timeSlice : timeSliceList){
+            byte[] b= timeSlice.encode();
+            System.arraycopy(b,0,toReturn,i,TimeSlice.STREAMED_SIZE);
+            i+=TimeSlice.STREAMED_SIZE;
+        }
+        return toReturn;
     }
 
     @Override
     public void decode(byte[] toDecode) {
+        for (int i=0;i<toDecode.length;i+=TimeSlice.STREAMED_SIZE){
+            TimeSlice toAdd= new TimeSlice();
+            byte[] support= new byte[TimeSlice.STREAMED_SIZE];
+            System.arraycopy(toDecode,i,support,0,TimeSlice.STREAMED_SIZE);
+            toAdd.decode(support);
+            timeSliceList.add(toAdd);
+        }
+    }
 
+    @Override
+    public int getStreamedSize() {
+        return timeSliceList.size()*TimeSlice.STREAMED_SIZE;
     }
 
     @Override
     public int describeContents() {
-        return 0;
+        return this.hashCode();
     }
 
     /**
@@ -75,8 +111,20 @@ public class ParcelableSong implements Song, Parcelable {
      * @param dest
      * @param flags
      */
+
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+        ArrayList<byte[]> timeSlicesByte = new ArrayList<byte[]>();
+
+        for(TimeSlice ts: timeSliceList){
+
+            timeSlicesByte.add(ts.encode());
+        }
+
+        dest.writeSerializable(timeSlicesByte);
+        dest.writeString(name);
     }
 
     @Override
