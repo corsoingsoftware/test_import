@@ -36,13 +36,13 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
             /**
              rVSelectSong.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView?> parent, View view, int position, long id) {
             Toast.makeText(getApplicationContext(),"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
             }
             });
              */
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_select_song_for_playlist);
+            setContentView(R.layout.activity_select_song_for_playlist2);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -56,12 +56,12 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
             });
         }
 
-        protected void onSaveInstanceState(Bundle outState) {
+       /** protected void onSaveInstanceState(Bundle outState) {
             //prende le canzoni totali e quelle selezionate
             outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
             outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
             super.onSaveInstanceState(outState);
-        }
+        }*/
 
         public ArrayList<ParcelableSong> provaDiTest(){
             ArrayList<ParcelableSong> array = new ArrayList<>();
