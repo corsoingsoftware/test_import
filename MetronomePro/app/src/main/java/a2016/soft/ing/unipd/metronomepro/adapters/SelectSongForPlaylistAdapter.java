@@ -23,12 +23,20 @@ import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<SelectSongForPlaylistAdapter.ViewHolder> {
 
     private ArrayList<ParcelableSong> arraySongs;
+    private ArrayList<ParcelableSong> selectedSongs; //lista con canzoni gia selezionate
     private Context context;
     private int songSelected;
 
     public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
         this.context = context;
         this.arraySongs = arraySongs;
+    }
+
+    public ArrayList<ParcelableSong> getArraySongs(){
+        return arraySongs;
+    }
+    public ArrayList<ParcelableSong> getSelectedSongs(){
+        return selectedSongs;
     }
 
     @Override

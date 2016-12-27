@@ -76,6 +76,21 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     }
 
     @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(int newId) {
+
+    }
+
+    @Override
     public int size() {
         return songList.size();
     }

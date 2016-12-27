@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,23 +28,23 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /**
-         *  rVPlaylistItem = (RecyclerView)findViewById(R.id.recicle_view_playlist);
-         rVPlaylistItem.setHasFixedSize(true);
-         rVLayoutManager =  new LinearLayoutManager(this);
-         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-         playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
-         rVPlaylistItem.setAdapter(playListAdapter);
-         */
+
         rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());//manca la lista da inserire
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
         rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
-
-
+        //potrebbe essere la strada per permettere il click, per il momento non è quella giusta!
+        /**
+        rVSelectSong.setOnClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
+            }
+        });
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_song_for_playlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,6 +59,14 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             }
         });
     }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        //prende le canzoni totali e quelle selezionate
+        outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
+        outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+        super.onSaveInstanceState(outState);
+    }
+
     public ArrayList<ParcelableSong> provaDiTest(){
         ArrayList<ParcelableSong> array = new ArrayList<>();
 
