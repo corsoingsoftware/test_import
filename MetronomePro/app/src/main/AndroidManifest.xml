@@ -45,16 +45,18 @@
             android:name=".PlaylistView"
             android:label="@string/title_activity_playlist_view"
             android:theme="@style/AppTheme">
+
+        </activity>
+        <activity
+            android:name=".SelectSongForPlaylist"
+            android:label="@string/title_activity_select_song_for_playlist"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SelectSongForPlaylist"
-            android:label="@string/title_activity_select_song_for_playlist"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

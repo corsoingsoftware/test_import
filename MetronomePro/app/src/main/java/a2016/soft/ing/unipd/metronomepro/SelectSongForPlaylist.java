@@ -16,8 +16,6 @@ import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
-public class SelectSongForPlaylist extends AppCompatActivity {
-
     public class SelectSongForPlaylist extends AppCompatActivity {
 
         private RecyclerView rVSelectSong;
@@ -83,4 +81,4 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     }
 
 
-}
+
