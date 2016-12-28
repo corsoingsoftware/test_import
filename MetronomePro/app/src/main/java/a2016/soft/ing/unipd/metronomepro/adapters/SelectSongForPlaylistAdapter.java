@@ -25,18 +25,17 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         private final OnItemClickListener listener = new OnItemClickListener() {
           @Override
           //qui dentro cambierà colore...
-          public void OnItemClick(ParcelableSong item) {
-              Toast.makeText(context,"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
+          public void OnItemClick(ParcelableSong item,int position) {
+              Toast.makeText(context,"hai selezionato l'elemento "+position,Toast.LENGTH_SHORT).show();
+              // aggiungo la song appena selezionata nell'array di item selezionati
+              //selectedSongs.add(item);
           }
       };
         private ArrayList<ParcelableSong> arraySongs;
-        private ArrayList<ParcelableSong> selectedSongs; //lista con canzoni gia selezionate
+        private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
         private Context context;
-        private int currentPosition;
-/**
-        public void onItemClick(ParcelableSong item){
-            Toast.makeText(context,"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
-        }*/
+
+        //costruttore: non riceve l'ascoltatore come parametro
         public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
             this.context = context;
             this.arraySongs = arraySongs;
@@ -63,7 +62,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         public void onBindViewHolder(ViewHolder holder, int position) {
             ParcelableSong song = arraySongs.get(position);
             holder.nameOfSong.setText(song.getName());
-            holder.bind(song,listener);//nuovo
+            holder.bind(song,listener,position);//so di preciso cosa sto selezionando
         }
 
         @Override
@@ -80,11 +79,11 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
                 this.nameOfSong=nameOfSong;
             }
             //passa l'ascoltatore all'item
-            public void bind(final ParcelableSong item,final OnItemClickListener listener){
+            public void bind(final ParcelableSong item, final OnItemClickListener listener, final int pos){
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.OnItemClick(item);
+                        listener.OnItemClick(item,pos);
                     }
                 });
             }
