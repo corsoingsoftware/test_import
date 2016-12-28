@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_select_song_for_playlist2);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
             rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
             rVSelectSong.setHasFixedSize(true);
@@ -32,36 +38,45 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
             selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
-            //potrebbe essere la strada per permettere il click, per il momento non è quella giusta!
-            /**
-             rVSelectSong.setOnClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView?> parent, View view, int position, long id) {
-            Toast.makeText(getApplicationContext(),"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
+            //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
+            if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
+                ArrayList<ParcelableSong> savedSongs = savedInstanceState.getParcelableArrayList("song for select");
+                selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs);
+                rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
             }
+
+
+           /**
+             rVSelectSong.setOnClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(SelectSongForPlaylist.this, "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
+                }
             });
              */
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_select_song_for_playlist2);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //test fatto male, funziona!!! salva le istanze! se giro lo schermo rimane eliminata
+                    //selectSongForPlaylistAdapter.remuveForTest(0);
                     Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             });
         }
 
-       /** protected void onSaveInstanceState(Bundle outState) {
+        protected void onSaveInstanceState(Bundle outState) {
             //prende le canzoni totali e quelle selezionate
             outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
-            outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+            //questa è per salvare l'istanza delle canzoni già selezionate..
+            //bisogna cambiare la chiave??
+           // outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
             super.onSaveInstanceState(outState);
-        }*/
+        }
 
         public ArrayList<ParcelableSong> provaDiTest(){
             ArrayList<ParcelableSong> array = new ArrayList<>();
