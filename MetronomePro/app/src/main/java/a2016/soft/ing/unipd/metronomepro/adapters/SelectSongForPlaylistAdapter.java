@@ -21,18 +21,14 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
  */
 
     public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
-        
-        //interfaccia per premettere di cliccare un item
-        public interface OnItemClickListener{
-            void OnItemClick(ParcelableSong item);
-        }
+
         private final OnItemClickListener listener = new OnItemClickListener() {
           @Override
           //qui dentro cambierà colore...
           public void OnItemClick(ParcelableSong item) {
               Toast.makeText(context,"hai selezionato un pulsante",Toast.LENGTH_SHORT).show();
           }
-      }; //nuovo
+      };
         private ArrayList<ParcelableSong> arraySongs;
         private ArrayList<ParcelableSong> selectedSongs; //lista con canzoni gia selezionate
         private Context context;
