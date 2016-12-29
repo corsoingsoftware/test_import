@@ -21,3 +21,4 @@
         android:id="@+id/recicle_song_for_playlist"
         android:clipToPadding="false" />
 </RelativeLayout>
+
