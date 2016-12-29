@@ -1,5 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters.listeners;
 
+import android.view.View;
+
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
 /**
@@ -7,5 +9,5 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
  */
 //ho usato il parametro int position per sapere quale elemento della lista sto selezionando!
 public interface OnItemClickListener {
-    void OnItemClick(ParcelableSong item,int position);
+    void OnItemClick(View item, int position);
 }

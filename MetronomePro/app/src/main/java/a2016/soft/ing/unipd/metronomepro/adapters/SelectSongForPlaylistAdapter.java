@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,8 +26,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         private final OnItemClickListener listener = new OnItemClickListener() {
           @Override
           //qui dentro cambierà colore...
-          public void OnItemClick(ParcelableSong item,int position) {
+          public void OnItemClick(View item,int position) {
               Toast.makeText(context,"hai selezionato l'elemento "+position,Toast.LENGTH_SHORT).show();
+              songSelected=position;
+              item.setBackgroundColor(Color.parseColor("#3F51B5"));
               // aggiungo la song appena selezionata nell'array di item selezionati
               //selectedSongs.add(item);
           }
@@ -34,11 +37,13 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         private ArrayList<ParcelableSong> arraySongs;
         private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
         private Context context;
+        private int songSelected;
 
         //costruttore: non riceve l'ascoltatore come parametro
         public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
             this.context = context;
             this.arraySongs = arraySongs;
+            songSelected=-1;
         }
         
         public void remuveForTest(int position){
@@ -62,7 +67,13 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         public void onBindViewHolder(ViewHolder holder, int position) {
             ParcelableSong song = arraySongs.get(position);
             holder.nameOfSong.setText(song.getName());
-            holder.bind(song,listener,position);//so di preciso cosa sto selezionando
+            holder.bind(holder.itemView,listener,position);//so di preciso cosa sto selezionando
+            /**if(position!=songSelected){
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+            else{
+                holder.itemView.setBackgroundColor(Color.parseColor("#3F51B5"));
+            }*/
         }
 
         @Override
@@ -79,7 +90,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
                 this.nameOfSong=nameOfSong;
             }
             //passa l'ascoltatore all'item
-            public void bind(final ParcelableSong item, final OnItemClickListener listener, final int pos){
+            public void bind(final View item, final OnItemClickListener listener, final int pos){
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
