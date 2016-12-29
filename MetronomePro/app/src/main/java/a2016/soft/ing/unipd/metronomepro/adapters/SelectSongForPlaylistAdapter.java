@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,22 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
     public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
 
+        private SparseBooleanArray selectedItems = new SparseBooleanArray();
         private final OnItemClickListener listener = new OnItemClickListener() {
           @Override
           //qui dentro cambierà colore...
           public void OnItemClick(View item,int position) {
-              Toast.makeText(context,"hai selezionato l'elemento "+position,Toast.LENGTH_SHORT).show();
-              songSelected=position;
-              item.setBackgroundColor(Color.parseColor("#3F51B5"));
+              if(selectedItems.get(position,false)){
+                  selectedItems.delete(position);
+                  item.setSelected(false);
+              }
+              else {
+                  selectedItems.put(position,true);
+                  item.setSelected(true);
+              }
+
+
+              //item.setBackgroundColor(Color.parseColor("#3F51B5"));
               // aggiungo la song appena selezionata nell'array di item selezionati
               //selectedSongs.add(item);
           }
