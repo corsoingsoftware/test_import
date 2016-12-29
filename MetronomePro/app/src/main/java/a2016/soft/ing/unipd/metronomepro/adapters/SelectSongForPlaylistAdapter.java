@@ -14,7 +14,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.R;
-import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnItemClickListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
@@ -24,36 +23,14 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
     public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
 
-        private SparseBooleanArray selectedItems = new SparseBooleanArray();
-        private final OnItemClickListener listener = new OnItemClickListener() {
-          @Override
-          //qui dentro cambierà colore...
-          public void OnItemClick(View item,int position) {
-              if(selectedItems.get(position,false)){
-                  selectedItems.delete(position);
-                  item.setSelected(false);
-              }
-              else {
-                  selectedItems.put(position,true);
-                  item.setSelected(true);
-              }
-
-
-              //item.setBackgroundColor(Color.parseColor("#3F51B5"));
-              // aggiungo la song appena selezionata nell'array di item selezionati
-              //selectedSongs.add(item);
-          }
-      };
         private ArrayList<ParcelableSong> arraySongs;
         private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
         private Context context;
-        private int songSelected;
 
         //costruttore: non riceve l'ascoltatore come parametro
         public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
             this.context = context;
             this.arraySongs = arraySongs;
-            songSelected=-1;
         }
         
         public void remuveForTest(int position){
@@ -77,13 +54,6 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         public void onBindViewHolder(ViewHolder holder, int position) {
             ParcelableSong song = arraySongs.get(position);
             holder.nameOfSong.setText(song.getName());
-            holder.bind(holder.itemView,listener,position);//so di preciso cosa sto selezionando
-            /**if(position!=songSelected){
-                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-            }
-            else{
-                holder.itemView.setBackgroundColor(Color.parseColor("#3F51B5"));
-            }*/
         }
 
         @Override
@@ -91,33 +61,30 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
             return arraySongs.size();
         }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView nameOfSong;
+            private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
             public ViewHolder(View itemView,TextView nameOfSong) {
                 super(itemView);
+                itemView.setOnClickListener(this);
                 this.nameOfSong=nameOfSong;
             }
-            //passa l'ascoltatore all'item
-            public void bind(final View item, final OnItemClickListener listener, final int pos){
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.OnItemClick(item,pos);
-                    }
-                });
+
+        @Override
+        public void onClick(View v) {
+            //c'è un array di booleani che tiene conto degli item che sono già stati premuti
+            //questo if-else permette di selezionare e deselezionare una canzone
+            if(selectedItems.get(getAdapterPosition(),false)){
+                selectedItems.delete(getAdapterPosition());
+                v.setSelected(false);
             }
-
-            @Override
-            public void onItemSelected() {
-
-            }
-
-            @Override
-            public void onItemClear() {
-
+            else{
+                selectedItems.put(getAdapterPosition(),true);
+                v.setSelected(true);
             }
         }
+    }
 
     }
