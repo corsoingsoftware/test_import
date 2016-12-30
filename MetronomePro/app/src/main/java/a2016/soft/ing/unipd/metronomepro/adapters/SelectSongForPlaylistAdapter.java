@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.R;
+import a2016.soft.ing.unipd.metronomepro.SelectSongForPlaylist;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
@@ -27,10 +28,16 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
         private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
         private Context context;
 
-        //costruttore: non riceve l'ascoltatore come parametro
+        //costruttore di base
         public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
             this.context = context;
             this.arraySongs = arraySongs;
+        }
+        //costruttore per salvare l'istanza delle canzoni selezionate
+        public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs,ArrayList<ParcelableSong> selectedSongs){
+            this.context = context;
+            this.arraySongs = arraySongs;
+            this.selectedSongs = selectedSongs;
         }
         
         public void remuveForTest(int position){
@@ -61,10 +68,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
             return arraySongs.size();
         }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView nameOfSong;
-            private SparseBooleanArray selectedItems = new SparseBooleanArray();
+            private boolean isPresent;
 
             public ViewHolder(View itemView,TextView nameOfSong) {
                 super(itemView);
@@ -74,16 +81,30 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
         @Override
         public void onClick(View v) {
-            //c'è un array di booleani che tiene conto degli item che sono già stati premuti
             //questo if-else permette di selezionare e deselezionare una canzone
-            if(selectedItems.get(getAdapterPosition(),false)){
-                selectedItems.delete(getAdapterPosition());
+            isPresent=SelectSongForPlaylistAdapter.this.getSelectedSongs().contains(SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition()));
+            if(isPresent==true){
                 v.setSelected(false);
+                ParcelableSong song = SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition());
+                SelectSongForPlaylistAdapter.this.selectedSongs.remove(song);
+
+                Snackbar.make(v, "hai rimosso l'elemento "+ song.getName(), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
             }
             else{
-                selectedItems.put(getAdapterPosition(),true);
                 v.setSelected(true);
+
+                ParcelableSong song = SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition());
+                SelectSongForPlaylistAdapter.this.selectedSongs.add(song);
+
+                Snackbar.make(v, "hai inserito l'elemento "+song.getName(), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
             }
+            //for test, funziona
+           // Snackbar.make(v, "totale elementi selezionati: "+ SelectSongForPlaylistAdapter.this.selectedSongs.size(), Snackbar.LENGTH_LONG)
+            //        .setAction("Action", null).show();
         }
     }
 

@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
             //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
             if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
                 ArrayList<ParcelableSong> savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-                selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs);
+                ArrayList<ParcelableSong> selectedSongs = savedInstanceState.getParcelableArrayList("song selected");
+                selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
                 rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
             }
 
@@ -52,18 +54,18 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
                 public void onClick(View view) {
                     //test fatto male, funziona!!! salva le istanze! se giro lo schermo rimane eliminata
                     //selectSongForPlaylistAdapter.remuveForTest(0);
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             });
         }
 
         protected void onSaveInstanceState(Bundle outState) {
-            //prende le canzoni totali e quelle selezionate
+            //prende le canzoni totali
             outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
-            //questa è per salvare l'istanza delle canzoni già selezionate..
-            //bisogna cambiare la chiave??
-           // outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+            //prende le istanze delle canzoni già selezionate
+            outState.putParcelableArrayList("song selected",(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+
             super.onSaveInstanceState(outState);
         }
     //classe di test, al posto di questa ci sarà il database
