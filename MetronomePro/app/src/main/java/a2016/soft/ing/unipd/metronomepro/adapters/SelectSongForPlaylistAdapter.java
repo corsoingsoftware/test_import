@@ -136,7 +136,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
                 ParcelableSong song = SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition());
                 SelectSongForPlaylistAdapter.this.selectedSongs.remove(song);
 
-                mselectedPosition=-1;
+                mselectedPosition=-1;//
                 mSelectedView=null;
                 //isSelected.add(getAdapterPosition(),false);
                 //viewItem.remove(getAdapterPosition());
