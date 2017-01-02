@@ -52,8 +52,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //test fatto male, funziona!!! salva le istanze! se giro lo schermo rimane eliminata
-                //selectSongForPlaylistAdapter.remuveForTest(0);
+                //for test
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
