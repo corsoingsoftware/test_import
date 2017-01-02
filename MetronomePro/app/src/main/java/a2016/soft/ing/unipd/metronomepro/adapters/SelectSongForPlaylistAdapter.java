@@ -30,6 +30,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
     private ArrayList<ParcelableSong> arraySongs;
     private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
     private Context context;
+    private SparseBooleanArray areSelected = new SparseBooleanArray();
 
     private RecyclerView mRecyclerView;
     private int mselectedPosition=-1;
@@ -73,13 +74,61 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         ParcelableSong song = arraySongs.get(position);
         holder.nameOfSong.setText(song.getName());
+        //holder.itemView.setOnClickListener(this);
+
+        View.OnClickListener a = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Boolean isPresent=SelectSongForPlaylistAdapter.this.getSelectedSongs().contains(SelectSongForPlaylistAdapter.this.arraySongs.get(position));
+                if(isPresent){
+                    v.setSelected(false);
+                    ParcelableSong song = arraySongs.get(position);
+                    selectedSongs.remove(song);
+
+                    mselectedPosition=-1;
+                    areSelected.delete(position);
+                    //isSelected.add(getAdapterPosition(),false);
+                    //viewItem.remove(getAdapterPosition());
+
+
+                    Snackbar.make(v, "hai rimosso l'elemento "+ song.getName(), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+                else{
+                    v.setSelected(true);
+
+                    ParcelableSong song = arraySongs.get(position);
+                    selectedSongs.add(song);
+
+                    //int previousSelectState = mselectedPosition;
+
+                    mselectedPosition = position;
+
+                    areSelected.put(mselectedPosition,true);
+
+                    //isSelected.add(getAdapterPosition(),true);
+                    //viewItem.add(getAdapterPosition(),v);
+                    //notifyItemChanged(previousSelectState);
+                    //notifyItemChanged(mselectedPosition);
+
+                    Snackbar.make(v, "hai inserito l'elemento "+song.getName(), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                }
+                //v.setSelected(!v.isSelected());
+                //for test, funziona
+                // Snackbar.make(v, "totale elementi selezionati: "+ SelectSongForPlaylistAdapter.this.selectedSongs.size(), Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
+            }
+        };
+        holder.itemView.setOnClickListener(a);
         //if(position == mselectedPosition&&holder.itemView.isSelected()){
-        if(position == mselectedPosition||holder.areSelected.get(position)){
+        //if(position == mselectedPosition||holder.areSelected.get(position)){
+        if(selectedSongs.lastIndexOf(song)>=0){
             holder.itemView.setSelected(true);
-            mSelectedView=holder.itemView;
         }
         else{
             holder.itemView.setSelected(false);
@@ -92,7 +141,14 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         return arraySongs.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.itemView.setOnClickListener(null);
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder /**implements View.OnClickListener */{
 
         TextView nameOfSong;
         private boolean isPresent;
@@ -106,7 +162,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
             this.itemView=itemView;
             //orderItem= (LinearLayout) itemView.findViewById(R.id.item_song_for_playlist);
             this.nameOfSong=nameOfSong;
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
 //
 
         }
@@ -127,8 +183,8 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         v.setSelected(!v.isSelected());
         }*/
 
-        @Override
-        public void onClick(View v) {
+        //@Override
+        /**public void onClick(View v) {
             //questo if-else permette di selezionare e deselezionare una canzone
             isPresent=SelectSongForPlaylistAdapter.this.getSelectedSongs().contains(SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition()));
             if(isPresent==true){
@@ -136,7 +192,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
                 ParcelableSong song = SelectSongForPlaylistAdapter.this.arraySongs.get(getAdapterPosition());
                 SelectSongForPlaylistAdapter.this.selectedSongs.remove(song);
 
-                mselectedPosition=-1;//
+                mselectedPosition=-1;
                 mSelectedView=null;
                 //isSelected.add(getAdapterPosition(),false);
                 //viewItem.remove(getAdapterPosition());
@@ -170,7 +226,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
             //for test, funziona
             // Snackbar.make(v, "totale elementi selezionati: "+ SelectSongForPlaylistAdapter.this.selectedSongs.size(), Snackbar.LENGTH_LONG)
             //        .setAction("Action", null).show();
-        }
+        }*/
 
 
     }
