@@ -19,108 +19,108 @@ import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
-    public class SelectSongForPlaylist extends AppCompatActivity {
+public class SelectSongForPlaylist extends AppCompatActivity {
 
-        private RecyclerView rVSelectSong;
-        private RecyclerView.LayoutManager rVLayoutManager;
-        private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
+    private RecyclerView rVSelectSong;
+    private RecyclerView.LayoutManager rVLayoutManager;
+    private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_select_song_for_playlist2);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select_song_for_playlist2);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
-            rVSelectSong.setHasFixedSize(true);
-            rVLayoutManager = new LinearLayoutManager(this);
-            rVSelectSong.setLayoutManager(rVLayoutManager);
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
+        rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
+        rVSelectSong.setHasFixedSize(true);
+        rVLayoutManager = new LinearLayoutManager(this);
+        rVSelectSong.setLayoutManager(rVLayoutManager);
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
+        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
+        //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
+        if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
+            ArrayList<ParcelableSong> savedSongs = savedInstanceState.getParcelableArrayList("song for select");
+            ArrayList<ParcelableSong> selectedSongs = savedInstanceState.getParcelableArrayList("song selected");
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+        }
 
-            //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
-            if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
-                ArrayList<ParcelableSong> savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-                ArrayList<ParcelableSong> selectedSongs = savedInstanceState.getParcelableArrayList("song selected");
-                selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
-                rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //test fatto male, funziona!!! salva le istanze! se giro lo schermo rimane eliminata
+                //selectSongForPlaylistAdapter.remuveForTest(0);
+                Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
+        });
+    }
 
+    protected void onSaveInstanceState(Bundle outState) {
+        //prende le canzoni totali
+        outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
+        //prende le istanze delle canzoni già selezionate
+        outState.putParcelableArrayList("song selected",(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //test fatto male, funziona!!! salva le istanze! se giro lo schermo rimane eliminata
-                    //selectSongForPlaylistAdapter.remuveForTest(0);
-                    Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-        }
-
-        protected void onSaveInstanceState(Bundle outState) {
-            //prende le canzoni totali
-            outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
-            //prende le istanze delle canzoni già selezionate
-            outState.putParcelableArrayList("song selected",(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
-
-            super.onSaveInstanceState(outState);
-        }
+        super.onSaveInstanceState(outState);
+    }
     //classe di test, al posto di questa ci sarà il database
-        public ArrayList<ParcelableSong> provaDiTest(){
-            ArrayList<ParcelableSong> array = new ArrayList<>();
+    public ArrayList<ParcelableSong> provaDiTest(){
+        ArrayList<ParcelableSong> array = new ArrayList<>();
 
-            Song s0 = EntitiesBuilder.getSong("prova di canzone 0");
-            Song s1 = EntitiesBuilder.getSong("prova di canzone 1");
-            Song s2 = EntitiesBuilder.getSong("prova di canzone 2");
-            Song s3 = EntitiesBuilder.getSong("prova di canzone 3");
-            Song s4 = EntitiesBuilder.getSong("prova di canzone 4");
-            Song s5 = EntitiesBuilder.getSong("prova di canzone 5");
-            Song s6 = EntitiesBuilder.getSong("prova di canzone 6");
-            Song s7 = EntitiesBuilder.getSong("prova di canzone 7");
-            Song s8 = EntitiesBuilder.getSong("prova di canzone 8");
-            Song s9 = EntitiesBuilder.getSong("prova di canzone 9");
-            Song s10 = EntitiesBuilder.getSong("prova di canzone 10");
-            Song s11 = EntitiesBuilder.getSong("prova di canzone 11");
-            Song s12 = EntitiesBuilder.getSong("prova di canzone 12");
-            Song s13 = EntitiesBuilder.getSong("prova di canzone 13");
-            Song s14 = EntitiesBuilder.getSong("prova di canzone 14");
-            Song s15 = EntitiesBuilder.getSong("prova di canzone 15");
-            Song s16 = EntitiesBuilder.getSong("prova di canzone 16");
-            Song s17 = EntitiesBuilder.getSong("prova di canzone 17");
-            Song s18 = EntitiesBuilder.getSong("prova di canzone 18");
-            Song s19 = EntitiesBuilder.getSong("prova di canzone 19");
-            Song s20 = EntitiesBuilder.getSong("prova di canzone 20");
+        Song s0 = EntitiesBuilder.getSong("prova di canzone 0");
+        Song s1 = EntitiesBuilder.getSong("prova di canzone 1");
+        Song s2 = EntitiesBuilder.getSong("prova di canzone 2");
+        Song s3 = EntitiesBuilder.getSong("prova di canzone 3");
+        Song s4 = EntitiesBuilder.getSong("prova di canzone 4");
+        Song s5 = EntitiesBuilder.getSong("prova di canzone 5");
+        Song s6 = EntitiesBuilder.getSong("prova di canzone 6");
+        Song s7 = EntitiesBuilder.getSong("prova di canzone 7");
+        Song s8 = EntitiesBuilder.getSong("prova di canzone 8");
+        Song s9 = EntitiesBuilder.getSong("prova di canzone 9");
+        Song s10 = EntitiesBuilder.getSong("prova di canzone 10");
+        Song s11 = EntitiesBuilder.getSong("prova di canzone 11");
+        Song s12 = EntitiesBuilder.getSong("prova di canzone 12");
+        Song s13 = EntitiesBuilder.getSong("prova di canzone 13");
+        Song s14 = EntitiesBuilder.getSong("prova di canzone 14");
+        Song s15 = EntitiesBuilder.getSong("prova di canzone 15");
+        Song s16 = EntitiesBuilder.getSong("prova di canzone 16");
+        Song s17 = EntitiesBuilder.getSong("prova di canzone 17");
+        Song s18 = EntitiesBuilder.getSong("prova di canzone 18");
+        Song s19 = EntitiesBuilder.getSong("prova di canzone 19");
+        Song s20 = EntitiesBuilder.getSong("prova di canzone 20");
 
-            array.add((ParcelableSong) s0);
-            array.add((ParcelableSong) s1);
-            array.add((ParcelableSong) s2);
-            array.add((ParcelableSong) s3);
-            array.add((ParcelableSong) s4);
-            array.add((ParcelableSong) s5);
-            array.add((ParcelableSong) s6);
-            array.add((ParcelableSong) s7);
-            array.add((ParcelableSong) s8);
-            array.add((ParcelableSong) s9);
-            array.add((ParcelableSong) s10);
-            array.add((ParcelableSong) s11);
-            array.add((ParcelableSong) s12);
-            array.add((ParcelableSong) s13);
-            array.add((ParcelableSong) s14);
-            array.add((ParcelableSong) s15);
-            array.add((ParcelableSong) s16);
-            array.add((ParcelableSong) s17);
-            array.add((ParcelableSong) s18);
-            array.add((ParcelableSong) s19);
-            array.add((ParcelableSong) s20);
+        array.add((ParcelableSong) s0);
+        array.add((ParcelableSong) s1);
+        array.add((ParcelableSong) s2);
+        array.add((ParcelableSong) s3);
+        array.add((ParcelableSong) s4);
+        array.add((ParcelableSong) s5);
+        array.add((ParcelableSong) s6);
+        array.add((ParcelableSong) s7);
+        array.add((ParcelableSong) s8);
+        array.add((ParcelableSong) s9);
+        array.add((ParcelableSong) s10);
+        array.add((ParcelableSong) s11);
+        array.add((ParcelableSong) s12);
+        array.add((ParcelableSong) s13);
+        array.add((ParcelableSong) s14);
+        array.add((ParcelableSong) s15);
+        array.add((ParcelableSong) s16);
+        array.add((ParcelableSong) s17);
+        array.add((ParcelableSong) s18);
+        array.add((ParcelableSong) s19);
+        array.add((ParcelableSong) s20);
 
-            return array;
-
-        }
+        return array;
 
     }
+
+}
 
 
 
