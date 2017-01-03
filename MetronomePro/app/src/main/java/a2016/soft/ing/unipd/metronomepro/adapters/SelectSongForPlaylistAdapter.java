@@ -27,16 +27,16 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
 public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
 
-    private ArrayList<ParcelableSong> arraySongs;
-    private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //lista con canzoni gia selezionate: non va inizializzata qui
+    private ArrayList<ParcelableSong> arraySongs; //it rappresent the songs that are already not into a playlist
+    private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //it rappresent the songs that the users want to insert into the playlist
     private Context context;
 
-    //costruttore di base
+    //base constructor
     public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
         this.context = context;
         this.arraySongs = arraySongs;
     }
-    //costruttore per salvare l'istanza delle canzoni selezionate
+    //constructor that allows to save the instance of the songs selected
     public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs,ArrayList<ParcelableSong> selectedSongs){
         this.context = context;
         this.arraySongs = arraySongs;
@@ -66,28 +66,34 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         View.OnClickListener a = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //when the item is deselecting
                 if(v.isSelected()){
-                    v.setSelected(false);
+                    v.setSelected(false); //set the background golour
 
-                    ParcelableSong song = arraySongs.get(position);
+                    ParcelableSong song = arraySongs.get(position); //remove the songe from selected songs
                     selectedSongs.remove(song);
-
+                    //for debug
                     Snackbar.make(v, "hai rimosso l'elemento "+ song.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                //when the item is selecting
                 else{
-                    v.setSelected(true);
+                    v.setSelected(true);//set the background colour
 
-                    ParcelableSong song = arraySongs.get(position);
+                    ParcelableSong song = arraySongs.get(position); //add the song to selected songs
                     selectedSongs.add(song);
-
+                    //for debug
                     Snackbar.make(v, "hai inserito l'elemento "+song.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
                 }
             }
         };
+        //the listener is activate when the item is building
         holder.itemView.setOnClickListener(a);
+        //when an item is recycled it take the settings of the first item in the list
+        //if the first item is selected, the recycle item will take the background of the first item whitch is wrong
+        //without this if-else, when you press an item more than one item will higtlight
         if(selectedSongs.lastIndexOf(song)>=0){
             holder.itemView.setSelected(true);
         }
@@ -96,7 +102,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         }
 
     }
-
+    //return the size of the item into the recycleview
     @Override
     public int getItemCount() {
         return arraySongs.size();
@@ -105,10 +111,12 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
+        //when you scroll up the list, the listener of the new item is disactivate
+        //so they will set in the right settings
         holder.itemView.setOnClickListener(null);
     }
 
-
+    //it describe an item view and metadata about its place within the recycleView
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView nameOfSong;
