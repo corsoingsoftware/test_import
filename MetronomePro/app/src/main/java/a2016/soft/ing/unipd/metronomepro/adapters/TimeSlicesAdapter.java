@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -152,12 +153,23 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         }
     }
 
+    public void setSelectedItem(TimeSlice timeSlice) {
+
+    }
+
+    public TimeSlice getTimeSliceSelected() {
+        return timeSliceSelected;
+    }
+
     public void addOnTimeSliceSelectedListener(OnTimeSliceSelectedListener onTimeSliceSelectedListener) {
         this.onTimeSliceSelectedListeners.add(onTimeSliceSelectedListener);
     }
 
     public void addTimeSlice(int position, TimeSlice newTS) {
-
+        songToEdit.add(position,newTS);
+        calculateAllWidthsAndColors();
+        notifyDataSetChanged();
+        //notifyItemInserted(position);
     }
 
     @Override
@@ -192,6 +204,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         songToEdit.remove(position);
         songToEditState.remove(position);
         //check max and min
+        calculateAllWidthsAndColors();
     }
 
 

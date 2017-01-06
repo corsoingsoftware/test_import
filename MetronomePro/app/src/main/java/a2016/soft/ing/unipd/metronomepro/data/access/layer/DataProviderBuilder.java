@@ -13,7 +13,7 @@ public class DataProviderBuilder {
      */
     public static DataProvider getDefaultDataProvider(Context c) {
 
-        DataProvider dp = new SQLiteDataProvider(c);
+        DataProvider dp = new FileDataProvier(c);
         return dp;
     }
 }

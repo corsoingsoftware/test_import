@@ -9,12 +9,10 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
-import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -116,18 +114,18 @@ public class ExampleInstrumentedTest {
         t3.setDurationInBeats(20);
 
 
-        Song s = new ParcelableSong();
+        Song s = new ParcelableTimeSlicesSong();
         s.add(t1);
         s.add(t2);
         s.add(t3);
 
-        SongPlayer atsp = new AudioTrackSongPlayer();
-        atsp.load(s);
+        //SongPlayer atsp = new AudioTrackSongPlayer();
+      //  atsp.load(s);
 
         Song[] arrayS = new Song[1];
         arrayS[0] = s;
 
-        ((AudioTrackSongPlayer)atsp).write(arrayS);
+      //  ((AudioTrackSongPlayer)atsp).write(arrayS);
         //atsp.play();
     }
 

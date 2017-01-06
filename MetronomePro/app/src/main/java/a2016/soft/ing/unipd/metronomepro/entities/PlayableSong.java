@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Omar on 12/12/2016.
  */
 
-public class PlayableSong extends ParcelableSong implements Parcelable {
+public class PlayableSong extends ParcelableTimeSlicesSong implements Parcelable {
 
     public static final int STATE_TOPLAY = 0;
     public static final int STATE_READYTOPLAY = 1;
