@@ -1,38 +1,38 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.sql.Array;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
+
 /**
  * Created by feder on 09/12/2016.
  */
 
-public class ParcelableSong implements Song, Parcelable {
+public class ParcelableTimeSlicesSong implements TimeSlicesSong {
     private static final int MIN_ARRAY_LIST_SIZE=10;
 
-    public static final Creator<ParcelableSong> CREATOR = new Creator<ParcelableSong>() {
+    public static final Creator<ParcelableTimeSlicesSong> CREATOR = new Creator<ParcelableTimeSlicesSong>() {
         /**
          * create song from parcel, just call default parcel constructor
          * @param in
          * @return
          */
         @Override
-        public ParcelableSong createFromParcel(Parcel in) {
-            return new ParcelableSong(in);
+        public ParcelableTimeSlicesSong createFromParcel(Parcel in) {
+            return new ParcelableTimeSlicesSong(in);
         }
 
         @Override
-        public ParcelableSong[] newArray(int size) {
-            return new ParcelableSong[size];
+        public ParcelableTimeSlicesSong[] newArray(int size) {
+            return new ParcelableTimeSlicesSong[size];
         }
     };
     /**
@@ -41,7 +41,7 @@ public class ParcelableSong implements Song, Parcelable {
      * @param in
      */
 
-    protected ParcelableSong(Parcel in) {
+    protected ParcelableTimeSlicesSong(Parcel in) {
 
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
@@ -60,14 +60,29 @@ public class ParcelableSong implements Song, Parcelable {
         this.name = name;
     }
 
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(int newId) {
+
+    }
+
+    @Override
+    public SongPlayer getSongPlayer(SongPlayerManager manager) {
+        return null;
+    }
+
     protected String name;
     protected ArrayList<TimeSlice> timeSliceList;
 
-    public ParcelableSong() {
+    public ParcelableTimeSlicesSong() {
         this("");
     }
 
-    ParcelableSong(String name) {
+    ParcelableTimeSlicesSong(String name) {
         this.name = name;
         timeSliceList = new ArrayList<TimeSlice>();
     }

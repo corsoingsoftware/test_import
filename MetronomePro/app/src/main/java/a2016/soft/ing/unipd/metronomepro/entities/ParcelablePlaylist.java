@@ -16,7 +16,6 @@ import java.util.ListIterator;
 
 public class ParcelablePlaylist implements Playlist, Parcelable {
 
-
     protected ParcelablePlaylist(Parcel in) {
         this(in.readString());
         ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();

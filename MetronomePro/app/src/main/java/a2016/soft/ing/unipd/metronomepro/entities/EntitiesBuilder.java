@@ -6,10 +6,10 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 
 public class EntitiesBuilder {
     public static Song getSong() {
-        return new ParcelableSong();
+        return new ParcelableTimeSlicesSong();
     }
     public static Song getSong(String name) {
-        return new ParcelableSong(name);
+        return new ParcelableTimeSlicesSong(name);
     }
     public static Playlist getPlaylist(String name){
         return new ParcelablePlaylist(name);
