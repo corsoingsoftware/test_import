@@ -18,6 +18,13 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     protected ParcelablePlaylist(Parcel in) {
         this(in.readString());
+        while(){
+            int a=in.readInt();
+            if(a==0) {
+                ParcelableTimeSlicesSong ps = in.readParcelable(ParcelableTimeSlicesSong.class.getClassLoader());
+                songList.add(ps);
+            }
+        }
         ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
         ArrayList<String> names=(ArrayList<String>) in.readSerializable();
         int indexToInsert = 0;
