@@ -22,6 +22,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListe
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 
 /**
  * Created by Omar on 12/12/2016.
@@ -47,6 +48,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         this.selectedSongs = selectedSongs;
         this.maxSelectable = maxSelectable;
+
 
     }
 
@@ -129,23 +131,32 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
         if(position < selectedSongs) {
 
-            PlayableSong toMove = arraySongs.get(position);
-            int i = selectedSongs;
-            PlayableSong current = arraySongs.get(i);
+            if(selectedSongs!=arraySongs.size()) {
+                PlayableSong toMove = arraySongs.get(position);
+                int i = selectedSongs;
+                PlayableSong current = arraySongs.get(i);
 
-            while(i < arraySongs.size() &&
-                    current.getSongState()== PlayableSong.STATE_READYTOPLAY &&
-                    current.getPlaylistPosition() < toMove.getPlaylistPosition() ) {
+                while (i < arraySongs.size() &&
+                        current.getSongState() == PlayableSong.STATE_READYTOPLAY &&
+                        current.getPlaylistPosition() < toMove.getPlaylistPosition()) {
 
-                i++;
-                if(i < arraySongs.size()) {
-                    current = arraySongs.get(i);
+                    i++;
+                    if (i < arraySongs.size()) {
+                        current = arraySongs.get(i);
+                    }
                 }
-            }
 
-            toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
-            selectedSongs--;
-            onSongPositionChange(position, i-1);
+                toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
+                selectedSongs--;
+                onSongPositionChange(position, i - 1);
+            }
+            else
+            {
+                PlayableSong toMove = arraySongs.get(position);
+                toMove.setSongState(PlayableSong.STATE_READYTOPLAY);
+                selectedSongs--;
+                onSongPositionChange(position, arraySongs.size() - 1);
+            }
         }
         else
         {
@@ -188,5 +199,23 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
     public int getSelectedSongs() {
 
         return selectedSongs;
+    }
+
+    /**
+     * Returns selected songs
+     * @return toReturn which contains selected songs
+     */
+
+    public Song[] getSongs() {
+
+        ArrayList<PlayableSong> app = new ArrayList<PlayableSong>();
+        for(int i = 0; i < selectedSongs; i++) {
+            app.add(arraySongs.get(i));
+        }
+
+        Song[] toReturn = new Song[selectedSongs];
+        toReturn = app.toArray(toReturn);
+
+        return toReturn;
     }
 }

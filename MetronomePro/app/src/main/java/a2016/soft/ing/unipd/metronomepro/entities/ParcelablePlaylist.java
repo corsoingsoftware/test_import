@@ -18,8 +18,16 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
 
     protected ParcelablePlaylist(Parcel in) {
-
-
+        this(in.readString());
+        ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
+        ArrayList<String> names=(ArrayList<String>) in.readSerializable();
+        int indexToInsert = 0;
+        for (byte[] bt : arrayByte) {
+            Song s = EntitiesBuilder.getSong(names.get(indexToInsert));
+            s.decode(bt);
+            songList.add(indexToInsert, s);
+            indexToInsert++;
+        }
     }
 
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {
@@ -38,7 +46,6 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     private ArrayList<Song> songList;
 
     public ParcelablePlaylist(String name) {
-
         this.name = name;
         songList = new ArrayList<Song>();
     }
@@ -50,7 +57,17 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-
+        ArrayList<byte[]> arrayByte = new ArrayList<byte[]>();
+        ArrayList<String> names= new ArrayList<>(size());
+        for (Song s : songList) {
+            arrayByte.add(s.encode());
+            names.add(s.getName());
+        }
+        dest.writeString(getName());
+        dest.writeSerializable(arrayByte);
+        dest.writeSerializable(names);
+        //prendo la song e la metto in array list convertita in array di byte
+        //passo al parser aray di byte quando li riprendo li devo riconvertire in song
     }
 
     @Override
@@ -132,9 +149,7 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     }
 
     @Override
-    public Song get(int index) {
-        return songList.get(index);
-    }
+    public Song get(int index) {return songList.get(index);}
 
     @Override
     public Song set(int index, Song element) {

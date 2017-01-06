@@ -96,6 +96,10 @@ public class ExampleInstrumentedTest {
         assertEquals(atc.getAudioTrack().getState(), AudioTrack.PLAYSTATE_STOPPED);
     }
 
+    /**
+     * This test doesn't work, cause it use android library to produce a sound
+     * @throws Exception
+     */
     @Test
     public void songTest() throws Exception {
 
@@ -125,5 +129,24 @@ public class ExampleInstrumentedTest {
 
         ((AudioTrackSongPlayer)atsp).write(arrayS);
         //atsp.play();
+    }
+
+    @Test
+    public void encodeDecodeTest() throws Exception {
+
+        //Create a new TimeSlice and encode it, "toReturn" represents "t1"
+        TimeSlice t1 = new TimeSlice();
+        byte[] toReturn = t1.encode();
+        //To use decode "method", I need a new TimeSlice object.
+        TimeSlice t2 = new TimeSlice();
+        //Decodification of toReturn
+        t2.decode(toReturn);
+
+        //Verify if the attributes are equals
+
+        assertEquals(t1.getBpm(), t2.getBpm());
+        assertEquals(t1.getDurationInBeats(), t2.getDurationInBeats());
+        assertEquals(t1.getTimeFigureDenominator(), t2.getTimeFigureDenominator());
+        assertEquals(t2.getTimeFigureNumerator(), t2.getTimeFigureNumerator());
     }
 }
