@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -17,7 +16,8 @@ public class SongPlayerService extends Service {
 
     private static final String LOG_TAG = "SongPlayerService";
     private IBinder mBinder = new MyBinder();
-    private SongPlayer atsp;
+    //private SongPlayer atsp;
+    private SongPlayerManager spm;
 
     @Override
     public void onCreate(){
@@ -78,13 +78,13 @@ public class SongPlayerService extends Service {
         atsp.write(songs);
     }
 
+    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
+        this.atsp = new AudioTrackSongPlayer(callback);
+    }
+
     public class MyBinder extends Binder {
         SongPlayerService getService() {
             return SongPlayerService.this;
         }
-    }
-
-    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback){
-        this.atsp = new AudioTrackSongPlayer(callback);
     }
 }

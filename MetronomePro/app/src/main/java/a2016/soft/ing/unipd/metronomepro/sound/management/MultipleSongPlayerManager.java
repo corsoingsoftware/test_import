@@ -16,6 +16,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
         song.getSongPlayer(this).play();
     }
 
+    public void load() {
+
+    }
+
     @Override
     public SongPlayer getMidiSongPlayer() {
         return null;

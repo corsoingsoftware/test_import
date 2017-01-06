@@ -7,22 +7,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
-import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 
 /**
  * Created by Omar on 12/12/2016.
@@ -49,7 +43,6 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         this.selectedSongs = selectedSongs;
         this.maxSelectable = maxSelectable;
 
-
     }
 
     public SelectSongsAdapter(ArrayList<PlayableSong> savedArray, int selectedSongs, int maxSelectable) {
@@ -57,8 +50,12 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         arraySongs = new ArrayList<>(savedArray.size());
         int i = 0;
         for(PlayableSong s : savedArray){
-            arraySongs.add(new PlayableSong(s, i++, s.getSongState()));
+
+            arraySongs.add(new PlayableSong(s.getInnerSong(), i++, s.getSongState()));
         }
+
+        this.selectedSongs = selectedSongs;
+        this.maxSelectable = maxSelectable;
 
     }
 
@@ -115,7 +112,7 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
                 break;
         }
 
-        holder.nameSong.setText(s.getName());
+        holder.nameSong.setText(s.getInnerSong().getName());
 
         holder.itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -170,28 +167,6 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         return arraySongs.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements
-            ItemTouchHelperViewHolder {
-
-        TextView nameSong;
-
-        public ViewHolder(View itemView, TextView nameSong) {
-            super(itemView);
-            this.nameSong = nameSong;
-        }
-
-
-        @Override
-        public void onItemSelected() {
-
-        }
-
-        @Override
-        public void onItemClear() {
-
-        }
-    }
-
     public ArrayList<PlayableSong> getArraySongs() {
         return arraySongs;
     }
@@ -217,5 +192,27 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         toReturn = app.toArray(toReturn);
 
         return toReturn;
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements
+            ItemTouchHelperViewHolder {
+
+        TextView nameSong;
+
+        public ViewHolder(View itemView, TextView nameSong) {
+            super(itemView);
+            this.nameSong = nameSong;
+        }
+
+
+        @Override
+        public void onItemSelected() {
+
+        }
+
+        @Override
+        public void onItemClear() {
+
+        }
     }
 }

@@ -24,8 +24,6 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 public class AudioTrackSongPlayer implements SongPlayer {
 
     static final int SAMPLE_RATE_IN_HERTZ = 8000;
-    private static final String THREAD_NAME = "bufferT";
-
     static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_MONO;
     static final int FRAME_SIZE = 2;
@@ -46,6 +44,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * Total length in bytes of the "beep", it must be shorter than minimum period, so when bpm are higher
      */
     static final int DEFAULT_SIN_LENGTH_IN_BYTES=500;
+    private static final String THREAD_NAME = "bufferT";
     private Thread writeAt;
     private boolean goThread;
     private AudioTrack at;
@@ -68,16 +67,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
         this.callback = callback;
     }
 
-    public interface AudioTrackSongPlayerCallback {
-        void writeEnd();
-    }
-
     @Override
     public void play() {
         at.play();
     }
-
-    //richiama dal costruttore
 
     /**
      * A lot of parameters but they are necessary, there are method with less parameters
@@ -108,6 +101,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         goThread = true;
     }
+
+    //richiama dal costruttore
 
     @Override
     public void initialize(int sampleRate, int audioFormat, int channelConfig) {
@@ -188,7 +183,9 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
         byte[] sound = sGenerator.generateSin(lengthBeep, frequencyBeep);
 
-        for (TimeSlice ts : s) {
+        TimeSlicesSong songSlices = (TimeSlicesSong) s;
+
+        for (TimeSlice ts : songSlices) {
 
             int bpm_slice = ts.getBpm();
             int PeriodLengthInBytes = (int)((SAMPLE_RATE_IN_HERTZ * FRAME_SIZE * (SECS_IN_MIN / (double)bpm_slice))+0.5);
@@ -284,10 +281,15 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
             }
         };
+
         if(goThread){
             currentThread= new Thread(toDo,  THREAD_NAME);
             currentThread.start();
         }
+    }
+
+    public interface AudioTrackSongPlayerCallback {
+        void writeEnd();
     }
 
 }
