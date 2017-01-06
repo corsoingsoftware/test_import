@@ -72,7 +72,7 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
     @Override
     public SongPlayer getSongPlayer(SongPlayerManager manager) {
-        return null;
+        return manager.getTimeSlicesSongPlayer();
     }
 
     protected String name;
