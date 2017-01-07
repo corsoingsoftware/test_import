@@ -16,8 +16,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
         song.getSongPlayer(this).play();
     }
 
-    public void load() {
-
+    public void load(Song song) {
+        song.getSongPlayer(this).load(song);
     }
 
     @Override

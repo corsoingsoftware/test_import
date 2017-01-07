@@ -16,7 +16,7 @@ public class SongPlayerService extends Service {
 
     private static final String LOG_TAG = "SongPlayerService";
     private IBinder mBinder = new MyBinder();
-    //private SongPlayer atsp;
+    private SongPlayer atsp;
     private SongPlayerManager spm;
 
     @Override
