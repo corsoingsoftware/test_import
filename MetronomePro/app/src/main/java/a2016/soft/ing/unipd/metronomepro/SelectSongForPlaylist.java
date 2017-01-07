@@ -28,6 +28,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,16 @@ public class SelectSongForPlaylist extends AppCompatActivity {
          }
          */
 
+
+
+
+
+
+
+
+
+        Bundle lista = getIntent().getExtras();
+        ArrayList<ParcelableSong> aLista = lista.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -76,11 +87,12 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
-                intent.putParcelableArrayListExtra(,selectSongForPlaylistAdapter.getSelectedSongs())
+                intent.putParcelableArrayListExtra("songs_to_add",selectSongForPlaylistAdapter.getSelectedSongs());
+                startActivityForResult(intent,10);
 
             }
         });
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,aLista);
         rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
     }
 
@@ -109,6 +121,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     }
      * @return
      */
+
     //classe di test, al posto di questa ci sarà il database
     public ArrayList<ParcelableSong> provaDiTest(){
         ArrayList<ParcelableSong> array = new ArrayList<>();
