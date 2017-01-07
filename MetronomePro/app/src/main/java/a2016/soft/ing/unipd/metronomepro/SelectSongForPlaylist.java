@@ -1,5 +1,8 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -36,8 +39,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
-        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
         //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
         if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
@@ -66,7 +67,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
          }
          */
 
-
+        final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,8 +75,13 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 //for test
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
+                intent.putParcelableArrayListExtra(,selectSongForPlaylistAdapter.getSelectedSongs())
+
             }
         });
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
+        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
     }
 
     protected void onSaveInstanceState(Bundle outState) {
