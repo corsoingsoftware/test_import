@@ -86,6 +86,23 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
         super.onSaveInstanceState(outState);
     }
+
+    /**
+     * @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(resultCode==RESULT_OK){
+    switch (requestCode){
+    case START_EDIT_NEW_SONG:
+    ParcelableTimeSlicesSong ps=(ParcelableTimeSlicesSong)data.getParcelableExtra(SONG_TO_EDIT);
+    modifyPlaylistAdapter.addSong(ps);
+    dataProvider.save(ps);
+    break;
+    }
+    }
+    }
+     * @return
+     */
     //classe di test, al posto di questa ci sarà il database
     public ArrayList<ParcelableSong> provaDiTest(){
         ArrayList<ParcelableSong> array = new ArrayList<>();
