@@ -46,6 +46,18 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
         }
+        /**
+         * fab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        Song songToEdit = EntitiesBuilder.getSong();
+        Intent intent = new Intent(activity, SongCreator.class);
+        intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
+        startActivityForResult(intent, START_EDIT_NEW_SONG);
+
+        }
+        });
+         */
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
