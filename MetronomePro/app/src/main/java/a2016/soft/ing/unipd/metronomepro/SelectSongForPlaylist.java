@@ -58,6 +58,13 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         });
          */
+        /**
+         * public void onClick(View v) {
+         Intent intent = new Intent(activity, SelectNextSongs.class);
+         intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
+         startActivity(intent);
+         }
+         */
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
