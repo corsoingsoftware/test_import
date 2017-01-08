@@ -16,8 +16,11 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -27,6 +30,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private RecyclerView rVSelectSong;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
+    private DataProvider dataProvider;
+    private ArrayList<ParcelableSong> playlistSongs;
 
 
     @Override
@@ -75,9 +80,31 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
 
 
+        try {
+            Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
+            playlistSongs = boundle.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
+        }
+        catch(NullPointerException e){}
 
-        Bundle lista = getIntent().getExtras();
-        ArrayList<ParcelableSong> aLista = lista.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
+        dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
+        List<Song> songInDb = dataProvider.getSongs();//ritorna tutte le canzoni nel db
+
+        for ( ParcelableSong i : playlistSongs) { //ogni canzone nella playlist
+            if(songInDb.contains(i)) { //se presente nel db...
+                songInDb.remove(i); //la rimuovo perchè non deve essere visualizzata
+            }
+        }
+        //converto songInDb da Lista a ArrayList<ParcelableSong>
+        ArrayList<ParcelableSong> songForView = new ArrayList<>();
+        for (Song i: songInDb
+             ) {
+            songForView.add((ParcelableSong)songInDb.get(songInDb.indexOf(i)));
+        }
+            //songForView ora contiene tutte le canzoni presenti nel database meno quelle che sono gia presenti nella playlist
+
+
+
+
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +119,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
             }
         });
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,aLista);
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForView);
         rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
     }
 
