@@ -25,6 +25,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
         entrySong.getSongPlayer(this).write(entrySong);
     }
 
+    public byte[] getSong(Song entrySong) {
+        return entrySong.getSongPlayer(this).getSong(entrySong);
+    }
+
 
     @Override
     public SongPlayer getMidiSongPlayer() {

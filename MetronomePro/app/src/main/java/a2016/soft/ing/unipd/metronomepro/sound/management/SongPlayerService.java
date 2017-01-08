@@ -61,9 +61,10 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in stop");
     }
 
-    public byte[] getSong(Song s){
+    public byte[] getSong(Song entrySong) {
         Log.v(LOG_TAG,"in getSong");
-        return atsp.getSong(s);
+        //return atsp.getSong(s);
+        return mspm.getSong(entrySong);
     }
 
     public PlayState getState(){
