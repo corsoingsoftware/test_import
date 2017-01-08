@@ -1,12 +1,10 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
@@ -24,12 +21,9 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
-import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -42,7 +36,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
-    SongPlayerServiceCaller spsc;
+    private DataProvider dataProvider;
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -95,8 +89,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
+                dataProvider= DataProviderBuilder.getDefaultDataProvider(this);
+                List<Song> songs=dataProvider.getSongs(null,playlist);
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -133,7 +127,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
-                    modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+                    ParcelableTimeSlicesSong ps=(ParcelableTimeSlicesSong)data.getParcelableExtra(SONG_TO_EDIT);
+                    modifyPlaylistAdapter.addSong(ps);
+                    dataProvider.save(ps);
                     break;
             }
         }

@@ -1,16 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.app.AppCompatActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.SQLiteDataProvider;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 

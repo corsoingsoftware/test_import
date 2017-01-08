@@ -50,19 +50,24 @@ public class FileDataProvier implements DataProvider {
             }
             File[] files = directory.listFiles();
             ArrayList<Song> arrayToReturn = new ArrayList<>();
-
-            for (int i = 0; i < files.length; i++) {
-                FileInputStream fileInputStream = new FileInputStream(searchName);
-                Song song = EntitiesBuilder.getSong();
-                byte[] byteToConvert = new byte[fileInputStream.available()];
-                fileInputStream.read(byteToConvert);
-                song.decode(byteToConvert);
-                arrayToReturn.add(song);
-            }
+            if(files!=null)
+                for (int i = 0; i < files.length; i++) {
+                    FileInputStream fileInputStream = new FileInputStream(files[i].getPath()+files[i].getName());
+                    Song song = EntitiesBuilder.getSong(files[i].getName());
+                    byte[] byteToConvert = new byte[fileInputStream.available()];
+                    fileInputStream.read(byteToConvert);
+                    song.decode(byteToConvert);
+                    arrayToReturn.add(song);
+                }
             return arrayToReturn;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public List<Song> getSongs(String searchName) {
         return null;
     }
 
@@ -85,9 +90,10 @@ public class FileDataProvier implements DataProvider {
     public void save(Song song) {
 
 //        File myDirectory = context.getDir(path, context.MODE_PRIVATE);
-        File fileToSave = new File(song_position + "_" + song.getName());
+        String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist/";
+        File fileToSave = new File(path+song_position + "_" + song.getName());
         try {
-            String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist";
+            fileToSave.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
             outputStream.write(song.encode());
             outputStream.close();
@@ -96,6 +102,21 @@ public class FileDataProvier implements DataProvider {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int delete(Song song) {
+        return 0;
+    }
+
+    @Override
+    public int save(Playlist playlist) {
+        return 0;
+    }
+
+    @Override
+    public int delete(Playlist playlist) {
+        return 0;
     }
 
     @Override
