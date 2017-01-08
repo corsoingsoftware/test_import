@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
+import a2016.soft.ing.unipd.metronomepro.SelectNextSongs;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 import android.content.ComponentName;
@@ -33,6 +34,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
     public SongPlayerServiceCaller(Context c, final SongPlayerServiceCallerCallback callback) {
         pBound = false;
         activityContext = c;
+
         pConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -114,6 +116,20 @@ public class SongPlayerServiceCaller implements SongPlayer {
         Log.v(LOG_TAG,"in load");
         pService.load(song);
 
+    }
+
+    public void write(Song[] songs) {
+        Log.v(LOG_TAG,"in write");
+        pService.write(songs);
+    }
+
+    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
+        Log.v(LOG_TAG,"in startAudioTrackSongPlayer");
+        pService.startAudioTrackSongPlayer(callback);
+    }
+
+    public SongPlayerService getService(){
+        return pService;
     }
 
 }

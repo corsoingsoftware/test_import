@@ -78,7 +78,13 @@ public interface SongPlayer {
 
     /**
      * State of current song
-     * @return PLaystate that describes state
+     * @return Playstate that describes state
      */
     PlayState getState();
+
+    /**
+     * Write the songs in the AudioTrack's buffer
+     * @param songs
+     */
+    void write(Song[] songs);
 }
