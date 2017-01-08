@@ -7,10 +7,4 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 public interface Streamable {
     byte[] encode();
     void decode(byte[] toDecode);
-
-    /**
-     * It provides the size of byte array to decode or the size of byte array to decode
-     * @return the stream size in int
-     */
-    int getStreamedSize();
 }

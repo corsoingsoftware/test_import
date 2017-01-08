@@ -45,6 +45,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
+        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
         //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
         if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
@@ -72,14 +74,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
          startActivity(intent);
          }
          */
-
-
-
-
-
-
-
-
+        /**
         try {
             Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
             playlistSongs = boundle.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
@@ -96,14 +91,14 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         //converto songInDb da Lista a ArrayList<ParcelableSong>
         ArrayList<ParcelableSong> songForView = new ArrayList<>();
-        for (Song i: songInDb) {
+        for (Song i: songInDb
+             ) {
             songForView.add((ParcelableSong)songInDb.get(songInDb.indexOf(i)));
         }
             //songForView ora contiene tutte le canzoni presenti nel database meno quelle che sono gia presenti nella playlist
 
 
-
-
+        */
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -111,15 +106,13 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             public void onClick(View view) {
                 //for test
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
+                       .setAction("Action", null).show();
+                Intent intent = new Intent(activity,PlaylistView.class);
                 intent.putParcelableArrayListExtra("songs_to_add",selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivityForResult(intent,10);
-
+                startActivity(intent);
             }
         });
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForView);
-        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -131,22 +124,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    /**
-     * @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if(resultCode==RESULT_OK){
-    switch (requestCode){
-    case START_EDIT_NEW_SONG:
-    ParcelableTimeSlicesSong ps=(ParcelableTimeSlicesSong)data.getParcelableExtra(SONG_TO_EDIT);
-    modifyPlaylistAdapter.addSong(ps);
-    dataProvider.save(ps);
-    break;
-    }
-    }
-    }
-     * @return
-     */
 
     //classe di test, al posto di questa ci sarà il database
     public ArrayList<ParcelableSong> provaDiTest(){

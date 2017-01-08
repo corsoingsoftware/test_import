@@ -13,21 +13,4 @@ public interface Playlist extends List<Song> {
      */
     String getName();
 
-    /**
-     * Change name of playlist
-     */
-    void setName(String name);
-
-    /**
-     * Internal unique Id of playlist
-     * -1 = new playlist
-     * @return the id as integer
-     */
-    int getId();
-
-    /**
-     * set the id of playlist
-     * @param newId the new value of it
-     */
-    void setId(int newId);
 }

@@ -16,24 +16,8 @@ import java.util.ListIterator;
 
 public class ParcelablePlaylist implements Playlist, Parcelable {
 
+
     protected ParcelablePlaylist(Parcel in) {
-        this(in.readString());
-        while(){
-            int a=in.readInt();
-            if(a==0) {
-                ParcelableTimeSlicesSong ps = in.readParcelable(ParcelableTimeSlicesSong.class.getClassLoader());
-                songList.add(ps);
-            }
-        }
-        ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
-        ArrayList<String> names=(ArrayList<String>) in.readSerializable();
-        int indexToInsert = 0;
-        for (byte[] bt : arrayByte) {
-            Song s = EntitiesBuilder.getSong(names.get(indexToInsert));
-            s.decode(bt);
-            songList.add(indexToInsert, s);
-            indexToInsert++;
-        }
     }
 
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {
@@ -52,6 +36,7 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     private ArrayList<Song> songList;
 
     public ParcelablePlaylist(String name) {
+
         this.name = name;
         songList = new ArrayList<Song>();
     }
@@ -63,12 +48,7 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        Parcelable[] p=new Parcelable[songList.size()];
-        p=songList.toArray(p);
-        dest.writeString(getName());
-        dest.writeParcelableArray(p, flags);
-        //prendo la song e la metto in array list convertita in array di byte
-        //passo al parser aray di byte quando li riprendo li devo riconvertire in song
+
     }
 
     @Override
