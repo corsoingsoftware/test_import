@@ -96,8 +96,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         //converto songInDb da Lista a ArrayList<ParcelableSong>
         ArrayList<ParcelableSong> songForView = new ArrayList<>();
-        for (Song i: songInDb
-             ) {
+        for (Song i: songInDb) {
             songForView.add((ParcelableSong)songInDb.get(songInDb.indexOf(i)));
         }
             //songForView ora contiene tutte le canzoni presenti nel database meno quelle che sono gia presenti nella playlist
