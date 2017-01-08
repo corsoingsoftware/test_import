@@ -68,6 +68,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
     }
 
     @Override
+    public void play(Song entrySong) {
+
+    }
+
     public void play() {
         at.play();
     }
@@ -239,10 +243,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     /**
      * Riceve in input un array di Songs. Le cerca nell'HashMap e, se presenti, le scrive nel buffer di AudioTrack.
-     * @param songs array contenente le canzoni
+     * @param entrySong array contenente le canzoni
      * @throws Exception
      */
-    public void write(final Song[] songs) {
+    public void write(final Song entrySong) {
 
 
         Runnable toDo= new Runnable() {
@@ -258,11 +262,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 goThread = false;
                 stop = false;
 
-                for (int i = 0; i < songs.length; i++) {
+                //for (int i = 0; i < songs.length; i++) {
 
-                    if (hashMap.containsKey(songs[i].getName())) {
+                if (hashMap.containsKey(entrySong.getName())) {
 
-                        arraySong = (byte[])hashMap.get(songs[i].getName());
+                    arraySong = (byte[]) hashMap.get(entrySong.getName());
                         int indexWrite = 0;
 
                         while (indexWrite < arraySong.length) {
@@ -273,7 +277,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
                                 return;
                         }
                     }
-                }
+                //}
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;

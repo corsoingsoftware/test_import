@@ -16,19 +16,6 @@ import java.util.ListIterator;
 
 public class ParcelablePlaylist implements Playlist, Parcelable {
 
-    protected ParcelablePlaylist(Parcel in) {
-        this(in.readString());
-        ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
-        ArrayList<String> names=(ArrayList<String>) in.readSerializable();
-        int indexToInsert = 0;
-        for (byte[] bt : arrayByte) {
-            Song s = EntitiesBuilder.getSong(names.get(indexToInsert));
-            s.decode(bt);
-            songList.add(indexToInsert, s);
-            indexToInsert++;
-        }
-    }
-
     public static final Creator<ParcelablePlaylist> CREATOR = new Creator<ParcelablePlaylist>() {
         @Override
         public ParcelablePlaylist createFromParcel(Parcel in) {
@@ -40,9 +27,21 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
             return new ParcelablePlaylist[size];
         }
     };
-
     private String name;
     private ArrayList<Song> songList;
+
+    protected ParcelablePlaylist(Parcel in) {
+        this(in.readString());
+        ArrayList<byte[]> arrayByte = (ArrayList<byte[]>) in.readSerializable();
+        ArrayList<String> names = (ArrayList<String>) in.readSerializable();
+        int indexToInsert = 0;
+        for (byte[] bt : arrayByte) {
+            Song s = EntitiesBuilder.getSong(names.get(indexToInsert));
+            ((TimeSlicesSong) s).decode(bt);
+            songList.add(indexToInsert, s);
+            indexToInsert++;
+        }
+    }
 
     public ParcelablePlaylist(String name) {
         this.name = name;
@@ -59,7 +58,7 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
         ArrayList<byte[]> arrayByte = new ArrayList<byte[]>();
         ArrayList<String> names= new ArrayList<>(size());
         for (Song s : songList) {
-            arrayByte.add(s.encode());
+            arrayByte.add(((TimeSlicesSong) s).encode());
             names.add(s.getName());
         }
         dest.writeString(getName());
@@ -72,6 +71,21 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(int newId) {
+
     }
 
     @Override

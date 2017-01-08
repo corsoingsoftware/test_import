@@ -12,13 +12,19 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
     /**
      * Example of method to manage a generic song
      */
-    public void play(Song song){
-        song.getSongPlayer(this).play();
+    public void play(Song entrySong) {
+        entrySong.getSongPlayer(this).play(entrySong);
     }
 
-    public void load(Song song) {
-        song.getSongPlayer(this).load(song);
+    public void load(Song entrySong) {
+        entrySong.getSongPlayer(this).load(entrySong);
     }
+
+    public void write(Song entrySong) {
+
+        entrySong.getSongPlayer(this).write(entrySong);
+    }
+
 
     @Override
     public SongPlayer getMidiSongPlayer() {

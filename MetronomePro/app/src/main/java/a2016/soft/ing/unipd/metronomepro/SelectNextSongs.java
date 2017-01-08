@@ -80,8 +80,12 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     //do whatever you want to do after successful binding
 
                     Song[] songs = selectSongsAdapter.getSongs();
-                    spsc.write(songs);
-                    spsc.play();
+
+                    for (Song entrySong : songs) {
+
+                        spsc.write(entrySong);
+                        spsc.play(entrySong);
+                    }
                 }
 
                 //Blocco tutto
