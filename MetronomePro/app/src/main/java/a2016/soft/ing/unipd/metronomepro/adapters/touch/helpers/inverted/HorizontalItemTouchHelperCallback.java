@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 
 /**
- * Created by feder on 12/12/2016.
+ * Created by Federico Favotto on 12/12/2016.
  */
 
 public class HorizontalItemTouchHelperCallback extends ItemTouchHelper.Callback

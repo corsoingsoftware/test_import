@@ -9,7 +9,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperA
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 
 /**
- * Created by feder on 12/12/2016.
+ * Created by Federico Favotto on 12/12/2016.
  */
 
 public class HorizontalDragTouchHelperCallback extends ItemTouchHelper.Callback

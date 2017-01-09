@@ -5,7 +5,7 @@ import android.media.AudioFormat;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
- * Created by feder on 08/12/2016.
+ * Created by Federico Favotto on 08/12/2016.
  */
 
 

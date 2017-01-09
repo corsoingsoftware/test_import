@@ -13,7 +13,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 /**
- * Created by feder on 09/12/2016.
+ * Created by Federico Favotto on 09/12/2016.
  */
 
 public class ParcelableTimeSlicesSong implements TimeSlicesSong {

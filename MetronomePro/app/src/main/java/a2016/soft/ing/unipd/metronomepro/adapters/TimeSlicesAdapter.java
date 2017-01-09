@@ -29,7 +29,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 
 /**
- * Created by feder on 12/12/2016.
+ * Created by Federico Favotto on 12/12/2016.
  */
 
 public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.ViewHolder> implements ItemTouchHelperAdapter {
