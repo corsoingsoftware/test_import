@@ -67,6 +67,11 @@ public class FileDataProvier implements DataProvider {
     }
 
     @Override
+    public List<Song> getSongs(String searchName) {
+        return null;
+    }
+
+    @Override
     public List<Playlist> getPlaylists(String searchName) {
 //        ArrayList<Song> songs = new ArrayList<Song>();
 //        try {
@@ -97,6 +102,21 @@ public class FileDataProvier implements DataProvider {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int delete(Song song) {
+        return 0;
+    }
+
+    @Override
+    public int save(Playlist playlist) {
+        return 0;
+    }
+
+    @Override
+    public int delete(Playlist playlist) {
+        return 0;
     }
 
     @Override
