@@ -24,6 +24,7 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
@@ -32,6 +33,7 @@ public class PlaylistView extends AppCompatActivity {
     private RecyclerView rVPlaylistItem;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectPlaylistAdapter playListAdapter;
+    private ArrayList<ParcelableSong> playlistSongs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +47,21 @@ public class PlaylistView extends AppCompatActivity {
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
+
+        Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
+        playlistSongs = boundle.getParcelableArrayList("songs_to_add");//nome della lista che lui chiama dalla sua classe
+
+        playListAdapter= new SelectPlaylistAdapter(this,playlistSongs);
         rVPlaylistItem.setAdapter(playListAdapter);
 
         if(savedInstanceState != null && savedInstanceState.containsKey("adapter")){
-            ArrayList<ParcelablePlaylist> savedPlaylist = savedInstanceState.getParcelableArrayList("adapter");
+            ArrayList<ParcelableSong> savedPlaylist = savedInstanceState.getParcelableArrayList("adapter");
             playListAdapter = new SelectPlaylistAdapter(this,savedPlaylist);
             rVPlaylistItem.setAdapter(playListAdapter);
         }
+
+
+
        /** else{
            qui dovrebbe "ricaricare" la lista e l'adapter direttamente dal database e non piu dal savedinstance state
         }*/

@@ -16,6 +16,7 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
@@ -25,9 +26,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<ParcelablePlaylist> arrayPlaylist= new ArrayList<>();
+    private ArrayList<ParcelableSong> arrayPlaylist= new ArrayList<>();
     private int selectPlaylist;
-    private ParcelablePlaylist PlaylistToEdit; //eventualmente..
+    private ParcelableSong PlaylistToEdit; //eventualmente..
 
 
     //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
@@ -40,7 +41,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         selectPlaylist++;
     }*/
    //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
-   public SelectPlaylistAdapter(Context context, ArrayList<ParcelablePlaylist> arrayPlaylist){
+   public SelectPlaylistAdapter(Context context, ArrayList<ParcelableSong> arrayPlaylist){
        this.context = context;
        this.arrayPlaylist=arrayPlaylist;
        selectPlaylist=0;
@@ -49,7 +50,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
-    public void addPlaylist(ParcelablePlaylist playlist){
+    public void addPlaylist(ParcelableSong playlist){
         arrayPlaylist.add(selectPlaylist,playlist);
         selectPlaylist++;
     }
@@ -74,7 +75,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        ParcelablePlaylist p = arrayPlaylist.get(position);
+        ParcelableSong p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
 
     }

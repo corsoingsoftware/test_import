@@ -109,7 +109,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                        .setAction("Action", null).show();
                 Intent intent = new Intent(activity,PlaylistView.class);
                 intent.putParcelableArrayListExtra("songs_to_add",selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivity(intent);
+                startActivityForResult(intent,10);
             }
         });
 
