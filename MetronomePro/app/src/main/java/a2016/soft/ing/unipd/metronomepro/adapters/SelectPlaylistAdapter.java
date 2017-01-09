@@ -26,7 +26,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<ParcelableSong> arrayPlaylist= new ArrayList<>();
+    private ArrayList<ParcelableSong> arrayPlaylist;
     private int selectPlaylist;
     private ParcelableSong PlaylistToEdit; //eventualmente..
 

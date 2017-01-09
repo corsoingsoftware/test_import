@@ -51,6 +51,7 @@ public class PlaylistView extends AppCompatActivity {
         Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
         playlistSongs = boundle.getParcelableArrayList("songs_to_add");//nome della lista che lui chiama dalla sua classe
 
+
         playListAdapter= new SelectPlaylistAdapter(this,playlistSongs);
         rVPlaylistItem.setAdapter(playListAdapter);
 

@@ -108,7 +108,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                        .setAction("Action", null).show();
                 Intent intent = new Intent(activity,PlaylistView.class);
-                intent.putParcelableArrayListExtra("songs_to_add",selectSongForPlaylistAdapter.getSelectedSongs());
+                intent.putParcelableArrayListExtra("songs_to_add",(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
                 startActivityForResult(intent,10);
             }
         });
