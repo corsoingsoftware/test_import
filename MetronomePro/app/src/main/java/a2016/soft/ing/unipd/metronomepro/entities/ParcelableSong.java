@@ -35,6 +35,11 @@ public class ParcelableSong implements Song, Parcelable {
             return new ParcelableSong[size];
         }
     };
+
+    protected long id;
+    protected String name;
+    protected ArrayList<TimeSlice> timeSliceList;
+
     /**
      * Unparcel the song
      *
@@ -45,7 +50,7 @@ public class ParcelableSong implements Song, Parcelable {
 
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
-
+        this.id=in.readLong();
         timeSliceList = new ArrayList<>(Math.min(support.size(), MIN_ARRAY_LIST_SIZE));
 
         if(support!=null)
@@ -60,8 +65,16 @@ public class ParcelableSong implements Song, Parcelable {
         this.name = name;
     }
 
-    protected String name;
-    protected ArrayList<TimeSlice> timeSliceList;
+    @Override
+    public long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id=id;
+    }
+
 
     public ParcelableSong() {
         this("");
@@ -125,6 +138,7 @@ public class ParcelableSong implements Song, Parcelable {
 
         dest.writeSerializable(timeSlicesByte);
         dest.writeString(name);
+        dest.writeLong(id);
     }
 
     @Override

@@ -11,4 +11,7 @@ import java.util.List;
 public interface Song extends List<TimeSlice>, Streamable {
 
     String getName();
+    void setName(String name);
+    long getId();
+    void setId(long id);
 }
