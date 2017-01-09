@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,6 +25,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListe
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 
 /**
@@ -35,14 +35,12 @@ import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private static final int DEF_COLOR = 0xFFFFFFFF;
-
-
-    private Context context;
     /**
      * It must be final cause can't change
      */
     private final OnStartDragListener dragListener;
     private final int[] timeSliceBackgroundColors;
+    private Context context;
     /**
      * The current selected timeslice
      */
@@ -50,7 +48,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     /**
      * the song to edit
      */
-    private Song songToEdit;
+    private TimeSlicesSong songToEdit;
     private ArrayList<TimeSliceState> songToEditState;
     /**
      * max width from resources
@@ -95,7 +93,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     public TimeSlicesAdapter(Context context, OnStartDragListener dragListener, Song song) {
         this.dragListener = dragListener;
         this.context = context;
-        this.songToEdit = song;
+        this.songToEdit = (TimeSlicesSong) song;
         this.actualRevision = 0;
         this.onTimeSliceSelectedListeners = new ArrayList<>();
         Resources res = context.getResources();
@@ -299,7 +297,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
      * @param songToEdit
      */
     public void setSongToEdit(Song songToEdit) {
-        this.songToEdit = songToEdit;
+        this.songToEdit = (TimeSlicesSong) songToEdit;
         timeSliceSelected=null;
         calculateAllWidthsAndColors();
         //I must notify the collection changed

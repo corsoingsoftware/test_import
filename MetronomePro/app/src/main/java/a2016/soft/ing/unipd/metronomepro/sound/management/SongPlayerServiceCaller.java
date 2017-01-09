@@ -1,15 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
-import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
-import a2016.soft.ing.unipd.metronomepro.SelectNextSongs;
-import a2016.soft.ing.unipd.metronomepro.entities.Song;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
+
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
 /**
  * Created by giuli on 09/12/2016.
  */
@@ -21,10 +19,6 @@ public class SongPlayerServiceCaller implements SongPlayer {
     private boolean pBound; //serve a verificare la connessione al servizio
     private ServiceConnection pConnection;
     private Context activityContext;
-
-    public interface SongPlayerServiceCallerCallback {
-        void serviceConnected();
-    }
 
     /*costruttore gli passa un metronomeActivity (provvisorio)
     per federico: avevi detto che il fatto di passare al costruttore un oggetto di tipo metronomeActivity
@@ -82,9 +76,9 @@ public class SongPlayerServiceCaller implements SongPlayer {
     }
 
     @Override
-    public void play(){
+    public void play(Song entrySong) {
         Log.v(LOG_TAG,"in play");
-        pService.play();
+        pService.play(entrySong);
     }
 
     @Override
@@ -118,9 +112,9 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     }
 
-    public void write(Song[] songs) {
+    public void write(Song entrySong) {
         Log.v(LOG_TAG,"in write");
-        pService.write(songs);
+        pService.write(entrySong);
     }
 
     public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
@@ -130,6 +124,10 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     public SongPlayerService getService(){
         return pService;
+    }
+
+    public interface SongPlayerServiceCallerCallback {
+        void serviceConnected();
     }
 
 }

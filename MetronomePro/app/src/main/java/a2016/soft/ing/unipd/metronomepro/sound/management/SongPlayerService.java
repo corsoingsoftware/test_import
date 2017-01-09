@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -18,11 +17,14 @@ public class SongPlayerService extends Service {
     private static final String LOG_TAG = "SongPlayerService";
     private IBinder mBinder = new MyBinder();
     private SongPlayer atsp;
+    private MultipleSongPlayerManager mspm;
 
     @Override
     public void onCreate(){
         Log.v(LOG_TAG,"in onCreate");
         super.onCreate();
+
+        mspm = new MultipleSongPlayerManager();
     }
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -43,13 +45,14 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in initialize()");
     }
 
-    public void play(){
-        atsp.play();
+    public void play(Song entrySong) {
+        //atsp.play();
+        mspm.play(entrySong);
         Log.v(LOG_TAG,"in play");
     }
 
     public void pause(){
-        atsp.pause();
+        //atsp.pause();
         Log.v(LOG_TAG,"in pause");
     }
 
@@ -58,9 +61,10 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in stop");
     }
 
-    public byte[] getSong(Song s){
+    public byte[] getSong(Song entrySong) {
         Log.v(LOG_TAG,"in getSong");
-        return atsp.getSong(s);
+        //return atsp.getSong(s);
+        return mspm.getSong(entrySong);
     }
 
     public PlayState getState(){
@@ -68,23 +72,25 @@ public class SongPlayerService extends Service {
         return atsp.getState();
     }
 
-    public void load(Song song){
-        atsp.load(song);
+    public void load(Song entrySong) {
+        //atsp.load(song);
+        mspm.load(entrySong);
         Log.v(LOG_TAG,"in load");
 
     }
 
-    public void write(Song[] songs) {
-        atsp.write(songs);
+    public void write(Song entrySong) {
+        //atsp.write(songs);
+        mspm.write(entrySong);
+    }
+
+    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
+        this.atsp = new AudioTrackSongPlayer(callback);
     }
 
     public class MyBinder extends Binder {
         SongPlayerService getService() {
             return SongPlayerService.this;
         }
-    }
-
-    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback){
-        this.atsp = new AudioTrackSongPlayer(callback);
     }
 }
