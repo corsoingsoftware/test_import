@@ -13,6 +13,7 @@ import java.util.List;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Portatile Lenovo on 18/12/2016.
@@ -56,13 +57,18 @@ public class FileDataProvier implements DataProvider {
                     Song song = EntitiesBuilder.getSong(files[i].getName());
                     byte[] byteToConvert = new byte[fileInputStream.available()];
                     fileInputStream.read(byteToConvert);
-                    song.decode(byteToConvert);
+                    ((TimeSlicesSong) song).decode(byteToConvert);
                     arrayToReturn.add(song);
                 }
             return arrayToReturn;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public List<Song> getSongs(String searchName) {
         return null;
     }
 
@@ -82,7 +88,7 @@ public class FileDataProvier implements DataProvider {
     }
 
     @Override
-    public void save(Song song) {
+    public void save(TimeSlicesSong song) {
 
 //        File myDirectory = context.getDir(path, context.MODE_PRIVATE);
         String path = Environment.getExternalStorageDirectory().toString() + "/def-playlist/";
@@ -97,6 +103,21 @@ public class FileDataProvier implements DataProvider {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int delete(Song song) {
+        return 0;
+    }
+
+    @Override
+    public int save(Playlist playlist) {
+        return 0;
+    }
+
+    @Override
+    public int delete(Playlist playlist) {
+        return 0;
     }
 
     @Override

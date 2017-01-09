@@ -1,7 +1,5 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
-import android.media.AudioFormat;
-
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
@@ -16,7 +14,7 @@ public interface SongPlayer {
     /**
      * Start the current song
      */
-    void play();
+    void play(Song entrySong);
 
     /**
      * Initialize the player with all parameter
@@ -78,13 +76,13 @@ public interface SongPlayer {
 
     /**
      * State of current song
-     * @return PLaystate that describes state
+     * @return Playstate that describes state
      */
     PlayState getState();
 
     /**
      * Write the songs in the AudioTrack's buffer
-     * @param songs
+     * @param entrySong
      */
-    void write(Song[] songs);
+    void write(Song entrySong);
 }

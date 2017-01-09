@@ -1,10 +1,8 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +13,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
@@ -23,7 +20,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.listeners.OnTimeSliceSelectedL
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.HorizontalDragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
@@ -80,7 +77,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
             public void onClick(View view) {
                 Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
                 Intent returnIntent = new Intent();
-                ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
+                ParcelableTimeSlicesSong ps=(ParcelableTimeSlicesSong) timeSlicesAdapter.getSongToEdit();
                 ps.setName(songNameEditText.getText().toString());
                 returnIntent.putExtra(SONG_TO_EDIT, ps);
                 setResult(RESULT_OK,returnIntent);

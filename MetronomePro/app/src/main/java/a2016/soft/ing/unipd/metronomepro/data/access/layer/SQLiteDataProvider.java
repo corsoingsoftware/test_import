@@ -50,7 +50,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
      * dentro alle stringhe metto il codie sql
      */
     public void onCreate(SQLiteDatabase db) {
-     /*   String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
+        /*String q = "CREATE TABLE " + DataProviderConstants.TBL_TRACK +
                 " (" +
                 DataProviderConstants.FIELD_TRACK_NAME + " TEXT PRIMARY KEY," +
                 DataProviderConstants.FIELD_TRACK_SONG + " BLOB);";
