@@ -18,6 +18,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 public class ParcelableTimeSlicesSong implements TimeSlicesSong {
     private static final int MIN_ARRAY_LIST_SIZE=10;
+    public static final int NO_ID=-1;
 
     public static final Creator<ParcelableTimeSlicesSong> CREATOR = new Creator<ParcelableTimeSlicesSong>() {
         /**
@@ -35,6 +36,11 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
             return new ParcelableTimeSlicesSong[size];
         }
     };
+
+    protected int id;
+    protected String name;
+    protected ArrayList<TimeSlice> timeSliceList;
+
     /**
      * Unparcel the song
      *
@@ -45,7 +51,7 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
-
+        this.id=in.readInt();
         timeSliceList = new ArrayList<>(Math.min(support.size(), MIN_ARRAY_LIST_SIZE));
 
         if(support!=null)
@@ -62,12 +68,12 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
     public void setId(int newId) {
-
+        id=newId;
     }
 
     @Override
@@ -75,16 +81,19 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
         return manager.getTimeSlicesSongPlayer();
     }
 
-    protected String name;
-    protected ArrayList<TimeSlice> timeSliceList;
 
     public ParcelableTimeSlicesSong() {
         this("");
     }
 
     ParcelableTimeSlicesSong(String name) {
+        this(name,NO_ID);
+    }
+
+    ParcelableTimeSlicesSong(String name, int id) {
         this.name = name;
         timeSliceList = new ArrayList<TimeSlice>();
+        this.id=id;
     }
 
 
@@ -140,6 +149,7 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
         dest.writeSerializable(timeSlicesByte);
         dest.writeString(name);
+        dest.writeInt(id);
     }
 
     @Override
