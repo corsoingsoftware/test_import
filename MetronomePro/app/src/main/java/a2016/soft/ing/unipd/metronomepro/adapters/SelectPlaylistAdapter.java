@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
@@ -24,9 +26,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
+    private ArrayList<ParcelableSong> arrayPlaylist;
     private int selectPlaylist;
-    private Playlist PlaylistToEdit; //eventualmente..
+    private ParcelableSong PlaylistToEdit; //eventualmente..
 
 
     //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
@@ -39,7 +41,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         selectPlaylist++;
     }*/
    //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
-   public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist){
+   public SelectPlaylistAdapter(Context context, ArrayList<ParcelableSong> arrayPlaylist){
        this.context = context;
        this.arrayPlaylist=arrayPlaylist;
        selectPlaylist=0;
@@ -48,7 +50,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
-    public void addPlaylist(Playlist playlist){
+    public void addPlaylist(ParcelableSong playlist){
         arrayPlaylist.add(selectPlaylist,playlist);
         selectPlaylist++;
     }
@@ -56,6 +58,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void remuvePlaylist(int position){
         arrayPlaylist.remove(position);
         selectPlaylist--;
+    }
+    public ArrayList getArrayPlaylist(){
+        return arrayPlaylist;
     }
 
     @Override
@@ -70,7 +75,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Playlist p = arrayPlaylist.get(position);
+        ParcelableSong p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
 
     }
