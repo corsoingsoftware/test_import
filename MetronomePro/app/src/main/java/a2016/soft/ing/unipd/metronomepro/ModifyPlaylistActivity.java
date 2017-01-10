@@ -127,7 +127,6 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                     ex.printStackTrace();
                 }
             }
-            //fine codice toccato da giulio
         }
 
 
@@ -158,8 +157,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
-                    //cambiato da giulio
-                    playlist.addAll(data.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD));
+                    modifyPlaylistAdapter.addAllSongs(data.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD));
                     break;
             }
         }

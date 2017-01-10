@@ -36,6 +36,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private ArrayList<ParcelableSong> playlistSongs;
     ArrayList<ParcelableSong> savedSongs = new ArrayList<>();
     ArrayList<ParcelableSong> selectedSongs;
+    ArrayList<ParcelableSong> songForAdapter = provaDiTest();
 
 
 
@@ -79,6 +80,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         });
          */
+
         if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
             selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
@@ -90,13 +92,23 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             if(intent!=null) {
                 try {
                     savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
+                    for (int i = 0;i<songForAdapter.size();i++) {
+                        for (int j = 0;j<savedSongs.size();j++) {
+                            if(savedSongs.get(j).getName().compareTo(songForAdapter.get(i).getName())==0){
+                                songForAdapter.remove(i);
+                            }
+                        }
+                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
+
         }
 
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs);
+
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
         rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
         //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
@@ -185,27 +197,27 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     public ArrayList<ParcelableSong> provaDiTest(){
         ArrayList<ParcelableSong> array = new ArrayList<>();
 
-        Song s0 = EntitiesBuilder.getSong("prova di canzone 0");
-        Song s1 = EntitiesBuilder.getSong("prova di canzone 1");
-        Song s2 = EntitiesBuilder.getSong("prova di canzone 2");
-        Song s3 = EntitiesBuilder.getSong("prova di canzone 3");
-        Song s4 = EntitiesBuilder.getSong("prova di canzone 4");
-        Song s5 = EntitiesBuilder.getSong("prova di canzone 5");
-        Song s6 = EntitiesBuilder.getSong("prova di canzone 6");
-        Song s7 = EntitiesBuilder.getSong("prova di canzone 7");
-        Song s8 = EntitiesBuilder.getSong("prova di canzone 8");
-        Song s9 = EntitiesBuilder.getSong("prova di canzone 9");
-        Song s10 = EntitiesBuilder.getSong("prova di canzone 10");
-        Song s11 = EntitiesBuilder.getSong("prova di canzone 11");
-        Song s12 = EntitiesBuilder.getSong("prova di canzone 12");
-        Song s13 = EntitiesBuilder.getSong("prova di canzone 13");
-        Song s14 = EntitiesBuilder.getSong("prova di canzone 14");
-        Song s15 = EntitiesBuilder.getSong("prova di canzone 15");
-        Song s16 = EntitiesBuilder.getSong("prova di canzone 16");
-        Song s17 = EntitiesBuilder.getSong("prova di canzone 17");
-        Song s18 = EntitiesBuilder.getSong("prova di canzone 18");
-        Song s19 = EntitiesBuilder.getSong("prova di canzone 19");
-        Song s20 = EntitiesBuilder.getSong("prova di canzone 20");
+        Song s0 = EntitiesBuilder.getSong("song 0");
+        Song s1 = EntitiesBuilder.getSong("song 1");
+        Song s2 = EntitiesBuilder.getSong("song 2");
+        Song s3 = EntitiesBuilder.getSong("song 3");
+        Song s4 = EntitiesBuilder.getSong("song 4");
+        Song s5 = EntitiesBuilder.getSong("song 5");
+        Song s6 = EntitiesBuilder.getSong("song 6");
+        Song s7 = EntitiesBuilder.getSong("song 7");
+        Song s8 = EntitiesBuilder.getSong("song 8");
+        Song s9 = EntitiesBuilder.getSong("song 9");
+        Song s10 = EntitiesBuilder.getSong("song 10");
+        Song s11 = EntitiesBuilder.getSong("song 11");
+        Song s12 = EntitiesBuilder.getSong("song 12");
+        Song s13 = EntitiesBuilder.getSong("song 13");
+        Song s14 = EntitiesBuilder.getSong("song 14");
+        Song s15 = EntitiesBuilder.getSong("song 15");
+        Song s16 = EntitiesBuilder.getSong("song 16");
+        Song s17 = EntitiesBuilder.getSong("song 17");
+        Song s18 = EntitiesBuilder.getSong("song 18");
+        Song s19 = EntitiesBuilder.getSong("song 19");
+        Song s20 = EntitiesBuilder.getSong("song 20");
 
         array.add((ParcelableSong) s0);
         array.add((ParcelableSong) s1);
