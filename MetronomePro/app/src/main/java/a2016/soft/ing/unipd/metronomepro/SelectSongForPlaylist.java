@@ -22,8 +22,10 @@ import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
 public class SelectSongForPlaylist extends AppCompatActivity {
 
@@ -34,10 +36,11 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private ArrayList<ParcelableSong> playlistSongs;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_song_for_playlist2);
+        setContentView(R.layout.activity_select_song_for_playlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -107,12 +110,22 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 //for test
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent(activity,PlaylistView.class);
-                intent.putParcelableArrayListExtra("songs_to_add",(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivityForResult(intent,10);
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
+                setResult(RESULT_OK,intent);
+                /**
+                 * Intent returnIntent = new Intent();
+                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
+                 returnIntent.putExtra(SONG_TO_EDIT, ps);
+                 setResult(RESULT_OK,returnIntent);
+                 finish();
+                 */
             }
         });
-
+        /**
+        ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
+        playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
+         */
     }
 
     protected void onSaveInstanceState(Bundle outState) {
