@@ -34,6 +34,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
     private DataProvider dataProvider;
     private ArrayList<ParcelableSong> playlistSongs;
+    ArrayList<ParcelableSong> savedSongs = new ArrayList<>();
+    ArrayList<ParcelableSong> selectedSongs;
 
 
 
@@ -48,16 +50,57 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,provaDiTest());
-        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
-
-        //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
-        if(savedInstanceState !=null && savedInstanceState.containsKey("song for select")){
-            ArrayList<ParcelableSong> savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-            ArrayList<ParcelableSong> selectedSongs = savedInstanceState.getParcelableArrayList("song selected");
+        /**
+         * if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
+         songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
+         }else{
+         Intent intent=getIntent();
+         try {
+         songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
+         } catch (Exception ex){
+         ex.printStackTrace();
+         }
+         }
+         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
+         rVTimeSlices.setAdapter(timeSlicesAdapter);
+         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
+         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
+         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
+         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
+         fab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
+        Intent returnIntent = new Intent();
+        ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
+        returnIntent.putExtra(SONG_TO_EDIT, ps);
+        setResult(RESULT_OK,returnIntent);
+        finish();
+        }
+        });
+         */
+        if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
+            savedSongs = savedInstanceState.getParcelableArrayList("song for select");
+            selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
             selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
         }
+        else{
+            Intent intent=getIntent();
+            if(intent!=null) {
+                try {
+                    savedSongs = intent.getParcelableArrayListExtra(SONG_TO_ADD);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs);
+        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
+        //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
+
         /**
          * fab.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -110,9 +153,9 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 //for test
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent();
+                Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
-                setResult(RESULT_OK,intent);
+                startActivityForResult(intent,10);
                 /**
                  * Intent returnIntent = new Intent();
                  ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
@@ -132,7 +175,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         //prende le canzoni totali
         outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
         //prende le istanze delle canzoni già selezionate
-        outState.putParcelableArrayList("song selected",(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+        outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
 
         super.onSaveInstanceState(outState);
     }

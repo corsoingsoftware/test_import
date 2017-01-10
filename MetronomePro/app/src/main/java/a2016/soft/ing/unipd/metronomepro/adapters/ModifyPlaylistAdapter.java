@@ -46,12 +46,19 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         playlistToModify.add(song);
         notifyItemInserted(playlistToModify.size()-1);
     }
-
+//aggiunto da giulio
     public void addAllSongs(ArrayList<ParcelableSong> lista){
         playlistToModify.addAll(lista);
        // notifyItemInserted(playlistToModify.size()-1);
     }
-
+//aggiunto da giulio
+    public ArrayList<ParcelableSong> getAllSongs(){
+        ArrayList<ParcelableSong> parceArray = new ArrayList<>();
+        for (Song s :playlistToModify) {
+            parceArray.add((ParcelableSong) s);
+        }
+        return parceArray;
+    }
     public void delete(Song song) {
         playlistToModify.remove(song);
     }

@@ -60,13 +60,25 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
+            //creato da giulio
             public void onClick(View view) {
+                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                Intent intent = new Intent(activity,SelectSongForPlaylist.class);
+                intent.putParcelableArrayListExtra(SONG_TO_ADD,modifyPlaylistAdapter.getAllSongs());
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
+
+            }
+            /**public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
 
-            }
+
+             ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
+             playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
+
+            }*/
         });
 
         FloatingActionButton floatingActionButtonPlay= (FloatingActionButton)findViewById(R.id.fabPlay);
