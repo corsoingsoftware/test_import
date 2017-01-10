@@ -89,7 +89,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             Intent intent=getIntent();
             if(intent!=null) {
                 try {
-                    savedSongs = intent.getParcelableArrayListExtra(SONG_TO_ADD);
+                    savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -155,7 +155,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                         .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivityForResult(intent,10);
+                startActivityForResult(intent,RESULT_OK);
                 /**
                  * Intent returnIntent = new Intent();
                  ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();

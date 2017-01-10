@@ -43,6 +43,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
     SongPlayerServiceCaller spsc;
+    private ArrayList<ParcelableSong> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
+                                                                    //selezionte nel layout di giulio
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -60,23 +62,18 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            //creato da giulio
+            //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
                 ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
-                intent.putParcelableArrayListExtra(SONG_TO_ADD,modifyPlaylistAdapter.getAllSongs());
+                intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
-
             }
             /**public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
-
-
-             ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
-             playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
 
             }*/
         });
@@ -118,7 +115,22 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 playlist.add(EntitiesBuilder.getSong("song 3"));
                 playlist.add(EntitiesBuilder.getSong("song 4"));
             }
+            /**
+             * creato da giulio: riceve le canzoni che ho selezionato
+             */
+            Intent intent = getIntent();
+            if(intent!=null){
+                try {
+                    songsToAdd = intent.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD);
+                    playlist.addAll(songsToAdd);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            //fine codice toccato da giulio
         }
+
+
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
@@ -146,7 +158,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
-                    modifyPlaylistAdapter.addAllSongs(data.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD));
+                    //cambiato da giulio
+                    playlist.addAll(data.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD));
                     break;
             }
         }
