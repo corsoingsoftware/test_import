@@ -60,7 +60,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//
+            public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
                 Intent intent = new Intent(activity, SongCreator.class);
                 intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
