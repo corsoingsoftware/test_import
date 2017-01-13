@@ -10,7 +10,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 /**
- * Created by feder on 07/12/2016.
+ * Created by feder, mune, alberto on 07/12/2016.
  */
 
 public interface Song extends Parcelable {
@@ -45,4 +45,13 @@ public interface Song extends Parcelable {
      * @return return the songplayer for this song
      */
     SongPlayer getSongPlayer(SongPlayerManager manager);
+
+    /**
+     * return the type of song
+     * @return the file exstension in String
+     */
+    String getType();
+
+
+
 }
