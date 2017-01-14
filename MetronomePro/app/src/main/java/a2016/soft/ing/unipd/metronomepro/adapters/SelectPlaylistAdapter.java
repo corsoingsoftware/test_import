@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import a2016.soft.ing.unipd.metronomepro.ModifyPlaylistActivity;
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
@@ -27,6 +29,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
     private int selectPlaylist;
     private Playlist PlaylistToEdit; //eventualmente..
+    private OnPlaylistClickListener playlistClickListener;
 
 
     //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
@@ -39,10 +42,11 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         selectPlaylist++;
     }*/
    //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
-   public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist){
+   public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist, OnPlaylistClickListener playlistClickListener){
        this.context = context;
        this.arrayPlaylist=arrayPlaylist;
        selectPlaylist=0;
+       this.playlistClickListener = playlistClickListener;
    }
     //costruttore per salvare le istanzepublic
     @Override
@@ -76,6 +80,22 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
         Playlist p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playlistClickListener.onPlaylistClick();
+            }
+        });
+
+        /**
+        final View.OnClickListener a = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,ModifyPlaylistActivity.class);
+                intent.putExtra("playlist_selected",arrayPlaylist.get(pos));
+                context.start
+            }
+        };*/
 
     }
 
@@ -114,4 +134,8 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
         }
     }
+    public interface OnPlaylistClickListener{
+        void onPlaylistClick();
+    }
 }
+

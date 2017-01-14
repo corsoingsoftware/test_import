@@ -50,35 +50,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
-        /**
-         * if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
-         songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
-         }else{
-         Intent intent=getIntent();
-         try {
-         songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
-         } catch (Exception ex){
-         ex.printStackTrace();
-         }
-         }
-         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
-         rVTimeSlices.setAdapter(timeSlicesAdapter);
-         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
-         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
-         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
-         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
-         fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
-        Intent returnIntent = new Intent();
-        ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-        returnIntent.putExtra(SONG_TO_EDIT, ps);
-        setResult(RESULT_OK,returnIntent);
-        finish();
-        }
-        });
-         */
 
         if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
@@ -169,19 +140,10 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
                 startActivityForResult(intent,RESULT_OK);
-                /**
-                 * Intent returnIntent = new Intent();
-                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-                 returnIntent.putExtra(SONG_TO_EDIT, ps);
-                 setResult(RESULT_OK,returnIntent);
-                 finish();
-                 */
+
             }
         });
-        /**
-        ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
-        playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
-         */
+
     }
 
     protected void onSaveInstanceState(Bundle outState) {
