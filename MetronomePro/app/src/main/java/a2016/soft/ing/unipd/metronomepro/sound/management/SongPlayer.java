@@ -14,41 +14,9 @@ public interface SongPlayer {
     /**
      * Start the current song
      */
-    void play(Song entrySong);
+    void play();
 
-    /**
-     * Initialize the player with all parameter
-     * @param frequencyBeep frequency of higher tone beep
-     * @param lengthBeep length of higher tone beep
-     * @param frequencyBoop frequency of lower tone boop
-     * @param lengthBoop length of lower tone boop
-     * @param sampleRate rate of audio signal
-     * @param audioFormat format of audio signal
-     * @param channelConfig config of channels
-     */
-    void initialize(int frequencyBeep,
-                    int lengthBeep,
-                    int frequencyBoop,
-                    int lengthBoop,
-                    int sampleRate,
-                    int audioFormat,
-                    int channelConfig);
-
-    /**
-     * Initialize the player with only some parameter
-     * @param sampleRate rate of audio signal
-     * @param audioFormat format of audio signal
-     * @param channelConfig config of channels
-     */
-    void initialize(int sampleRate,
-                    int audioFormat,
-                    int channelConfig);
-
-
-    /**
-     * Initialize the default player
-     */
-    void initialize();
+//deleted initialized methods by Federico, no more necessary
 
 
     /**
@@ -82,7 +50,15 @@ public interface SongPlayer {
 
     /**
      * Write the songs in the AudioTrack's buffer
-     * @param entrySong
+     * @param songs
      */
-    void write(Song entrySong);
+    void write(Song[] songs);
+
+
+    interface SongPlayerCallback {
+        /**
+         * method called when play ends
+         */
+        void playEnded(SongPlayer origin);
+    }
 }
