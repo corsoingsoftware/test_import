@@ -28,4 +28,10 @@ public interface MidiSong extends Song {
      */
     int getBpm();
 
+    /**
+     * return the type of song
+     * @return the file exstension in String
+     */
+    String getType();
+
 }

@@ -46,11 +46,6 @@ public interface Song extends Parcelable {
      */
     SongPlayer getSongPlayer(SongPlayerManager manager);
 
-    /**
-     * return the type of song
-     * @return the file exstension in String
-     */
-    String getType();
 
 
 
