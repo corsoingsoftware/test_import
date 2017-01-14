@@ -22,7 +22,7 @@ public class PlaylistView extends AppCompatActivity {
     private RecyclerView rVPlaylistItem;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectPlaylistAdapter playListAdapter;
-    private ArrayList<ParcelablePlaylist> selectedPlaylist;
+    private ArrayList<Playlist> selectedPlaylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,8 @@ public class PlaylistView extends AppCompatActivity {
 
         if(savedInstanceState !=null && savedInstanceState.containsKey("playlist_for_select")){
             selectedPlaylist = savedInstanceState.getParcelableArrayList("playlist_for_select");
-
+            playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist);
+            rVPlaylistItem.setAdapter(playListAdapter);
             /**
             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
             selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
