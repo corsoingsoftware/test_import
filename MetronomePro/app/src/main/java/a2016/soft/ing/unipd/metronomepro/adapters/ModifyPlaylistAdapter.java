@@ -18,7 +18,6 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperA
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
@@ -47,15 +46,15 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         notifyItemInserted(playlistToModify.size()-1);
     }
 //aggiunto da giulio
-    public void addAllSongs(ArrayList<ParcelableSong> lista){
+    public void addAllSongs(ArrayList<Song> lista){
         playlistToModify.addAll(lista);
        // notifyItemInserted(playlistToModify.size()-1);
     }
 //aggiunto da giulio
-    public ArrayList<ParcelableSong> getAllSongs(){
-        ArrayList<ParcelableSong> parceArray = new ArrayList<>();
+    public ArrayList<Song> getAllSongs(){
+        ArrayList<Song> parceArray = new ArrayList<>();
         for (Song s :playlistToModify) {
-            parceArray.add((ParcelableSong) s);
+            parceArray.add((Song) s);
         }
         return parceArray;
     }

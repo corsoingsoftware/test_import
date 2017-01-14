@@ -23,7 +23,6 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -33,10 +32,10 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
     private DataProvider dataProvider;
-    private ArrayList<ParcelableSong> playlistSongs;
-    ArrayList<ParcelableSong> savedSongs = new ArrayList<>();
-    ArrayList<ParcelableSong> selectedSongs;
-    ArrayList<ParcelableSong> songForAdapter = provaDiTest();
+    private ArrayList<Song> playlistSongs;
+    ArrayList<Song> savedSongs = new ArrayList<>();
+    ArrayList<Song> selectedSongs;
+    ArrayList<Song> songForAdapter = provaDiTest();
 
 
 
@@ -166,7 +165,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
-                intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getSelectedSongs());
+                intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
                 startActivityForResult(intent,RESULT_OK);
                 /**
                  * Intent returnIntent = new Intent();
@@ -185,17 +184,17 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
     protected void onSaveInstanceState(Bundle outState) {
         //prende le canzoni totali
-        outState.putParcelableArrayList("song for select", (ArrayList<ParcelableSong>) selectSongForPlaylistAdapter.getArraySongs());
+        outState.putParcelableArrayList("song for select", (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
         //prende le istanze delle canzoni già selezionate
-        outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<ParcelableSong>)selectSongForPlaylistAdapter.getSelectedSongs());
+        outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<Song>)selectSongForPlaylistAdapter.getSelectedSongs());
 
         super.onSaveInstanceState(outState);
     }
 
 
     //classe di test, al posto di questa ci sarà il database
-    public ArrayList<ParcelableSong> provaDiTest(){
-        ArrayList<ParcelableSong> array = new ArrayList<>();
+    public ArrayList<Song> provaDiTest(){
+        ArrayList<Song> array = new ArrayList<>();
 
         Song s0 = EntitiesBuilder.getSong("song 0");
         Song s1 = EntitiesBuilder.getSong("song 1");
@@ -219,27 +218,27 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         Song s19 = EntitiesBuilder.getSong("song 19");
         Song s20 = EntitiesBuilder.getSong("song 20");
 
-        array.add((ParcelableSong) s0);
-        array.add((ParcelableSong) s1);
-        array.add((ParcelableSong) s2);
-        array.add((ParcelableSong) s3);
-        array.add((ParcelableSong) s4);
-        array.add((ParcelableSong) s5);
-        array.add((ParcelableSong) s6);
-        array.add((ParcelableSong) s7);
-        array.add((ParcelableSong) s8);
-        array.add((ParcelableSong) s9);
-        array.add((ParcelableSong) s10);
-        array.add((ParcelableSong) s11);
-        array.add((ParcelableSong) s12);
-        array.add((ParcelableSong) s13);
-        array.add((ParcelableSong) s14);
-        array.add((ParcelableSong) s15);
-        array.add((ParcelableSong) s16);
-        array.add((ParcelableSong) s17);
-        array.add((ParcelableSong) s18);
-        array.add((ParcelableSong) s19);
-        array.add((ParcelableSong) s20);
+        array.add((Song) s0);
+        array.add((Song) s1);
+        array.add((Song) s2);
+        array.add((Song) s3);
+        array.add((Song) s4);
+        array.add((Song) s5);
+        array.add((Song) s6);
+        array.add((Song) s7);
+        array.add((Song) s8);
+        array.add((Song) s9);
+        array.add((Song) s10);
+        array.add((Song) s11);
+        array.add((Song) s12);
+        array.add((Song) s13);
+        array.add((Song) s14);
+        array.add((Song) s15);
+        array.add((Song) s16);
+        array.add((Song) s17);
+        array.add((Song) s18);
+        array.add((Song) s19);
+        array.add((Song) s20);
 
         return array;
 
