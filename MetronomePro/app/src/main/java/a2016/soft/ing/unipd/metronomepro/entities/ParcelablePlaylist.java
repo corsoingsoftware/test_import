@@ -15,7 +15,7 @@ import java.util.ListIterator;
  * Created by Omar on 12/12/2016.
  */
 
-public class ParcelablePlaylist implements Playlist, Parcelable{
+public class ParcelablePlaylist implements Playlist{
 
     private final int TIME_SLICES_SONG = 0;
     private final int MIDI_SONG = 1;

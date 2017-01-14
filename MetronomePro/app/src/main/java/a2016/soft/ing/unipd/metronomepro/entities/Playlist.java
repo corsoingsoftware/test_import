@@ -1,12 +1,14 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by Federico Favotto on 09/12/2016.
  */
 
-public interface Playlist extends List<Song> {
+public interface Playlist extends List<Song>, Parcelable {
     /**
      * Name of the playlist
      * @return string that represents playlist identifier
