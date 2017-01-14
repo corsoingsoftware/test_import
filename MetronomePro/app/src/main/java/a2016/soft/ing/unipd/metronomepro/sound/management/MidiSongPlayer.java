@@ -28,7 +28,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
     MidiSongPlayer(Context c){
         playerState = ON_STOP;
         currentSong = UNPOINTED;
-        player.create(c, null);
+        player= new MediaPlayer();
         player.setOnCompletionListener(this);
     }
 
