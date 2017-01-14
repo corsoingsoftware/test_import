@@ -27,8 +27,6 @@ public class PlaylistView extends AppCompatActivity {
         setContentView(R.layout.activity_playlist_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         rVPlaylistItem = (RecyclerView)findViewById(R.id.recicle_view_playlist);
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
