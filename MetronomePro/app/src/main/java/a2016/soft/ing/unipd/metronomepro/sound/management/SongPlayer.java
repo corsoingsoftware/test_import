@@ -59,6 +59,6 @@ public interface SongPlayer {
         /**
          * method called when play ends
          */
-        void playEnded();
+        void playEnded(SongPlayer origin);
     }
 }
