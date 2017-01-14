@@ -21,7 +21,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCalle
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYABLE_PLAYLIST;
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYLIST;
 
-public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback, AudioTrackSongPlayer.AudioTrackSongPlayerCallback {
+public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
     private final static int MAX_SELECTABLE = 3;
     SongPlayerServiceCaller spsc;
@@ -105,8 +105,6 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     public void serviceConnected() {
 
-        spsc.startAudioTrackSongPlayer(this);
-
         ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
 
         for (int i = 0; i < playlist.size(); i++) {
@@ -115,10 +113,4 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         }
     }
 
-    @Override
-    public void writeEnd() {
-
-        //Scrittura terminata
-
-    }
 }
