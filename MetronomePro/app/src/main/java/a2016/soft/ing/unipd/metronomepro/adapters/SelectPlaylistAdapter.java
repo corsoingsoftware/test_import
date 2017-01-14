@@ -83,6 +83,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
         Playlist p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
+        PlaylistToEdit=p;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

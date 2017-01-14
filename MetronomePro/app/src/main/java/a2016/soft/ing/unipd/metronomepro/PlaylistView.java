@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +18,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class PlaylistView extends AppCompatActivity implements SelectPlaylistAdapter.OnPlaylistClickListener {
 
@@ -72,6 +74,16 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         Playlist p2 =  EntitiesBuilder.getPlaylist("prova di playlist 2");
         Playlist p3 =  EntitiesBuilder.getPlaylist("prova di playlist 3");
 
+        p1.add(EntitiesBuilder.getSong("song 0"));
+
+        p2.add(EntitiesBuilder.getSong("song 0"));
+        p2.add(EntitiesBuilder.getSong("song 1"));
+
+        p3.add(EntitiesBuilder.getSong("song 0"));
+        p3.add(EntitiesBuilder.getSong("song 1"));
+        p3.add(EntitiesBuilder.getSong("song 2"));
+
+
         ArrayList<Playlist> arrayList = new ArrayList<>();
         //HARDCODED FOR TEST
         arrayList.add(0,p1);
@@ -83,8 +95,9 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
 
     @Override
     public void onPlaylistClick() {
-        Intent intent = new Intent(this,ModifyPlaylistActivity.class);
+        Activity activity = this;
+        Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
         intent.putExtra("playlist_selected",playListAdapter.getPlaylistToEdit());
-        startActivityForResult(intent,RESULT_OK);
+        startActivity(intent);
     }
 }

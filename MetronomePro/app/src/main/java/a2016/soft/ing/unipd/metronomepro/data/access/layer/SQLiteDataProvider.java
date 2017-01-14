@@ -17,99 +17,22 @@ import java.util.List;
 import java.util.Objects;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Francesco on 09/12/2016.
  */
 
-public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
+public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider {
 
-    public SQLiteDataProvider(Context context) {
-        super(context, DBNAME, null, DB_VERSION);
+    public SQLiteDataProvider(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
     }
-
-    private static final String CREATE_TABLE_SONG = "CREATE TABLE "
-                + TBL_SONG + "("
-                + FIELD_SONG_ID + " INTEGER PRMARY KEY,"
-                + FIELD_SONG_TITLE + " UNIQUE TEXT);";
-
-    private static final String CREATE_TABLE_PLAYLIST = "CREATE TABLE "
-                + TBL_PLAYLIST + "("
-                + FIELD_PLAYLIST_ID + " INTEGER PRIMARY KEY,"
-                + FIELD_PLAYLIST_NAME + " UNIQUE TEXT);";
-
-    private static final String CREATE_TABLE_TIMESLICES = "CREATE TABLE "
-                + TBL_TS_SONG + "("
-                + FIELD_TIME_SLICES_ID + " INTEGER FOREIGN KEY (" + FIELD_TIME_SLICES_ID
-                + ") REFERENCES " + TBL_SONG + " (" + FIELD_SONG_ID + "), "
-                + FIELD_TIME_SLICES_SONG + " BLOB);";
-
-    private static final String CREATE_TABLE_MIDI = "CREATE TABLE "
-                + TBL_MIDI_SONG + "("
-                + FIELD_MIDI_ID + " INTEGER FOREIGN KEY (" + FIELD_MIDI_ID
-                + ") REFERENCES " + TBL_SONG + " (" + FIELD_SONG_ID + "), "
-                + FIELD_MIDI_PATH + " UNIQUE TEXT,"
-                + FIELD_MIDI_DURATION + " INTEGER);";
-
-    private static final String CREATE_TABLE_SONG_PLAYLIST = "CREATE TABLE "
-                + TBL_SONG_PLAYLIST + "("
-                + FIELD_SP_SONG_ID + " UNIQUE TEXT, "
-                + FIELD_SP_MIDI_ID + " UNIQUE TEXT);";
-
-    @Override
-    public void onCreate(SQLiteDatabase database) {
-        database.execSQL(CREATE_TABLE_MIDI);
-        database.execSQL(CREATE_TABLE_PLAYLIST);
-        database.execSQL(CREATE_TABLE_SONG);
-        database.execSQL(CREATE_TABLE_TIMESLICES);
-    }
-
-    @Override
-    public void save(Song songToAdd) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues valuesToInsert = new ContentValues();
-
-        if(songToAdd instanceof TimeSlicesSong) {
-            valuesToInsert.put(FIELD_SONG_TITLE, songToAdd.getName());
-            valuesToInsert.put(FIELD_SONG_ID, songToAdd.getId());
-            valuesToInsert.put(FIELD_TIME_SLICES_ID, songToAdd.getId());
-            valuesToInsert.put(FIELD_TIME_SLICES_SONG, ((ParcelableTimeSlicesSong) songToAdd).encode());
-
-        }
-        else{
-            valuesToInsert.put(FIELD_SONG_TITLE, songToAdd.getName());
-            valuesToInsert.put(FIELD_SONG_ID, songToAdd.getId());
-            valuesToInsert.put(FIELD_MIDI_ID, songToAdd.getId());
-            valuesToInsert.put(FIELD_MIDI_PATH, ((MidiSong) songToAdd).getPath());
-            valuesToInsert.put(FIELD_MIDI_DURATION, ((MidiSong) songToAdd).getDuration());
-        }
-    }
-
-    @Override
-    public void savePlaylist(Playlist playlistToAdd) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues valesToInsert = new ContentValues();
-
-        valesToInsert.put(FIELD_PLAYLIST_ID, playlistToAdd.getId());
-        valesToInsert.put(FIELD_PLAYLIST_NAME, playlistToAdd.getName());
-    }
-
 
     @Override
     public List<Song> getSongs() {
-        List<Song> songsToReturn = new ArrayList<Song>();
-        SQLiteDatabase database = this.getReadableDatabase();
-        Cursor c = database.rawQuery(TBL_TS_SONG,null);
-        MidiSong midiSong
-
-
-
-        return songsToReturn;
+        return null;
     }
 
     @Override
@@ -123,12 +46,27 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     }
 
     @Override
-    public void deleteSong(Song songToDelete) {
+    public void save(Song song) {
+
+    }
+
+    @Override
+    public void deleteSong(Song song) {
+
+    }
+
+    @Override
+    public void savePlaylist(Playlist playlist) {
 
     }
 
     @Override
     public void deletePlaylist(Playlist playlist) {
+
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
 
     }
 

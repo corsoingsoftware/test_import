@@ -49,11 +49,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
-
+        <activity
+            android:name=".SelectSongForPlaylist"
+            android:label="@string/title_activity_select_next_songs"
+            android:theme="@style/AppTheme">
+        </activity>
         <activity
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
             android:theme="@style/AppTheme">
+
         </activity>
         <activity
             android:name=".PlaylistView"
