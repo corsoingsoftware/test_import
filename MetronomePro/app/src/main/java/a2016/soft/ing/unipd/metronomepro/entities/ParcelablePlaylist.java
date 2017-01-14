@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,9 +16,14 @@ import java.util.ListIterator;
  */
 
 public class ParcelablePlaylist implements Playlist, Parcelable {
+    /**
+     * The default id for playlist
+     */
+    private static int NO_ID=-1;
 
     protected ParcelablePlaylist(Parcel in) {
-        this(in.readString());
+        this(in.readInt(),in.readString());
+        songList= in.createTypedArrayList(Song.CREATOR);
         while(){
             int a=in.readInt();
             if(a==0) {
@@ -48,12 +54,18 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
         }
     };
 
+    private int id;
     private String name;
     private ArrayList<Song> songList;
 
-    public ParcelablePlaylist(String name) {
+    public ParcelablePlaylist(int id, String name) {
+        this.id=id;
         this.name = name;
         songList = new ArrayList<Song>();
+    }
+
+    public ParcelablePlaylist(String name){
+        this(NO_ID, name);
     }
 
     @Override
@@ -63,10 +75,9 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        Parcelable[] p=new Parcelable[songList.size()];
-        p=songList.toArray(p);
+        dest.writeInt(id);
         dest.writeString(getName());
-        dest.writeParcelableArray(p, flags);
+        dest.writeTypedList(songList);
         //prendo la song e la metto in array list convertita in array di byte
         //passo al parser aray di byte quando li riprendo li devo riconvertire in song
     }
@@ -74,6 +85,21 @@ public class ParcelablePlaylist implements Playlist, Parcelable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int newId) {
+        this.id=newId;
     }
 
     @Override
