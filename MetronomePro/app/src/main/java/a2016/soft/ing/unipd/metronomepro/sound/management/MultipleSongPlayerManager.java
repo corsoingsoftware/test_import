@@ -18,23 +18,13 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private final static int PLAYERS=2;
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
-    private int timeSlicesPlayerState;
-    private int midiPlayerState;
     private LinkedBlockingQueue<Song> songQueue;
     private int typeChanged;
 
 
-    /** player state
-     * 0 := puoi fare write
-     * 1 := puoi fare play
-     * 2 := in play
-     */
-
     public MultipleSongPlayerManager() {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        timeSlicesPlayerState = 0;
-        midiPlayerState = 0;
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
     }
