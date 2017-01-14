@@ -50,9 +50,9 @@ public interface SongPlayer {
 
     /**
      * Write the songs in the AudioTrack's buffer
-     * @param entrySong
+     * @param songs
      */
-    void write(Song entrySong);
+    void write(Song[] songs);
 
 
     interface SongPlayerCallback {
