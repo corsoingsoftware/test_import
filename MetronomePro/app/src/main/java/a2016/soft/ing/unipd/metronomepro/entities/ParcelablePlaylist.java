@@ -1,6 +1,17 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+
+
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 

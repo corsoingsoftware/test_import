@@ -121,7 +121,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         for (TimeSlice ts :
                 songToEdit) {
             int bpm = ts.getBpm();
-            double lenght = ts.getDurationInBeats() * ((double) Constants.SECS_IN_MIN / bpm);
+            double lenght = ts.getDurationInBeats() * ((double) bpm / Constants.SECS_IN_MIN);
             if (lenght > maxLengthInSecs) maxLengthInSecs = lenght;
             if (lenght < minLengthInSecs) minLengthInSecs = lenght;
             if (bpm > maxBPM) maxBPM = bpm;

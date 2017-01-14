@@ -1,11 +1,12 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
 import android.os.Parcel;
+
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 /**
- * Created by Munerato, Alberto on 14/01/2017.
+ * Created by Federico Favotto on 14/01/2017.
  */
 
 public class ParcelableMidiSong implements MidiSong {
@@ -22,75 +23,53 @@ public class ParcelableMidiSong implements MidiSong {
         }
     };
 
-    private int id, duration;
-    private String title, path;
-    private final int ID_NULL = -1;
-
     ParcelableMidiSong(Parcel in) {
-        this.id = in.readInt();
-        this.title = in.readString();
-        this.path = in.readString();
-        this.duration = in.readInt();
+
     }
-
-    ParcelableMidiSong(){
-        this.id = ID_NULL;
-    }
-
-    ParcelableMidiSong(int id){
-        this(id, null, null, 0);
-    }
-
-    ParcelableMidiSong(int id, String path){
-        this(id, path, null, 0);
-    }
-
-    ParcelableMidiSong(int id, String path, String title){
-        this(id, path, title, 0);
-    }
-
-    ParcelableMidiSong(int id, String path, String title, int duration){
-        this.id = id;
-        this.title = title;
-        this.path = path;
-        this.duration = duration;
-    }
-
-
     @Override
     public String getPath() {
-        return path;
+        return null;
     }
 
     @Override
-    public void setPath(String newPath) { this.path = newPath; }
+    public void setPath(String newPath) {
+
+    }
 
     @Override
     public int getDuration() {
-        return duration;
+        return 0;
     }
 
     @Override
-    public void setDuration(int millisDuration) { this.duration = millisDuration; }
+    public void setDuration(int millisDuration) {
+
+    }
 
     @Override
     public String getName() {
-        return title;
+        return null;
     }
 
     @Override
-    public void setName(String newName) { this.title = newName; }
+    public void setName(String newName) {
+
+    }
 
     @Override
     public int getId() {
-        return id;
+        return 0;
     }
 
     @Override
-    public void setId(int newId) { this.id = newId; }
+    public void setId(int newId) {
+
+    }
 
     @Override
-    public SongPlayer getSongPlayer(SongPlayerManager manager) { return manager.getMidiSongPlayer(); }
+    public SongPlayer getSongPlayer(SongPlayerManager manager) {
+        return null;
+    }
 
     @Override
     public int describeContents() {
@@ -99,9 +78,6 @@ public class ParcelableMidiSong implements MidiSong {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(title);
-        dest.writeString(path);
-        dest.writeInt(duration);
+
     }
 }

@@ -14,10 +14,4 @@ public class EntitiesBuilder {
     public static Playlist getPlaylist(String name){
         return new ParcelablePlaylist(name);
     }
-    public static MidiSong getMidiSong(){
-        return null;
-    }
-    public static TimeSlicesSong getTimeSlicesSong(){
-        return null;
-    }
 }
