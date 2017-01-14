@@ -6,7 +6,7 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 /**
- * Created by feder on 14/01/2017.
+ * Created by Federico Favotto on 14/01/2017.
  */
 
 public class ParcelableMidiSong implements MidiSong {
