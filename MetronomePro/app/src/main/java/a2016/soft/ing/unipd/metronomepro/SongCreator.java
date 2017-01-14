@@ -25,6 +25,7 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.inverted.Horizon
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -77,7 +78,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
             public void onClick(View view) {
                 Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
                 Intent returnIntent = new Intent();
-                Song ps=(Song) timeSlicesAdapter.getSongToEdit();
+                TimeSlicesSong ps=(TimeSlicesSong) timeSlicesAdapter.getSongToEdit();
                 returnIntent.putExtra(SONG_TO_EDIT, ps);
                 setResult(RESULT_OK,returnIntent);
                 finish();
@@ -148,7 +149,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
      */
     private Song createTestSong(){
         TimeSlice t1, t2, t3;
-        Song s =EntitiesBuilder.getSong("pippo");
+        TimeSlicesSong s =(TimeSlicesSong) EntitiesBuilder.getSong("pippo");
         t1 = new TimeSlice();
         t2 = new TimeSlice();
         t3 = new TimeSlice();
