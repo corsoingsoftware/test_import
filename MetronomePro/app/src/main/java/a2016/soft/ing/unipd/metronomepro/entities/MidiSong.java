@@ -1,7 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
 /**
- * Created by feder, mune, alberto on 22/12/2016.
+ * Created by mune, alberto on 22/12/2016.
  */
 
 /**
