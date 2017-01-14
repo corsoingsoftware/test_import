@@ -30,7 +30,7 @@ public class SongPlayerService extends Service {
         return mBinder;
     }
 
-    public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
+    /*public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
         atsp.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
         Log.v(LOG_TAG,"in initialize(7param)");
     }
@@ -43,7 +43,7 @@ public class SongPlayerService extends Service {
     public void initialize(){
         atsp.initialize();
         Log.v(LOG_TAG,"in initialize()");
-    }
+    }*/
 
     public void play(Song entrySong) {
         //atsp.play();
@@ -79,14 +79,12 @@ public class SongPlayerService extends Service {
 
     }
 
-    public void write(Song entrySong) {
+    public void write(Song[] songs) {
         //atsp.write(songs);
-        mspm.write(entrySong);
+        mspm.startTheseSongs(songs);
     }
 
-    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
-        this.atsp = new AudioTrackSongPlayer(callback);
-    }
+
 
     public class MyBinder extends Binder {
         SongPlayerService getService() {
