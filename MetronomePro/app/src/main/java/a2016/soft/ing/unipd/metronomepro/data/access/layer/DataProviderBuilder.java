@@ -3,7 +3,7 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 import android.content.Context;
 
 /**
- * Created by feder on 09/12/2016.
+ * Created by Federico Favotto on 09/12/2016.
  */
 
 public class DataProviderBuilder {
@@ -13,7 +13,7 @@ public class DataProviderBuilder {
      */
     public static DataProvider getDefaultDataProvider(Context c) {
 
-        DataProvider dp = new FileDataProvier(c);
+        DataProvider dp = new SQLiteDataProvider(c);
         return dp;
     }
 }

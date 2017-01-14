@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import a2016.soft.ing.unipd.metronomepro.R;
@@ -43,7 +45,19 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         playlistToModify.add(song);
         notifyItemInserted(playlistToModify.size()-1);
     }
-
+//aggiunto da giulio
+    public void addAllSongs(ArrayList<Song> lista){
+        playlistToModify.addAll(lista);
+       // notifyItemInserted(playlistToModify.size()-1);
+    }
+//aggiunto da giulio
+    public ArrayList<Song> getAllSongs(){
+        ArrayList<Song> parceArray = new ArrayList<>();
+        for (Song s :playlistToModify) {
+            parceArray.add((Song) s);
+        }
+        return parceArray;
+    }
     public void delete(Song song) {
         playlistToModify.remove(song);
     }

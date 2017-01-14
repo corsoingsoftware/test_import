@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Created by feder on 08/12/2016.
+ * Created by Federico Favotto on 08/12/2016.
  */
 
 public class SignalsGenerator {

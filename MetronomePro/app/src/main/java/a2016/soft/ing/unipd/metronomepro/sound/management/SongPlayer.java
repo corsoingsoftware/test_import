@@ -3,7 +3,7 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
- * Created by feder on 08/12/2016.
+ * Created by Federico Favotto on 08/12/2016.
  */
 
 
@@ -76,7 +76,7 @@ public interface SongPlayer {
 
     /**
      * State of current song
-     * @return Playstate that describes state
+     * @return PLaystate that describes state
      */
     PlayState getState();
 

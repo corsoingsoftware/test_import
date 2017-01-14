@@ -1,10 +1,12 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
@@ -21,9 +24,11 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
+import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
@@ -36,7 +41,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
-    private DataProvider dataProvider;
+    SongPlayerServiceCaller spsc;
+    private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
+                                                                    //selezionte nel layout di giulio
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
 
@@ -54,13 +61,20 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
+            //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
+                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                Intent intent = new Intent(activity,SelectSongForPlaylist.class);
+                intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
+            }
+            /**public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
-                Intent intent = new Intent(activity, SongCreator.class);
+                Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
 
-            }
+            }*/
         });
 
         FloatingActionButton floatingActionButtonPlay= (FloatingActionButton)findViewById(R.id.fabPlay);
@@ -89,8 +103,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                dataProvider= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dataProvider.getSongs(null,playlist);
+                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
+                List<Song> songs=dp.getSongs(null,playlist);
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -100,7 +114,21 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 playlist.add(EntitiesBuilder.getSong("song 3"));
                 playlist.add(EntitiesBuilder.getSong("song 4"));
             }
+            /**
+             * creato da giulio: riceve le canzoni che ho selezionato
+             */
+            Intent intent = getIntent();
+            if(intent!=null){
+                try {
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+                    playlist.addAll(songsToAdd);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
+
+
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
@@ -127,9 +155,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
-                    ParcelableTimeSlicesSong ps=(ParcelableTimeSlicesSong)data.getParcelableExtra(SONG_TO_EDIT);
-                    modifyPlaylistAdapter.addSong(ps);
-                    dataProvider.save(ps);
+                    //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+                    modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
                     break;
             }
         }

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Created by feder on 07/12/2016.
+ * Created by Federico Favotto on 07/12/2016.
  */
 
 public class TimeSlice implements Streamable, Parcelable{

@@ -6,7 +6,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
- * Created by feder on 09/12/2016.
+ * Created by Federico Favotto on 09/12/2016.
  */
 
 public interface DataProvider {
@@ -24,14 +24,6 @@ public interface DataProvider {
      */
     List<Song> getSongs(String searchName, Playlist playlist);
 
-
-    /**
-     * return a list of songs that respects parameters
-     * @param searchName research parameter "like" for name of songs if null=all songs
-     * @return a list of songs that respects parameters
-     */
-    List<Song> getSongs(String searchName);
-
     /**
      * read the playlists
      * @param searchName search parameter, ignore if null
@@ -43,27 +35,25 @@ public interface DataProvider {
      * memorize the song in database, throw exception if fails
      * override if present!
      * @param song to memorize
-     * @return number of row affected
      */
-    int save(Song song);
+    void save(Song song);
 
     /**
      * Delete the song throw exception if fails
      * @param song to delete
-     * @return number of rows affected
      */
-    int delete(Song song);
+    void deleteSong(Song song);
 
     /**
      * save the playlist, and the songs in it if they aren't in database already
      * @param playlist to save or update!
      */
-    int save(Playlist playlist);
+    void savePlaylist(Playlist playlist);
 
     /**
      * delete the playlist but not the songs! Throw exception if fails
      * @param playlist to delete
      */
-    int delete(Playlist playlist);
+    void deletePlaylist(Playlist playlist);
 
 }

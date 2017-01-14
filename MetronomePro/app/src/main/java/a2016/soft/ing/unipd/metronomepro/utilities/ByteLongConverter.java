@@ -6,7 +6,7 @@ import android.support.annotation.RequiresApi;
 import java.nio.ByteBuffer;
 
 /**
- * Created by feder on 08/11/2016.
+ * Created by Federico Favotto on 08/11/2016.
  */
 
 public class ByteLongConverter {

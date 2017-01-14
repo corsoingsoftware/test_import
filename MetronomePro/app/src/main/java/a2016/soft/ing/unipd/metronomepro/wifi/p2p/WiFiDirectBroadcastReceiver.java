@@ -7,7 +7,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 
 /**
- * Created by feder on 07/11/2016.
+ * Created by Federico Favotto on 07/11/2016.
  */
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {

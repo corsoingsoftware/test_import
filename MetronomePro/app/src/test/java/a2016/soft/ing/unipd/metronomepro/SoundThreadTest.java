@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by feder on 11/11/2016.
+ * Created by Federico Favotto on 11/11/2016.
  */
 public class SoundThreadTest {
     @Test

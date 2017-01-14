@@ -13,10 +13,13 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
 
 /**
- * Created by feder on 09/12/2016.
+ * Created by Federico Favotto on 09/12/2016.
  */
 
 public class ParcelableTimeSlicesSong implements TimeSlicesSong {
+    private static final int MIN_ARRAY_LIST_SIZE=10;
+    public static final int NO_ID=-1;
+
     public static final Creator<ParcelableTimeSlicesSong> CREATOR = new Creator<ParcelableTimeSlicesSong>() {
         /**
          * create song from parcel, just call default parcel constructor
@@ -33,7 +36,8 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
             return new ParcelableTimeSlicesSong[size];
         }
     };
-    private static final int MIN_ARRAY_LIST_SIZE = 10;
+
+    protected int id;
     protected String name;
     protected ArrayList<TimeSlice> timeSliceList;
 
@@ -47,7 +51,7 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
         ArrayList<byte[]> support = (ArrayList<byte[]>) in.readSerializable();
         this.name = in.readString();
-
+        this.id=in.readInt();
         timeSliceList = new ArrayList<>(Math.min(support.size(), MIN_ARRAY_LIST_SIZE));
 
         if(support!=null)
@@ -58,29 +62,40 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
             }
     }
 
-    public ParcelableTimeSlicesSong() {
-        this("");
-    }
-
-    ParcelableTimeSlicesSong(String name) {
+    public void setName(String name) {
         this.name = name;
-        timeSliceList = new ArrayList<TimeSlice>();
     }
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
     public void setId(int newId) {
-
+        id=newId;
     }
 
     @Override
     public SongPlayer getSongPlayer(SongPlayerManager manager) {
         return manager.getTimeSlicesSongPlayer();
     }
+
+
+    public ParcelableTimeSlicesSong() {
+        this("");
+    }
+
+    ParcelableTimeSlicesSong(String name) {
+        this(name,NO_ID);
+    }
+
+    ParcelableTimeSlicesSong(String name, int id) {
+        this.name = name;
+        timeSliceList = new ArrayList<TimeSlice>();
+        this.id=id;
+    }
+
 
     @Override
     public byte[] encode() {
@@ -134,6 +149,7 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
         dest.writeSerializable(timeSlicesByte);
         dest.writeString(name);
+        dest.writeInt(id);
     }
 
     @Override
@@ -258,10 +274,6 @@ public class ParcelableTimeSlicesSong implements TimeSlicesSong {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
 }

@@ -1,7 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.entities;
 
 /**
- * Created by feder on 10/12/2016.
+ * Created by Federico Favotto on 10/12/2016.
  */
 
 public class EntitiesBuilder {
