@@ -76,7 +76,7 @@ public interface SongPlayer {
 
     /**
      * State of current song
-     * @return Playstate that describes state
+     * @return PLaystate that describes state
      */
     PlayState getState();
 

@@ -9,4 +9,5 @@ public interface ActivityExtraNames {
     String SONG_TO_EDIT="song_to_edit";
     String PLAYABLE_PLAYLIST="playable_playlist";
     String PLAYLIST="playlist";
+    String SONG_TO_ADD ="song_to_add";
 }

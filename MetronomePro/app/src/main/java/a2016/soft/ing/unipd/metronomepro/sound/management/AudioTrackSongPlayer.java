@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.generators.SignalsGenerator;
 
 import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PAUSE;
@@ -176,6 +175,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     @Override
     public byte[] getSong(Song s) {
+
         SignalsGenerator sGenerator = new SignalsGenerator();
         ArrayList<byte[]> listSong = new ArrayList<byte[]>();
         int numBytes = 0;
