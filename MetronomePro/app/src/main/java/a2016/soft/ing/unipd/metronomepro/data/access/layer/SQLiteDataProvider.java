@@ -56,6 +56,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             + FIELD_SP_MIDI_ID + " UNIQUE INTEGER);";
 
     @Override
+
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_MIDI);
         database.execSQL(CREATE_TABLE_PLAYLIST);
