@@ -104,11 +104,11 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 }
             }
 
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
         }
 
 
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
-        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
         //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
 
