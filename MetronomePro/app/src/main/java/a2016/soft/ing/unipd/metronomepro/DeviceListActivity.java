@@ -19,7 +19,7 @@ import android.widget.TextView;
 import java.util.Set;
 
 /**
- * Created by feder on 01/11/2016.
+ * Created by Federico Favotto on 01/11/2016.
  */
 
 public class DeviceListActivity extends Activity {

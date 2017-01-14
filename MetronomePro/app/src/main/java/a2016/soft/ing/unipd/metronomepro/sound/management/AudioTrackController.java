@@ -14,7 +14,7 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYS
 import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_UNKNOW;
 
 /**
- * Created by feder on 12/11/2016.
+ * Created by Federico Favotto on 12/11/2016.
  * Si occupa di gestire le interazioni con audioTrack, un'istanza di questa classe sarà contenuta nel service.
  * Sara lui che implementa completamente soundmanager e i suoi metodi non saranno più degli eco a qualcun altro ma
  * farà veramente qualcosa.

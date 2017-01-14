@@ -7,9 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
 
@@ -40,7 +41,7 @@ public class AtspTest extends AppCompatActivity {
 
         TimeSlice t1, t2, t3;
 
-        Song s = new ParcelableSong();
+        TimeSlicesSong s = new ParcelableTimeSlicesSong();
         t1 = new TimeSlice();
         t1.setBpm(180);
         t1.setDurationInBeats(10);
@@ -61,8 +62,8 @@ public class AtspTest extends AppCompatActivity {
         arrayS[0] = s;
 
 
-        ((AudioTrackSongPlayer)atsp).write(arrayS);
+        //((AudioTrackSongPlayer)atsp).write(arrayS);
 
-        atsp.play();
+        //atsp.play();
     }
 }

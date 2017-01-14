@@ -6,7 +6,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
- * Created by feder on 09/12/2016.
+ * Created by Federico Favotto on 09/12/2016.
  */
 
 public interface DataProvider {

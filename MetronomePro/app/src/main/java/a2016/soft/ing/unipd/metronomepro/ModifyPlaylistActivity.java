@@ -24,7 +24,6 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -43,7 +42,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
     SongPlayerServiceCaller spsc;
-    private ArrayList<ParcelableSong> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
+    private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
                                                                     //selezionte nel layout di giulio
     //All results:
     private static final int START_EDIT_NEW_SONG=1;
@@ -121,7 +120,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             Intent intent = getIntent();
             if(intent!=null){
                 try {
-                    songsToAdd = intent.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD);
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
                     playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -157,7 +156,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             switch (requestCode){
                 case START_EDIT_NEW_SONG:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
-                    modifyPlaylistAdapter.addAllSongs(data.<ParcelableSong>getParcelableArrayListExtra(SONG_TO_ADD));
+                    modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
                     break;
             }
         }

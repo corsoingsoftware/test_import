@@ -19,7 +19,7 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.SelectSongForPlaylist;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
+import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
  * Created by giuli on 27/12/2016.
@@ -27,26 +27,26 @@ import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 
 public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
 
-    private ArrayList<ParcelableSong> arraySongs; //it rappresent the songs that are already not into a playlist
-    private ArrayList<ParcelableSong> selectedSongs=new ArrayList<>(); //it rappresent the songs that the users want to insert into the playlist
+    private ArrayList<Song> arraySongs; //it rappresent the songs that are already not into a playlist
+    private ArrayList<Song> selectedSongs=new ArrayList<>(); //it rappresent the songs that the users want to insert into the playlist
     private Context context;
 
     //base constructor
-    public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs){
+    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs){
         this.context = context;
         this.arraySongs = arraySongs;
     }
     //constructor that allows to save the instance of the songs selected
-    public SelectSongForPlaylistAdapter(Context context, ArrayList<ParcelableSong> arraySongs,ArrayList<ParcelableSong> selectedSongs){
+    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs,ArrayList<Song> selectedSongs){
         this.context = context;
         this.arraySongs = arraySongs;
         this.selectedSongs = selectedSongs;
     }
 
-    public ArrayList<ParcelableSong> getArraySongs(){
+    public ArrayList<Song> getArraySongs(){
         return arraySongs;
     }
-    public ArrayList<ParcelableSong> getSelectedSongs(){
+    public ArrayList<Song> getSelectedSongs(){
         return selectedSongs;
     }
 
@@ -60,7 +60,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        ParcelableSong song = arraySongs.get(position);
+        Song song = arraySongs.get(position);
         holder.nameOfSong.setText(song.getName());
 
         View.OnClickListener a = new View.OnClickListener() {
@@ -70,7 +70,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
                 if(v.isSelected()){
                     v.setSelected(false); //set the background golour
 
-                    ParcelableSong song = arraySongs.get(position); //remove the songe from selected songs
+                    Song song = arraySongs.get(position); //remove the songe from selected songs
                     selectedSongs.remove(song);
                     //for debug
                     Snackbar.make(v, "hai rimosso l'elemento "+ song.getName(), Snackbar.LENGTH_LONG)
@@ -80,7 +80,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
                 else{
                     v.setSelected(true);//set the background colour
 
-                    ParcelableSong song = arraySongs.get(position); //add the song to selected songs
+                    Song song = arraySongs.get(position); //add the song to selected songs
                     selectedSongs.add(song);
                     //for debug
                     Snackbar.make(v, "hai inserito l'elemento "+song.getName(), Snackbar.LENGTH_LONG)

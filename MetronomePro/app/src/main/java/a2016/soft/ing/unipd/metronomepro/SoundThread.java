@@ -3,7 +3,7 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.content.Context;
 
 /**
- * Created by feder on 22/10/2016.
+ * Created by Federico Favotto on 22/10/2016.
  */
 
 public class SoundThread extends Thread {

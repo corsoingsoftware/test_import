@@ -3,37 +3,32 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
-import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerService;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 
-import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYABLE_PLAYLIST;
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYLIST;
 
 public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback, AudioTrackSongPlayer.AudioTrackSongPlayerCallback {
 
-    private RecyclerView rVNextSongs;
-    private RecyclerView.LayoutManager rVLayoutManager;
-    private SelectSongsAdapter selectSongsAdapter;
     private final static int MAX_SELECTABLE = 3;
     SongPlayerServiceCaller spsc;
     Playlist p;
+    private RecyclerView rVNextSongs;
+    private RecyclerView.LayoutManager rVLayoutManager;
+    private SelectSongsAdapter selectSongsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +74,17 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
             @Override
             public void onClick(View view) {
 
-                if(spsc.getService() != null){
-                    //do whatever you want to do after successful binding
-                    Song[] songs = selectSongsAdapter.getSongs();
-                    spsc.write(songs);
-                    spsc.play();
 
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.recycler_view_next_songs);
-                    for (int i = 0; i < layout.getChildCount(); i++) {
-                        View child = layout.getChildAt(i);
-                        child.setEnabled(false);
+                if(spsc.getService() != null) {
+
+                    //do whatever you want to do after successful binding
+
+                    Song[] songs = selectSongsAdapter.getSongs();
+
+                    for (Song entrySong : songs) {
+
+                        spsc.write(entrySong);
+                        spsc.play(entrySong);
                     }
                 }
 
@@ -101,7 +97,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelableArrayList(PLAYABLE_PLAYLIST, selectSongsAdapter.getArraySongs());
+        outState.putParcelableArrayList(PLAYABLE_PLAYLIST, (ArrayList<PlayableSong>) selectSongsAdapter.getArraySongs());
         outState.putInt(PLAYABLE_PLAYLIST, selectSongsAdapter.getSelectedSongs());
         super.onSaveInstanceState(outState);
     }
@@ -114,7 +110,8 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         ArrayList<PlayableSong> playlist = selectSongsAdapter.getArraySongs();
 
         for (int i = 0; i < playlist.size(); i++) {
-            spsc.load(playlist.get(i));
+
+            spsc.load((Song) playlist.get(i));
         }
     }
 
