@@ -10,6 +10,22 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerManager;
  */
 
 public class ParcelableMidiSong implements MidiSong {
+
+    public static final Creator<ParcelableMidiSong> CREATOR = new Creator<ParcelableMidiSong>() {
+        @Override
+        public ParcelableMidiSong createFromParcel(Parcel in) {
+            return new ParcelableMidiSong(in);
+        }
+
+        @Override
+        public ParcelableMidiSong[] newArray(int size) {
+            return new ParcelableMidiSong[size];
+        }
+    };
+
+    ParcelableMidiSong(Parcel in) {
+
+    }
     @Override
     public String getPath() {
         return null;
