@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +18,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
-public class PlaylistView extends AppCompatActivity {
+public class PlaylistView extends AppCompatActivity implements SelectPlaylistAdapter.OnPlaylistClickListener {
 
     private RecyclerView rVPlaylistItem;
     private RecyclerView.LayoutManager rVLayoutManager;
@@ -34,12 +35,12 @@ public class PlaylistView extends AppCompatActivity {
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist());
+        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist(),this);
         rVPlaylistItem.setAdapter(playListAdapter);
 
         if(savedInstanceState !=null && savedInstanceState.containsKey("playlist_for_select")){
             selectedPlaylist = savedInstanceState.getParcelableArrayList("playlist_for_select");
-            playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist);
+            playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist,this);
             rVPlaylistItem.setAdapter(playListAdapter);
             /**
             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
@@ -80,6 +81,10 @@ public class PlaylistView extends AppCompatActivity {
         return arrayList;
     }
 
-
-
+    @Override
+    public void onPlaylistClick() {
+        Intent intent = new Intent(this,ModifyPlaylistActivity.class);
+        intent.putExtra("playlist_selected",playListAdapter.getPlaylistToEdit());
+        startActivityForResult(intent,RESULT_OK);
+    }
 }

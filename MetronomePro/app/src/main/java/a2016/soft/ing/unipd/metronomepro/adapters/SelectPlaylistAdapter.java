@@ -62,6 +62,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         arrayPlaylist.remove(position);
         selectPlaylist--;
     }
+    public Playlist getPlaylistToEdit(){
+        return PlaylistToEdit;
+    }
     public ArrayList<Playlist> getArrayPlaylist(){
        return arrayPlaylist;
     }
@@ -76,13 +79,14 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         Playlist p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PlaylistToEdit=arrayPlaylist.get(position);
                 playlistClickListener.onPlaylistClick();
             }
         });
