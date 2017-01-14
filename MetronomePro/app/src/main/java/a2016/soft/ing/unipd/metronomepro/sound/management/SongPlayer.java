@@ -14,7 +14,7 @@ public interface SongPlayer {
     /**
      * Start the current song
      */
-    void play(Song entrySong);
+    void play();
 
 //deleted initialized methods by Federico, no more necessary
 
