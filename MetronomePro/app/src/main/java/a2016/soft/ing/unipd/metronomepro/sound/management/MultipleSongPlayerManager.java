@@ -13,6 +13,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
  */
 
 public class MultipleSongPlayerManager implements SongPlayerManager {
+
+    private final static int PLAYERS=2;
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private int timeSlicesPlayerState;
     private int midiPlayerState;
@@ -49,10 +51,13 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
         //entrySong.getSongPlayer(this).write(entrySong);
 
         int i = 0;
-        while(i < songs.length) {
-
+        int typeChanged=0;
+        Class s=songs[i].getClass();
+        while(i < songs.length && typeChanged<PLAYERS) {
             Song currSong = songs[i++];
-
+            if(currSong.getClass()!=s){
+                typeChanged++;
+            }
             while(songs[i] instanceof currSong. && i < songs.length) {
 
                 songQueue.add(songs[i]);
