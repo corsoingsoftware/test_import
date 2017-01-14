@@ -15,6 +15,7 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
@@ -44,11 +45,12 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
        this.arrayPlaylist=arrayPlaylist;
        selectPlaylist=0;
    }
+    //costruttore per salvare le istanzepublic
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
-    public void addPlaylist(Playlist playlist){
+    public void addPlaylist(ParcelablePlaylist playlist){
         arrayPlaylist.add(selectPlaylist,playlist);
         selectPlaylist++;
     }
@@ -56,6 +58,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void remuvePlaylist(int position){
         arrayPlaylist.remove(position);
         selectPlaylist--;
+    }
+    public ArrayList<Playlist> getArrayPlaylist(){
+       return arrayPlaylist;
     }
 
     @Override

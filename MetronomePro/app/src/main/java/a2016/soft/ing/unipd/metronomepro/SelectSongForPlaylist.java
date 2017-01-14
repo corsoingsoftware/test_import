@@ -36,7 +36,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private ArrayList<ParcelableSong> playlistSongs;
     ArrayList<ParcelableSong> savedSongs = new ArrayList<>();
     ArrayList<ParcelableSong> selectedSongs;
-    ArrayList<ParcelableSong> songForAdapter = provaDiTest();
+    ArrayList<ParcelableSong> songForAdapter;
 
 
 
@@ -89,6 +89,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         else{
             Intent intent=getIntent();
+            songForAdapter= provaDiTest();
             if(intent!=null) {
                 try {
                     savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
@@ -104,12 +105,13 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                     ex.printStackTrace();
                 }
             }
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
 
         }
 
 
-        selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
-        rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
 
         //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
 
