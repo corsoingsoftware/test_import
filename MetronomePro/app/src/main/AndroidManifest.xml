@@ -44,9 +44,8 @@
 
         </activity>
         <activity
-            android:name=".SelectNextSongs"
-            android:label="@string/title_activity_select_next_songs"
-            android:screenOrientation="portrait"
+            android:name=".ModifyPlaylistActivity"
+            android:label="@string/title_activity_modify_playlist"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,12 +54,12 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ModifyPlaylistActivity"
-            android:label="@string/title_activity_modify_playlist"
-            android:theme="@style/AppTheme">
+        <!--<activity-->
+            <!--android:name=".ModifyPlaylistActivity"-->
+            <!--android:label="@string/title_activity_modify_playlist"-->
+            <!--android:theme="@style/AppTheme">-->
 
-        </activity>
+        <!--</activity>-->
 
         <activity
             android:name=".AtspTest"

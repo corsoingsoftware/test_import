@@ -2,7 +2,6 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.security.keystore.KeyNotYetValidException;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -19,9 +18,14 @@ public class ParcelablePlaylist implements Playlist{
 
     private final int TIME_SLICES_SONG = 0;
     private final int MIDI_SONG = 1;
+    private int playlistID;
+    private String playlistName;
 
     protected ParcelablePlaylist(Parcel inputParcel) {
         this(inputParcel.readString());
+        this.playlistName = inputParcel.readString();
+        this.playlistID = inputParcel.readInt();
+
         for(int cycles = 0; cycles < inputParcel.dataSize(); cycles++){
             int songTime=inputParcel.readInt();
             if(songTime==TIME_SLICES_SONG) {
@@ -75,11 +79,15 @@ public class ParcelablePlaylist implements Playlist{
         p=songList.toArray(p);
         for(Song currentSong: songList){
             if(currentSong instanceof TimeSlicesSong){
+                dest.writeString(playlistName);
+                dest.writeInt(playlistID);
                 dest.writeInt(TIME_SLICES_SONG);
                 dest.writeParcelable(currentSong, flags);
             }
             else{
-                dest.writeInt(MIDI_SONG);
+                dest.writeString(playlistName);
+                dest.writeInt(playlistID);
+                dest.writeInt(TIME_SLICES_SONG);
                 dest.writeParcelable(currentSong, flags);
             }
         }
@@ -90,21 +98,19 @@ public class ParcelablePlaylist implements Playlist{
     }
 
     @Override
-    public void setName(String name) {    }
+    public void setName(String name) { this.playlistName = name;  }
 
     @Override
-    public int getId() {
-        return 0;
+    public int getId() {    return playlistID;
     }
 
     @Override
-    public void setId(int newId) {
-
+    public void setId(int newId) {  this.playlistID = newId;
     }
 
     @Override
     public String getName() {
-        return name;
+        return playlistName;
     }
 
     @Override
