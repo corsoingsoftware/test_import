@@ -9,6 +9,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 public class MultipleSongPlayerManager implements SongPlayerManager {
     private AudioTrackSongPlayer audioTrackSongPlayer;
 
+    public MultipleSongPlayerManager() {
+        //audioTrackSongPlayer = new AudioTrackSongPlayer();
+    }
+
     /**
      * Example of method to manage a generic song
      */
@@ -20,9 +24,9 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
         entrySong.getSongPlayer(this).load(entrySong);
     }
 
-    public void write(Song entrySong) {
+    public void write(Song[] songs) {
 
-        entrySong.getSongPlayer(this).write(entrySong);
+        //entrySong.getSongPlayer(this).write(entrySong);
     }
 
     public byte[] getSong(Song entrySong) {
@@ -39,5 +43,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
     public SongPlayer getTimeSlicesSongPlayer() {
         return audioTrackSongPlayer;
     }
+
     //altra istanza di un eventuale midiplayer
 }

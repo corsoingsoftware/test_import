@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.generators.SignalsGenerator;
 
 import static a2016.soft.ing.unipd.metronomepro.sound.management.PlayState.PLAYSTATE_PAUSE;
@@ -243,10 +244,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     /**
      * Riceve in input un array di Songs. Le cerca nell'HashMap e, se presenti, le scrive nel buffer di AudioTrack.
-     * @param entrySong array contenente le canzoni
+     * @param songs array contenente le canzoni
      * @throws Exception
      */
-    public void write(final Song entrySong) {
+    public void write(final Song[] songs) {
 
 
         Runnable toDo= new Runnable() {
@@ -262,11 +263,11 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 goThread = false;
                 stop = false;
 
-                //for (int i = 0; i < songs.length; i++) {
+                for (int i = 0; i < songs.length; i++) {
 
-                if (hashMap.containsKey(entrySong.getName())) {
+                    if (hashMap.containsKey(songs[i].getName())) {
 
-                    arraySong = (byte[]) hashMap.get(entrySong.getName());
+                    arraySong = (byte[]) hashMap.get(songs[i].getName());
                         int indexWrite = 0;
 
                         while (indexWrite < arraySong.length) {
@@ -277,7 +278,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
                                 return;
                         }
                     }
-                //}
+                }
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
