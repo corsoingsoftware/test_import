@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.SQLiteDataProvider;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 

@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
@@ -116,16 +115,16 @@ public class ExampleInstrumentedTest {
         t3.setDurationInBeats(20);
 
 
-        Song s = new ParcelableSong();
-        s.add(t1);
-        s.add(t2);
-        s.add(t3);
+//        Song s = new ParcelableSong();
+//        s.add(t1);
+//        s.add(t2);
+//        s.add(t3);
 
         //SongPlayer atsp = new AudioTrackSongPlayer();
       //  atsp.load(s);
 
         Song[] arrayS = new Song[1];
-        arrayS[0] = s;
+//        arrayS[0] = s;
 
       //  ((AudioTrackSongPlayer)atsp).write(arrayS);
         //atsp.play();
