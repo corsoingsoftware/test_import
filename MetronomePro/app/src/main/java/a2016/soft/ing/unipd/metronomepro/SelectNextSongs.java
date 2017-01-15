@@ -83,7 +83,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
                     for (Song entrySong : songs) {
 
-                        spsc.write(entrySong);
+         //               spsc.write(entrySong);
                         spsc.play(entrySong);
                     }
                 }

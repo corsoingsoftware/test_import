@@ -79,7 +79,7 @@ public class SongPlayerService extends Service {
 
     }
 
-    public void write(Song entrySong) {
+    public void write(Song[] entrySong) {
         //atsp.write(songs);
         mspm.write(entrySong);
     }

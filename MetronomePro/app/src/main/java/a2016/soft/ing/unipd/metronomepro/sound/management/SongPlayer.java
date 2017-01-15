@@ -14,10 +14,14 @@ public interface SongPlayer {
     /**
      * Start the current song
      */
-    void play();
+    void play(Song entrySong);
 
 //deleted initialized methods by Federico, no more necessary
 
+    //giulio for debug
+    public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig);
+    public void initialize(int sampleRate, int audioFormat, int channelConfig);
+    public void initialize();
 
     /**
      * Pause the current song

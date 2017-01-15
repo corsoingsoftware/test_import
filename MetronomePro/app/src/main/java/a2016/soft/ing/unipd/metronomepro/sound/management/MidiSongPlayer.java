@@ -31,13 +31,33 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
         player= new MediaPlayer();
         player.setOnCompletionListener(this);
     }
-
+/**
     @Override
     public void play() {
         if(playerState != ON_PLAY) {
             playerState = ON_PLAY;
             player.start();
         }
+    }*/
+
+    @Override
+    public void play(Song entrySong) {
+
+    }
+
+    @Override
+    public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig) {
+
+    }
+
+    @Override
+    public void initialize(int sampleRate, int audioFormat, int channelConfig) {
+
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override

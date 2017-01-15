@@ -57,19 +57,19 @@ public class SongPlayerServiceCaller implements SongPlayer {
         pBound = true;
     }
 
-    @Override
+
     public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(7param)");
         pService.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
     }
 
-    @Override
+
     public void initialize(int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(3param)");
         pService.initialize(sampleRate,audioFormat,channelConfig);
     }
 
-    @Override
+
     public void initialize(){
         Log.v(LOG_TAG,"in initialize()");
         pService.initialize();
@@ -106,16 +106,21 @@ public class SongPlayerServiceCaller implements SongPlayer {
     }
 
     @Override
+    public void write(Song[] songs) {
+
+    }
+
+    @Override
     public void load(Song song){
         Log.v(LOG_TAG,"in load");
         pService.load(song);
 
     }
 
-    public void write(Song entrySong) {
+   /** public void write(Song[] entrySong) {
         Log.v(LOG_TAG,"in write");
         pService.write(entrySong);
-    }
+    }*/
 
     public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
         Log.v(LOG_TAG,"in startAudioTrackSongPlayer");

@@ -39,7 +39,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
      * Example of method to manage a generic song
      */
     public void play(Song entrySong) {
-        entrySong.getSongPlayer(this).play();
+      //  entrySong.getSongPlayer(this).play();
     }
 
     public void load(Song entrySong) {
@@ -58,11 +58,11 @@ public class MultipleSongPlayerManager implements SongPlayerManager {
             if(currSong.getClass()!=s){
                 typeChanged++;
             }
-            while(songs[i] instanceof currSong. && i < songs.length) {
+           // while(songs[i] instanceof currSong. && i < songs.length) {
 
                 songQueue.add(songs[i]);
                 i++;
-            }
+          //  }
         }
 
     }
