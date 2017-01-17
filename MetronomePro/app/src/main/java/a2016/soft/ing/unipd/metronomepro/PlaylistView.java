@@ -2,19 +2,27 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.sip.SipAudioCall;
+import android.net.sip.SipSession;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -64,8 +72,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //CharacterPickerDialog dialog = new CharacterPickerDialog();
-                customDialog();
+               customDialog();
 
             }
         });
@@ -101,13 +108,29 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
 
         return arrayList;
     }
+
     public void customDialog(){
         Dialog dialog = new Dialog(PlaylistView.this);
         dialog.setContentView(R.layout.dialog_submit);
-        TextView edit_model = (TextView)dialog.findViewById(R.id.edit_model);
-        edit_model.setText(Build.DEVICE);
+        EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel);
+        Button submit = (Button) dialog.findViewById(R.id.but_submit);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         dialog.show();
+
     }
+
     @Override
     public void onPlaylistClick() {
         Activity activity = this;
