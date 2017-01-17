@@ -33,9 +33,9 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
 
     public ModifyPlaylistAdapter(ParcelablePlaylist playlistToModify, Context c, OnStartDragListener dragListener) {
         this.playlistToModify = playlistToModify;
-        this.dragListener = dragListener;
-        this.context = c;
-    }
+    this.dragListener = dragListener;
+    this.context = c;
+}
 
     public interface ModifyPlaylistAdapterCallback {
         void serviceConnected();
