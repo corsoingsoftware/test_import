@@ -30,34 +30,32 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     //query's edited by Alessio and Alberto
     private static final String CREATE_TABLE_SONG = "CREATE TABLE "
             + TBL_SONG + "("
-            + FIELD_SONG_ID + " INTEGER PRIMARY KEY, "
-            + FIELD_SONG_TITLE + " UNIQUE TEXT);";
+            + FIELD_SONG_TITLE + " TEXT PRIMARY KEY);";
 
     private static final String CREATE_TABLE_PLAYLIST = "CREATE TABLE "
             + TBL_PLAYLIST + "("
-            + FIELD_PLAYLIST_ID + " INTEGER PRIMARY KEY, "
-            + FIELD_PLAYLIST_NAME + " UNIQUE TEXT);";
+            + FIELD_PLAYLIST_NAME + " TEXT PRIMARY KEY);";
 
     private static final String CREATE_TABLE_TIMESLICES = "CREATE TABLE "
             + TBL_TS_SONG + "("
-            + FIELD_TIME_SLICES_ID + " INTEGER, "
-            + FIELD_TIME_SLICES_SONG + " BLOB, "
-            + "FOREIGN KEY(" + FIELD_TIME_SLICES_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "));";
+            + FIELD_SONG_TITLE + " TEXT PRIMARY KEY, "
+            + FIELD_TIME_SLICES_BLOB + " BLOB, "
+            + "FOREIGN KEY(" + FIELD_SONG_TITLE + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "));";
 
     private static final String CREATE_TABLE_MIDI = "CREATE TABLE "
             + TBL_MIDI_SONG + "("
-            + FIELD_MIDI_ID + " INTEGER, "
+            + FIELD_SONG_TITLE + " TEXT PRIMARY KEY, "
             + FIELD_MIDI_PATH + " UNIQUE TEXT, "
             + FIELD_MIDI_DURATION + " INTEGER, "
-            + "FOREIGN KEY(" + FIELD_MIDI_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "));";
+            + "FOREIGN KEY(" + FIELD_SONG_TITLE + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "));";
 
     private static final String CREATE_TABLE_SONG_PLAYLIST = "CREATE TABLE "
             + TBL_SONG_PLAYLIST + "("
-            + FIELD_SONG_ID + " INTEGER NOT NULL, "
-            + FIELD_PLAYLIST_ID + " INTEGER NOT NULL, "
-            + "FOREIGN KEY("+ FIELD_PLAYLIST_ID + ") REFERENCES " + TBL_PLAYLIST + "(" + FIELD_PLAYLIST_ID + "), "
-            + "FOREIGN KEY("+ FIELD_SONG_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "), "
-            + "PRIMARY KEY("+ FIELD_PLAYLIST_ID + ", " + FIELD_SONG_ID + ")); ";
+            + FIELD_SONG_TITLE + " TEXT NOT NULL, "
+            + FIELD_PLAYLIST_NAME + " TEXT NOT NULL, "
+            + "FOREIGN KEY("+ FIELD_PLAYLIST_NAME + ") REFERENCES " + TBL_PLAYLIST + "(" + FIELD_PLAYLIST_NAME + "), "
+            + "FOREIGN KEY("+ FIELD_SONG_TITLE  + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "), "
+            + "PRIMARY KEY("+ FIELD_PLAYLIST_NAME + ", " + FIELD_SONG_TITLE + ")); ";
 
     @Override
 
@@ -73,20 +71,17 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public void save(Song songToAdd) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues valuesToInsertInSong = new ContentValues();
-        valuesToInsertInSong.put(FIELD_SONG_ID, songToAdd.getId());
         valuesToInsertInSong.put(FIELD_SONG_TITLE, songToAdd.getName());
         database.insert(TBL_SONG, null, valuesToInsertInSong);
 
 
         if (songToAdd instanceof TimeSlicesSong) {
             ContentValues valuesToInsertInTimeSlices = new ContentValues();
-            valuesToInsertInTimeSlices.put(FIELD_TIME_SLICES_ID, songToAdd.getId());
-            valuesToInsertInTimeSlices.put(FIELD_TIME_SLICES_SONG, ((TimeSlicesSong) songToAdd).encode());
+            valuesToInsertInTimeSlices.put(FIELD_TIME_SLICES_BLOB, ((TimeSlicesSong) songToAdd).encode());
             database.insert(TBL_TS_SONG, null, valuesToInsertInSong);
 
         } else {
             ContentValues valuesToInsertInMidiSong = new ContentValues();
-            valuesToInsertInMidiSong.put(FIELD_MIDI_ID, songToAdd.getId());
             valuesToInsertInMidiSong.put(FIELD_MIDI_PATH, ((MidiSong) songToAdd).getPath());
             valuesToInsertInMidiSong.put(FIELD_MIDI_DURATION, ((MidiSong) songToAdd).getDuration());
             database.insert(TBL_MIDI_SONG, null, valuesToInsertInSong);
@@ -97,7 +92,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public void savePlaylist(Playlist playlistToAdd) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues valesToInsert = new ContentValues();
-        valesToInsert.put(FIELD_PLAYLIST_ID, playlistToAdd.getId());
         valesToInsert.put(FIELD_PLAYLIST_NAME, playlistToAdd.getName());
         database.insert(TBL_PLAYLIST, null, valesToInsert);
     }
@@ -108,28 +102,26 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         List<Song> songsToReturn = new ArrayList<Song>();
         SQLiteDatabase database = this.getReadableDatabase();
 
-        String queryForMidiSongs = "SELECT * FROM " + TBL_SONG + " JOIN " + TBL_MIDI_SONG + " ON "
-                + FIELD_SONG_ID + " = " + FIELD_MIDI_ID +";";
+        String queryForMidiSongs = "SELECT * FROM " + TBL_SONG + " NATURAL JOIN " + TBL_MIDI_SONG + ";";
         Cursor cursorOfMidi = database.rawQuery(queryForMidiSongs, null);
         if (cursorOfMidi.moveToFirst()) {
             do {
-                MidiSong midiToAdd = EntitiesBuilder.getMidiSong();
-                midiToAdd.setId(cursorOfMidi.getInt(cursorOfMidi.getColumnIndex(FIELD_MIDI_ID)));
-                midiToAdd.setName(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_SONG_TITLE)));
-                midiToAdd.setDuration(cursorOfMidi.getInt(cursorOfMidi.getColumnIndex(FIELD_MIDI_DURATION)));
-                midiToAdd.setPath(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_MIDI_PATH)));
-                songsToReturn.add(midiToAdd);
+                MidiSong newMidi = EntitiesBuilder.getMidiSong();
+                newMidi.setName(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_SONG_TITLE)));
+                newMidi.setDuration(cursorOfMidi.getInt(cursorOfMidi.getColumnIndex(FIELD_MIDI_DURATION)));
+                newMidi.setPath(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_MIDI_PATH)));
+                songsToReturn.add(newMidi);
             } while (cursorOfMidi.moveToNext());
         }
 
-        String queryForTimeSlicesSongs = "SELECT * FROM " + TBL_SONG + " JOIN " + TBL_TS_SONG + " ON "
-                + FIELD_SONG_ID + "=" + FIELD_TIME_SLICES_ID +";";
+        String queryForTimeSlicesSongs = "SELECT * FROM " + TBL_SONG + " NATURAL JOIN " + TBL_TS_SONG + ";";
         Cursor cursorOfTimeSlices = database.rawQuery(queryForTimeSlicesSongs, null);
         if (cursorOfTimeSlices.moveToFirst()) {
             do {
-                TimeSlicesSong TimeSlicesToAdd = EntitiesBuilder.getTimeSlicesSong();
-                TimeSlicesToAdd.setName(cursorOfTimeSlices.getString(cursorOfMidi.getColumnIndex(FIELD_SONG_TITLE)));
-                songsToReturn.add(TimeSlicesToAdd);
+                TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
+                newTimeSlices.setName(cursorOfTimeSlices.getString(cursorOfTimeSlices.getColumnIndex(FIELD_SONG_TITLE)));
+                newTimeSlices.decode(cursorOfTimeSlices.getBlob(cursorOfTimeSlices.getColumnIndex(FIELD_TIME_SLICES_BLOB)));
+                songsToReturn.add(newTimeSlices);
             } while (cursorOfMidi.moveToNext());
         }
         return songsToReturn;
