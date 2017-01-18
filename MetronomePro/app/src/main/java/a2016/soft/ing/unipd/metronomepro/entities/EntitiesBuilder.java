@@ -14,10 +14,11 @@ public class EntitiesBuilder {
     public static Playlist getPlaylist(String name){
         return new ParcelablePlaylist(name);
     }
+    //edited by Alessio and Alberto on 18/01/17
     public static MidiSong getMidiSong(){
-        return null;
+        return new ParcelableMidiSong();
     }
     public static TimeSlicesSong getTimeSlicesSong(){
-        return null;
+        return new ParcelableTimeSlicesSong();
     }
 }

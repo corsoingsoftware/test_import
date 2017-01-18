@@ -28,6 +28,4 @@ public interface DataProviderConstants {
     public static final String FIELD_MIDI_ID = "MidiID";
 
     public static final String TBL_SONG_PLAYLIST = "Contiene";
-    public static final String FIELD_SP_SONG_ID = "SongID";
-    public static final String FIELD_SP_MIDI_ID = "MidiID";
     }
