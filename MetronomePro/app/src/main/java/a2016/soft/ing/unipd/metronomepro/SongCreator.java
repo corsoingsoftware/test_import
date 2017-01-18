@@ -56,7 +56,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
-        Song songToEdit= createTestSong();
+        Song songToEdit= createTestSong("test");
         if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
             songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
         }else{
@@ -155,7 +155,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
      * This method create a test song just used to test usability
      * @return a demo song
      */
-    public static Song createTestSong(){
+    public static Song createTestSong(String nameSong){
         TimeSlice t1, t2, t3;
         TimeSlicesSong s =(TimeSlicesSong) EntitiesBuilder.getTimeSlicesSong();
         t1 = new TimeSlice();
@@ -206,6 +206,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         s.add(t1);
         s.add(t2);
         s.add(t3);
+        s.setName(nameSong);
         return s;
     }
 
