@@ -109,7 +109,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     @Override
     public void write(Song[] songs) {
-
+        pService.write(songs);
     }
 
     @Override

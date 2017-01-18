@@ -183,9 +183,9 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
 
     public Song[] getSongs() {
 
-        ArrayList<PlayableSong> app = new ArrayList<PlayableSong>();
+        ArrayList<Song> app = new ArrayList<Song>();
         for(int i = 0; i < selectedSongs; i++) {
-            app.add(arraySongs.get(i));
+            app.add(arraySongs.get(i).getInnerSong());
         }
 
         Song[] toReturn = new Song[selectedSongs];

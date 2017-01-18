@@ -21,7 +21,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private MidiSongPlayer midiSongPlayer;
     private LinkedBlockingQueue<Song> songQueue;
     private int typeChanged;
-    private int resourcesToUse;
     private int nextToPlay;
     private Song[] arraySongs;
 
@@ -31,7 +30,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
-        resourcesToUse = 2;
         nextToPlay = 0;
     }
 
@@ -99,6 +97,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
                 listSongsSameType.add(currSong);
                 songQueue.poll();
+
+                if(songQueue.size()==0) {
+                    Song[] app = new Song[listSongsSameType.size()];
+                    app = listSongsSameType.toArray(app);
+                    currentPlayer.write(app);
+                }
             }
 
             currSong = songQueue.peek();
