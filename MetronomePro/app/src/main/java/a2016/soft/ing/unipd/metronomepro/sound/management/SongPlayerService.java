@@ -45,11 +45,11 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in initialize()");
     }*/
 
-    public void play(Song entrySong) {
+    /*public void play(Song entrySong) {
         //atsp.play();
         mspm.play(entrySong);
         Log.v(LOG_TAG,"in play");
-    }
+    }*/
 
     public void pause(){
         //atsp.pause();
@@ -73,6 +73,7 @@ public class SongPlayerService extends Service {
     }
 
     public void load(Song entrySong) {
+
         //atsp.load(song);
         mspm.load(entrySong);
         Log.v(LOG_TAG,"in load");
@@ -80,6 +81,7 @@ public class SongPlayerService extends Service {
     }
 
     public void write(Song[] songs) {
+
         //atsp.write(songs);
         mspm.startTheseSongs(songs);
     }

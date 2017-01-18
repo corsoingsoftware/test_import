@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +43,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private Playlist playlist;
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
-    //selezionte nel layout di giulio
+                                                                    //selezionte nel layout di giulio
     //All results:
-    private static final int EDIT_SELECTED_SONGS=1;
+    private static final int START_EDIT_NEW_SONG=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +63,18 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-                Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
-                startActivityForResult(intent, EDIT_SELECTED_SONGS);
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
             }
             /**public void onClick(View view) {
-             Song songToEdit = EntitiesBuilder.getSong();
-             Intent intent = new Intent(activity,SelectSongForPlaylist.class);
-             intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
-             startActivityForResult(intent, START_EDIT_NEW_SONG);
+                Song songToEdit = EntitiesBuilder.getSong();
+                Intent intent = new Intent(activity,SelectSongForPlaylist.class);
+                intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
+                startActivityForResult(intent, START_EDIT_NEW_SONG);
 
-             }*/
+            }*/
         });
 
         FloatingActionButton floatingActionButtonPlay= (FloatingActionButton)findViewById(R.id.fabPlay);
@@ -102,67 +101,32 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             playlist = savedInstanceState.getParcelable("Playlist");
         } */
         else {
-            /**Intent playlistIntent = getIntent();
-             if(playlistIntent!=null){
-             try{
-             playlist = playlistIntent.getParcelableExtra("playlist_selected");
-             }
-             catch(Exception e){
-             e.printStackTrace();
-             }
-             }*/
-
             //Default
-           /** try {
+            try {
                 DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
                 List<Song> songs=dp.getSongs(null,playlist);
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getSong("song 0"));
-                playlist.add(EntitiesBuilder.getSong("song 1"));
-                playlist.add(EntitiesBuilder.getSong("song 2"));
-                playlist.add(EntitiesBuilder.getSong("song 3"));
-                playlist.add(EntitiesBuilder.getSong("song 4"));
-            }*/
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getMidiSong());
+            }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato
              */
-            Intent intent = null;
-            try {
-                intent = Intent.getIntentOld("playlist_selected");
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
+            Intent intent = getIntent();
             if(intent!=null){
                 try {
-                    playlist = intent.getParcelableExtra("playlist_selected");
-                    //songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
-                    //playlist.addAll(songsToAdd);
-                }
-                catch (Exception ex) {
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+                    playlist.addAll(songsToAdd);
+                } catch (Exception ex) {
                     ex.printStackTrace();
-                    playlist.add(EntitiesBuilder.getSong("song 4"));
                 }
             }
         }
-        //modificato da giulio
-        /**
-         * try {
-         savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
-         for (int i = 0;i<songForAdapter.size();i++) {
-         for (int j = 0;j<savedSongs.size();j++) {
-         if(savedSongs.get(j).getName().compareTo(songForAdapter.get(i).getName())==0){
-         songForAdapter.remove(i);
-         }
-         }
-         }
-
-         } catch (Exception ex) {
-         ex.printStackTrace();
-         }
-         */
 
 
         modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
@@ -190,7 +154,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
             switch (requestCode){
-                case EDIT_SELECTED_SONGS:
+                case START_EDIT_NEW_SONG:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
                     break;

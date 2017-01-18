@@ -12,6 +12,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -44,6 +45,10 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVNextSongs.setLayoutManager(rVLayoutManager);
         spsc = new SongPlayerServiceCaller(this, this);
 
+
+
+
+
         if(savedInstanceState!=null) {
             if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
 
@@ -62,7 +67,18 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         }else{
             Intent intent=getIntent();
             if(intent!=null){
-                p=intent.getParcelableExtra(PLAYLIST);
+                if(intent.hasExtra(PLAYLIST)) {
+                    p = intent.getParcelableExtra(PLAYLIST);
+                }else{
+                    p= EntitiesBuilder.getPlaylist("prova");
+
+                    Song testSong1 = SongCreator.createTestSong();
+                    Song testSong2 = SongCreator.createTestSong();
+                    Song testSong3 = SongCreator.createTestSong();
+                    p.add(testSong1);
+                    p.add(testSong2);
+                    p.add(testSong3);
+                }
                 selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
             }
         }
@@ -81,11 +97,13 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
                     Song[] songs = selectSongsAdapter.getSongs();
 
-                    for (Song entrySong : songs) {
+                    /*for (Song entrySong : songs) {
 
                         spsc.write(entrySong);
                         spsc.play(entrySong);
-                    }
+                    }*/
+
+                    spsc.write(songs);
                 }
 
                 //Blocco tutto
@@ -109,7 +127,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
         for (int i = 0; i < playlist.size(); i++) {
 
-            spsc.load((Song) playlist.get(i));
+            spsc.load((Song) playlist.get(i).getInnerSong());
         }
     }
 

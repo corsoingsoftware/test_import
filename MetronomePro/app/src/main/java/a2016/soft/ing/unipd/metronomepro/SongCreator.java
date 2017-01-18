@@ -15,7 +15,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;
@@ -62,7 +61,11 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         }else{
             Intent intent=getIntent();
             try {
-                songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
+                if(intent.hasExtra(SONG_TO_EDIT)) {
+                    songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
+                } else {
+                    songToEdit= EntitiesBuilder.getTimeSlicesSong();
+                }
             } catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -106,13 +109,17 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
      * @param v the v called
      */
     private void onAddOrEditClicked(View v) {
-        if(timeSlicesAdapter.getTimeSliceSelected()!=null){
-            //edit
+        TimeSlice currentTimeSlice=timeSlicesAdapter.getTimeSliceSelected();
+        if(currentTimeSlice!=null){
+            currentTimeSlice.setBpm(Integer.parseInt(bpmEditText.getText().toString()));
+            currentTimeSlice.setDurationInBeats(Integer.parseInt(beatsEditText.getText().toString()));
+            timeSlicesAdapter.setSelectedItem(null);
+            timeSlicesAdapter.notifyItemChanged(timeSlicesAdapter.getTimeSliceSelectedPosition());
         }else{
-            TimeSlice ts= new TimeSlice();
-            ts.setBpm(Integer.parseInt(bpmEditText.getText().toString()));
-            ts.setDurationInBeats(Integer.parseInt(beatsEditText.getText().toString()));
-            timeSlicesAdapter.addTimeSlice(timeSlicesAdapter.getItemCount(),ts);
+            currentTimeSlice= new TimeSlice();
+            currentTimeSlice.setBpm(Integer.parseInt(bpmEditText.getText().toString()));
+            currentTimeSlice.setDurationInBeats(Integer.parseInt(beatsEditText.getText().toString()));
+            timeSlicesAdapter.addTimeSlice(timeSlicesAdapter.getItemCount(),currentTimeSlice);
         }
     }
 
@@ -147,9 +154,9 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
      * This method create a test song just used to test usability
      * @return a demo song
      */
-    private Song createTestSong(){
+    public static Song createTestSong(){
         TimeSlice t1, t2, t3;
-        TimeSlicesSong s =(TimeSlicesSong) EntitiesBuilder.getSong("pippo");
+        TimeSlicesSong s =(TimeSlicesSong) EntitiesBuilder.getTimeSlicesSong();
         t1 = new TimeSlice();
         t2 = new TimeSlice();
         t3 = new TimeSlice();
