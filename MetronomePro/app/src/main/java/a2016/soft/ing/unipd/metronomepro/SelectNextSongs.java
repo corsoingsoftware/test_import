@@ -72,9 +72,9 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                 }else{
                     p= EntitiesBuilder.getPlaylist("prova");
 
-                    Song testSong1 = SongCreator.createTestSong();
-                    Song testSong2 = SongCreator.createTestSong();
-                    Song testSong3 = SongCreator.createTestSong();
+                    Song testSong1 = SongCreator.createTestSong("song1");
+                    Song testSong2 = SongCreator.createTestSong("song2");
+                    Song testSong3 = SongCreator.createTestSong("song3");
                     p.add(testSong1);
                     p.add(testSong2);
                     p.add(testSong3);
