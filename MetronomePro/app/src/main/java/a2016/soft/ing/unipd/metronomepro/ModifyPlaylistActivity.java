@@ -108,11 +108,11 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getSong("song 0"));
-                playlist.add(EntitiesBuilder.getSong("song 1"));
-                playlist.add(EntitiesBuilder.getSong("song 2"));
-                playlist.add(EntitiesBuilder.getSong("song 3"));
-                playlist.add(EntitiesBuilder.getSong("song 4"));
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getTimeSlicesSong());
+                playlist.add(EntitiesBuilder.getMidiSong());
             }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato

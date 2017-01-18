@@ -5,15 +5,19 @@ package a2016.soft.ing.unipd.metronomepro.entities;
  */
 
 public class EntitiesBuilder {
-    public static Song getSong() {
+
+    public static TimeSlicesSong getTimeSlicesSong() {
         return new ParcelableTimeSlicesSong();
     }
+
     public static Song getSong(String name) {
         return new ParcelableTimeSlicesSong(name);
     }
+
     public static Playlist getPlaylist(String name){
         return new ParcelablePlaylist(name);
     }
+
     //edited by Alessio and Alberto on 18/01/17
     public static MidiSong getMidiSong(){
         return new ParcelableMidiSong();
@@ -21,4 +25,5 @@ public class EntitiesBuilder {
     public static TimeSlicesSong getTimeSlicesSong(){
         return new ParcelableTimeSlicesSong();
     }
+
 }
