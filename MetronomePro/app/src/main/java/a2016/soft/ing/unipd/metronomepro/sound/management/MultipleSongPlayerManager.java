@@ -32,39 +32,26 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     /**
      * Example of method to manage a generic song
      */
-    public void play(Song entrySong) {
-        entrySong.getSongPlayer(this).play();
+    public void play(Song[] songs) {
+
+        //entrySong.getSongPlayer(this).play();
+
+        Class currClass = songs[0].getClass();
+
+        for(int i = 0; i < songs.length; i++) {
+
+            if(songs[i].getClass() != currClass) {
+
+            }
+            else {
+
+            }
+        }
     }
 
     public void load(Song entrySong) {
         entrySong.getSongPlayer(this).load(entrySong);
     }
-
-    /*public void write(Song[] songs, Song[] ) {
-
-        //entrySong.getSongPlayer(this).write(entrySong);
-
-        int i = 0;
-        int typeChanged = 0;
-        Class s = songs[i].getClass();
-        Song currSong = songs[i++];
-
-        while(i < songs.length && typeChanged < PLAYERS) {
-
-            if(currSong.getClass() != s){
-                typeChanged++;
-                currSong = songs[i];
-                s = songs[i].getClass();
-            }
-            else {
-                songQueue.add(songs[i]);
-            }
-
-            i++;
-        }
-
-
-    }*/
 
 
     public void startTheseSongs(Song[] songs) {
@@ -74,7 +61,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             for (Song s : songs) {
                 songQueue.add(s);
             }
-
             dequeueManagement();
         }
     }
@@ -92,6 +78,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
                 currentPlayer.write((Song[])listSongsSameType.toArray());
                 typeChanged ++;
+
                 if(typeChanged < PLAYERS) {
                     s = currSong.getClass();
                     currentPlayer = currSong.getSongPlayer(this);
@@ -106,6 +93,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
                 currSong = songQueue.poll();
             }
         }
+
     }
 
 
@@ -129,7 +117,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         typeChanged --;
         dequeueManagement();
+        //play();
     }
 
-    //altra istanza di un eventuale midiplayer
 }
