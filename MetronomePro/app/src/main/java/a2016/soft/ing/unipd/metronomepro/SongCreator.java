@@ -15,7 +15,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 
 import a2016.soft.ing.unipd.metronomepro.adapters.TimeSlicesAdapter;

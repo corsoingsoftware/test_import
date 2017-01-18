@@ -127,7 +127,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
         for (int i = 0; i < playlist.size(); i++) {
 
-            spsc.load((Song) playlist.get(i));
+            spsc.load((Song) playlist.get(i).getInnerSong());
         }
     }
 
