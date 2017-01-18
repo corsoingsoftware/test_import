@@ -10,8 +10,9 @@ import android.util.Log;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 /**
  * Created by giuli on 09/12/2016.
+ *
  */
-
+//// TODO: 15/01/2017 Federico says: we must be check this class and the service associated!!!!! ATM I commented all errors
 public class SongPlayerServiceCaller implements SongPlayer {
 
     private static final String LOG_TAG = "SPScaller"; //for debug
@@ -57,28 +58,29 @@ public class SongPlayerServiceCaller implements SongPlayer {
         pBound = true;
     }
 
-    @Override
     public void initialize(int frequencyBeep, int lenghtBeep, int frequencyBoop, int lenghtBoop, int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(7param)");
-        pService.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
+        //pService.initialize(frequencyBeep,lenghtBeep,frequencyBoop,lenghtBoop,sampleRate,audioFormat,channelConfig);
     }
 
-    @Override
     public void initialize(int sampleRate, int audioFormat, int channelConfig){
         Log.v(LOG_TAG,"in initialize(3param)");
-        pService.initialize(sampleRate,audioFormat,channelConfig);
+        //pService.initialize(sampleRate,audioFormat,channelConfig);
     }
 
-    @Override
     public void initialize(){
         Log.v(LOG_TAG,"in initialize()");
-        pService.initialize();
+        //pService.initialize();
     }
 
-    @Override
     public void play(Song entrySong) {
         Log.v(LOG_TAG,"in play");
         pService.play(entrySong);
+    }
+
+    @Override
+    public void play() {
+
     }
 
     @Override
@@ -106,6 +108,11 @@ public class SongPlayerServiceCaller implements SongPlayer {
     }
 
     @Override
+    public void write(Song[] songs) {
+
+    }
+
+    @Override
     public void load(Song song){
         Log.v(LOG_TAG,"in load");
         pService.load(song);
@@ -114,12 +121,12 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     public void write(Song entrySong) {
         Log.v(LOG_TAG,"in write");
-        pService.write(entrySong);
+        //pService.write(/*entrySong*/);
     }
 
-    public void startAudioTrackSongPlayer(AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback) {
+    public void startAudioTrackSongPlayer(/*AudioTrackSongPlayer.AudioTrackSongPlayerCallback callback*/) {
         Log.v(LOG_TAG,"in startAudioTrackSongPlayer");
-        pService.startAudioTrackSongPlayer(callback);
+        //pService.startAudioTrackSongPlayer(callback);
     }
 
     public SongPlayerService getService(){

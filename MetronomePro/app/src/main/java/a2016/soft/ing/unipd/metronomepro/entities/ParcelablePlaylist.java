@@ -2,7 +2,6 @@ package a2016.soft.ing.unipd.metronomepro.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.security.keystore.KeyNotYetValidException;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -15,13 +14,19 @@ import java.util.ListIterator;
  * Created by Omar on 12/12/2016.
  */
 
-public class ParcelablePlaylist implements Playlist{
+public class ParcelablePlaylist implements Playlist {
 
-    private final int TIME_SLICES_SONG = 0;
-    private final int MIDI_SONG = 1;
+    private static final int NO_ID=-1;
+    private static final int TIME_SLICES_SONG = 0;
+    private static final int MIDI_SONG = 1;
+    private int playlistID;
+    private String name;
+    private ArrayList<Song> songList;
 
     protected ParcelablePlaylist(Parcel inputParcel) {
         this(inputParcel.readString());
+        this.playlistID = inputParcel.readInt();
+
         for(int cycles = 0; cycles < inputParcel.dataSize(); cycles++){
             int songTime=inputParcel.readInt();
             if(songTime==TIME_SLICES_SONG) {
@@ -57,10 +62,13 @@ public class ParcelablePlaylist implements Playlist{
         }
     };
 
-    private String name;
-    private ArrayList<Song> songList;
 
     public ParcelablePlaylist(String name) {
+        this(NO_ID,name);
+    }
+
+    public ParcelablePlaylist(int id, String name) {
+        this.playlistID=id;
         this.name = name;
         songList = new ArrayList<Song>();
     }
@@ -71,8 +79,10 @@ public class ParcelablePlaylist implements Playlist{
     }
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        Parcelable[] p=new Parcelable[songList.size()];
-        p=songList.toArray(p);
+        dest.writeString(name);
+        dest.writeInt(playlistID);
+//        Parcelable[] p=new Parcelable[songList.size()];
+//        p=songList.toArray(p);
         for(Song currentSong: songList){
             if(currentSong instanceof TimeSlicesSong){
                 dest.writeInt(TIME_SLICES_SONG);
@@ -83,23 +93,20 @@ public class ParcelablePlaylist implements Playlist{
                 dest.writeParcelable(currentSong, flags);
             }
         }
-        dest.writeString(getName());
-        dest.writeParcelableArray(p, flags);
+        //dest.writeParcelableArray(p, flags);
         //prendo la song e la metto in array list convertita in array di byte
         //passo al parser aray di byte quando li riprendo li devo riconvertire in song
     }
 
     @Override
-    public void setName(String name) {    }
+    public void setName(String name) { this.name = name;  }
 
     @Override
-    public int getId() {
-        return 0;
+    public int getId() {    return playlistID;
     }
 
     @Override
-    public void setId(int newId) {
-
+    public void setId(int newId) {  this.playlistID = newId;
     }
 
     @Override

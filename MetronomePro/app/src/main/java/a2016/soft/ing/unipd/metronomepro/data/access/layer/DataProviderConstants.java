@@ -9,13 +9,25 @@ public interface DataProviderConstants {
     public static final String DEFAULT_PLAYLIST = "Default playlist";
     public static final String DBNAME = "MetronomeProDB";
     public static final int DB_VERSION = 1;
-    public static final String TBL_TRACK = "Tracce";
-    public static final String FIELD_TRACK_NAME = "Nome";
-    public static final String FIELD_TRACK_SONG = "Canzone";
+
+    public static final String TBL_SONG = "Song";
+    public static final String FIELD_SONG_ID = "SongID";
+    public static final String FIELD_SONG_TITLE = "Titolo";
+
     public static final String TBL_PLAYLIST = "Playlist";
+    public static final String FIELD_PLAYLIST_ID = "PlaylistID";
     public static final String FIELD_PLAYLIST_NAME = "Nome";
-    public static final String TBL_ASSOCIATION = "Include";
-    public static final String FIELD_ASSOCIATION_SONGS = "Tracce";
-    public static final String FIELD_ASSOCIATION_PLAYLIST = "Playlist";
-    public static final String FIELD_ASSOCIATION_POSITION = "Posizione";
-}
+
+    public static final String TBL_TS_SONG = "TimeSlicesSong";
+    public static final String FIELD_TIME_SLICES_SONG = "Song";
+    public static final String FIELD_TIME_SLICES_ID ="TimeSlicesID";
+
+    public static final String TBL_MIDI_SONG = "MidiSlicesSong";
+    public static final String FIELD_MIDI_DURATION = "Durata";
+    public static final String FIELD_MIDI_PATH = "Path";
+    public static final String FIELD_MIDI_ID = "MidiID";
+
+    public static final String TBL_SONG_PLAYLIST = "Contiene";
+    public static final String FIELD_SP_SONG_ID = "SongID";
+    public static final String FIELD_SP_MIDI_ID = "MidiID";
+    }

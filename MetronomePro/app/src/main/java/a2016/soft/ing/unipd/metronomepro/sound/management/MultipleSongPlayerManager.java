@@ -11,6 +11,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
+ * Developed by Omar
  */
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {

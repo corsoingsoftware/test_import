@@ -25,41 +25,42 @@ public class AtspTest extends AppCompatActivity {
         setContentView(R.layout.activity_atsp_test);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        final SongPlayer atsp = new AudioTrackSongPlayer((AudioTrackSongPlayer.AudioTrackSongPlayerCallback) this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                atsp.stop();
-            }
-        });
-
-        TimeSlice t1, t2, t3;
-
-        TimeSlicesSong s = new ParcelableTimeSlicesSong();
-        t1 = new TimeSlice();
-        t1.setBpm(180);
-        t1.setDurationInBeats(10);
-        s.add(t1);
-        t2 = new TimeSlice();
-        t2.setBpm(300);
-        t2.setDurationInBeats(10);
-        s.add(t2);
-        t3 = new TimeSlice();
-        t3.setBpm(30);
-        t3.setDurationInBeats(10);
-        s.add(t3);
-
-
-        atsp.load(s);
-
-        Song[] arrayS = new Song[1];
-        arrayS[0] = s;
+        //Commented by Federico to compile
+//
+//        final SongPlayer atsp = new AudioTrackSongPlayer((AudioTrackSongPlayer.AudioTrackSongPlayerCallback) this);
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//
+//                atsp.stop();
+//            }
+//        });
+//
+//        TimeSlice t1, t2, t3;
+//
+//        TimeSlicesSong s = new ParcelableTimeSlicesSong();
+//        t1 = new TimeSlice();
+//        t1.setBpm(180);
+//        t1.setDurationInBeats(10);
+//        s.add(t1);
+//        t2 = new TimeSlice();
+//        t2.setBpm(300);
+//        t2.setDurationInBeats(10);
+//        s.add(t2);
+//        t3 = new TimeSlice();
+//        t3.setBpm(30);
+//        t3.setDurationInBeats(10);
+//        s.add(t3);
+//
+//
+//        atsp.load(s);
+//
+//        Song[] arrayS = new Song[1];
+//        arrayS[0] = s;
 
 
         //((AudioTrackSongPlayer)atsp).write(arrayS);
