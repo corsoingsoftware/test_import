@@ -155,7 +155,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
      * This method create a test song just used to test usability
      * @return a demo song
      */
-    private Song createTestSong(){
+    public static Song createTestSong(){
         TimeSlice t1, t2, t3;
         TimeSlicesSong s =(TimeSlicesSong) EntitiesBuilder.getTimeSlicesSong();
         t1 = new TimeSlice();

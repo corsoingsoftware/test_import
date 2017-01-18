@@ -75,7 +75,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     public void play(Song entrySong) {
         Log.v(LOG_TAG,"in play");
-        pService.play(entrySong);
+        //pService.play(entrySong);
     }
 
     @Override
