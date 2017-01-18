@@ -110,21 +110,23 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     }
 
     public void customDialog(){
-        Dialog dialog = new Dialog(PlaylistView.this);
+        final Dialog dialog = new Dialog(PlaylistView.this);
         dialog.setContentView(R.layout.dialog_submit);
-        EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name);
+        final EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name);
         Button cancel = (Button) dialog.findViewById(R.id.but_cancel);
         Button submit = (Button) dialog.findViewById(R.id.but_submit);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.cancel();
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Playlist p = EntitiesBuilder.getPlaylist(edit_name.getText().toString());
+                playListAdapter.addPlaylist(p);
+                dialog.cancel();
             }
         });
         dialog.show();

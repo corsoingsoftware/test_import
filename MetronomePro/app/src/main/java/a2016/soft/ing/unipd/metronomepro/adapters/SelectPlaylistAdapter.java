@@ -27,7 +27,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     private Context context;
     private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
-    private int selectPlaylist;
     private Playlist playlistToEdit; //eventualmente..
     private OnPlaylistClickListener playlistClickListener;
 
@@ -45,7 +44,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist, OnPlaylistClickListener playlistClickListener){
         this.context = context;
         this.arrayPlaylist=arrayPlaylist;
-        selectPlaylist=0;
         this.playlistClickListener = playlistClickListener;
     }
     //costruttore per salvare le istanzepublic
@@ -53,14 +51,12 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
-    public void addPlaylist(ParcelablePlaylist playlist){
-        arrayPlaylist.add(selectPlaylist,playlist);
-        selectPlaylist++;
+    public void addPlaylist(Playlist playlist){
+        arrayPlaylist.add(arrayPlaylist.size(),playlist);
     }
 
     public void remuvePlaylist(int position){
         arrayPlaylist.remove(position);
-        selectPlaylist--;
     }
     public Playlist getPlaylistToEdit(){
         return playlistToEdit;
