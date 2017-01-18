@@ -16,11 +16,14 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
-    private final static int PLAYERS=2;
+    private final static int PLAYERS = 2;
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
     private LinkedBlockingQueue<Song> songQueue;
     private int typeChanged;
+    private int resourcesToUse;
+    private int nextToPlay;
+    private Song[] arraySongs;
 
 
     public MultipleSongPlayerManager() {
@@ -28,26 +31,28 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
+        resourcesToUse = 2;
+        nextToPlay = 0;
     }
 
     /**
      * Example of method to manage a generic song
      */
+
     public void play(Song[] songs) {
 
-        //entrySong.getSongPlayer(this).play();
+        Class currClass = songs[nextToPlay].getClass();
+        int i = nextToPlay;
+        Song currSong = songs[i];
+        currSong.getSongPlayer(this).play();
 
-        Class currClass = songs[0].getClass();
+        //Individuo la prossima song da riprodurre in seguito al playEnded
 
-        for(int i = 0; i < songs.length; i++) {
-
-            if(songs[i].getClass() != currClass) {
-
-            }
-            else {
-
-            }
+        for(; i < songs.length && songs[i].getClass() == currSong.getClass(); i++) {
         }
+
+        nextToPlay = i;
+        dequeueManagement(songs);
     }
 
     public void load(Song entrySong) {
@@ -62,39 +67,44 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             for (Song s : songs) {
                 songQueue.add(s);
             }
-            dequeueManagement();
+
+            arraySongs = songs;
+            dequeueManagement(arraySongs);
         }
     }
 
-    public void dequeueManagement(){
+    public void dequeueManagement(Song[] songs){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
-        Class s = (songQueue.peek()).getClass();
-        Song currSong = songQueue.poll();
+        Song currSong = songQueue.peek();
+        Class s = currSong.getClass();
         SongPlayer currentPlayer = currSong.getSongPlayer(this);
 
         while(typeChanged < PLAYERS && songQueue.size() !=0) {
 
             if(currSong.getClass() != s) {
 
-                currentPlayer.write((Song[])listSongsSameType.toArray());
                 typeChanged ++;
 
                 if(typeChanged < PLAYERS) {
+                    currentPlayer.write((Song[])listSongsSameType.toArray());
                     s = currSong.getClass();
                     currentPlayer = currSong.getSongPlayer(this);
                     listSongsSameType.clear();
                     listSongsSameType.add(currSong);
-                    currSong = songQueue.poll();
+                    songQueue.poll();
                 }
             }
             else {
 
                 listSongsSameType.add(currSong);
-                currSong = songQueue.poll();
+                songQueue.poll();
             }
+
+            currSong = songQueue.peek();
         }
 
+        play(arraySongs);
     }
 
 
@@ -117,8 +127,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     public void playEnded(SongPlayer origin) {
 
         typeChanged --;
-        dequeueManagement();
-        //play();
+        play(arraySongs);
     }
 
 }
