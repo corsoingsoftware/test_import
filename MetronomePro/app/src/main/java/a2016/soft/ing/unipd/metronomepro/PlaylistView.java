@@ -89,15 +89,16 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         Playlist p2 =  EntitiesBuilder.getPlaylist("prova di playlist 2");
         Playlist p3 =  EntitiesBuilder.getPlaylist("prova di playlist 3");
 
-        p1.add(EntitiesBuilder.getSong("song 0"));
+        p1.add(EntitiesBuilder.getTimeSlicesSong());
 
 
-        p2.add(EntitiesBuilder.getSong("song 0"));
-        p2.add(EntitiesBuilder.getSong("song 1"));
+        p2.add(EntitiesBuilder.getTimeSlicesSong());
+        p2.add(EntitiesBuilder.getTimeSlicesSong());
 
-        p3.add(EntitiesBuilder.getSong("song 0"));
-        p3.add(EntitiesBuilder.getSong("song 1"));
-        p3.add(EntitiesBuilder.getSong("song 2"));
+        p3.add(EntitiesBuilder.getTimeSlicesSong());
+        p3.add(EntitiesBuilder.getTimeSlicesSong());
+        p3.add(EntitiesBuilder.getTimeSlicesSong());
+
 
 
         ArrayList<Playlist> arrayList = new ArrayList<>();

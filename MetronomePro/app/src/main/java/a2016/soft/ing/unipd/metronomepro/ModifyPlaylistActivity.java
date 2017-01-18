@@ -63,7 +63,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
@@ -120,12 +120,33 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             Intent intent = getIntent();
             if(intent!=null){
                 try {
+                    playlist = intent.getParcelableExtra("playlist_selected");
                     songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
                     playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
+            /**
+             * Intent intent = null;
+             try {
+             intent = Intent.getIntentOld("playlist_selected");
+             } catch (URISyntaxException e) {
+             e.printStackTrace();
+             }
+
+             if(intent!=null){
+             try {
+             playlist = intent.getParcelableExtra("playlist_selected");
+             //songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+             //playlist.addAll(songsToAdd);
+             }
+             catch (Exception ex) {
+             ex.printStackTrace();
+             playlist.add(EntitiesBuilder.getSong("song 4"));
+             }
+             }
+             */
         }
 
 
