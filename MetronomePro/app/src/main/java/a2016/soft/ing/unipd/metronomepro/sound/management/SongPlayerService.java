@@ -24,7 +24,7 @@ public class SongPlayerService extends Service {
         Log.v(LOG_TAG,"in onCreate");
         super.onCreate();
 
-        mspm = new MultipleSongPlayerManager();
+        mspm = new MultipleSongPlayerManager(this);
     }
     public IBinder onBind(Intent intent) {
         return mBinder;

@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -105,6 +107,11 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     s1.setName("song1");
                     s2.setName("song2");
                     s3.setName("song3");
+                    MidiSong midiS = (MidiSong)EntitiesBuilder.getMidiSong();
+                    midiS.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                            + "/Tick.mid");
+                    midiS.setName("midiSong");
+                    p.add(midiS);
                     p.add(s1);
                     p.add(s2);
                     p.add(s3);
@@ -116,6 +123,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
 
         rVNextSongs.setAdapter(selectSongsAdapter);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

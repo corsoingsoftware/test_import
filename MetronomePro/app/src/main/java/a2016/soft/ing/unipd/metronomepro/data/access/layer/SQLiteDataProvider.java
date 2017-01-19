@@ -184,11 +184,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public void deletePlaylist(Playlist playlist) {
         //TODO I have to end this
         SQLiteDatabase database = this.getWritableDatabase();
-        String tableType = (songToDelete instanceof MidiSong)? TBL_MIDI_SONG : TBL_TS_SONG;
-        String queryDeleteSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
-        String queryDeleteSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
-        database.execSQL(queryDeleteSongType);
-        database.execSQL(queryDeleteSong);
+        //String tableType = (songToDelete instanceof MidiSong)? TBL_MIDI_SONG : TBL_TS_SONG;
+        //String queryDeleteSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        //String queryDeleteSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        //database.execSQL(queryDeleteSongType);
+        //database.execSQL(queryDeleteSong);
     }
 
     @Override

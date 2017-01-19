@@ -27,10 +27,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private Song[] arraySongs;
 
 
-    public MultipleSongPlayerManager() {
+    public MultipleSongPlayerManager(Context c) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(this, this);
+        midiSongPlayer = new MidiSongPlayer(c, this);
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
     }
@@ -132,7 +132,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     @Override
     public SongPlayer getMidiSongPlayer() {
-        return null;
+        return midiSongPlayer;
     }
 
     @Override
@@ -143,8 +143,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     @Override
     public void playEnded(SongPlayer origin) {
 
-        typeChanged --;
-        play(arraySongs);
+        //typeChanged --;
+        //play(arraySongs);
     }
 
 }

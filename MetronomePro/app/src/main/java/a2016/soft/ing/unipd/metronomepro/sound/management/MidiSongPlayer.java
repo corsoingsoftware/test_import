@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableMidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
@@ -61,7 +62,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void load(Song song) {
-
+        System.out.print("LOAD");
     }
 
     /**
@@ -90,8 +91,9 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
     @Override
     public void write(Song[] songs) {
         currentSong = 0;
-        playlist = new MidiSong[songs.length];
-        for(int i = 0; i < songs.length; i++) playlist[i] = (MidiSong) songs[i];
+        playlist = new ParcelableMidiSong[songs.length];
+        for(int i = 0; i < songs.length; i++)
+            playlist[i] = (ParcelableMidiSong) songs[i];
         try {
             Uri firstSongPath = Uri.parse(playlist[currentSong].getPath());
             player.create(context, firstSongPath);
@@ -100,6 +102,11 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             Log.d(TAG,"Midi not found or invalid path");
         }
 
+        try {
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
