@@ -3,6 +3,7 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -72,7 +73,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues valuesToInsertInSong = new ContentValues();
         valuesToInsertInSong.put(FIELD_SONG_TITLE, songToAdd.getName());
-        database.insert(TBL_SONG, null, valuesToInsertInSong);
+        try {
+            database.insertOrThrow(TBL_SONG, null, valuesToInsertInSong);
+        }catch(SQLException e){
+            //TODO handle the exception
+            //No need to handle the exception in the next tables, if the insert goes fine on Song tbale
+        }
 
 
         if (songToAdd instanceof TimeSlicesSong) {
@@ -93,7 +99,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues valesToInsert = new ContentValues();
         valesToInsert.put(FIELD_PLAYLIST_NAME, playlistToAdd.getName());
-        database.insert(TBL_PLAYLIST, null, valesToInsert);
+        try {
+            database.insertOrThrow(TBL_PLAYLIST, null, valesToInsert);
+        }catch(SQLException e){}
     }
 
 
@@ -129,22 +137,58 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public List<Song> getSongs(String searchName, Playlist playlist) {
-        return null;
+        List<Song> songsToReturn = new ArrayList<Song>();
+        Playlist returnedPlaylist;
+        if(playlist == null && searchName == null) songsToReturn = getSongs();
+        if(playlist != null){
+            SQLiteDatabase database = this.getReadableDatabase();
+            String queryFindPlaylist = "SELECT * FROM " + TBL_PLAYLIST
+                                    + " WHERE " + FIELD_PLAYLIST_NAME + " LIKE %" + searchName +"% ;";
+            Cursor cursorPlaylist = database.rawQuery(queryFindPlaylist, null);
+            if (cursorPlaylist.moveToFirst())
+                returnedPlaylist = EntitiesBuilder.getPlaylist(cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_NAME)));
+        }
+        //TODO end this method
+        return songsToReturn;
     }
 
     @Override
     public List<Playlist> getPlaylists(String searchName) {
-        return null;
+        List<Playlist> playlistsToReturn = new ArrayList<Playlist>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        String pieceOfQuery = "";
+        if(searchName != null) pieceOfQuery += " WHERE " + FIELD_PLAYLIST_NAME + " LIKE %" + searchName + "%";
+        String queryFindPlaylists = "SELECT * FROM " + TBL_PLAYLIST + pieceOfQuery + ";";
+        Cursor cursorPlaylists = database.rawQuery(queryFindPlaylists, null);
+        if(cursorPlaylists.moveToFirst()){
+            do{
+                playlistsToReturn.add(EntitiesBuilder.getPlaylist(cursorPlaylists.getString(cursorPlaylists.getColumnIndex(FIELD_PLAYLIST_NAME))));
+            }
+            while(cursorPlaylists.moveToNext());
+        }
+        return playlistsToReturn;
     }
 
     @Override
     public void deleteSong(Song songToDelete) {
-
+        SQLiteDatabase database = this.getWritableDatabase();
+        String tableType = (songToDelete instanceof MidiSong)? TBL_MIDI_SONG : TBL_TS_SONG;
+        String queryDeleteFromSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        String queryDeleteFromSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        String queryDeleteFromPlaylistSong = "DELETE FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        database.execSQL(queryDeleteFromSongType);
+        database.execSQL(queryDeleteFromSong);
     }
 
     @Override
     public void deletePlaylist(Playlist playlist) {
-
+        //TODO I have to end this
+        SQLiteDatabase database = this.getWritableDatabase();
+        String tableType = (songToDelete instanceof MidiSong)? TBL_MIDI_SONG : TBL_TS_SONG;
+        String queryDeleteSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        String queryDeleteSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
+        database.execSQL(queryDeleteSongType);
+        database.execSQL(queryDeleteSong);
     }
 
     @Override
