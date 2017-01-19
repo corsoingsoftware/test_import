@@ -87,7 +87,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             }
         });
 
-        playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
+ //       playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
 //        Song s = EntitiesBuilder.getSong();
 //        TimeSlice ts = new TimeSlice();
 //        s.add(ts);
@@ -104,15 +104,15 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             //Default
             try {
                 DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
-                playlist.addAll(songs);
+ //               List<Song> songs=dp.getSongs(null,playlist);
+//                playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getMidiSong());
+//                playlist.add(EntitiesBuilder.getSong("canzone 1"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 2"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 3"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 4"));
+      //          playlist.add(EntitiesBuilder.getMidiSong());
             }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato

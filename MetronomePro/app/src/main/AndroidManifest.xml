@@ -63,7 +63,6 @@
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
             android:theme="@style/AppTheme">
-
         </activity>
 
         <activity

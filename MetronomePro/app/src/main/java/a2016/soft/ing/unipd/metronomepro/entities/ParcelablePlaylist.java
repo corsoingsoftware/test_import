@@ -26,12 +26,15 @@ public class ParcelablePlaylist implements Playlist {
     protected ParcelablePlaylist(Parcel inputParcel) {
         this(inputParcel.readString());
         this.playlistID = inputParcel.readInt();
-
-        for(int cycles = 0; cycles < inputParcel.dataSize(); cycles++){
+        int a = inputParcel.dataSize();
+        for(int cycles = 0; cycles < a; cycles++){
             int songTime=inputParcel.readInt();
             if(songTime==TIME_SLICES_SONG) {
                 ParcelableTimeSlicesSong timeSlicesSongToAdd = inputParcel.readParcelable(ParcelableTimeSlicesSong.class.getClassLoader());
+                //aggiunte da giulio
+                if(timeSlicesSongToAdd==null) break;    //senza questo if diventa un loop infinito
                 songList.add(timeSlicesSongToAdd);
+
             }
             else{
                 MidiSong midiSongToAdd = inputParcel.readParcelable(MidiSong.class.getClassLoader());
