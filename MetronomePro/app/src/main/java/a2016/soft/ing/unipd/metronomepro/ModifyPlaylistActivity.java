@@ -87,7 +87,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             }
         });
 
- //       playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
+        playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
 //        Song s = EntitiesBuilder.getSong();
 //        TimeSlice ts = new TimeSlice();
 //        s.add(ts);
@@ -104,8 +104,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             //Default
             try {
                 DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
- //               List<Song> songs=dp.getSongs(null,playlist);
-//                playlist.addAll(songs);
+                List<Song> songs=dp.getSongs(null,playlist);
+                playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
 //                playlist.add(EntitiesBuilder.getSong("canzone 1"));
@@ -120,33 +120,13 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             Intent intent = getIntent();
             if(intent!=null){
                 try {
-                    playlist = intent.getParcelableExtra("playlist_selected");
-                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED); //canzoni passate dalla playlist (PlaylistView)
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
                     playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-            /**
-             * Intent intent = null;
-             try {
-             intent = Intent.getIntentOld("playlist_selected");
-             } catch (URISyntaxException e) {
-             e.printStackTrace();
-             }
-
-             if(intent!=null){
-             try {
-             playlist = intent.getParcelableExtra("playlist_selected");
-             //songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
-             //playlist.addAll(songsToAdd);
-             }
-             catch (Exception ex) {
-             ex.printStackTrace();
-             playlist.add(EntitiesBuilder.getSong("song 4"));
-             }
-             }
-             */
         }
 
 

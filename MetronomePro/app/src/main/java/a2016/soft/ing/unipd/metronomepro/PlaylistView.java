@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.app.Activity;
 import android.app.Dialog;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.sip.SipAudioCall;
@@ -138,7 +139,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     public void onPlaylistClick() {
         Activity activity = this;
         Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
-        intent.putExtra("playlist_selected",playListAdapter.getPlaylistToEdit());
+        intent.putExtra(ActivityExtraNames.PLAYLIST_SELECTED,playListAdapter.getPlaylistToEdit());
         Playlist playList = playListAdapter.getPlaylistToEdit();
         startActivity(intent);
     }
