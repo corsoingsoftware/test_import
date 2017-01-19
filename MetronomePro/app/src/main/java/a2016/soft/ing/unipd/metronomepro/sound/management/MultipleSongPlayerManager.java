@@ -1,5 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
+import android.content.Context;
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -28,6 +30,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     public MultipleSongPlayerManager() {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
+        midiSongPlayer = new MidiSongPlayer(this, this);
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
     }

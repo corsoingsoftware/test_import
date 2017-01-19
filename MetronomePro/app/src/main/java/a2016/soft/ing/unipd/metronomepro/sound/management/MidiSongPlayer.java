@@ -25,11 +25,12 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
     private MidiSong[] playlist;
     private int currentSong;
 
-    MidiSongPlayer(Context c){
+    MidiSongPlayer(MultipleSongPlayerManager c, SongPlayerCallback callback){
         playerState = ON_STOP;
         currentSong = UNPOINTED;
         player= new MediaPlayer();
         player.setOnCompletionListener(this);
+        this.callback = callback;
     }
 
     @Override
