@@ -30,7 +30,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
         songQueue = new LinkedBlockingQueue<Song>();
         typeChanged = 0;
-        nextToPlay = 0;
     }
 
     /**
@@ -46,11 +45,20 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         //Individuo la prossima song da riprodurre in seguito al playEnded
 
-        for(; i < songs.length && songs[i].getClass() == currSong.getClass(); i++) {
+        boolean stopLoop = false;
+        while(i < songs.length && !(stopLoop)) {
+
+            if(songs[i].getClass() == currClass)
+                i++;
+            else
+                stopLoop = true;
         }
 
         nextToPlay = i;
-        dequeueManagement(songs);
+
+        if(songQueue.size() > 0){
+            dequeueManagement(songs);
+        }
     }
 
     public void load(Song entrySong) {
@@ -69,6 +77,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             arraySongs = songs;
             dequeueManagement(arraySongs);
         }
+
+        nextToPlay = 0;
     }
 
     public void dequeueManagement(Song[] songs){
