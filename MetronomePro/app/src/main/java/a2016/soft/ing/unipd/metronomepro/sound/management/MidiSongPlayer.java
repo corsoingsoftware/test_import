@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.sound.management;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
@@ -96,15 +97,18 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             playlist[i] = (ParcelableMidiSong) songs[i];
         try {
             Uri firstSongPath = Uri.parse(playlist[currentSong].getPath());
-            player.create(context, firstSongPath);
-        }catch(NullPointerException e){
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            player.setDataSource(context, firstSongPath);
+            player.prepare();
+
+        }catch(Exception e){
             e.printStackTrace();
             Log.d(TAG,"Midi not found or invalid path");
         }
 
         try {
             player.prepare();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -121,7 +125,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             }
             try {
                 player.prepare();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             player.start();
