@@ -24,13 +24,15 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
     private SongPlayerCallback callback;
     private MidiSong[] playlist;
     private int currentSong;
+    private Context context;
 
-    MidiSongPlayer(MultipleSongPlayerManager c, SongPlayerCallback callback){
+    MidiSongPlayer(Context c, SongPlayerCallback callback){
         playerState = ON_STOP;
         currentSong = UNPOINTED;
-        player= new MediaPlayer();
-        player.setOnCompletionListener(this);
         this.callback = callback;
+        this.context = c;
+        player = new MediaPlayer();
+        player.setOnCompletionListener(this);
     }
 
     @Override
@@ -91,16 +93,13 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
         playlist = new MidiSong[songs.length];
         for(int i = 0; i < songs.length; i++) playlist[i] = (MidiSong) songs[i];
         try {
-            player.setDataSource(playlist[currentSong].getPath());
-        } catch (IOException e) {
+            Uri firstSongPath = Uri.parse(playlist[currentSong].getPath());
+            player.create(context, firstSongPath);
+        }catch(NullPointerException e){
             e.printStackTrace();
             Log.d(TAG,"Midi not found or invalid path");
         }
-        try {
-            player.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
