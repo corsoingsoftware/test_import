@@ -118,15 +118,27 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
              * creato da giulio: riceve le canzoni che ho selezionato
              */
             Intent intent = getIntent();
-            if(intent!=null){
+            if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
-                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED); //canzoni passate dalla playlist (PlaylistView)
-                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
-                    playlist.addAll(songsToAdd);
+                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
+                    onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
+                    //           songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
+        //            playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
+            else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
+                try {
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
+                    playlist.addAll(songsToAdd);
+                    onSaveInstanceState(intent.getBundleExtra(SONG_TO_ADD));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+     //       Intent xint = getIntent();
+
         }
 
 
