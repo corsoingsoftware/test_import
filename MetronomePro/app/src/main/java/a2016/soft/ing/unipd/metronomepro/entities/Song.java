@@ -27,6 +27,9 @@ public interface Song extends Parcelable {
      */
     void setName(String newName);
 
+    //!!!!!!!USELESS!!!!!!!
+    //The method below here are useless
+
     /**
      * returns the id of songs
      * @return the id of the song

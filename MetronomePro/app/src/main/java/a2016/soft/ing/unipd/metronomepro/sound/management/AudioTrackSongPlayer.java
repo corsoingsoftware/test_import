@@ -58,18 +58,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     private HashMap<String, byte[]> hashMap;
     private int frequencyBeep, lengthBeep, frequencyBoop, lenghtBoop;
-    private AudioTrackSongPlayerCallback callback;
+    private SongPlayerCallback callback;
 
-    public AudioTrackSongPlayer(AudioTrackSongPlayerCallback callback) {
+    public AudioTrackSongPlayer(SongPlayerCallback callback) {
         hashMap = new HashMap<String, byte[]>();
         this.initialize();
         stop = true;
         this.callback = callback;
-    }
-
-    @Override
-    public void play(Song entrySong) {
-
     }
 
     public void play() {
@@ -86,7 +81,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
      * @param audioFormat format of audio signal
      * @param channelConfig config of channels
      */
-    @Override
+
+
     public void initialize(int frequencyBeep,
                            int lengthBeep,
                            int frequencyBoop,
@@ -103,12 +99,13 @@ public class AudioTrackSongPlayer implements SongPlayer {
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
                 audioFormat, AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat), AudioTrack.MODE_STREAM);
 
+
         goThread = true;
     }
 
     //richiama dal costruttore
 
-    @Override
+
     public void initialize(int sampleRate, int audioFormat, int channelConfig) {
 
         this.initialize(DEFAULT_BEEP_FREQUENCY,
@@ -121,7 +118,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
     }
 
-    @Override
     public void initialize() {
         this.initialize(SAMPLE_RATE_IN_HERTZ, AUDIO_FORMAT, CHANNEL_CONFIG);
     }
@@ -249,6 +245,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
      */
     public void write(final Song[] songs) {
 
+        final SongPlayer sp = this;
 
         Runnable toDo= new Runnable() {
             @Override
@@ -282,8 +279,7 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 //Ho finito la scrittura nel buffer, consento l'accesso agli altri Thread
                 goThread = true;
-                callback.writeEnd();
-
+                callback.playEnded(sp);
             }
         };
 
@@ -291,10 +287,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
             currentThread= new Thread(toDo,  THREAD_NAME);
             currentThread.start();
         }
-    }
-
-    public interface AudioTrackSongPlayerCallback {
-        void writeEnd();
     }
 
 }
