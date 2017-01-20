@@ -106,12 +106,15 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     }
 
+
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
     }
 
     @Override
     public void onItemSwiped(int position) {
+        arrayPlaylist.remove(position);
+        notifyItemRemoved(position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
