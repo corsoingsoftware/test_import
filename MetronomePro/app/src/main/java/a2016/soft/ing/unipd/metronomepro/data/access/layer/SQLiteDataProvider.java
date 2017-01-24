@@ -12,6 +12,7 @@ import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
+import a2016.soft.ing.unipd.metronomepro.entities.ParcelableMidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -107,64 +108,57 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public List<Song> getSongs() {
-        List<Song> songsToReturn = new ArrayList<Song>();
-        SQLiteDatabase database = this.getReadableDatabase();
-
-        String queryForMidiSongs = "SELECT * FROM " + TBL_SONG + " NATURAL JOIN " + TBL_MIDI_SONG + ";";
-        Cursor cursorOfMidi = database.rawQuery(queryForMidiSongs, null);
-        if (cursorOfMidi.moveToFirst()) {
-            do {
-                MidiSong newMidi = EntitiesBuilder.getMidiSong();
-                newMidi.setName(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_SONG_TITLE)));
-                newMidi.setDuration(cursorOfMidi.getInt(cursorOfMidi.getColumnIndex(FIELD_MIDI_DURATION)));
-                newMidi.setPath(cursorOfMidi.getString(cursorOfMidi.getColumnIndex(FIELD_MIDI_PATH)));
-                songsToReturn.add(newMidi);
-            } while (cursorOfMidi.moveToNext());
-        }
-
-        String queryForTimeSlicesSongs = "SELECT * FROM " + TBL_SONG + " NATURAL JOIN " + TBL_TS_SONG + ";";
-        Cursor cursorOfTimeSlices = database.rawQuery(queryForTimeSlicesSongs, null);
-        if (cursorOfTimeSlices.moveToFirst()) {
-            do {
-                TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
-                newTimeSlices.setName(cursorOfTimeSlices.getString(cursorOfTimeSlices.getColumnIndex(FIELD_SONG_TITLE)));
-                newTimeSlices.decode(cursorOfTimeSlices.getBlob(cursorOfTimeSlices.getColumnIndex(FIELD_TIME_SLICES_BLOB)));
-                songsToReturn.add(newTimeSlices);
-            } while (cursorOfMidi.moveToNext());
-        }
-        return songsToReturn;
+        return getSongs(null, null);
     }
 
     @Override
-    public List<Song> getSongs(String searchName, Playlist playlist) {
+    public List<Song> getSongs(String songTitle, Playlist playlist) {
         List<Song> songsToReturn = new ArrayList<Song>();
-        Playlist returnedPlaylist;
-        if(playlist == null && searchName == null) songsToReturn = getSongs();
-        if(playlist != null){
-            SQLiteDatabase database = this.getReadableDatabase();
-            String queryFindPlaylist = "SELECT * FROM " + TBL_PLAYLIST
-                                    + " WHERE " + FIELD_PLAYLIST_NAME + " LIKE %" + searchName +"% ;";
-            Cursor cursorPlaylist = database.rawQuery(queryFindPlaylist, null);
-            if (cursorPlaylist.moveToFirst())
-                returnedPlaylist = EntitiesBuilder.getPlaylist(cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_NAME)));
-        }
-        //TODO end this method
-        return songsToReturn;
-    }
-
-    @Override
-    public List<Playlist> getPlaylists(String searchName) {
-        List<Playlist> playlistsToReturn = new ArrayList<Playlist>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String pieceOfQuery = "";
-        if(searchName != null) pieceOfQuery += " WHERE " + FIELD_PLAYLIST_NAME + " LIKE %" + searchName + "%";
-        String queryFindPlaylists = "SELECT * FROM " + TBL_PLAYLIST + pieceOfQuery + ";";
-        Cursor cursorPlaylists = database.rawQuery(queryFindPlaylists, null);
-        if(cursorPlaylists.moveToFirst()){
-            do{
-                playlistsToReturn.add(EntitiesBuilder.getPlaylist(cursorPlaylists.getString(cursorPlaylists.getColumnIndex(FIELD_PLAYLIST_NAME))));
+        String playlistName = (playlist != null)? playlist.getName() : null;
+        List<String> songsFinded = search(songTitle, playlistName);
+        String songsToMatch = "";
+        if(songsFinded.size() > 0) {
+            if(songsFinded.size() != 1) {
+                int indexMatchedSongs = 0;
+                for (; indexMatchedSongs < songsFinded.size() - 1; indexMatchedSongs++)
+                    songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(indexMatchedSongs) + " OR ";
+                songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(++indexMatchedSongs) + ";";
+            }else{
+                songsToMatch += songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(0) + ";";
             }
-            while(cursorPlaylists.moveToNext());
+            String querySongs = "SELECT * FROM " + TBL_MIDI_SONG + " WHERE " + songsToMatch;
+            Cursor cursorSongs = database.rawQuery(querySongs, null);
+            if(cursorSongs.moveToFirst()) {
+                do {
+                    MidiSong newMidi = EntitiesBuilder.getMidiSong();
+                    newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_TITLE)));
+                    newMidi.setDuration(cursorSongs.getInt(cursorSongs.getColumnIndex(FIELD_MIDI_DURATION)));
+                    newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MIDI_PATH)));
+                    songsToReturn.add(newMidi);
+                } while (cursorSongs.moveToNext());
+            }
+            querySongs = "SELECT * FROM " + TBL_TS_SONG + " WHERE " + songsToMatch;
+            cursorSongs = database.rawQuery(querySongs, null);
+            if(cursorSongs.moveToFirst()){
+                do {
+                    TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
+                    newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_TITLE)));
+                    newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TIME_SLICES_BLOB)));
+                    songsToReturn.add(newTimeSlices);
+                } while (cursorSongs.moveToNext());
+            }
+        }
+        return songsToReturn;
+    }
+
+    @Override
+    public List<Playlist> getPlaylists(String playlistName) {
+        List<Playlist> playlistsToReturn = new ArrayList<Playlist>();
+        List<String> playlistsFinded = search(null, playlistName);
+        for(int indexPlaylistFinded = 0; indexPlaylistFinded < playlistsFinded.size(); indexPlaylistFinded++){
+            Playlist newPlaylist = EntitiesBuilder.getPlaylist(playlistsFinded.get(indexPlaylistFinded));
+            playlistsToReturn.add(newPlaylist);
         }
         return playlistsToReturn;
     }
@@ -178,6 +172,27 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         String queryDeleteFromPlaylistSong = "DELETE FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete + ";";
         database.execSQL(queryDeleteFromSongType);
         database.execSQL(queryDeleteFromSong);
+    }
+
+    private List<String> search(String songName, String playlistName){
+        SQLiteDatabase database = this.getReadableDatabase();
+        String querySongName = (songName == null)? " LIKE %%;" : " = " + songName + ";";
+        String queryMatchAll;
+        if(playlistName == null){
+            queryMatchAll =  "SELECT * FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + querySongName;
+        }else{
+            queryMatchAll = "SELECT * FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_PLAYLIST_NAME + " = " + playlistName + " AND "
+                           + FIELD_SONG_TITLE + " = " + querySongName;
+        }
+        Cursor cursorResults = database.rawQuery(queryMatchAll, null);
+        List<String> results = new ArrayList<String>();
+        if(cursorResults.moveToFirst()) {
+            String field = (playlistName != null && songName == null) ? FIELD_PLAYLIST_NAME : FIELD_SONG_TITLE;
+            do {
+                results.add(cursorResults.getString(cursorResults.getColumnIndex(field)));
+            } while (cursorResults.moveToNext());
+        }
+        return results;
     }
 
     @Override
