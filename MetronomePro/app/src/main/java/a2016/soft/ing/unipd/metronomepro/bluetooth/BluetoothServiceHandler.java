@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 
 /**
- * Created by feder on 08/11/2016.
+ * Created by Federico Favotto on 08/11/2016.
  */
 
 public class BluetoothServiceHandler extends Handler {

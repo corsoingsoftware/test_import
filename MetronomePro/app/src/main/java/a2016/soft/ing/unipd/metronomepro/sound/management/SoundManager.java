@@ -5,10 +5,15 @@ import android.os.IBinder;
 /**
  * Created by Federico Favotto on 12/11/2016.
  * Questa interfaccia espone una serie di metodi utili per far partire e gestire il "clack" del metronomo
+ *
+ * It provides methods to manage the sound with a particular bpm.
+ * It provides also a group of utility constants, so the class that uses the interface is independent from the class that
+ * implements the interface
  */
 
 public interface SoundManager {
-    /**
+
+     /**
      * Questo metodo inizializza le variabili interne necessarie alla classe per poter gestire gli altri metodi.
      * Esso va sempre chiamato all'inizializzazione della classe che implementa l'interfaccia
      * se i parametri maxbpm e minbpm son impostati e diversi da -1 allora la classe implementatrice cercherà di ottimizzare
@@ -33,9 +38,9 @@ public interface SoundManager {
 
     /**
      * restituisce lo stato attuale del player
-     * @return 0=nessun suono impostato, 1=pronto a partire, 2=in esecuzione
+     * @return playstate that describes status
      */
-    int getState();
+    PlayState getState();
 
     /**
      * Imposta la ritmica, se il suono è in esecuzione allora viene fermato.

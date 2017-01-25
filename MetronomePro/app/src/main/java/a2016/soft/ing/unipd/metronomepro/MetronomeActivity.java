@@ -3,13 +3,10 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,14 +18,12 @@ import android.widget.TextView;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.bluetooth.Constants;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerService;
+import a2016.soft.ing.unipd.metronomepro.sound.management.PlayState;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 import a2016.soft.ing.unipd.metronomepro.utilities.ByteLongConverter;
 
 import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MAX;
 import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MIN;
-import static android.R.drawable.ic_media_pause;
-import static android.R.drawable.ic_media_play;
 
 /**
  * Qua dentro ci sarà un SoundManagerServiceCaller che si occuperà di chiamare il servizio
@@ -209,7 +204,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
 //        slowerButton.setOnClickListener(this);
         fastForwardButton.setOnClickListener(this);
         backForwardButton.setOnClickListener(this);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fabAdd);
 //        if (clackThread == null) {
 //            setActualBPM(INITIAL_VALUE);
 //            clackThread = new SoundThread(this, INITIAL_VALUE);
@@ -218,7 +213,7 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(soundManagerServiceCaller.getState()==1)
+                if(soundManagerServiceCaller.getState().equals(PlayState.PLAYSTATE_PLAYING))
                     soundManagerServiceCaller.stop();
                 else
                     soundManagerServiceCaller.play();
