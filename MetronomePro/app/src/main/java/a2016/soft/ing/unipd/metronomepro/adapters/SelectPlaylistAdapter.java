@@ -31,16 +31,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private OnPlaylistClickListener playlistClickListener;
 
 
-    //COSTRUTTORE DI PROVA RICEVE UNA PLAYLIT IN INGRESSO
-    /** public SelectPlaylistAdapter(Context context, Playlist playlist) {
-     this.context = context;
-     PlaylistToEdit = playlist;
-     arrayPlaylist = new ArrayList<>();
-     selectPlaylist = 0;
-     arrayPlaylist.add(selectPlaylist,playlist);
-     selectPlaylist++;
-     }*/
-    //QUESTO COSTRUTTORE RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
+    //COSTRUTTORE: RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
     public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist, OnPlaylistClickListener playlistClickListener){
         this.context = context;
         this.arrayPlaylist=arrayPlaylist;
