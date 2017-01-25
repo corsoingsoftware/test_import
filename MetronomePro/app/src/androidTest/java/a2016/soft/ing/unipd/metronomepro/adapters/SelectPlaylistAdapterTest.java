@@ -1,11 +1,13 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
@@ -16,8 +18,16 @@ import static org.junit.Assert.*;
  */
 public class SelectPlaylistAdapterTest {
 
+    private ItemTouchHelper itemTouchHelper;
     private Context context;
     private SelectPlaylistAdapter.OnPlaylistClickListener playlistClickListener;
+
+    @Test
+    public void getItemCount() throws Exception {
+        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,chargeAdapter(),playlistClickListener, (OnStartDragListener) itemTouchHelper);
+
+        assertEquals(adapter.getItemCount(),3);
+    }
 
     public ArrayList<Playlist> chargeAdapter(){
         //three different Playlist within Different Songs
@@ -53,7 +63,7 @@ public class SelectPlaylistAdapterTest {
         p4.add(EntitiesBuilder.getSong("song 3"));
         p4.add(EntitiesBuilder.getSong("song 4"));
 
-        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,chargeAdapter(),playlistClickListener);
+        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,chargeAdapter(),playlistClickListener, (OnStartDragListener) itemTouchHelper);
         adapter.addPlaylist(p4);
         int size = adapter.getItemCount();
         //se addPlaylist funziona dentro alla lista ci sono 4 canzoni
@@ -64,7 +74,7 @@ public class SelectPlaylistAdapterTest {
     @Test
     public void remuvePlaylist() throws Exception {
         ArrayList<Playlist> list = chargeAdapter();
-        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,list,playlistClickListener);
+        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,list,playlistClickListener, (OnStartDragListener) itemTouchHelper);
         adapter.remuvePlaylist(0);
 
         list.remove(0);
@@ -74,7 +84,7 @@ public class SelectPlaylistAdapterTest {
 
     @Test
     public void getArrayPlaylist() throws Exception {
-        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,chargeAdapter(),playlistClickListener);
+        SelectPlaylistAdapter adapter = new SelectPlaylistAdapter(context,chargeAdapter(),playlistClickListener, (OnStartDragListener) itemTouchHelper);
         int songs = adapter.getArrayPlaylist().size();
         assertEquals(songs,3);
     }
