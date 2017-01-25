@@ -1,22 +1,21 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 
-import a2016.soft.ing.unipd.metronomepro.ModifyPlaylistActivity;
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
@@ -29,13 +28,15 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
     private Playlist playlistToEdit; //eventualmente..
     private OnPlaylistClickListener playlistClickListener;
+    private OnStartDragListener dragListener;
 
 
     //COSTRUTTORE: RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
-    public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist, OnPlaylistClickListener playlistClickListener){
+    public SelectPlaylistAdapter(Context context, ArrayList<Playlist> arrayPlaylist, OnPlaylistClickListener playlistClickListener,OnStartDragListener dragListener){
         this.context = context;
         this.arrayPlaylist=arrayPlaylist;
         this.playlistClickListener = playlistClickListener;
+        this.dragListener = dragListener;
     }
     //costruttore per salvare le istanzepublic
     @Override
@@ -66,7 +67,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         Playlist p = arrayPlaylist.get(position);
         holder.nameOfPlaylist.setText(p.getName());
@@ -77,7 +78,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
                 playlistClickListener.onPlaylistClick();
             }
         });
-
         /**
          final View.OnClickListener a = new View.OnClickListener() {
         @Override
@@ -103,10 +103,32 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     }
 
     @Override
-    public void onItemSwiped(int position) {
-        arrayPlaylist.remove(position);
-        notifyItemRemoved(position);
+    public void onItemSwiped(final int position) {
+        /**arrayPlaylist.remove(position);
+        notifyItemRemoved(position);*/
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.delate_dialog);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);
+        Button submit = (Button) dialog.findViewById(R.id.but_submit_p);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+                notifyItemChanged(position);
+            }
+        });
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayPlaylist.remove(position);
+                notifyItemRemoved(position);
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {

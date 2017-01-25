@@ -3,43 +3,35 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.app.Activity;
 import android.app.Dialog;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.sip.SipAudioCall;
-import android.net.sip.SipSession;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.method.CharacterPickerDialog;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
-import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
-public class PlaylistView extends AppCompatActivity implements SelectPlaylistAdapter.OnPlaylistClickListener {
+public class PlaylistView extends AppCompatActivity implements SelectPlaylistAdapter.OnPlaylistClickListener, OnStartDragListener {
 
     private RecyclerView rVPlaylistItem;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectPlaylistAdapter playListAdapter;
     private ArrayList<Playlist> selectedPlaylist;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +43,15 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist(),this);
+        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist(),this,this);
         rVPlaylistItem.setAdapter(playListAdapter);
+        DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(playListAdapter);
+        itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
+        itemTouchHelper.attachToRecyclerView(rVPlaylistItem);
 
         if(savedInstanceState !=null && savedInstanceState.containsKey("playlist_for_select")){
             selectedPlaylist = savedInstanceState.getParcelableArrayList("playlist_for_select");
-            playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist,this);
+            playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist,this,this);
             rVPlaylistItem.setAdapter(playListAdapter);
             /**
              savedSongs = savedInstanceState.getParcelableArrayList("song for select");
@@ -114,8 +109,8 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     public void customDialog(){
         final Dialog dialog = new Dialog(PlaylistView.this);
         dialog.setContentView(R.layout.dialog_submit);
-        final EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name);
-        Button cancel = (Button) dialog.findViewById(R.id.but_cancel);
+        final EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name_p);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);
         Button submit = (Button) dialog.findViewById(R.id.but_submit);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,5 +137,9 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         intent.putExtra(ActivityExtraNames.PLAYLIST_SELECTED,playListAdapter.getPlaylistToEdit());
         Playlist playList = playListAdapter.getPlaylistToEdit();
         startActivity(intent);
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
     }
 }

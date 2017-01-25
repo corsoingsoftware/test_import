@@ -15,8 +15,10 @@ import static org.junit.Assert.*;
  * Created by giuli on 12/01/2017.
  */
 public class SelectPlaylistAdapterTest {
+
     private Context context;
     private SelectPlaylistAdapter.OnPlaylistClickListener playlistClickListener;
+
     public ArrayList<Playlist> chargeAdapter(){
         //three different Playlist within Different Songs
         Playlist p1 =  EntitiesBuilder.getPlaylist("prova di playlist 1");

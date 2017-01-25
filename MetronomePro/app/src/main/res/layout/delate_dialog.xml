@@ -15,41 +15,28 @@
         android:textStyle="bold"
         />
 
-    <TextView android:id="@+id/txt_model"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFF"
-        android:layout_below="@+id/edit_name_p"
-        android:text="Type The Name Of The New Playlist"
-        />
-
-    <TextView android:id="@+id/edit_model"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:text="Type The Name Of The New Playlist"
-        tools:text="Type The Name Of The New Playlist" />
 
     <Button android:id="@+id/but_cancel_p"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="NO"
         android:layout_below="@+id/txt_name"
         android:layout_alignParentStart="true"
         android:layout_marginTop="66dp" />
 
-    <EditText android:id="@+id/edit_name_p"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_name"
-        android:layout_alignParentStart="true" />
-
-    <Button android:id="@+id/but_submit"
+    <Button android:id="@+id/but_submit_p"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="YES"
         android:layout_alignBaseline="@+id/but_cancel_p"
         android:layout_alignBottom="@+id/but_cancel_p"
         android:layout_toEndOf="@+id/but_cancel_p" />
+
+    <TextView android:id="@+id/edit_model_p"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Delate Playlist?"
+        tools:text="Type The Name Of The New Playlist"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
