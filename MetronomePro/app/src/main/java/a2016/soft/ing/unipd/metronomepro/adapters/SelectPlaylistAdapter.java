@@ -78,16 +78,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
                 playlistClickListener.onPlaylistClick();
             }
         });
-        /**
-         final View.OnClickListener a = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-        Intent intent = new Intent(context,ModifyPlaylistActivity.class);
-        intent.putExtra("playlist_selected",arrayPlaylist.get(pos));
-        context.start
-        }
-        };*/
-
     }
 
     @Override
@@ -104,8 +94,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
 
     @Override
     public void onItemSwiped(final int position) {
-        /**arrayPlaylist.remove(position);
-        notifyItemRemoved(position);*/
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.delate_dialog);
         Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);
@@ -128,7 +116,6 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         dialog.show();
 
     }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
