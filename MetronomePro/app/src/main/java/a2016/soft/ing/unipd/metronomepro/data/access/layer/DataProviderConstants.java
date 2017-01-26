@@ -6,7 +6,6 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 
 public interface DataProviderConstants {
 
-    public static final String DEFAULT_PLAYLIST = "Default playlist";
     public static final String DBNAME = "MetronomeProDB";
     public static final int DB_VERSION = 1;
 
@@ -20,8 +19,8 @@ public interface DataProviderConstants {
     public static final String FIELD_TIME_SLICES_BLOB = "Blob";
 
     public static final String TBL_MIDI_SONG = "MidiSlicesSong";
-    public static final String FIELD_MIDI_DURATION = "Durata";
     public static final String FIELD_MIDI_PATH = "Path";
 
     public static final String TBL_SONG_PLAYLIST = "Contiene";
+    public static final String FIELD_INDEX_SONG = "Posizione";
     }

@@ -22,6 +22,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
 
+    public final String ALL_SONGS = null;
+    public final Playlist NO_PLAYLISTS = null;
+
     public SQLiteDataProvider(Context context) {
         super(context, DBNAME, null, DB_VERSION);
     }
@@ -53,12 +56,16 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             + TBL_SONG_PLAYLIST + "("
             + FIELD_SONG_TITLE + " TEXT NOT NULL, "
             + FIELD_PLAYLIST_NAME + " TEXT NOT NULL, "
+            + FIELD_INDEX_SONG + " INTEGER NOT NULL, "
             + "FOREIGN KEY("+ FIELD_PLAYLIST_NAME + ") REFERENCES " + TBL_PLAYLIST + "(" + FIELD_PLAYLIST_NAME + "), "
             + "FOREIGN KEY("+ FIELD_SONG_TITLE  + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "), "
             + "PRIMARY KEY("+ FIELD_PLAYLIST_NAME + ", " + FIELD_SONG_TITLE + ")); ";
 
+    /**
+     *
+     * @param database
+     */
     @Override
-
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_MIDI);
         database.execSQL(CREATE_TABLE_SONG);
@@ -67,19 +74,19 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     }
 
     @Override
-    public boolean saveSong(Song songToAdd) {
+    public boolean saveSong(Song newSong) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues songValues = new ContentValues();
-        songValues.put(FIELD_SONG_TITLE, songToAdd.getName());
+        songValues.put(FIELD_SONG_TITLE, newSong.getName());
         try {
             database.insertOrThrow(TBL_SONG, null, songValues);
-            if (songToAdd instanceof TimeSlicesSong) {
+            if (newSong instanceof TimeSlicesSong) {
                 ContentValues timeSliceValues = new ContentValues();
-                timeSliceValues.put(FIELD_TIME_SLICES_BLOB, ((TimeSlicesSong) songToAdd).encode());
+                timeSliceValues.put(FIELD_TIME_SLICES_BLOB, ((TimeSlicesSong) newSong).encode());
                 database.insert(TBL_TS_SONG, null, songValues);
             } else {
                 ContentValues midiValues = new ContentValues();
-                midiValues.put(FIELD_MIDI_PATH, ((MidiSong) songToAdd).getPath());
+                midiValues.put(FIELD_MIDI_PATH, ((MidiSong) newSong).getPath());
                 database.insert(TBL_MIDI_SONG, null, songValues);
             }
         }catch(SQLException e){
@@ -95,6 +102,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         for(Song song : newPlaylist) {
             playlistValues.put(FIELD_PLAYLIST_NAME, newPlaylist.getName());
             playlistValues.put(FIELD_SONG_TITLE, song.getName());
+            playlistValues.put(FIELD_INDEX_SONG, newPlaylist.getSongIndex(song));
             try {
                 database.insertOrThrow(TBL_SONG_PLAYLIST, null, playlistValues);
             } catch (SQLException e) {
@@ -107,7 +115,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public List<Song> getSongs() {
-        return getSongs(null, null);
+        return getSongs(ALL_SONGS, NO_PLAYLISTS);
     }
 
     @Override
@@ -178,27 +186,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         return true;
     }
 
-    private List<String> search(String songName, String playlistName){
-        SQLiteDatabase database = this.getReadableDatabase();
-        String querySongName = (songName == null)? " LIKE %%;" : " = " + songName + ";";
-        String queryMatchAll;
-        if(playlistName == null){
-            queryMatchAll =  "SELECT * FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + querySongName;
-        }else{
-            queryMatchAll = "SELECT * FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_PLAYLIST_NAME + " = " + playlistName + " AND "
-                           + FIELD_SONG_TITLE + querySongName;
-        }
-        Cursor cursorResults = database.rawQuery(queryMatchAll, null);
-        List<String> results = new ArrayList<String>();
-        if(cursorResults.moveToFirst()) {
-            String field = (playlistName != null && songName == null) ? FIELD_PLAYLIST_NAME : FIELD_SONG_TITLE;
-            do {
-                results.add(cursorResults.getString(cursorResults.getColumnIndex(field)));
-            } while (cursorResults.moveToNext());
-        }
-        return results;
-    }
-
     @Override
     public boolean deletePlaylist(Playlist playlist) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -211,22 +198,49 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         return true;
     }
 
+
     @Override
     public boolean modifySong(Song oldSong, Song newSong) {
-        //TODO non basta far questo, devo aggiornare TBL_SONG_PLAYLIST
-        //se oldSong(key) = newSong(key) => fai UPDATE, altrimenti DELETE + INSERT
+        SQLiteDatabase database = getWritableDatabase();
+        if (oldSong.getName().compareTo(newSong.getName()) != 0) {
+            String queryUpdate = "UPDATE " + TBL_SONG_PLAYLIST + " SET " + FIELD_SONG_TITLE + " = " + newSong.getName()
+                                + " WHERE " + FIELD_SONG_TITLE + " = " + oldSong.getName() + ";";
+            try{
+                database.execSQL(queryUpdate);
+            }catch (SQLException e) {  return false; }
+        }
+        //TODO Verificare che DELETE + INSERT qui sotto non crei violazioni di integrità referenziale nel db
         return deleteSong(oldSong) && saveSong(newSong);
     }
 
     @Override
     public boolean modifyPlaylist(Playlist oldPlaylist, Playlist newPlaylist) {
-        //TODO non basta far questo, devo aggiornare TBL_SONG_PLAYLIST
-        //se oldPlaylist(key) = newPlaylist(key) => fai UPDATE, altrimenti DELETE + INSERT
         return deletePlaylist(oldPlaylist) && savePlaylist(newPlaylist);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //TODO Chiedere come implementare questo metodo
+    }
 
+    private List<String> search(String songName, String playlistName){
+        SQLiteDatabase database = this.getReadableDatabase();
+        String querySongName = (songName == ALL_SONGS)? " LIKE %%;" : " = " + songName + ";";
+        String queryMatchAll;
+        if (playlistName == null) {
+            queryMatchAll =  "SELECT * FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + querySongName;
+        } else {
+            queryMatchAll = "SELECT * FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_PLAYLIST_NAME + " = " + playlistName + " AND "
+                    + FIELD_SONG_TITLE + querySongName;
+        }
+        Cursor cursorResults = database.rawQuery(queryMatchAll, null);
+        List<String> results = new ArrayList<String>();
+        if (cursorResults.moveToFirst()) {
+            String field = (playlistName != null && songName == null) ? FIELD_PLAYLIST_NAME : FIELD_SONG_TITLE;
+            do {
+                results.add(cursorResults.getString(cursorResults.getColumnIndex(field)));
+            } while (cursorResults.moveToNext());
+        }
+        return results;
     }
 }

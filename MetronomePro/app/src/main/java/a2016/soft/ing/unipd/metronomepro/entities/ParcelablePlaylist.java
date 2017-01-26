@@ -15,8 +15,8 @@ import java.util.ListIterator;
  */
 
 public class ParcelablePlaylist implements Playlist {
-
-    private static final int NO_ID=-1;
+    //TODO Chiedere se id effettivamente ora serve ancora
+    private static final int NO_ID = -1;
     private static final int TIME_SLICES_SONG = 0;
     private static final int MIDI_SONG = 1;
     private int playlistID;
@@ -28,8 +28,8 @@ public class ParcelablePlaylist implements Playlist {
         this.playlistID = inputParcel.readInt();
 
         for(int cycles = 0; cycles < inputParcel.dataSize(); cycles++){
-            int songTime=inputParcel.readInt();
-            if(songTime==TIME_SLICES_SONG) {
+            int songTime = inputParcel.readInt();
+            if(songTime == TIME_SLICES_SONG) {
                 ParcelableTimeSlicesSong timeSlicesSongToAdd = inputParcel.readParcelable(ParcelableTimeSlicesSong.class.getClassLoader());
                 songList.add(timeSlicesSongToAdd);
             }
@@ -68,7 +68,7 @@ public class ParcelablePlaylist implements Playlist {
     }
 
     public ParcelablePlaylist(int id, String name) {
-        this.playlistID=id;
+        this.playlistID = id;
         this.name = name;
         songList = new ArrayList<Song>();
     }
@@ -101,13 +101,26 @@ public class ParcelablePlaylist implements Playlist {
     @Override
     public void setName(String name) { this.name = name;  }
 
+    //Insert methods getIndex and setIndex by Munerato
     @Override
-    public int getId() {    return playlistID;
+    public int getSongIndex(Song song) {
+        return songList.indexOf(song);
     }
 
     @Override
-    public void setId(int newId) {  this.playlistID = newId;
+    public boolean setSongIndex(Song song, int index) {
+        try {
+            songList.remove(song);
+            songList.add(index, song);
+        }catch (IndexOutOfBoundsException e) {  return false; }
+        return true;
     }
+
+    @Override
+    public int getId() {    return playlistID; }
+
+    @Override
+    public void setId(int newId) {  this.playlistID = newId; }
 
     @Override
     public String getName() {
