@@ -86,7 +86,7 @@ public class ActivityImportMidi extends AppCompatActivity {
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
                 String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                 if (filePath != null) {
                     Log.d("Path: ", filePath);
@@ -98,6 +98,7 @@ public class ActivityImportMidi extends AppCompatActivity {
                         MidiSong md = EntitiesBuilder.getMidiSong();
                         md.setName(midiTitle);
                         md.setPath(midiPath);
+                        db.saveSong(md);
                     }
                     else{
                         Toast.makeText(this, "Import failed", Toast.LENGTH_LONG).show();
