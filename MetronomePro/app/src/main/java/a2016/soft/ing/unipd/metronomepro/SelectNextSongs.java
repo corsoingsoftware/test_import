@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,9 +13,13 @@ import android.view.View;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.PlayableSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 
@@ -44,6 +49,10 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVNextSongs.setLayoutManager(rVLayoutManager);
         spsc = new SongPlayerServiceCaller(this, this);
 
+
+
+
+
         if(savedInstanceState!=null) {
             if (savedInstanceState.containsKey(PLAYABLE_PLAYLIST)) {
 
@@ -62,13 +71,59 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         }else{
             Intent intent=getIntent();
             if(intent!=null){
-                p=intent.getParcelableExtra(PLAYLIST);
+                if(intent.hasExtra(PLAYLIST)) {
+                    p = intent.getParcelableExtra(PLAYLIST);
+                }else{
+                    p= EntitiesBuilder.getPlaylist("prova");
+
+                    /*Song testSong1 = SongCreator.createTestSong("song1");
+                    Song testSong2 = SongCreator.createTestSong("song2");
+                    Song testSong3 = SongCreator.createTestSong("song3");
+                    p.add(testSong1);
+                    p.add(testSong2);
+                    p.add(testSong3);*/
+
+                    TimeSlice t1, t2;
+                    t1 = new TimeSlice();
+                    t1.setDurationInBeats(10);
+                    t1.setBpm(80);
+                    t2 = new TimeSlice();
+                    t2.setDurationInBeats(10);
+                    t2.setBpm(180);
+                    TimeSlicesSong s1 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+                    s1.add(t1);
+                    s1.add(t2);
+                    TimeSlicesSong s2 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+                    TimeSlice t3, t4;
+                    t3 = new TimeSlice();
+                    t4 = new TimeSlice();
+                    t3.setDurationInBeats(10);
+                    t3.setBpm(250);
+                    s2.add(t3);
+                    TimeSlicesSong s3 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+                    t4.setDurationInBeats(10);
+                    t4.setBpm(300);
+                    s3.add(t4);
+                    s1.setName("song1");
+                    s2.setName("song2");
+                    s3.setName("song3");
+                    MidiSong midiS = (MidiSong)EntitiesBuilder.getMidiSong();
+                    midiS.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                            + "/Tick.mid");
+                    midiS.setName("midiSong");
+                    p.add(midiS);
+                    p.add(s1);
+                    p.add(s2);
+                    p.add(s3);
+
+                }
                 selectSongsAdapter = new SelectSongsAdapter(this, p, 0, MAX_SELECTABLE);
             }
         }
 
 
         rVNextSongs.setAdapter(selectSongsAdapter);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +136,13 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
                     Song[] songs = selectSongsAdapter.getSongs();
 
-                    for (Song entrySong : songs) {
+                    /*for (Song entrySong : songs) {
 
                         spsc.write(entrySong);
                         spsc.play(entrySong);
-                    }
+                    }*/
+
+                    spsc.write(songs);
                 }
 
                 //Blocco tutto
@@ -109,7 +166,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
         for (int i = 0; i < playlist.size(); i++) {
 
-            spsc.load((Song) playlist.get(i));
+            spsc.load((Song) playlist.get(i).getInnerSong());
         }
     }
 

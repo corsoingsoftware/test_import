@@ -34,26 +34,50 @@ public interface DataProvider {
     /**
      * memorize the song in database, throw exception if fails
      * override if present!
+     * Added return parameter to know if the save was successful, by Munerato
      * @param song to memorize
+     * @return boolean, true if the save was successful
      */
-    void save(Song song);
+    boolean saveSong(Song song);
 
     /**
      * Delete the song throw exception if fails
+     * Added return parameter to know if the save was successful, by Munerato
      * @param song to delete
+     * @return boolean
      */
-    void deleteSong(Song song);
+    boolean deleteSong(Song song);
 
     /**
      * save the playlist, and the songs in it if they aren't in database already
      * @param playlist to save or update!
+     * @return boolean, true if the save was successful
      */
-    void savePlaylist(Playlist playlist);
+    boolean savePlaylist(Playlist playlist);
 
     /**
-     * delete the playlist but not the songs! Throw exception if fails
+     * delete the playlist but not the songs!
+     * Added return parameter to know if the save was successful, by Munerato
      * @param playlist to delete
+     * @return boolean, true if the save was successful
+     *
      */
-    void deletePlaylist(Playlist playlist);
+    boolean deletePlaylist(Playlist playlist);
+
+    /**
+     * replace an old song into a new one
+     * @param oldSong to replace
+     * @param newSong to insert
+     * @return boolean, true if the replace was successful
+     */
+    boolean modifySong(Song oldSong, Song newSong);
+
+    /**
+     * replace an old playlist into a new one
+     * @param oldPlaylist to replace
+     * @param newPlaylist to insert
+     * @return boolean, true if the replace was successful
+     */
+    boolean modifyPlaylist(Playlist oldPlaylist, Playlist newPlaylist);
 
 }
