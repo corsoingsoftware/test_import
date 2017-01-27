@@ -121,4 +121,10 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         //Scrittura terminata
 
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        spsc.unbind();
+    }
 }

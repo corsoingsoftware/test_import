@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +41,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
     private EditText songNameEditText;
     private ImageButton addEditTimeSliceButton;
     private View backgroundView;
+    private boolean oneSlicePresent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rVTimeSlices.setLayoutManager(rVLayoutManager);
         Song songToEdit= createTestSong();
+        oneSlicePresent = false;
         if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
             songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
         }else{
@@ -78,13 +81,15 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
-                Intent returnIntent = new Intent();
-                ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-                ps.setName(songNameEditText.getText().toString());
-                returnIntent.putExtra(SONG_TO_EDIT, ps);
-                setResult(RESULT_OK,returnIntent);
-                finish();
+                if(checkAllFields() && oneSlicePresent) {
+                    Snackbar.make(view, getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
+                    Intent returnIntent = new Intent();
+                    ParcelableSong ps = (ParcelableSong) timeSlicesAdapter.getSongToEdit();
+                    ps.setName(songNameEditText.getText().toString());
+                    returnIntent.putExtra(SONG_TO_EDIT, ps);
+                    setResult(RESULT_OK, returnIntent);
+                    finish();
+                }
             }
         });
         //register listener for selected timeslice
@@ -98,12 +103,37 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         addEditTimeSliceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onAddOrEditClicked(v);
+                if(checkAllFields()) {
+                    onAddOrEditClicked(v);
+                    oneSlicePresent=true;
+                }
             }
         });
 
     }
 
+    public boolean checkAllFields(){
+        boolean checked = true;
+        String bpm = bpmEditText.getText().toString();
+        String beat = beatsEditText.getText().toString();
+        String songName = songNameEditText.getText().toString();
+        if(TextUtils.isEmpty(bpm)) {
+            bpmEditText.setError("BPM cannot be empty");
+            checked=false;
+        }
+        if(TextUtils.isEmpty(beat)) {
+            beatsEditText.setError("Beat cannot be empty");
+            checked=false;
+
+        }
+        if(TextUtils.isEmpty(songName)) {
+            songNameEditText.setError("Please insert a name!");
+            checked=false;
+
+        }
+        return checked;
+
+    }
     /**
      * Used when a timeslice be edited or clicked
      * @param v the v called

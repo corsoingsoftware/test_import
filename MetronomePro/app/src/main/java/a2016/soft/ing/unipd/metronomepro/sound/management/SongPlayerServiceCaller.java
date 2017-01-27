@@ -131,5 +131,10 @@ public class SongPlayerServiceCaller implements SongPlayer {
     public SongPlayerService getService(){
         return pService;
     }
-
+    public void unbind() {
+        if(pBound) {
+            activityContext.unbindService(pConnection);
+            pBound=false;
+        }
+    }
 }
