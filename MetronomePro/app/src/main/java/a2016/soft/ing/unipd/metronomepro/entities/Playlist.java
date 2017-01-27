@@ -20,6 +20,26 @@ public interface Playlist extends List<Song>, Parcelable {
      */
     void setName(String name);
 
+    //Insert by Munerato
+
+    /**
+     * Return the index of the song
+     * @param song searched on playlist
+     * @return int the index of the song, -1 if not found
+     */
+    int getSongIndex(Song song);
+
+    /**
+     * Set the song's index in the current playlist
+     * @param song that we want to modify
+     * @param index the position that we want
+     * @return an boolean: false if the position is already occupied, true otherwise
+     */
+    boolean setSongIndex(Song song, int index);
+
+    //Modified by Munerato
+    //The methods below are useless
+
     /**
      * Internal unique Id of playlist
      * -1 = new playlist
