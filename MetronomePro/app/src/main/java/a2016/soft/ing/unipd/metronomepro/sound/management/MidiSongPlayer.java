@@ -91,6 +91,8 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void write(Song[] songs) {
+
+
         currentSong = 0;
         playlist = new ParcelableMidiSong[songs.length];
         for(int i = 0; i < songs.length; i++)
@@ -106,11 +108,11 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             Log.d(TAG,"Midi not found or invalid path");
         }
 
-        try {
+        /*try {
             player.prepare();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
