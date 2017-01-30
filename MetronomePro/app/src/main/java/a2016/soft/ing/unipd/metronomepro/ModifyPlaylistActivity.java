@@ -103,8 +103,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
+                DataProvider dp = DataProviderBuilder.getDefaultDataProvider(this);
+                //TODO Modified by Mune, I touched the 2 methods below, if they're wrong just fix them (sorry <3)
+                List<Song> songs = dp.getAllSongs();
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();

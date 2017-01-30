@@ -11,29 +11,33 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public interface DataProvider {
     /**
-     * Read all songs
-     * @return get all songs in database, in a list format
+     * Read all the stored songs
+     * @return as a list, all songs in the database
      */
-    List<Song> getSongs();
+    List<Song> getAllSongs();
 
     /**
-     * return a list of songs that respects parameters
-     * @param searchName research parameter "like" for name of songs if null=all songs
-     * @param playlist to search if null=ignore this parameter
-     * @return a list of songs that respects parameters
+     * Search the song requested
+     * @param searchName is the name of the song, it can't be null
+     * @return the searched songs, null if it doesn't find it
      */
-    List<Song> getSongs(String searchName, Playlist playlist);
+    Song getSong(String searchName);
 
     /**
-     * read the playlists
-     * @param searchName search parameter, ignore if null
-     * @return the list of avaiable playlist
+     * Search the playlist requested
+     * @param searchName is the name of the playlist, it can't be null
+     * @return the searched playlist, null if it doesn't find it
      */
-    List<Playlist> getPlaylists(String searchName);
+    Playlist getPlaylist(String searchName);
 
     /**
-     * memorize the song in database, throw exception if fails
-     * override if present!
+     * Get all the name of the avaible playlists
+     * @return a list of String about avaiable playlists
+     */
+    List<String> getAllPlaylists();
+
+    /**
+     * Memorize the song in database, throw exception if fails
      * Added return parameter to know if the save was successful, by Munerato
      * @param song to memorize
      * @return boolean, true if the save was successful
@@ -79,5 +83,4 @@ public interface DataProvider {
      * @return boolean, true if the replace was successful
      */
     boolean modifyPlaylist(Playlist oldPlaylist, Playlist newPlaylist);
-
 }

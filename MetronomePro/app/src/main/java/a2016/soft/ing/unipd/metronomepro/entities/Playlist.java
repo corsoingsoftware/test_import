@@ -52,4 +52,6 @@ public interface Playlist extends List<Song>, Parcelable {
      * @param newId the new value of it
      */
     void setId(int newId);
+
+
 }

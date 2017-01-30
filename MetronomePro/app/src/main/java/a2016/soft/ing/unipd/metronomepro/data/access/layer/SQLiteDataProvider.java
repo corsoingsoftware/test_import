@@ -6,9 +6,17 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.Settings;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
@@ -18,12 +26,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Francesco, Alessio, Alberto on 09/12/2016.
+ * @author Alessio Munerato
  */
 
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
-
-    public final String ALL_SONGS = null;
-    public final Playlist NO_PLAYLISTS = null;
 
     public SQLiteDataProvider(Context context) {
         super(context, DBNAME, null, DB_VERSION);
@@ -32,7 +38,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     //queries edited by Munerato and Moretto
     private static final String CREATE_TABLE_SONG = "CREATE TABLE "
             + TBL_SONG + "("
-            + FIELD_SONG_TITLE + " VARCHAR(50) PRIMARY KEY);";
+            + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY);";
 
     //We dont need that anymore, all playlists are stored on TBL_SONG_PLAYLIST, by Munerato
     /*private static final String CREATE_TABLE_PLAYLIST = "CREATE TABLE "
@@ -42,24 +48,23 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     private static final String CREATE_TABLE_TIMESLICES = "CREATE TABLE "
             + TBL_TS_SONG + "("
-            + FIELD_SONG_TITLE + " VARCHAR(50) PRIMARY KEY, "
-            + FIELD_TIME_SLICES_BLOB + " BLOB, "
-            + "FOREIGN KEY(" + FIELD_SONG_TITLE + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "));";
+            + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY, "
+            + FIELD_TS_BLOB + " BLOB, "
+            + "FOREIGN KEY(" + FIELD_SONG_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "));";
 
     private static final String CREATE_TABLE_MIDI = "CREATE TABLE "
-            + TBL_MIDI_SONG + " ("
-            + FIELD_SONG_TITLE + " VARCHAR(50) PRIMARY KEY, "
-            + FIELD_MIDI_PATH + " TEXT, "
-            + "FOREIGN KEY(" + FIELD_SONG_TITLE + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "));";
+            + TBL_MD_SONG + " ("
+            + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY, "
+            + FIELD_MD_PATH + " TEXT, "
+            + "FOREIGN KEY(" + FIELD_SONG_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "));";
 
-    private static final String CREATE_TABLE_SONG_PLAYLIST = "CREATE TABLE "
-            + TBL_SONG_PLAYLIST + "("
-            + FIELD_SONG_TITLE + " TEXT NOT NULL, "
-            + FIELD_PLAYLIST_NAME + " TEXT NOT NULL, "
-            + FIELD_INDEX_SONG + " INTEGER NOT NULL, "
-            + "FOREIGN KEY(" + FIELD_PLAYLIST_NAME + ") REFERENCES " + TBL_PLAYLIST + "(" + FIELD_PLAYLIST_NAME + "), "
-            + "FOREIGN KEY(" + FIELD_SONG_TITLE + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_TITLE + "), "
-            + "PRIMARY KEY(" + FIELD_PLAYLIST_NAME + ", " + FIELD_SONG_TITLE + ")); ";
+    private static final String CREATE_TABLE_PLAYLIST = "CREATE TABLE "
+            + TBL_PLAYLIST + "("
+            + FIELD_PLAYLIST_ID + " VARCHAR(50) NOT NULL, "
+            + FIELD_SONG_ID + " VARCHAR(50) NOT NULL, "
+            + FIELD_SONG_INDEX + " INTEGER NOT NULL, "
+            + "FOREIGN KEY(" + FIELD_SONG_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + "), "
+            + "PRIMARY KEY(" + FIELD_PLAYLIST_ID + ", " + FIELD_SONG_ID + ")); ";
 
     /**
      * @param database
@@ -67,11 +72,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public void onCreate(SQLiteDatabase database) {
         try {
-
             database.execSQL(CREATE_TABLE_SONG);
             database.execSQL(CREATE_TABLE_MIDI);
             database.execSQL(CREATE_TABLE_TIMESLICES);
-            database.execSQL(CREATE_TABLE_SONG_PLAYLIST);
+            database.execSQL(CREATE_TABLE_PLAYLIST);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -81,17 +85,19 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public boolean saveSong(Song newSong) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues songValues = new ContentValues();
-        songValues.put(FIELD_SONG_TITLE, newSong.getName());
+        songValues.put(FIELD_SONG_ID, newSong.getName());
         try {
             database.insertOrThrow(TBL_SONG, null, songValues);
             if (newSong instanceof TimeSlicesSong) {
                 ContentValues timeSliceValues = new ContentValues();
-                timeSliceValues.put(FIELD_TIME_SLICES_BLOB, ((TimeSlicesSong) newSong).encode());
-                database.insert(TBL_TS_SONG, null, songValues);
+                timeSliceValues.put(FIELD_SONG_ID, newSong.getName());
+                timeSliceValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
+                database.insert(TBL_TS_SONG, null, timeSliceValues);
             } else {
                 ContentValues midiValues = new ContentValues();
-                midiValues.put(FIELD_MIDI_PATH, ((MidiSong) newSong).getPath());
-                database.insert(TBL_MIDI_SONG, null, songValues);
+                midiValues.put(FIELD_SONG_ID, newSong.getName());
+                midiValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
+                database.insert(TBL_MD_SONG, null, midiValues);
             }
         } catch (SQLException e) {
             return false;
@@ -104,11 +110,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues playlistValues = new ContentValues();
         for (Song song : newPlaylist) {
-            playlistValues.put(FIELD_PLAYLIST_NAME, newPlaylist.getName());
-            playlistValues.put(FIELD_SONG_TITLE, song.getName());
-            playlistValues.put(FIELD_INDEX_SONG, newPlaylist.getSongIndex(song));
+            playlistValues.put(FIELD_PLAYLIST_ID, newPlaylist.getName());
+            playlistValues.put(FIELD_SONG_ID, song.getName());
+            playlistValues.put(FIELD_SONG_INDEX, newPlaylist.getSongIndex(song));
             try {
-                database.insertOrThrow(TBL_SONG_PLAYLIST, null, playlistValues);
+                database.insertOrThrow(TBL_PLAYLIST, null, playlistValues);
             } catch (SQLException e) {
                 return false;
             }
@@ -116,88 +122,173 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         return true;
     }
 
-
-    @Override
-    public List<Song> getSongs() {
-        return getSongs(ALL_SONGS, NO_PLAYLISTS);
+    public Song getSong(String songTitle){
+        SQLiteDatabase database = this.getReadableDatabase();
+        String queryFirst = "SELECT * FROM ";
+        String queryLast = " WHERE " + FIELD_SONG_ID + " = '" + songTitle +"'";
+        String querySong = "" + queryFirst + TBL_MD_SONG + queryLast;
+        Cursor cursorSongs = database.rawQuery(querySong, null);
+        if (cursorSongs.moveToFirst()) {
+            MidiSong newMidi = EntitiesBuilder.getMidiSong();
+            newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+            newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MD_PATH)));
+            return newMidi;
+        }
+        querySong = "" + queryFirst + TBL_TS_SONG + queryLast;
+        cursorSongs = database.rawQuery(querySong, null);
+        if (cursorSongs.moveToFirst()) {
+            TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
+            newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+            newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TS_BLOB)));
+            return newTimeSlices;
+        }
+        return null;
     }
 
     @Override
-    public List<Song> getSongs(String songTitle, Playlist playlist) {
-        List<Song> songsToReturn = new ArrayList<Song>();
+    public List<Song> getAllSongs() {
+        List<Song> songList = new ArrayList<>();
         SQLiteDatabase database = this.getReadableDatabase();
-        StringBuilder sbM = new StringBuilder();
-        sbM.append("Select * from " + TBL_MIDI_SONG);
-        if (playlist != null) {
-            sbM.append(" natural join " + TBL_SONG_PLAYLIST);
-        }
-        sbM.append(" where 1=1");
-        if (songTitle != null) {
-            sbM.append(" AND " + FIELD_SONG_TITLE + " = '" + songTitle + "'");
-        }
-        if (playlist != null) {
-            sbM.append(" AND " + FIELD_PLAYLIST_NAME + " = '" + playlist.getName() + "'");
-        }
-        sbM.append(";");
-
-        String playlistName = (playlist != null) ? playlist.getName() : null;
-        List<String> songsFinded = search(songTitle, playlistName);
-        String songsToMatch = "";
-//        if(songsFinded.size() > 0) {
-//            if(songsFinded.size() != 1) {
-//                int indexMatchedSongs = 0;
-//                for (; indexMatchedSongs < songsFinded.size() - 1; indexMatchedSongs++)
-//                    songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(indexMatchedSongs) + " OR ";
-//                songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(++indexMatchedSongs) + ";";
-//            }else{
-//                songsToMatch += songsToMatch += FIELD_SONG_TITLE + " = " + songsFinded.get(0) + ";";
-//            }
-        String querySongs = sbM.toString();
-        Cursor cursorSongs = database.rawQuery(querySongs, null);
+        String query = "SELECT * FROM ";
+        Cursor cursorSongs = database.rawQuery("" + query +TBL_MD_SONG, null);
         if (cursorSongs.moveToFirst()) {
             do {
                 MidiSong newMidi = EntitiesBuilder.getMidiSong();
-                newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_TITLE)));
-                newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MIDI_PATH)));
-                songsToReturn.add(newMidi);
+                newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+                newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MD_PATH)));
+                songList.add(newMidi);
             } while (cursorSongs.moveToNext());
         }
-
-        sbM = new StringBuilder();
-        sbM.append("Select * from " + TBL_TS_SONG);
-        if (playlist != null) {
-            sbM.append(" natural join " + TBL_SONG_PLAYLIST);
-        }
-        sbM.append(" where 1=1");
-        if (songTitle != null) {
-            sbM.append(" AND " + FIELD_SONG_TITLE + " = '" + songTitle + "'");
-        }
-        if (playlist != null) {
-            sbM.append(" AND " + FIELD_PLAYLIST_NAME + " = '" + playlist.getName() + "'");
-        }
-        sbM.append(";");
-
-        querySongs = sbM.toString();
-        cursorSongs = database.rawQuery(querySongs, null);
+        cursorSongs = database.rawQuery("" + query + TBL_TS_SONG, null);
         if (cursorSongs.moveToFirst()) {
             do {
                 TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
-                newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_TITLE)));
-                newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TIME_SLICES_BLOB)));
-                songsToReturn.add(newTimeSlices);
+                newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+                newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TS_BLOB)));
+                songList.add(newTimeSlices);
             } while (cursorSongs.moveToNext());
         }
-//        }
-        return songsToReturn;
+        return songList;
     }
 
+
+    public Playlist getPlaylist(String playlistName){
+        SQLiteDatabase database = this.getReadableDatabase();
+        String queryPlaylist = "SELECT * FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID + " = '" + playlistName + "'";
+        Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
+        if (cursorPlaylist.moveToFirst()) {
+            SparseArray<String> songMap = new SparseArray<>();
+            String tempPlaylistName = cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_ID));
+            Playlist newPlaylist = EntitiesBuilder.getPlaylist(tempPlaylistName);
+            int indexSong;
+            int maxIndex = -1;
+            String song;
+            do{
+                song = cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_SONG_ID));
+                indexSong = cursorPlaylist.getInt(cursorPlaylist.getColumnIndex(FIELD_SONG_INDEX));
+                songMap.append(indexSong, song);
+                if (indexSong > maxIndex) maxIndex = indexSong;
+            } while (cursorPlaylist.moveToNext());
+            List<Song> allSongs = getAllSongs();
+            //Fa un po' schifo...rendere più efficiente
+            Song searchSong;
+            Iterator <Song> songIterator;
+            boolean flag;
+            for (int i = 0; i < maxIndex + 1; i++){
+                flag = true;
+                songIterator = allSongs.iterator();
+                while (songIterator.hasNext() && flag){
+                    searchSong = songIterator.next();
+                    if (searchSong.getName().equals(songMap.get(i))) {
+                        newPlaylist.add(searchSong);
+                        songIterator.remove();
+                        flag = false;
+                    }
+                }
+
+            }
+            return newPlaylist;
+        }
+        return null;
+    }
+
+    /*@Override
+    public List<Song> getSong(String songTitle, Playlist playlist) {
+        SparseArray<Song> songMap = new SparseArray<Song>();
+        int maxIndexSong = -1;
+        List<Song> songsToReturn = new ArrayList<Song>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        String queryMd = "SELECT * FROM " + TBL_MD_SONG;
+        String queryTs = "SELECT * FROM " + TBL_TS_SONG;
+        if(playlist == null){
+            if(songTitle!=null) {
+                queryMd += " WHERE " + FIELD_SONG_ID + " = '" + songTitle +"'";
+                queryTs += " WHERE " + FIELD_SONG_ID + " = '" + songTitle +"'";
+            }
+        }else{
+            queryMd += " INNER JOIN " + TBL_PLAYLIST + " ON " + TBL_MD_SONG + "." + FIELD_SONG_ID + " = " + TBL_PLAYLIST + "." + FIELD_SONG_ID;
+            queryTs += " INNER JOIN " + TBL_PLAYLIST + " ON " + TBL_TS_SONG + "." + FIELD_SONG_ID + " = " + TBL_PLAYLIST + "." + FIELD_SONG_ID;
+            queryMd += " WHERE " + TBL_PLAYLIST + "." + FIELD_PLAYLIST_ID + " = '" + playlist.getName() +"'";
+            queryTs += " WHERE " + TBL_PLAYLIST + "." + FIELD_PLAYLIST_ID + " = '" + playlist.getName() +"'";
+            if(songTitle!=null) {
+                queryMd += " AND " + TBL_MD_SONG + "." + FIELD_SONG_ID + " = '" + songTitle +"'";
+                queryTs += " AND " + TBL_TS_SONG + "." + FIELD_SONG_ID + " = '" + songTitle +"'";
+            }
+        }
+        Cursor cursorSongs = database.rawQuery(queryMd, null);
+        if (cursorSongs.moveToFirst()) {
+            int tempIndexSong;
+            do {
+                MidiSong newMidi = EntitiesBuilder.getMidiSong();
+                newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+                newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MD_PATH)));
+                if(playlist!=null) {
+                    tempIndexSong = cursorSongs.getInt(cursorSongs.getColumnIndex(FIELD_SONG_INDEX));
+                    songMap.append(tempIndexSong, newMidi);
+                    if (tempIndexSong > maxIndexSong) {
+                        maxIndexSong = tempIndexSong;
+                    }
+                }else{
+                    songsToReturn.add(newMidi);
+                }
+            } while (cursorSongs.moveToNext());
+        }
+        cursorSongs = database.rawQuery(queryTs, null);
+        if (cursorSongs.moveToFirst()) {
+            int tempIndexSong;
+            do {
+                TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
+                newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
+                newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TS_BLOB)));
+                if(playlist!=null) {
+                    tempIndexSong = cursorSongs.getInt(cursorSongs.getColumnIndex(FIELD_SONG_INDEX));
+                    songMap.append(tempIndexSong, newTimeSlices);
+                    if (tempIndexSong > maxIndexSong) {
+                        maxIndexSong = tempIndexSong;
+                    }
+                }else{
+                    songsToReturn.add(newTimeSlices);
+                }
+            } while (cursorSongs.moveToNext());
+        }
+        if (maxIndexSong > -1) {
+            for (int i = 0; i < maxIndexSong + 1; i++) {
+                songsToReturn.add(songMap.get(i));
+            }
+        }
+        return songsToReturn;
+    }*/
+
     @Override
-    public List<Playlist> getPlaylists(String playlistName) {
-        List<Playlist> playlistsToReturn = new ArrayList<Playlist>();
-        List<String> playlistsFinded = search(null, playlistName);
-        for (int indexPlaylistFinded = 0; indexPlaylistFinded < playlistsFinded.size(); indexPlaylistFinded++) {
-            Playlist newPlaylist = EntitiesBuilder.getPlaylist(playlistsFinded.get(indexPlaylistFinded));
-            playlistsToReturn.add(newPlaylist);
+    public List<String> getAllPlaylists() {
+        List<String> playlistsToReturn = new ArrayList<>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        String queryPlaylist = "SELECT " + FIELD_PLAYLIST_ID + " FROM " + TBL_PLAYLIST + " GROUP BY " + FIELD_PLAYLIST_ID;
+        Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
+        if(cursorPlaylist.moveToFirst()){
+            do{
+                playlistsToReturn.add(cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_ID)));
+            } while (cursorPlaylist.moveToNext());
         }
         return playlistsToReturn;
     }
@@ -205,10 +296,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deleteSong(Song songToDelete) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String tableType = (songToDelete instanceof MidiSong) ? TBL_MIDI_SONG : TBL_TS_SONG;
-        String queryDelSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete.getName() + ";";
-        String queryDelSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete.getName() + ";";
-        String queryDelPlaylistSong = "DELETE FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_SONG_TITLE + " = " + songToDelete.getName() + ";";
+        String tableType = (songToDelete instanceof MidiSong) ? TBL_MD_SONG : TBL_TS_SONG;
+        String queryDelSongType = "DELETE FROM " + tableType + " WHERE " + FIELD_SONG_ID + " = '" + songToDelete.getName() + "';";
+        String queryDelSong = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_ID + " = '" + songToDelete.getName() + "';";
+        String queryDelPlaylistSong = "DELETE FROM " + TBL_PLAYLIST + " WHERE " + FIELD_SONG_ID + " = '" + songToDelete.getName() + "';";
         try {
             database.execSQL(queryDelPlaylistSong);
             database.execSQL(queryDelSongType);
@@ -222,7 +313,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deletePlaylist(Playlist playlist) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String queryDelPlaylist = "DELETE FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_PLAYLIST_NAME + " = " + playlist.getName() + ";";
+        String queryDelPlaylist = "DELETE FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID + " = '" + playlist.getName() + "';";
         try {
             database.execSQL(queryDelPlaylist);
         } catch (SQLException e) {
@@ -236,8 +327,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public boolean modifySong(Song oldSong, Song newSong) {
         SQLiteDatabase database = getWritableDatabase();
         if (oldSong.getName().compareTo(newSong.getName()) != 0) {
-            String queryUpdate = "UPDATE " + TBL_SONG_PLAYLIST + " SET " + FIELD_SONG_TITLE + " = " + newSong.getName()
-                    + " WHERE " + FIELD_SONG_TITLE + " = " + oldSong.getName() + ";";
+            String queryUpdate = "UPDATE " + TBL_PLAYLIST + " SET " + FIELD_SONG_ID + " = '" + newSong.getName()
+                    + "' WHERE " + FIELD_SONG_ID + " = '" + oldSong.getName() + "';";
             try {
                 database.execSQL(queryUpdate);
             } catch (SQLException e) {
@@ -259,24 +350,4 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         onCreate(db);
     }
 
-    private List<String> search(String songName, String playlistName) {
-        SQLiteDatabase database = this.getReadableDatabase();
-        String querySongName = (songName == ALL_SONGS) ? " LIKE '%%';" : " = " + songName + ";";
-        String queryMatchAll;
-        if (playlistName == null) {
-            queryMatchAll = "SELECT * FROM " + TBL_SONG + " WHERE " + FIELD_SONG_TITLE + querySongName;
-        } else {
-            queryMatchAll = "SELECT * FROM " + TBL_SONG_PLAYLIST + " WHERE " + FIELD_PLAYLIST_NAME + " = " + playlistName + " AND "
-                    + FIELD_SONG_TITLE + querySongName;
-        }
-        Cursor cursorResults = database.rawQuery(queryMatchAll, null);
-        List<String> results = new ArrayList<String>();
-        if (cursorResults.moveToFirst()) {
-            String field = (playlistName != null && songName == null) ? FIELD_PLAYLIST_NAME : FIELD_SONG_TITLE;
-            do {
-                results.add(cursorResults.getString(cursorResults.getColumnIndex(field)));
-            } while (cursorResults.moveToNext());
-        }
-        return results;
-    }
 }
