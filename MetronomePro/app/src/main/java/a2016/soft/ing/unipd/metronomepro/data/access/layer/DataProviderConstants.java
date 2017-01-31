@@ -17,13 +17,10 @@ public interface DataProviderConstants {
     public static final String FIELD_PLAYLIST_ID = "PlaylistName";
     public static final String FIELD_SONG_INDEX = "Position";
 
-
     public static final String TBL_TS_SONG = "TimeSlices";
     public static final String FIELD_TS_BLOB = "Blob";
 
     public static final String TBL_MD_SONG = "Midi";
     public static final String FIELD_MD_PATH = "Path";
-
-
 
     }

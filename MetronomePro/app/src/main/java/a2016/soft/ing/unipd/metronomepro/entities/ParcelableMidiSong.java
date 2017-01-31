@@ -22,38 +22,24 @@ public class ParcelableMidiSong implements MidiSong {
         }
     };
 
-    private int id, duration;
     private String title, path;
-    private final int ID_NULL = -1;
 
     ParcelableMidiSong(Parcel in) {
-        this.id = in.readInt();
         this.title = in.readString();
         this.path = in.readString();
-        this.duration = in.readInt();
     }
 
     ParcelableMidiSong(){
-        this.id = ID_NULL;
+        this(null, null);
     }
 
-    ParcelableMidiSong(int id){
-        this(id, null, null, 0);
+    ParcelableMidiSong(String title){
+        this(title, null);
     }
 
-    ParcelableMidiSong(int id, String path){
-        this(id, path, null, 0);
-    }
-
-    ParcelableMidiSong(int id, String path, String title){
-        this(id, path, title, 0);
-    }
-
-    ParcelableMidiSong(int id, String path, String title, int duration){
-        this.id = id;
+    ParcelableMidiSong(String title, String path){
         this.title = title;
         this.path = path;
-        this.duration = duration;
     }
 
 
@@ -66,28 +52,12 @@ public class ParcelableMidiSong implements MidiSong {
     public void setPath(String newPath) { this.path = newPath; }
 
     @Override
-    public int getDuration() {
-        return duration;
-    }
-
-    @Override
-    public void setDuration(int millisDuration) { this.duration = millisDuration; }
-
-    @Override
     public String getName() {
         return title;
     }
 
     @Override
     public void setName(String newName) { this.title = newName; }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int newId) { this.id = newId; }
 
     @Override
     public SongPlayer getSongPlayer(SongPlayerManager manager) { return manager.getMidiSongPlayer(); }
@@ -99,9 +69,19 @@ public class ParcelableMidiSong implements MidiSong {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(path);
-        dest.writeInt(duration);
     }
+
+    //The methods below now are useless
+    @Override
+    public int getId() {
+        return -1;
+    }
+
+    @Override
+    public void setId(int newId) {
+
+    }
+
 }

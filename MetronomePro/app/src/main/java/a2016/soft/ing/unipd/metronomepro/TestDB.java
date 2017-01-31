@@ -63,13 +63,16 @@ public class TestDB extends AppCompatActivity {
                 z = dp.saveSong(m3);
                 TimeSlicesSong tss1 = EntitiesBuilder.getTimeSlicesSong();
                 TimeSlicesSong tss2 = EntitiesBuilder.getTimeSlicesSong();
+                TimeSlicesSong tss3 = EntitiesBuilder.getTimeSlicesSong();
                 tss1.setName("ts1");
                 tss2.setName("ts2");
+                tss3.setName("ts3");
                 TimeSlice ts = new TimeSlice();
                 ts.setBpm(60);
                 ts.setDurationInBeats(120);
                 tss1.add(ts);
                 tss2.add(ts);
+                tss3.add(ts);
                 ts = new TimeSlice();
                 ts.setBpm(60);
                 ts.setDurationInBeats(120);
@@ -102,13 +105,39 @@ public class TestDB extends AppCompatActivity {
                 dp.savePlaylist(p2);
                 List<String> playlistsName = dp.getAllPlaylists();
                 for(String name : playlistsName) System.out.println(name);
-                Playlist prova = dp.getPlaylist(p2.getName());
+                Playlist prova = dp.getPlaylist(p1.getName());
                 if (prova != null) Log.d("playlist: ", prova.getName());
                 Iterator t = prova.iterator();
                 while(t.hasNext()){
                     Song temp = (Song) t.next();
                     Log.d("Canzone di P1: ", temp.getName());
                 }
+                MidiSong m4 = EntitiesBuilder.getMidiSong();
+                m4.setName("m1");
+                m4.setPath("m4lolasd");
+                //dp.deleteSong(m1);
+                dp.deleteSong(tss1);
+                List<Song> allSongs2 = dp.getAllSongs();
+                for (Song s: allSongs2) {
+                    System.out.println("canzone aaa: " + s.getName());
+                }
+                dp.saveSong(tss1);
+                allSongs2 = dp.getAllSongs();
+                for (Song s: allSongs2) {
+                    System.out.println("Canzone bbb: " + s.getName());
+                }
+                p1 = dp.getPlaylist("p1");
+                Iterator <Song> itP1 = p1.iterator();
+                while (itP1.hasNext()) {
+                    System.out.println("Canzone in p1: " + itP1.next().getName());
+                }
+                dp.deletePlaylist(p1);
+                for(Song s : dp.getAllSongs()){
+                    System.out.println("NomeCanzone: " + s.getName());
+                }
+                dp.modifySong(m1, tss3);
+                TimeSlicesSong m = (TimeSlicesSong) dp.getSong(tss3.getName());
+                System.out.println("" + m.getName() + "");
                 /*
                 MidiSong ms1= EntitiesBuilder.getMidiSong();
                 ms1.setName("m1");
