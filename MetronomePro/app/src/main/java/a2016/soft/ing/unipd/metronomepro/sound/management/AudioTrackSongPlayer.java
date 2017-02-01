@@ -254,8 +254,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 byte[] arraySong;
 
-                while (!goThread) {
-                }  //Attesa!
+                /*while (!goThread) {
+                }  //Attesa!*/
 
                 //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
                 goThread = false;

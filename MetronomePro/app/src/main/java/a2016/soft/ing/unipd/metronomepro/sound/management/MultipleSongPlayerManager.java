@@ -98,7 +98,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
                 typeChanged ++;
 
-                if(typeChanged < PLAYERS) {
+                if(typeChanged <= PLAYERS) {
 
                     Song[] app = new Song[listSongsSameType.size()];
                     app = listSongsSameType.toArray(app);
@@ -106,7 +106,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
                     listSongsSameType.clear();
                     currentPlayer = currSong.getSongPlayer(this);
                     s = currSong.getClass();
-                    listSongsSameType.clear();
                     listSongsSameType.add(currSong);
                     songQueue.poll();
                 }
@@ -117,11 +116,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
                 listSongsSameType.add(currSong);
                 songQueue.poll();
 
-                /*if(songQueue.size()==0) {
-                    Song[] app = new Song[listSongsSameType.size()];
-                    app = listSongsSameType.toArray(app);
-                    currentPlayer.write(app);
-                }*/
             }
 
             currSong = songQueue.peek();
@@ -131,7 +125,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
                 app = listSongsSameType.toArray(app);
                 currentPlayer.write(app);
             }
-
         }
 
         play(arraySongs);
