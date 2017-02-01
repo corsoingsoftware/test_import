@@ -90,7 +90,14 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             }
         });
 
-       // playlist = EntitiesBuilder.getPlaylist(PLAYLIST_SELECTED);
+        //prima volta che apro la app non c'è la playlist salvata e me la creo
+        if(database.getPlaylist(PLAYLIST_SELECTED) == null){
+            playlist = EntitiesBuilder.getPlaylist(PLAYLIST_SELECTED);
+        }
+        //tutte le altre volte me la carico dal database
+        else {
+            playlist = database.getPlaylist(PLAYLIST_SELECTED);
+        }
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
             //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);

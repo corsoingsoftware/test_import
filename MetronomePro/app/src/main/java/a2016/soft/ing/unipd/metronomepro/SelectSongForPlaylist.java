@@ -189,6 +189,14 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
         playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
          */
+        FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
+        FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public  void onClick(View view) {
+                Intent intent = new Intent(activity,SongCreator.class);
+                startActivityForResult(intent,RESULT_OK);
+            }
+        });
     }
 
     protected void onSaveInstanceState(Bundle outState) {
