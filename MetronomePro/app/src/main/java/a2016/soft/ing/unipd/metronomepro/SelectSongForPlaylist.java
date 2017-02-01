@@ -133,7 +133,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             if(requestCode == SONG_CREATED){
                 TimeSlicesSong songCreated = data.getParcelableExtra(SONG_TO_EDIT);
                 dataProvider.saveSong(songCreated);
-                songForAdapter.add(songCreated);
+                selectSongForPlaylistAdapter.addSong(songCreated);
+                selectSongForPlaylistAdapter.notifyDataSetChanged();
             }
         }
     }

@@ -50,6 +50,9 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
     public ArrayList<Song> getSelectedSongs(){
         return selectedSongs;
     }
+    public void addSong(Song song){
+        arraySongs.add(song);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
