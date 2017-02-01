@@ -46,8 +46,6 @@
             android:name=".SelectSongForPlaylist"
             android:label="@string/title_activity_song_creator"
             android:theme="@style/AppTheme" >
-
-
         </activity>
 
         <activity
@@ -83,11 +81,6 @@
             android:name=".TestDB"
             android:label="@string/title_activity_test_db"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
