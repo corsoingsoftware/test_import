@@ -34,7 +34,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private static final int SONG_CREATED = 1;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
-    private DataProvider dataProvider;
+    private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
     private ArrayList<Song> playlistSongs;
     ArrayList<Song> savedSongs = new ArrayList<>();
     ArrayList<Song> selectedSongs;
