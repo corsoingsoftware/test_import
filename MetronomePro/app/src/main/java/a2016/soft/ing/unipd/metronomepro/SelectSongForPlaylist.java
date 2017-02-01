@@ -27,7 +27,9 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
-
+/**
+ * Created by giuli on 27/12/2016.
+ */
 public class SelectSongForPlaylist extends AppCompatActivity {
 
     private RecyclerView rVSelectSong;
@@ -95,9 +97,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //for test
-                Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
                 setResult(RESULT_OK,intent);
