@@ -121,6 +121,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
              * creato da giulio: riceve le canzoni che ho selezionato
              */
             Intent intent = getIntent();
+            //se mi viene passata una playlist da modificare
             if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
                     playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
@@ -132,6 +133,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                     ex.printStackTrace();
                 }
             }
+            //se mi vengono passate canzoni da aggiungere
             else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
                 try {
                     songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
@@ -145,7 +147,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         }
 
 
-        modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
+        modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) database.getPlaylist(PLAYLIST_SELECTED), this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
