@@ -90,7 +90,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             }
         });
 
-        playlist = EntitiesBuilder.getPlaylist(PLAYLIST_SELECTED);
+       // playlist = EntitiesBuilder.getPlaylist(PLAYLIST_SELECTED);
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
             //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);
