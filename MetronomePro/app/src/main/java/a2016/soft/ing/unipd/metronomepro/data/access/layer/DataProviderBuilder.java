@@ -12,12 +12,10 @@ public class DataProviderBuilder {
      * @return an instance for the class
      */
     public static DataProvider getDefaultDataProvider(Context c) {
-
         return new SQLiteDataProvider(c);
     }
 
     public static DataProvider getDefaultDataProvider(Context c, int version) {
-
         return new SQLiteDataProvider(c, version);
     }
 }

@@ -54,9 +54,6 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.context = c;
     }
 
-    public interface ModifyPlaylistAdapterCallback {
-        void serviceConnected();
-    }
 
     /**
      * add a song to the playlist
