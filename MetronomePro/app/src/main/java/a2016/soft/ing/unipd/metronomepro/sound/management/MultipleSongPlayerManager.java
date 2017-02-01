@@ -37,9 +37,9 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     public void startTheseSongs(Song[] songs) {
 
-        arraySongsToPlay=songs;
-        nextToPlay=0;
-        nextToLoad=0;
+        arraySongsToPlay = songs;
+        nextToPlay = 0;
+        nextToLoad = 0;
         songQueue= new LinkedBlockingQueue<>();
 
         for(Song song : songs){
@@ -61,7 +61,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         while(songQueue.size() > 0 && currSong.getClass() == s) {
             songQueue.poll();
             listSongsSameType.add(currSong);
-            currSong=songQueue.peek();
+            currSong = songQueue.peek();
         }
 
         Song[] app = new Song[listSongsSameType.size()];
