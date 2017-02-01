@@ -192,16 +192,16 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
         playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
          */
-        FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
-        FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            //se voglio modificae una song passo nel extra al posto del entities bulder
-            public  void onClick(View view) {
-                Intent intent = new Intent(activity,SongCreator.class);
-                intent.putExtra(SONG_TO_EDIT,EntitiesBuilder.getTimeSlicesSong());
-                startActivityForResult(intent,SONG_CREATED);
-            }
-        });
+//        FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
+//        FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            //se voglio modificae una song passo nel extra al posto del entities bulder
+//            public  void onClick(View view) {
+//                Intent intent = new Intent(activity,SongCreator.class);
+//                intent.putExtra(SONG_TO_EDIT,EntitiesBuilder.getTimeSlicesSong());
+//                startActivityForResult(intent,SONG_CREATED);
+//            }
+//        });
     }
 
     protected void onSaveInstanceState(Bundle outState) {

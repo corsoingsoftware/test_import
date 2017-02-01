@@ -23,15 +23,15 @@
 
     <include layout="@layout/content_select_song_for_playlist" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/FabtoEditorActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_add"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="upper|center_horizontal"
-        app:elevation="7dp" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/FabtoEditorActivity"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@mipmap/ic_add"-->
+        <!--app:layout_anchorGravity="center_vertical|center_horizontal"-->
+        <!--android:layout_gravity="upper|center_horizontal"-->
+        <!--app:elevation="7dp" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
