@@ -17,6 +17,8 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -43,6 +45,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     private final OnStartDragListener dragListener;
     private Context context;
     private Song songSelected;
+    private DataProvider database;
 
     /**
      * default constructor
@@ -51,6 +54,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
+        database = DataProviderBuilder.getDefaultDataProvider(c);
     }
 
     /**
@@ -60,6 +64,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void addSong(Song song) {
         playlistToModify.add(song);
         notifyItemInserted(playlistToModify.size()-1);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
     }
 
     /**
@@ -69,6 +75,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void addAllSongs(ArrayList<Song> lista){
         playlistToModify.addAll(lista);
+        database.savePlaylist(playlistToModify);
        // notifyItemInserted(playlistToModify.size()-1);
     }
 
@@ -91,6 +98,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void delete(Song song) {
         playlistToModify.remove(song);
+        database.savePlaylist(playlistToModify);
+        playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**
@@ -111,6 +120,9 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(playlistToModify, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
+       // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**
@@ -122,6 +134,9 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void onItemSwiped(int position) {
         playlistToModify.remove(position);
         notifyItemRemoved(position);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
+       // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
 
