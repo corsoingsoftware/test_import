@@ -16,9 +16,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
-    private LinkedBlockingQueue<Song> songQueue;
+    private LinkedBlockingQueue<Song> songsQueue;
+    //Contains the index of the next song to be played.
     private int indexNextToPlay;
+    //Contains the index of the next song to be loaded.
     private int indexNextToLoad;
+    //Array that contains the songs to be played.
     private Song[] arraySongsToPlay;
 
     public MultipleSongPlayerManager(Context c) {
@@ -31,33 +34,45 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         entrySong.getSongPlayer(this).load(entrySong);
     }
 
+    /**
+     * Method that initializes the attributes with default values and SongQueue with arrayEntrySongs' elements.
+     * @param arrayEntrySongs  Array that contains songs to be played.
+     */
+
     public void startTheseSongs(Song[] arrayEntrySongs) {
 
         arraySongsToPlay = arrayEntrySongs;
         indexNextToPlay = 0;
         indexNextToLoad = 0;
-        songQueue= new LinkedBlockingQueue<>();
+
+
+        songsQueue = new LinkedBlockingQueue<>();
 
         for(Song songToAdd : arrayEntrySongs){
-            songQueue.add(songToAdd);
+            songsQueue.add(songToAdd);
         }
 
         dequeueManagement();
         arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
-        checkQueueEnded();
+        checkQueueEmpty();
     }
+
+    /**
+     *  It manages the loading of the songs in theirs corresponding Players. In particular it identifies blocks of
+     *  songs of the same type and loads them.
+     */
 
     public void dequeueManagement(){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
-        Song currentSong = songQueue.peek();
+        Song currentSong = songsQueue.peek();
         Class currentSongClass = currentSong.getClass();
         SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
-        while(songQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
-            songQueue.poll();
+        while(songsQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
+            songsQueue.poll();
             listSongsSameType.add(currentSong);
-            currentSong = songQueue.peek();
+            currentSong = songsQueue.peek();
         }
 
         Song[] app = new Song[listSongsSameType.size()];
@@ -66,11 +81,21 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         currentSongSongPlayer.write(app);
     }
 
+    /**
+     * It returns a player for midiSongs. It is totally transparent thanks to Song interface.
+     * @return midiSongPlayer A player for midiSongs.
+     */
+
     @Override
     public SongPlayer getMidiSongPlayer() {
 
         return midiSongPlayer;
     }
+
+    /**
+     *
+     * @return audioTrackSongPlayer
+     */
 
     @Override
     public SongPlayer getTimeSlicesSongPlayer() {
@@ -78,13 +103,18 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         return audioTrackSongPlayer;
     }
 
+    /**
+     * Method called when a Player finished to play a block of songs of the same type. It
+     * @param origin SongPlayer that finished to play the songs.
+     */
+
     @Override
     public void playEnded(SongPlayer origin) {
 
         if(indexNextToPlay < arraySongsToPlay.length) {
             origin.pause();
             arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
-            checkQueueEnded();
+            checkQueueEmpty();
 
         } else {
 
@@ -99,7 +129,11 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         }
     }
 
-    private void checkQueueEnded() {
+    /**
+     *  Method for checking the
+     */
+
+    private void checkQueueEmpty() {
 
         indexNextToPlay = indexNextToLoad;
         if(indexNextToLoad < arraySongsToPlay.length)
