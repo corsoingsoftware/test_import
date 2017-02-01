@@ -44,8 +44,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         arraySongsToPlay = arrayEntrySongs;
         indexNextToPlay = 0;
         indexNextToLoad = 0;
-
-
         songsQueue = new LinkedBlockingQueue<>();
 
         for(Song songToAdd : arrayEntrySongs){
