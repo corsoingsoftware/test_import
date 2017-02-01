@@ -45,15 +45,14 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     private Context context;
     private Song songSelected;
 
-/**
- * default constructor
- */
-public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
-    this.playlistToModify = playlistToModify;
+    /**
+     * default constructor
+     */
+    public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
+        this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
     }
-}
 
     public interface ModifyPlaylistAdapterCallback {
         void serviceConnected();
