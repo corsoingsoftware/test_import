@@ -3,13 +3,9 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 import android.content.Context;
 
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
@@ -21,8 +17,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
     private LinkedBlockingQueue<Song> songQueue;
-    private int nextToPlay;
-    private int nextToLoad;
+    private int indexNextToPlay;
+    private int indexNextToLoad;
     private Song[] arraySongsToPlay;
 
     public MultipleSongPlayerManager(Context c) {
@@ -35,39 +31,39 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         entrySong.getSongPlayer(this).load(entrySong);
     }
 
-    public void startTheseSongs(Song[] songs) {
+    public void startTheseSongs(Song[] arrayEntrySongs) {
 
-        arraySongsToPlay = songs;
-        nextToPlay = 0;
-        nextToLoad = 0;
+        arraySongsToPlay = arrayEntrySongs;
+        indexNextToPlay = 0;
+        indexNextToLoad = 0;
         songQueue= new LinkedBlockingQueue<>();
 
-        for(Song song : songs){
-            songQueue.add(song);
+        for(Song songToAdd : arrayEntrySongs){
+            songQueue.add(songToAdd);
         }
 
         dequeueManagement();
-        arraySongsToPlay[nextToPlay].getSongPlayer(this).play();
+        arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
         checkQueueEnded();
     }
 
     public void dequeueManagement(){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
-        Song currSong = songQueue.peek();
-        Class s = currSong.getClass();
-        SongPlayer currentPlayer = currSong.getSongPlayer(this);
+        Song currentSong = songQueue.peek();
+        Class currentSongClass = currentSong.getClass();
+        SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
-        while(songQueue.size() > 0 && currSong.getClass() == s) {
+        while(songQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
             songQueue.poll();
-            listSongsSameType.add(currSong);
-            currSong = songQueue.peek();
+            listSongsSameType.add(currentSong);
+            currentSong = songQueue.peek();
         }
 
         Song[] app = new Song[listSongsSameType.size()];
-        nextToLoad += listSongsSameType.size();
+        indexNextToLoad += listSongsSameType.size();
         app = listSongsSameType.toArray(app);
-        currentPlayer.write(app);
+        currentSongSongPlayer.write(app);
     }
 
     @Override
@@ -82,20 +78,27 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     @Override
     public void playEnded(SongPlayer origin) {
-        if(nextToPlay < arraySongsToPlay.length) {
+        if(indexNextToPlay < arraySongsToPlay.length) {
             origin.pause();
-            arraySongsToPlay[nextToPlay].getSongPlayer(this).play();
+            arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
             checkQueueEnded();
 
         } else {
+
+            try {
+                audioTrackSongPlayer.pause();
+                midiSongPlayer.pause();
+            } catch (Exception e) {
+
+            }
 
             //avviso l'activity che ho finito
         }
     }
 
     private void checkQueueEnded() {
-        nextToPlay = nextToLoad;
-        if(nextToLoad < arraySongsToPlay.length)
+        indexNextToPlay = indexNextToLoad;
+        if(indexNextToLoad < arraySongsToPlay.length)
             dequeueManagement();
     }
 }
