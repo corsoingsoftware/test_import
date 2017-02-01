@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
@@ -47,7 +48,8 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
 
         DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
-        ArrayList<String> playlistNames = (ArrayList<String>) db.getAllPlaylists();
+        List<String> playlistNames = db.getAllPlaylists();
+        selectedPlaylist= new ArrayList<>();
         for (String s:playlistNames){
             Playlist p = db.getPlaylist(s);
             selectedPlaylist.add(p);
