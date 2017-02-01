@@ -109,7 +109,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     s3.setName("song3");
                     MidiSong midiS1 = (MidiSong)EntitiesBuilder.getMidiSong();
                     midiS1.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                            + "/Tick.mid");
+                            +"/A.mid");//+ "/Tick.mid");
                     midiS1.setName("midiSong1");
                     MidiSong midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
                     midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
