@@ -35,7 +35,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
     private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
-    private ArrayList<Song> playlistSongs;
+    private ArrayList<Song> songsFrom;
     ArrayList<Song> savedSongs = new ArrayList<>();
     ArrayList<Song> selectedSongs;
     ArrayList<Song> songForAdapter;
@@ -59,35 +59,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             db.saveSong(s);
         }
         songForAdapter= (ArrayList<Song>) db.getAllSongs();
-        /**
-         * if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
-         songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
-         }else{
-         Intent intent=getIntent();
-         try {
-         songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
-         } catch (Exception ex){
-         ex.printStackTrace();
-         }
-         }
-         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
-         rVTimeSlices.setAdapter(timeSlicesAdapter);
-         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
-         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
-         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
-         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
-         fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
-        Intent returnIntent = new Intent();
-        ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-        returnIntent.putExtra(SONG_TO_EDIT, ps);
-        setResult(RESULT_OK,returnIntent);
-        finish();
-        }
-        });
-         */
 
         if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
@@ -99,15 +70,14 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             Intent intent=getIntent();
             if(intent!=null) {
                 try {
-                    savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
-                    for (int i = 0;i<songForAdapter.size();i++) {
-                        for (int j = 0;j<savedSongs.size();j++) {
-                            if(savedSongs.get(j).getName().compareTo(songForAdapter.get(i).getName())==0){
-                                songForAdapter.remove(i);
+                    songsFrom = intent.getParcelableArrayListExtra(PLAYLIST);
+                     for (int i = 0;i<songsFrom.size();i++) {
+                        for (int j = 0;j<songForAdapter.size();j++) {
+                            if(songsFrom.get(i).getName().compareTo(songForAdapter.get(j).getName())==0){
+                                songForAdapter.remove(j);
                             }
                         }
                     }
-
 
 
                 } catch (Exception ex) {
@@ -120,54 +90,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
         }
 
-
-
-        //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
-
-        /**
-         * fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Song songToEdit = EntitiesBuilder.getSong();
-        Intent intent = new Intent(activity, SongCreator.class);
-        intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
-        startActivityForResult(intent, START_EDIT_NEW_SONG);
-
-        }
-        });
-         */
-        /**
-         * public void onClick(View v) {
-         Intent intent = new Intent(activity, SelectNextSongs.class);
-         intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
-         startActivity(intent);
-         }
-         */
-        /**
-         try {
-         Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
-         playlistSongs = boundle.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
-         }
-         catch(NullPointerException e){}
-
-         dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
-         List<Song> songInDb = dataProvider.getSongs();//ritorna tutte le canzoni nel db
-
-         for ( ParcelableSong i : playlistSongs) { //ogni canzone nella playlist
-         if(songInDb.contains(i)) { //se presente nel db...
-         songInDb.remove(i); //la rimuovo perchè non deve essere visualizzata
-         }
-         }
-         //converto songInDb da Lista a ArrayList<ParcelableSong>
-         ArrayList<ParcelableSong> songForView = new ArrayList<>();
-         for (Song i: songInDb
-         ) {
-         songForView.add((ParcelableSong)songInDb.get(songInDb.indexOf(i)));
-         }
-         //songForView ora contiene tutte le canzoni presenti nel database meno quelle che sono gia presenti nella playlist
-
-
-         */
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -180,20 +102,9 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
                 setResult(RESULT_OK,intent);
                 finish();
-               // startActivityForResult(intent,RESULT_OK);
-                /**
-                 * Intent returnIntent = new Intent();
-                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-                 returnIntent.putExtra(SONG_TO_EDIT, ps);
-                 setResult(RESULT_OK,returnIntent);
-                 finish();
-                 */
             }
         });
-        /**
-        ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
-        playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
-         */
+
         FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
         FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
             @Override
