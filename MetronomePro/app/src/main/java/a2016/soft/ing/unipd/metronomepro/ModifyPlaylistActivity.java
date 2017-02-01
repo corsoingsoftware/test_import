@@ -41,6 +41,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
+    private DataProvider database;
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
                                                                     //selezionte nel layout di giulio
@@ -58,13 +59,13 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-        final DataProvider database = DataProviderBuilder.getDefaultDataProvider(this);
+        database = DataProviderBuilder.getDefaultDataProvider(this);
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-                Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+              //  Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
@@ -89,11 +90,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             }
         });
 
-        playlist = EntitiesBuilder.getPlaylist(PLAYLIST_DEFAULT_NAME);
-//        Song s = EntitiesBuilder.getSong();
-//        TimeSlice ts = new TimeSlice();
-//        s.add(ts);
-//        playlist.add(s);
+
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
             //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);
@@ -109,6 +106,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 //TODO Modified by Mune, I touched the 2 methods below, if they're wrong just fix them (sorry <3)
                 List<Song> songs = dp.getAllSongs();
                 playlist.addAll(songs);
+                database.savePlaylist(playlist);
             }catch (Exception ex){
                 ex.printStackTrace();
 //                playlist.add(EntitiesBuilder.getSong("canzone 1"));
@@ -126,7 +124,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 try {
                     playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
                     onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
-                    playlist = database.getPlaylist(PLAYLIST_SELECTED);
+                    playlist = database.getPlaylist(playlist.getName());
+  //                playlist = database.getPlaylist(PLAYLIST_SELECTED);
+
                     //           songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
         //            playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
@@ -147,7 +147,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         }
 
 
-        modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) database.getPlaylist(PLAYLIST_SELECTED), this, this);
+        modifyPlaylistAdapter = new ModifyPlaylistAdapter((ParcelablePlaylist) playlist, this, this);
         rVModifyPlaylist.setAdapter(modifyPlaylistAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(modifyPlaylistAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
