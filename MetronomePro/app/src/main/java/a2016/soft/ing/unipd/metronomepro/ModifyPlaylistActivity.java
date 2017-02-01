@@ -63,7 +63,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
@@ -109,24 +109,37 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getMidiSong());
+//                playlist.add(EntitiesBuilder.getSong("canzone 1"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 2"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 3"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 4"));
+      //          playlist.add(EntitiesBuilder.getMidiSong());
             }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato
              */
             Intent intent = getIntent();
-            if(intent!=null){
+            if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
-                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
-                    playlist.addAll(songsToAdd);
+                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
+                    onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
+                    //           songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
+        //            playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
+            else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
+                try {
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
+                    playlist.addAll(songsToAdd);
+                    onSaveInstanceState(intent.getBundleExtra(SONG_TO_ADD));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+     //       Intent xint = getIntent();
+
         }
 
 

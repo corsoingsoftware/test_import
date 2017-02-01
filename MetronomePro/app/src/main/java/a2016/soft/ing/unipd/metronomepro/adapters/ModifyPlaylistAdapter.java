@@ -17,8 +17,10 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
+import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Francesco on 12/12/2016 thanks to Federico Favotto for the great help.
@@ -38,18 +40,20 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
-    private ParcelablePlaylist playlistToModify;
+    private Playlist playlistToModify;
     private final OnStartDragListener dragListener;
     private Context context;
     private Song songSelected;
+
 /**
  * default constructor
  */
-    public ModifyPlaylistAdapter(ParcelablePlaylist playlistToModify, Context c, OnStartDragListener dragListener) {
-        this.playlistToModify = playlistToModify;
+public ModifyPlaylistAdapter(Playlist playlistToModify, Context c, OnStartDragListener dragListener) {
+    this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
     }
+}
 
     public interface ModifyPlaylistAdapterCallback {
         void serviceConnected();
@@ -91,7 +95,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      * delete a passed song
      * @param song to delete
      */
-        public void delete(Song song) {
+    public void delete(Song song) {
         playlistToModify.remove(song);
     }
 
@@ -99,7 +103,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      * get the playlist that is being modify
      * @return playlist to modify
      */
-    public ParcelablePlaylist getPlaylistToModify() {
+    public Playlist getPlaylistToModify() {
         return playlistToModify;
     }
 
