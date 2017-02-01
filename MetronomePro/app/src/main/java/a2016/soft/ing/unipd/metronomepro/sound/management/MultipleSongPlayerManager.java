@@ -82,7 +82,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * It returns a player for midiSongs. It will be automatically called if the song examined is a MidiSong
+     * It returns a player for midiSongs. It will be transparently called if the song examined is a MidiSong
      * thanks to Song interface and its implementation in MidiSong.
      * @return midiSongPlayer A player for MidiSongs.
      */
