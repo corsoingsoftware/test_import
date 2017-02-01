@@ -35,7 +35,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private ArrayList<Song> playlistSongs;
     ArrayList<Song> savedSongs = new ArrayList<>();
     ArrayList<Song> selectedSongs;
-    ArrayList<Song> songForAdapter = provaDiTest();
+    ArrayList<Song> songForAdapter;
+    private DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
 
 
 
@@ -91,19 +92,23 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             if(intent!=null) {
                 try {
                     savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
-                    for (int i = 0;i<songForAdapter.size();i++) {
+                  /**  for (int i = 0;i<songForAdapter.size();i++) {
                         for (int j = 0;j<savedSongs.size();j++) {
                             if(savedSongs.get(j).getName().compareTo(songForAdapter.get(i).getName())==0){
                                 songForAdapter.remove(i);
                             }
                         }
-                    }
+                    }*/
+
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-
+            for (Song s:provaDiTest()) {
+                db.saveSong(s);
+            }
+            songForAdapter= (ArrayList<Song>) db.getAllSongs();
             selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
         }
@@ -239,6 +244,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         array.add((Song) s18);
         array.add((Song) s19);
         array.add((Song) s20);
+
 
         return array;
 
