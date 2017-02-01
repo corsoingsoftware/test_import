@@ -37,10 +37,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void play() {
-        if(playerState != ON_PLAY) {
-            playerState = ON_PLAY;
-            player.start();
-        }
+        player.start();
     }
 
     @Override
@@ -76,13 +73,14 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public PlayState getState() {
+
         PlayState ps;
-        switch(playerState) {
-            case ON_PLAY :  ps = PlayState.PLAYSTATE_PLAYING;
-            case ON_PAUSE : ps = PlayState.PLAYSTATE_PAUSE;
-            case ON_STOP : ps = PlayState.PLAYSTATE_STOP;
-            default: ps = null;
+        if(player.isPlaying()) {
+            ps = PlayState.PLAYSTATE_PLAYING;
+        } else {
+            ps = PlayState.PLAYSTATE_STOP;
         }
+
         return ps;
     }
 
@@ -90,6 +88,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
      * Federico: il player va creato ogni volta che si cambia la traccia!
      * This method reinitializes the mediaPlayer
      */
+
     private void createNewMediaPlayer(String audioPath) {
         if(player!=null){
             player.setOnCompletionListener(null);
@@ -112,18 +111,11 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
     @Override
     public void write(Song[] songs) {
 
-
         currentSong = 0;
         playlist = new ParcelableMidiSong[songs.length];
         for(int i = 0; i < songs.length; i++)
             playlist[i] = (ParcelableMidiSong) songs[i];
         createNewMediaPlayer(playlist[currentSong].getPath());
-
-        /*try {
-            player.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     @Override
