@@ -24,11 +24,14 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
+
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 
 public class SelectSongForPlaylist extends AppCompatActivity {
 
     private RecyclerView rVSelectSong;
+    private static final int SONG_CREATED = 1;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
     private DataProvider dataProvider;
@@ -192,9 +195,11 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
         FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
             @Override
+            //se voglio modificae una song passo nel extra al posto del entities bulder
             public  void onClick(View view) {
                 Intent intent = new Intent(activity,SongCreator.class);
-                startActivityForResult(intent,RESULT_OK);
+                intent.putExtra(SONG_TO_EDIT,EntitiesBuilder.getTimeSlicesSong());
+                startActivityForResult(intent,SONG_CREATED);
             }
         });
     }
@@ -208,6 +213,17 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == SONG_CREATED){
+                TimeSlicesSong songCreated = data.getParcelableExtra(SONG_TO_EDIT);
+                dataProvider.saveSong(songCreated);
+                songForAdapter.add(songCreated);
+            }
+        }
+    }
 
     //classe di test, al posto di questa ci sarà il database
     public ArrayList<Song> provaDiTest(){

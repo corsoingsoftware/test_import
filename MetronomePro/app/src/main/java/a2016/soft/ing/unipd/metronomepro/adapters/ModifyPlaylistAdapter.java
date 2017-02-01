@@ -139,6 +139,12 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
        // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
+    /**
+     * oggetto che contiene proprita grafiche creato in oncreate distrutto in onrecycled nel onbind vengono risettate le scritte
+     * @param parent
+     * @param viewType
+     * @return
+     */
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
