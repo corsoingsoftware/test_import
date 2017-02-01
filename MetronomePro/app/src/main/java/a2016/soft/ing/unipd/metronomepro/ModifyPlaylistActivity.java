@@ -43,7 +43,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
     private DataProvider database;
-    private Playlist supporto;
+    private Playlist supporto; //è una playlist di supporto che mi serve per ricevee l'intent da SelectPlaylistActivity vedi riga 129
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
                                                                     //selezionte nel layout di giulio
@@ -126,7 +126,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
                     supporto = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
-                    if(database.getPlaylist(supporto.getName())==null){
+                    if(database.getPlaylist(supporto.getName())==null){//NON ELIMINARE QUESTO IF ELSE RISOLVE UN GRAN BUG
                         playlist = supporto;
                     }
                     else{
