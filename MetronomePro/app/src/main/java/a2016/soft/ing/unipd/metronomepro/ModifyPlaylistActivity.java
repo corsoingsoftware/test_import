@@ -42,11 +42,12 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
     private DataProvider database;
+    String nomedc;
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
                                                                     //selezionte nel layout di giulio
     //All results:
-    private static final int START_EDIT_NEW_SONG=1;
+    private static final int START_ADD_SONGS=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
               //  Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
-                startActivityForResult(intent, START_EDIT_NEW_SONG);
+                startActivityForResult(intent, START_ADD_SONGS);
             }
             /**public void onClick(View view) {
                 Song songToEdit = EntitiesBuilder.getSong();
@@ -125,6 +126,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                     playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
                     onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
                     database.savePlaylist(playlist);
+                    nomedc=playlist.getName();
    //               playlist = database.getPlaylist(playlist.getName());
   //                playlist = database.getPlaylist(PLAYLIST_SELECTED);
 
@@ -137,6 +139,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             //se mi vengono passate canzoni da aggiungere
             else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
                 try {
+              //      playlist = database.getPlaylist(nomedc);
                     songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
                     playlist.addAll(songsToAdd);
                     database.savePlaylist(playlist);
@@ -173,9 +176,11 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
             switch (requestCode){
-                case START_EDIT_NEW_SONG:
+                case START_ADD_SONGS:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
+                    playlist.addAll(songsToAdd);
+                    database.savePlaylist(playlist);
                     break;
             }
         }

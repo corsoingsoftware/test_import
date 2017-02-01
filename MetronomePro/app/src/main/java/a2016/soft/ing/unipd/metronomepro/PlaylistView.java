@@ -147,6 +147,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     public void onPlaylistClick() {
         Activity activity = this;
         Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
+        Playlist p = playListAdapter.getPlaylistToEdit();
         intent.putExtra(ActivityExtraNames.PLAYLIST_SELECTED,playListAdapter.getPlaylistToEdit());
         Playlist playList = playListAdapter.getPlaylistToEdit();
         startActivity(intent);

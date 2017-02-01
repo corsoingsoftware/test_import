@@ -175,7 +175,9 @@ public class SelectSongForPlaylist extends AppCompatActivity {
                         .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivityForResult(intent,RESULT_OK);
+                setResult(RESULT_OK,intent);
+                finish();
+               // startActivityForResult(intent,RESULT_OK);
                 /**
                  * Intent returnIntent = new Intent();
                  ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
