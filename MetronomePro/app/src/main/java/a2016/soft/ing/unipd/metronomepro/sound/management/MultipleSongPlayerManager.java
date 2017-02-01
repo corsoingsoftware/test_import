@@ -68,16 +68,19 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     @Override
     public SongPlayer getMidiSongPlayer() {
+
         return midiSongPlayer;
     }
 
     @Override
     public SongPlayer getTimeSlicesSongPlayer() {
+
         return audioTrackSongPlayer;
     }
 
     @Override
     public void playEnded(SongPlayer origin) {
+
         if(indexNextToPlay < arraySongsToPlay.length) {
             origin.pause();
             arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
@@ -97,6 +100,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     private void checkQueueEnded() {
+
         indexNextToPlay = indexNextToLoad;
         if(indexNextToLoad < arraySongsToPlay.length)
             dequeueManagement();
