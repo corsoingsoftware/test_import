@@ -43,7 +43,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private ItemTouchHelper itemTouchHelper;
     private Playlist playlist;
     private DataProvider database;
-    String nomedc;
+    private Playlist supporto;
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
                                                                     //selezionte nel layout di giulio
@@ -93,13 +93,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         });
 
         //prima volta che apro la app non c'è la playlist salvata e me la creo
-        if(database.getPlaylist(PLAYLIST_SELECTED) == null){
-            playlist = EntitiesBuilder.getPlaylist(PLAYLIST_SELECTED);
-        }
-        //tutte le altre volte me la carico dal database
-        else {
-            playlist = database.getPlaylist(PLAYLIST_SELECTED);
-        }
+
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYLIST)) {
             //saved state on destroy
             playlist = savedInstanceState.getParcelable(PLAYLIST);
@@ -131,10 +125,15 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             //se mi viene passata una playlist da modificare
             if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
-                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
-                    onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
+                    supporto = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
+                    if(database.getPlaylist(supporto.getName())==null){
+                        playlist = supporto;
+                    }
+                    else{
+                        playlist=database.getPlaylist(supporto.getName());
+                    }
                     database.savePlaylist(playlist);
-                    nomedc=playlist.getName();
+                    onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
    //               playlist = database.getPlaylist(playlist.getName());
   //                playlist = database.getPlaylist(PLAYLIST_SELECTED);
 
@@ -176,8 +175,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 case START_ADD_SONGS:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
-                  //  playlist.addAll(songsToAdd);
-                    database.savePlaylist(modifyPlaylistAdapter.getPlaylistToModify());
+                    playlist.addAll(songsToAdd);
+                    database.savePlaylist(playlist);
                     break;
             }
         }
