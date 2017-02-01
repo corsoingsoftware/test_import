@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -144,17 +145,6 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 }
             }
             //se mi vengono passate canzoni da aggiungere
-            else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
-                try {
-              //      playlist = database.getPlaylist(nomedc);
-                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
-                    playlist.addAll(songsToAdd);
-                    database.savePlaylist(playlist);
-                    onSaveInstanceState(intent.getBundleExtra(SONG_TO_ADD));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
         }
 
 
@@ -186,8 +176,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                 case START_ADD_SONGS:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
-                    playlist.addAll(songsToAdd);
-                    database.savePlaylist(playlist);
+                  //  playlist.addAll(songsToAdd);
+                    database.savePlaylist(modifyPlaylistAdapter.getPlaylistToModify());
                     break;
             }
         }

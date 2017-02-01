@@ -75,6 +75,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void addAllSongs(ArrayList<Song> lista){
         playlistToModify.addAll(lista);
+        notifyDataSetChanged();
         database.savePlaylist(playlistToModify);
        // notifyItemInserted(playlistToModify.size()-1);
     }
