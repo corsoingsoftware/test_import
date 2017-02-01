@@ -137,10 +137,6 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 currentThread.interrupt();
             }
         }
-
-
-        at.pause();
-        at.flush();
         at.stop();
 
     }
