@@ -31,7 +31,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private Playlist playlistToEdit; //eventualmente..
     private OnPlaylistClickListener playlistClickListener;
     private OnStartDragListener dragListener;
-    private DataProvider db = DataProviderBuilder.getDefaultDataProvider(context);
+    private DataProvider db;
 
 
     //COSTRUTTORE: RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
@@ -40,6 +40,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         this.arrayPlaylist=arrayPlaylist;
         this.playlistClickListener = playlistClickListener;
         this.dragListener = dragListener;
+        db=DataProviderBuilder.getDefaultDataProvider(context);
     }
     //costruttore per salvare le istanzepublic
     @Override
@@ -112,7 +113,8 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
             @Override
             public void onClick(View v) {
                 db.deletePlaylist(arrayPlaylist.remove(position));
-                notifyItemRemoved(position);
+               // arrayPlaylist.remove(position);
+               // notifyItemRemoved(position);
                 dialog.cancel();
             }
         });
