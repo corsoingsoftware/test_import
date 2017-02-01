@@ -103,7 +103,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Method called when a Player (AudioTrackSongPlayer or MidiPlayer) finished to reproduce loaded songs.
+     * Method called when a Player (AudioTrackSongPlayer or MidiPlayer) finished to reproduce its loaded songs.
      * @param origin SongPlayer that finished to play the songs.
      */
 
@@ -129,7 +129,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  Method that checks if the queue is empty. If not, it calls the method for the loading of the songs.
+     *  Method that checks if the queue is empty. If not, it calls dequeueManagement() to continue
+     *  the loading of the songs.
      */
 
     private void checkQueueEmpty() {
