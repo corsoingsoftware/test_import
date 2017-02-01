@@ -137,7 +137,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
                 playListAdapter.addPlaylist(p);
                 dialog.cancel();
             }
-        });
+        });//
         dialog.show();
 
     }
