@@ -58,8 +58,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  It manages the loading of the songs. In particular it identifies blocks of songs
-     *  of the same type in the queue and loads them in the appropriate Player.
+     *  It manages the loading of the songs. In particular it identifies blocks of the songs
+     *  of the same type in the queue, remove them from it and loads them in the appropriate Player.
      */
 
     public void dequeueManagement(){
@@ -103,7 +103,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Method called when a Player finished the reproduction.
+     * Method called when a Player (AudioTrackSongPlayer or MidiPlayer) finished to reproduce loaded songs.
      * @param origin SongPlayer that finished to play the songs.
      */
 
@@ -129,7 +129,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  Method that checks if the queue is empty. If not, it calls the method for the
+     *  Method that checks if the queue is empty. If not, it calls the method for the loading of the songs.
      */
 
     private void checkQueueEmpty() {
