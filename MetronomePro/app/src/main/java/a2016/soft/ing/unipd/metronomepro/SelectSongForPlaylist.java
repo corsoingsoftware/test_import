@@ -33,16 +33,18 @@ import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
 public class SelectSongForPlaylist extends AppCompatActivity {
 
     private RecyclerView rVSelectSong;
-    private static final int SONG_CREATED = 1;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
-    private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
-    private ArrayList<Song> songsFrom;
-    ArrayList<Song> savedSongs = new ArrayList<>();
-    ArrayList<Song> selectedSongs;
-    ArrayList<Song> songForAdapter;
+    private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this); //the database
+    private ArrayList<Song> songsFrom;  //rappresent the songs that I recive from the activity that want to insert new songs
+    ArrayList<Song> savedSongs = new ArrayList<>(); //it is used for save the instance of the activity
+    //for more information https://developer.android.com/guide/components/activities/activity-lifecycle.html
+    ArrayList<Song> selectedSongs; //the song that the user has selected
+    ArrayList<Song> songForAdapter; //this is the list of the songs used to give to the adapter constructor
     private DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
 
+    private static final int SONG_CREATED = 1;
+    private static final String SONG_SELECTING = "song for select";
 
 
     @Override
@@ -51,7 +53,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         setContentView(R.layout.activity_select_song_for_playlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //this is the tipical code for initializing a recycleview
         rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
@@ -60,19 +62,23 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         for (Song s:provaDiTest()) {
             db.saveSong(s);
         }
-        songForAdapter= (ArrayList<Song>) db.getAllSongs();
+        songForAdapter= (ArrayList<Song>) db.getAllSongs();//in the beginning songsForAdapter contains All the songs of the Database
 
-        if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
-            savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-            selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
-            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+        if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){//save the instance of the activity
+            savedSongs = savedInstanceState.getParcelableArrayList(SONG_SELECTING);//get the parcel of the all songs in the list
+            selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);//get the parcel of the song selected
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);//adapter initialized
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleView
         }
         else{
             Intent intent=getIntent();
             if(intent!=null) {
                 try {
-                    songsFrom = intent.getParcelableArrayListExtra(PLAYLIST);
+                    songsFrom = intent.getParcelableArrayListExtra(PLAYLIST);//takes the intent from ModifyPlaylistActivity
+                    //ModifyPlaylistActivity is a class that rapresent the playlist
+                    //it already  contains songs..
+                    //when the user inserts the new songs in the playlist, it must be able to enter only the songs that are not yet within the playlist
+                    //so I take all the songs in the database and I subtract those that pass me from ModifyPlaylistActivity
                      for (int i = 0;i<songsFrom.size();i++) {
                         for (int j = 0;j<songForAdapter.size();j++) {
                             if(songsFrom.get(i).getName().compareTo(songForAdapter.get(j).getName())==0){
@@ -94,6 +100,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //I return with this button the songs selected by the user to ModifyPlaylistActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +125,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
 
     protected void onSaveInstanceState(Bundle outState) {
         //prende le canzoni totali
-        outState.putParcelableArrayList("song for select", (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
+        outState.putParcelableArrayList(SONG_SELECTING, (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
         //prende le istanze delle canzoni già selezionate
         outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<Song>)selectSongForPlaylistAdapter.getSelectedSongs());
 

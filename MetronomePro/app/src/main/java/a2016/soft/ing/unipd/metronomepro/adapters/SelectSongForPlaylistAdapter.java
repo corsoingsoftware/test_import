@@ -26,11 +26,16 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
  * Created by giuli on 27/12/2016.
  */
 
+/**
+ * SelectSongForPlaylist and SelectSongForPlaylist are built for insert the songs that are saved into the database, into a
+ * playlist that is recived from an other activity.
+ * This adapter allows to select and deselect the songs that will be included in the playlist
+ */
 public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
 
-    private ArrayList<Song> arraySongs; //it rappresent the songs that are already not into a playlist
+    private ArrayList<Song> arraySongs; //it rappresent the songs that the user could select
     private ArrayList<Song> selectedSongs=new ArrayList<>(); //it rappresent the songs that the users want to insert into the playlist
-    private Context context;
+    private Context context; // the context of the activity
 
     //base constructor
     public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs){
@@ -46,14 +51,15 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
 
     public ArrayList<Song> getArraySongs(){
         return arraySongs;
-    }
-    public ArrayList<Song> getSelectedSongs(){
+    } //return the list of the all songs
+    public ArrayList<Song> getSelectedSongs(){//return the list of the songs Selected
         return selectedSongs;
     }
     public void addSong(Song song){
         arraySongs.add(song);
     }
-
+    //this is the creator of the ViewHolder
+    //see documentation for more information
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_song_for_playlist_item, parent, false);
@@ -65,8 +71,8 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Song song = arraySongs.get(position);
-        holder.nameOfSong.setText(song.getName());
-
+        holder.nameOfSong.setText(song.getName());//to see the name of the songs in the RecycleView
+    //below the code for hilight an item when pressed
         View.OnClickListener a = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,9 +82,6 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
 
                     Song song = arraySongs.get(position); //remove the songe from selected songs
                     selectedSongs.remove(song);
-                    //for debug
-                    Snackbar.make(v, "hai rimosso l'elemento "+ song.getName(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
                 }
                 //when the item is selecting
                 else{
@@ -86,10 +89,6 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
 
                     Song song = arraySongs.get(position); //add the song to selected songs
                     selectedSongs.add(song);
-                    //for debug
-                    Snackbar.make(v, "hai inserito l'elemento "+song.getName(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
                 }
             }
         };
@@ -120,7 +119,8 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         holder.itemView.setOnClickListener(null);
     }
 
-    //it describe an item view and metadata about its place within the recycleView
+    //A ViewHolder describes an item view and metadata about its place within the RecyclerView.
+    //for more information: https://developer.android.com/reference/android/support/v7/widget/RecyclerView.ViewHolder.html
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView nameOfSong;
