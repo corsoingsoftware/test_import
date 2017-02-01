@@ -40,11 +40,19 @@ public class SQLiteDataProviderTest {
      * uso il get per vedere se sono stati effetivamente salvati
      */
     @Test
-        public void saveTrackTest(){
+        public void saveTimeSlicesSongTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Song s = EntitiesBuilder.getSong();
-        dataProvider.save(s);
-        dataProvider.getSongs(s.getName(),null);
+        Song songToAddforTest = EntitiesBuilder.getTimeSlicesSong();
+        dataProvider.save(songToAddforTest);
+        dataProvider.getSongs(songToAddforTest.getName(),null);
+    }
+
+    @Test
+    public void saveMidiSongTest(){
+        SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
+        Song songToAddforTest = EntitiesBuilder.getMidiSong();
+        dataProvider.save(songToAddforTest);
+        dataProvider.getSongs(songToAddforTest.getName(),null);
     }
 
     /**
@@ -54,11 +62,14 @@ public class SQLiteDataProviderTest {
      * uso il get per vedere se è stata effetivamente eliminata
      */
     @Test
-    public void deleteTrackTest(){
+    public void deleteTimeSlicesSongTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        Song s = EntitiesBuilder.getSong();
-        dataProvider.save(s);
-        dataProvider.deleteSong(s);
+        Song songToDeleteforTest = EntitiesBuilder.getTimeSlicesSong();
+        songToDeleteforTest.setName("SongtoDelete");
+        dataProvider.save(songToDeleteforTest);
+        dataProvider.deleteSong(songToDeleteforTest);
+        dataProvider.getSongs(songToDeleteforTest.getName(), null);
+        //TODO prendi l'ecezione se non trova la song
     }
 
     /**
@@ -71,9 +82,9 @@ public class SQLiteDataProviderTest {
     @Test
     public void savePlaylistTest(){
         SQLiteDataProvider dataProvider = new SQLiteDataProvider(c);
-        String playlistName = "Test playlist";
-        Playlist p = EntitiesBuilder.getPlaylist(playlistName);
-        dataProvider.savePlaylist(p);
+        String playlistName = "TestPlaylist";
+        Playlist playlistToAddforTest = EntitiesBuilder.getPlaylist(playlistName);
+        dataProvider.savePlaylist(playlistToAddforTest);
         dataProvider.getPlaylists(playlistName);
     }
 
@@ -91,6 +102,7 @@ public class SQLiteDataProviderTest {
         dataProvider.savePlaylist(p);
         dataProvider.deletePlaylist(p);
         dataProvider.getPlaylists(playlistName);
+        //TODO prendi l'eccezione per playlist non trovato anche qui
     }
 
 }
