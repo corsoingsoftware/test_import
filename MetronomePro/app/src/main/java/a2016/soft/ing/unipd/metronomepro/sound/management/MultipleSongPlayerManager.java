@@ -75,15 +75,15 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             currentSong = songsQueue.peek();
         }
 
-        Song[] app = new Song[listSongsSameType.size()];
-        indexNextToLoad += listSongsSameType.size();
-        app = listSongsSameType.toArray(app);
-        currentSongSongPlayer.write(app);
+        Song[] arraySongsSameType = new Song[listSongsSameType.size()];
+        indexNextToLoad = indexNextToLoad + listSongsSameType.size();
+        arraySongsSameType = listSongsSameType.toArray(arraySongsSameType);
+        currentSongSongPlayer.write(arraySongsSameType);
     }
 
     /**
      * It returns a player for midiSongs. It will be automatically called if the song examined is a MidiSong
-     * thanks to Song interface and its implementation.
+     * thanks to Song interface and its implementation in MidiSong.
      * @return midiSongPlayer A player for MidiSongs.
      */
 
@@ -93,18 +93,17 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *
+     * Similar to getMidiSongPlayer().
      * @return audioTrackSongPlayer A player for TimeSlicesSongs.
      */
 
     @Override
     public SongPlayer getTimeSlicesSongPlayer() {
-
         return audioTrackSongPlayer;
     }
 
     /**
-     * Method called when a Player finished to play a block of songs of the same type. It
+     * Method called when a Player finished the reproduction.
      * @param origin SongPlayer that finished to play the songs.
      */
 
