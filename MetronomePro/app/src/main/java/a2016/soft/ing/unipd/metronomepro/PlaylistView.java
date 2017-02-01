@@ -35,6 +35,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     private SelectPlaylistAdapter playListAdapter;
     private ArrayList<Playlist> selectedPlaylist;
     private ItemTouchHelper itemTouchHelper;
+    private DataProvider db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
 
-        DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
+        db = DataProviderBuilder.getDefaultDataProvider(this);
         List<String> playlistNames = db.getAllPlaylists();
         selectedPlaylist= new ArrayList<>();
         for (String s:playlistNames){
@@ -137,7 +138,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
                 playListAdapter.addPlaylist(p);
                 dialog.cancel();
             }
-        });//
+        });
         dialog.show();
 
     }
