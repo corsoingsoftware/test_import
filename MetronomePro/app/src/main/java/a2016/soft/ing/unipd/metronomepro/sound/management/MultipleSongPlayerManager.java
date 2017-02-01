@@ -21,7 +21,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private int indexNextToPlay;
     //Contains the index of the next song to be loaded.
     private int indexNextToLoad;
-    //Array that contains the songs to be played.
+    //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
     public MultipleSongPlayerManager(Context c) {
@@ -58,8 +58,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  It manages the loading of the songs in theirs corresponding Players. In particular it identifies blocks of
-     *  songs of the same type and loads them.
+     *  It manages the loading of the songs. In particular it identifies blocks of songs
+     *  of the same type in the queue and loads them in the appropriate Player.
      */
 
     public void dequeueManagement(){
@@ -82,19 +82,19 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * It returns a player for midiSongs. It is totally transparent thanks to Song interface.
-     * @return midiSongPlayer A player for midiSongs.
+     * It returns a player for midiSongs. It will be automatically called if the song examined is a MidiSong
+     * thanks to Song interface and its implementation.
+     * @return midiSongPlayer A player for MidiSongs.
      */
 
     @Override
     public SongPlayer getMidiSongPlayer() {
-
         return midiSongPlayer;
     }
 
     /**
      *
-     * @return audioTrackSongPlayer
+     * @return audioTrackSongPlayer A player for TimeSlicesSongs.
      */
 
     @Override
@@ -130,7 +130,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  Method for checking the
+     *  Method that checks if the queue is empty. If not, it calls the method for the
      */
 
     private void checkQueueEmpty() {
