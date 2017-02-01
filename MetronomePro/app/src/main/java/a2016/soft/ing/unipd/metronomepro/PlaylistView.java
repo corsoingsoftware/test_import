@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
@@ -43,7 +45,15 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         rVPlaylistItem.setHasFixedSize(true);
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
-        playListAdapter= new SelectPlaylistAdapter(this,createTestPlaylist(),this,this);
+
+        DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
+        ArrayList<String> playlistNames = (ArrayList<String>) db.getAllPlaylists();
+        for (String s:playlistNames){
+            Playlist p = db.getPlaylist(s);
+            selectedPlaylist.add(p);
+        }
+
+        playListAdapter= new SelectPlaylistAdapter(this,selectedPlaylist,this,this);
         rVPlaylistItem.setAdapter(playListAdapter);
         DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(playListAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
