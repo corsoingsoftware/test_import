@@ -58,12 +58,13 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         rVLayoutManager = new LinearLayoutManager(this);
         rVModifyPlaylist.setLayoutManager(rVLayoutManager);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        final DataProvider database = DataProviderBuilder.getDefaultDataProvider(this);
         final Activity activity=this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-                ParcelablePlaylist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_EDIT_NEW_SONG);
@@ -81,6 +82,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         floatingActionButtonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                database.savePlaylist(playlist);
                 Intent intent = new Intent(activity, SelectNextSongs.class);
                 intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
                 startActivity(intent);
@@ -103,25 +105,39 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         else {
             //Default
             try {
-                DataProvider dp= DataProviderBuilder.getDefaultDataProvider(this);
-                List<Song> songs=dp.getSongs(null,playlist);
+                DataProvider dp = DataProviderBuilder.getDefaultDataProvider(this);
+                //TODO Modified by Mune, I touched the 2 methods below, if they're wrong just fix them (sorry <3)
+                List<Song> songs = dp.getAllSongs();
                 playlist.addAll(songs);
             }catch (Exception ex){
                 ex.printStackTrace();
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getTimeSlicesSong());
-                playlist.add(EntitiesBuilder.getMidiSong());
+//                playlist.add(EntitiesBuilder.getSong("canzone 1"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 2"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 3"));
+//                playlist.add(EntitiesBuilder.getSong("canzone 4"));
+      //          playlist.add(EntitiesBuilder.getMidiSong());
             }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato
              */
             Intent intent = getIntent();
-            if(intent!=null){
+            if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
-                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+                    playlist = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
+                    onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
+                    playlist = database.getPlaylist(PLAYLIST_SELECTED);
+                    //           songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
+        //            playlist.addAll(songsToAdd);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else if(intent!=null&&intent.hasExtra(SONG_TO_ADD)){
+                try {
+                    songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
                     playlist.addAll(songsToAdd);
+                    database.savePlaylist(playlist);
+                    onSaveInstanceState(intent.getBundleExtra(SONG_TO_ADD));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

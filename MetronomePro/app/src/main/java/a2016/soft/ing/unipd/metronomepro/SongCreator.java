@@ -83,7 +83,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                 Intent returnIntent = new Intent();
                 TimeSlicesSong ps=(TimeSlicesSong) timeSlicesAdapter.getSongToEdit();
                 returnIntent.putExtra(SONG_TO_EDIT, ps);
-                setResult(RESULT_OK,returnIntent);
+            //    setResult(RESULT_OK,returnIntent);
                 finish();
             }
         });
