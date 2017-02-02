@@ -14,12 +14,14 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
+    //Players for midiSong and timeSlicesSong respectively. They are unique in the class.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
-    private LinkedBlockingQueue<Song> songsQueue;
-    //Contains the index of the next song to be played.
+    //Queue that contains songs to be loaded.
+    private LinkedBlockingQueue<Song> songsToLoadQueue;
+    //Contains the index of the next Song to be played.
     private int indexNextToPlay;
-    //Contains the index of the next song to be loaded.
+    //Contains the index of the next Song to be loaded.
     private int indexNextToLoad;
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
@@ -35,7 +37,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Method that initializes the attributes with default values and SongQueue with arrayEntrySongs' elements.
+     * Method that initializes the attributes with initial values and SongQueue with arrayEntrySongs' elements.
      * @param arrayEntrySongs  Array that contains songs to be played.
      */
 
@@ -44,10 +46,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         arraySongsToPlay = arrayEntrySongs;
         indexNextToPlay = 0;
         indexNextToLoad = 0;
-        songsQueue = new LinkedBlockingQueue<>();
+        songsToLoadQueue = new LinkedBlockingQueue<>();
 
         for(Song songToAdd : arrayEntrySongs){
-            songsQueue.add(songToAdd);
+            songsToLoadQueue.add(songToAdd);
         }
 
         dequeueManagement();
@@ -63,14 +65,14 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     public void dequeueManagement(){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
-        Song currentSong = songsQueue.peek();
+        Song currentSong = songsToLoadQueue.peek();
         Class currentSongClass = currentSong.getClass();
         SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
-        while(songsQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
-            songsQueue.poll();
+        while(songsToLoadQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
+            songsToLoadQueue.poll();
             listSongsSameType.add(currentSong);
-            currentSong = songsQueue.peek();
+            currentSong = songsToLoadQueue.peek();
         }
 
         Song[] arraySongsSameType = new Song[listSongsSameType.size()];
@@ -80,9 +82,9 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * It returns a Player for midiSongs. It will be transparently called if the song examined is a MidiSong
+     * It returns a Player for midiSongs. It will be transparently called if the song examined is an instance MidiSong
      * thanks to Song interface and its implementation in ParcelableMidiSong.
-     * @return midiSongPlayer A player for MidiSongs.
+     * @return midiSongPlayer SongPlayer for midiSongs.
      */
 
     @Override
@@ -92,7 +94,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     /**
      * Similar to getMidiSongPlayer().
-     * @return audioTrackSongPlayer A player for TimeSlicesSongs.
+     * @return audioTrackSongPlayer SongPlayer for timeSlicesSongs.
      */
 
     @Override
@@ -101,9 +103,9 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Method called when a SongPlayer (audioTrackSongPlayer or midiSongPlayer) finished to reproduce its loaded songs.
-     * It reproduces next ready Song and calls pause method in both players if all songs have been played.
-     * @param origin SongPlayer that finished to play the songs.
+     * Method called when a SongPlayer (audioTrackSongPlayer or midiSongPlayer) stopped reproducing its loaded songs.
+     * It reproduces next ready Song or, if all songs have been played, calls pause method in both players.
+     * @param origin SongPlayer stopped reproducing its songs.
      */
 
     @Override
@@ -116,12 +118,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         } else {
 
-            try {
-                audioTrackSongPlayer.pause();
-                midiSongPlayer.pause();
-            } catch (Exception e) {
-
-            }
+            audioTrackSongPlayer.pause();
+            midiSongPlayer.pause();
         }
     }
 
