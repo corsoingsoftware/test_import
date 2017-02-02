@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import a2016.soft.ing.unipd.metronomepro.R;
@@ -17,15 +16,18 @@ import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceCon
 import static a2016.soft.ing.unipd.metronomepro.sound.management.SoundServiceConstants.MIN;
 
 /**
- * Riceve le chiamate in entrata e gestisce Audiotrack!
- * Contiene al suo interno un audiotrackcontroller e lo gestisce correttamente in base alle chiamate che gli arrivano!!
+ * Riceve le chiamate in entrata che gli fa SoundManagerServiceCaller
+ * e le passa ad AudiotrackController
+ * Contiene al suo interno un AudioTrackController e lo gestisce correttamente in base alle chiamate che gli arrivano
+ * E' un servizio di tipo Bound
  */
 public class SoundManagerService extends Service {
 
-    private static final String LOG_TAG = "SoundManagerService";       //aggiungo una stringa di log per facilitare il debug
+           //aggiungo una stringa di log per facilitare il debug
     private IBinder mBinder = new myBinder();
     private AudioTrackController atc;
     private boolean isPlaying = false;
+    private final static String LOG_TAG = "SoundManagerService";
 
    /* public SoundManagerService() {
 
@@ -33,9 +35,13 @@ public class SoundManagerService extends Service {
 
     @Override
     public void onCreate() {
+        Log.v(LOG_TAG, "in onCreate");
         super.onCreate();
         this.atc = new AudioTrackController();
-
+/**
+ * divido  afdClack e afdClackFinal per implementare più tardi la ritmica, dove il primo sarà il clack normale
+ * mentre il final sarà quello di inizio battuta
+ */
         AssetFileDescriptor afdClack = null;
         try {
             afdClack = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
@@ -44,73 +50,92 @@ public class SoundManagerService extends Service {
         }
         AssetFileDescriptor afdClackFinal = null;
         try {
-            afdClackFinal = getApplicationContext().getAssets().openFd(getApplicationContext().getString(R.string.fileAudioName));
+            afdClackFinal = getApplicationContext().getAssets().openFd("prova_Snap.wav");;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.atc.loadFile(afdClack.getFileDescriptor(),afdClackFinal.getFileDescriptor());
-        this.atc.initialize(MIN,MAX);
+        try {
+            this.atc.loadFile(afdClack.getFileDescriptor(), afdClackFinal.getFileDescriptor());
+        } catch (NullPointerException e) {
+            Log.v(LOG_TAG, "NullPointerException on getFileDescriptor");
+        }
+        this.atc.initialize(MIN, MAX);
         this.atc.setBPM(INITIAL_VALUE);
     }
-
-    // i vari metodi ricevono i comandi da SoundManagerServiceCaller e dopo aver fatto i controlli chiamano i metodi
-    //   di AudioTrackController
-
+    /**
+     *  i vari metodi ricevono i comandi da SoundManagerServiceCaller chiamano quelli di AudioTrackController
+     *  i controlli sui parametri in ingresso sono stati tutti spostati nella classe AudioTrackController per continuità
+     */
 
     /**
-     *  controllo che il massimo e il minimo siano entro il range rispettato
+     * inizializza AudioTrackController con i valori di dafault min, max nella classe SoundManagerServiceCaller
      */
-    public void initialize(int min,int max){
-        atc.initialize(min,max);
+    public void initialize(int min, int max) {
+        Log.v(LOG_TAG, "in initialize");
+        atc.initialize(min, max);
     }
 
+
     /**
-     * Numero bpm attualmente impostato
+     * Ritorna il numero bpm attualmente impostato
+     *
      * @return bpm
      */
-    public int getBPM(){
+    public int getBPM() {
+        Log.v(LOG_TAG, "in getBPM");
         return atc.getCurrBPM();
     }
 
     /**
      * Stato del player
+     *
      * @return 0 none/stop 1 play 2 pause
      */
-    public int getState() {
+    public PlayState getState() {
+        Log.v(LOG_TAG, "in getState");
         return atc.getState();
     }
-    // il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
-    // se c'è già qualcosa in esecuzione ignora la chiamata
+
 
     /**
-     * il metodo controlla che non ci siano altri suoni in esecuzione, in caso contrario chiama il metodo di AudioTrackController
+     * nella classe AudioTrackController il metodo dovrà controllare che non ci siano altri suoni in esecuzione,
      * se c'è già qualcosa in esecuzione ignora la chiamata
      */
-    public void play(){
-            atc.play();
+    public void play() {
+        Log.v(LOG_TAG, "in play");
+        atc.play();
     }
-    // il metodo controlla che ci sia un altro suono in esecuzione, in caso contrario ignora la chiamata
-    public void stop(){
-            atc.stop();
-    }
-    /*
-        @param il nuovo numero di BPM
-        controllo che il numero stia dentro al range massimo
+
+    /**
+     * nella classe AudioTrackController il metodo dovrà controllare che ci sia un altro suono in esecuzione,
+     * in caso contrario ignora la chiamata
      */
-    public void setBPM(int BPM){
+    public void stop() {
+        Log.v(LOG_TAG, "in stop");
+        atc.stop();
+    }
+
+
+    /**
+     * @param BPM nuovo numero di bpm dato da SoundManagerServiceCaller
+     *            lo passa ad AudioTrackController
+     *            nella classe AudioTrackController ci dovrà essere un controllo sulla validità del numero passato
+     */
+    public void setBPM(int BPM) {
         Log.v(LOG_TAG, "in setBPM");
         atc.setBPM(BPM);
     }
-    @Override
 
+    @Override
+    /**
+     * questi sono il metodo e la classe per la creazione del service Bound
+     */
     public IBinder onBind(Intent intent) {
         Log.v(LOG_TAG, "in onBind");
         return mBinder;
     }
 
-
-
-    public class myBinder extends Binder{
+    public class myBinder extends Binder {
         SoundManagerService getService() {
             return SoundManagerService.this;
         }
