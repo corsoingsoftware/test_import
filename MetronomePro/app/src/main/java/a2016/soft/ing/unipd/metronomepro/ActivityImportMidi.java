@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.nbsp.materialfilepicker.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,7 +94,7 @@ public class ActivityImportMidi extends AppCompatActivity {
 
                     String midiTitle = filePath.substring(filePath.lastIndexOf("/")+1);
                     String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
-                    if(copyFile(filePath,midiPath)){
+                    if(copyFile(filePath,midiStorageDir.getAbsolutePath())){
                         Toast.makeText(this, "File copied in : " + midiPath, Toast.LENGTH_LONG).show();
                         MidiSong md = EntitiesBuilder.getMidiSong();
                         md.setName(midiTitle);
