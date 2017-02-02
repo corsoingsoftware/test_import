@@ -17,12 +17,16 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     //Players for midiSong and timeSlicesSong respectively. They are unique in the class.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
+
     //Queue that contains songs to be loaded.
     private LinkedBlockingQueue<Song> songsToLoadQueue;
+
     //Contains the index of the next Song to be played.
     private int indexNextToPlay;
+
     //Contains the index of the next Song to be loaded.
     private int indexNextToLoad;
+
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
@@ -33,6 +37,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     public void load(Song entrySong) {
+
         entrySong.getSongPlayer(this).load(entrySong);
     }
 
@@ -89,6 +94,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     @Override
     public SongPlayer getMidiSongPlayer() {
+
         return midiSongPlayer;
     }
 
@@ -99,6 +105,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     @Override
     public SongPlayer getTimeSlicesSongPlayer() {
+
         return audioTrackSongPlayer;
     }
 
