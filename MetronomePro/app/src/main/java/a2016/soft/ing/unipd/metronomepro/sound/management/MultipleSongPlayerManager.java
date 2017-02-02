@@ -87,8 +87,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * It returns a Player for midiSongs. It will be transparently called if the song examined is an instance MidiSong
-     * thanks to Song interface and its implementation in ParcelableMidiSong.
+     * It returns a Player for midiSongs. It will be transparently called if the song examined is an instance of
+     * MidiSong thanks to Song interface and its implementation in ParcelableMidiSong.
      * @return midiSongPlayer SongPlayer for midiSongs.
      */
 
