@@ -13,8 +13,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
+
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYLIST;
 
 /**
  * Created by Alberto on 30/01/17.
@@ -22,7 +25,10 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 public class select_playlist extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+
+    private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private String chosenPl;
+    private static final int START_EDIT_NEW_SONG=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,7 @@ public class select_playlist extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         chosenPl = (String) parent.getItemAtPosition(position);
-        Toast.makeText(this, "Playlist selected: " + chosenPl, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Playlist selected: " + chosenPl, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -57,8 +63,12 @@ public class select_playlist extends AppCompatActivity implements AdapterView.On
     }
 
     private void createPlaylist() {
+        Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
         Intent intent = new Intent(this,SelectSongForPlaylist.class);
-        startActivity(intent);
+        intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
+        startActivityForResult(intent, START_EDIT_NEW_SONG);
+        //Intent intent = new Intent(this,SelectSongForPlaylist.class);
+        //startActivity(intent);
     }
 
     //metodo di test per vedere se funziona
