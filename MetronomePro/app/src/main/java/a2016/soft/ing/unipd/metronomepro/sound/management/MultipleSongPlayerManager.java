@@ -78,13 +78,14 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             }
 
             arraySongs = songs;
+            nextToPlay = 0;
             dequeueManagement(arraySongs);
         }
 
-        nextToPlay = 0;
     }
 
     public void dequeueManagement(Song[] songs){
+
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
         Song currSong = songQueue.peek();
@@ -98,27 +99,39 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
                 typeChanged ++;
 
                 if(typeChanged < PLAYERS) {
-                    currentPlayer.write((Song[])listSongsSameType.toArray());
-                    s = currSong.getClass();
+
+                    Song[] app = new Song[listSongsSameType.size()];
+                    app = listSongsSameType.toArray(app);
+                    currentPlayer.write(app);
+                    listSongsSameType.clear();
                     currentPlayer = currSong.getSongPlayer(this);
+                    s = currSong.getClass();
                     listSongsSameType.clear();
                     listSongsSameType.add(currSong);
                     songQueue.poll();
                 }
+
             }
             else {
 
                 listSongsSameType.add(currSong);
                 songQueue.poll();
 
-                if(songQueue.size()==0) {
+                /*if(songQueue.size()==0) {
                     Song[] app = new Song[listSongsSameType.size()];
                     app = listSongsSameType.toArray(app);
                     currentPlayer.write(app);
-                }
+                }*/
             }
 
             currSong = songQueue.peek();
+
+            if(songQueue.size()==0) {
+                Song[] app = new Song[listSongsSameType.size()];
+                app = listSongsSameType.toArray(app);
+                currentPlayer.write(app);
+            }
+
         }
 
         play(arraySongs);
@@ -143,8 +156,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     @Override
     public void playEnded(SongPlayer origin) {
 
-        //typeChanged --;
-        //play(arraySongs);
+        if(nextToPlay < arraySongs.length) {
+            typeChanged--;
+            play(arraySongs);
+        }
     }
 
 }
