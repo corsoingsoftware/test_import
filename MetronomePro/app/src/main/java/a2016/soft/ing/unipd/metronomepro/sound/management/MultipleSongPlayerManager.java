@@ -56,7 +56,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     *  It manages the loading of the songs. In particular it identifies blocks of the songs
+     *  It manages the loading of the songs. In particular it identifies blocks of songs
      *  of the same type in the queue, remove them from it and loads them in the appropriate Player.
      */
 
@@ -80,8 +80,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * It returns a player for midiSongs. It will be transparently called if the song examined is a MidiSong
-     * thanks to Song interface and its implementation in MidiSong.
+     * It returns a Player for midiSongs. It will be transparently called if the song examined is a MidiSong
+     * thanks to Song interface and its implementation in ParcelableMidiSong.
      * @return midiSongPlayer A player for MidiSongs.
      */
 
@@ -101,7 +101,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Method called when a Player (AudioTrackSongPlayer or MidiPlayer) finished to reproduce its loaded songs.
+     * Method called when a SongPlayer (audioTrackSongPlayer or midiSongPlayer) finished to reproduce its loaded songs.
+     * It reproduces next ready Song and calls pause method in both players if all songs have been played.
      * @param origin SongPlayer that finished to play the songs.
      */
 
@@ -121,14 +122,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             } catch (Exception e) {
 
             }
-
-            //avviso l'activity che ho finito
         }
     }
 
     /**
-     *  Method that checks if the queue is empty. If not, it calls dequeueManagement() to continue
-     *  the loading of the songs.
+     *  Method that updates indexNextToPlay and checks if the queue is empty.
+     *  If not, it calls dequeueManagement() to continue songs' loading.
      */
 
     private void checkQueueEmpty() {
