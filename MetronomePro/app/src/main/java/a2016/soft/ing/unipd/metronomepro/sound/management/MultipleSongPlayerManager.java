@@ -9,7 +9,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
- * Developed by Omar, thanks Federico for the help.
+ * Developed by Omar. Thanks Federico for the help.
  */
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
