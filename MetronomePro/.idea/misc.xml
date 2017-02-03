@@ -46,7 +46,8 @@
   <component name="revuProjectSettings">
     <option name="reviewFiles">
       <list>
-        <option value="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController_java.xml" />
+        <option value="CodeReviewGiulioPettenuzzo.xml" />
+        <option value="CodeReviewGiulioP.xml" />
       </list>
     </option>
   </component>
