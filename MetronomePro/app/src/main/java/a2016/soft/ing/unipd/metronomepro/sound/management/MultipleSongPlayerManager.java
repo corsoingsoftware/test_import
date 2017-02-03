@@ -19,7 +19,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
-    //Players for midiSong and timeSlicesSong respectively. They are unique in the class.
+    //Players for midiSongs and timeSlicesSongs respectively. They are unique in the class.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
 
@@ -35,10 +35,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
-    public MultipleSongPlayerManager(Context c) {
+    public MultipleSongPlayerManager(Context contextForMidiPlayer) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(c, this);
+        midiSongPlayer = new MidiSongPlayer(contextForMidiPlayer, this);
     }
 
     /**
