@@ -9,12 +9,12 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
- * Developed by Omar. Thanks Federico for the help.
+ * Developed by Omar. Thanks Federico for helping.
  *
- * This class deals with reproducing in order the songs selected by the user. In particular it loads the songs in the
- * appropriate songPlayers exploiting the available resources : audioTrackSongPlayer and midiSongPlayer.
+ * This class deals with reproducing the songs selected by the user in the order chosen by the user itself.
+ * In particular it loads the songs in the appropriate songPlayers and plays them exploiting the available resources:
+ * audioTrackSongPlayer and midiSongPlayer.
  */
-
 
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
@@ -39,11 +39,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
         midiSongPlayer = new MidiSongPlayer(c, this);
-    }
-
-    public void load(Song entrySong) {
-
-        entrySong.getSongPlayer(this).load(entrySong);
     }
 
     /**
