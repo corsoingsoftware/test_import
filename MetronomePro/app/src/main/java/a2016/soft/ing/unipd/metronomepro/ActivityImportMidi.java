@@ -7,12 +7,10 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbsp.materialfilepicker.MaterialFilePicker;
@@ -22,17 +20,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.util.regex.Pattern;
 
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 
-import static android.R.attr.data;
-
 /**
  * Created by Alberto on 25/01/17.
+ */
+
+/**
+ * This Activity serves for add a new Song into the database of the app.
+ * The user can choose two ways:
+ * 1) Import a midi file saved into the device storage copying it into a specify directory of the app
+ * 2) Create a time slice song, that is a list of set of beats with a chosen bpm
+ * For both ways there are specific Activities.
  */
 
 public class ActivityImportMidi extends AppCompatActivity {
@@ -41,8 +44,11 @@ public class ActivityImportMidi extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 0;
     private static final int FILE_PICKER_REQUEST_CODE = 1;
     //parameters for save the midi and add it into the database
+    private static final int STRING_TOP =0;
+    private static final int ONE = 1;
+    private static final String MIDI_DIR_NAME = "midiStorageDir";
     private DataProvider db;
-    private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/midiStorageDir");
+    private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/"+MIDI_DIR_NAME);
 
 
     @Override
@@ -110,7 +116,7 @@ public class ActivityImportMidi extends AppCompatActivity {
      * Method for show at the user that the app don't have the necessary permissions
      */
     private void showError() {
-        Toast.makeText(this, "Allow external storage reading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.exstorage_permission), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -128,19 +134,19 @@ public class ActivityImportMidi extends AppCompatActivity {
             if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
                 String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                 if (filePath != null) {
-                    Log.d("Path: ", filePath);
+                    Log.d(getResources().getString(R.string.path), filePath);
 
-                    String midiTitle = filePath.substring(filePath.lastIndexOf("/")+1);
+                    String midiTitle = filePath.substring(filePath.lastIndexOf("/")+ONE);
                     String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
                     if(copyFile(filePath,midiPath)){
-                        Toast.makeText(this, "File copied in : " + midiPath, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.file_copied) + midiPath, Toast.LENGTH_LONG).show();
                         MidiSong md = EntitiesBuilder.getMidiSong();
                         md.setName(midiTitle);
                         md.setPath(midiPath);
                         db.saveSong(md);
                     }
                     else{
-                        Toast.makeText(this, "Import failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.import_failed), Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -157,7 +163,7 @@ public class ActivityImportMidi extends AppCompatActivity {
                 .withActivity(this)
                 .withRequestCode(FILE_PICKER_REQUEST_CODE)
                 .withHiddenFiles(true)
-                .withTitle("Device Directory")
+                .withTitle(getResources().getString(R.string.file_picker_title))
                 .start();
     }
 
@@ -188,14 +194,14 @@ public class ActivityImportMidi extends AppCompatActivity {
             File sd = Environment.getExternalStorageDirectory();
             if (sd.canWrite()) {
                 int end = from.toString().lastIndexOf("/");
-                String str1 = from.toString().substring(0, end);
-                String str2 = from.toString().substring(end+1, from.length());
+                String str1 = from.toString().substring(STRING_TOP, end);
+                String str2 = from.toString().substring(end+ONE, from.length());
                 File source = new File(str1, str2);
                 File destination= new File(to, str2);
                 if (source.exists()) {
                     FileChannel src = new FileInputStream(source).getChannel();
                     FileChannel dst = new FileOutputStream(destination).getChannel();
-                    dst.transferFrom(src, 0, src.size());
+                    dst.transferFrom(src, STRING_TOP, src.size());
                     src.close();
                     dst.close();
                 }
