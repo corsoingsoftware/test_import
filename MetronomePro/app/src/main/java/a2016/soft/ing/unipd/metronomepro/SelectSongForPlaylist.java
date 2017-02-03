@@ -38,7 +38,6 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this); //the database
     private ArrayList<Song> songsFrom;  //rappresent the songs recived from the activity that want to insert new songs
     ArrayList<Song> savedSongs = new ArrayList<>(); //it is used for save the instance of the activity
-    //for more information https://developer.android.com/guide/components/activities/activity-lifecycle.html
     ArrayList<Song> selectedSongs; //the song that the user has selected
     ArrayList<Song> songForAdapter; //this is the list of the songs used to give to the adapter constructor
     private DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
@@ -64,6 +63,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
         songForAdapter= (ArrayList<Song>) db.getAllSongs();//in the beginning songsForAdapter contains All the songs of the Database
 
+        //saving the instance of the song selected and deselected
+        //for more information https://developer.android.com/guide/components/activities/activity-lifecycle.html
         if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){//save the instance of the activity
             savedSongs = savedInstanceState.getParcelableArrayList(SONG_SELECTING);//get the parcel of the all songs in the list
             selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);//get the parcel of the song selected
