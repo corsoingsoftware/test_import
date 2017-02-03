@@ -149,6 +149,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     private void checkQueueEmpty() {
 
         indexNextToPlay = indexNextToLoad;
+        System.out.print("ciao");
         if(indexNextToLoad < arraySongsToPlay.length)
             dequeueManagement();
     }
