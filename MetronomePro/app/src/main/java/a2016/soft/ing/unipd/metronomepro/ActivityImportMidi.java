@@ -51,6 +51,11 @@ public class ActivityImportMidi extends AppCompatActivity {
     private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/"+MIDI_DIR_NAME);
 
 
+
+    /**
+     * Called when the activity is first created
+     * @param savedInstanceState state information
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
