@@ -36,8 +36,10 @@ import static android.R.attr.data;
 
 public class ActivityImportMidi extends AppCompatActivity {
 
+    //parameters necessary for MaterialFilePicker
     private static final int PERMISSIONS_REQUEST_CODE = 0;
     private static final int FILE_PICKER_REQUEST_CODE = 1;
+    //parameters for save the midi and add it into the database
     private DataProvider db;
     private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/midiStorageDir");
 
@@ -50,7 +52,9 @@ public class ActivityImportMidi extends AppCompatActivity {
 
         db = DataProviderBuilder.getDefaultDataProvider(this);
 
-
+        /**
+         * Control if the directory for save the midi song already exists, if don't create it
+         */
         if(!midiStorageDir.exists()){
             midiStorageDir.mkdir();
         }
