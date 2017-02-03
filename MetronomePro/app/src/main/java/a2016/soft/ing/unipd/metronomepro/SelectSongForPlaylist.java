@@ -36,7 +36,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
     private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this); //the database
-    private ArrayList<Song> songsFrom;  //rappresent the songs that I recive from the activity that want to insert new songs
+    private ArrayList<Song> songsFrom;  //rappresent the songs recived from the activity that want to insert new songs
     ArrayList<Song> savedSongs = new ArrayList<>(); //it is used for save the instance of the activity
     //for more information https://developer.android.com/guide/components/activities/activity-lifecycle.html
     ArrayList<Song> selectedSongs; //the song that the user has selected
@@ -59,7 +59,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
 
-        for (Song s:provaDiTest()) {
+        for (Song s:provaDiTest()) { //save 20 songs in the database for testing
             db.saveSong(s);
         }
         songForAdapter= (ArrayList<Song>) db.getAllSongs();//in the beginning songsForAdapter contains All the songs of the Database
@@ -94,8 +94,8 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             }
 
 
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
-            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);//adapter initialized
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleview
         }
 
         final Activity activity = this;
@@ -106,12 +106,14 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
+                //the intent now contains the songs selected by the user
                 setResult(RESULT_OK,intent);
                 finish();
             }
         });
 
         FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
+        //to create a new TimeSlice song with the activity SongCreator
         FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             //se voglio modificae una song passo nel extra al posto del entities bulder
@@ -124,28 +126,29 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     }
 
     protected void onSaveInstanceState(Bundle outState) {
-        //prende le canzoni totali
+        //it takes all the songs in the adapter
         outState.putParcelableArrayList(SONG_SELECTING, (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
-        //prende le istanze delle canzoni già selezionate
+        //it takes only the songs that user selected
         outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<Song>)selectSongForPlaylistAdapter.getSelectedSongs());
 
         super.onSaveInstanceState(outState);
     }
 
-    @Override
+    @Override //this method takes the TimeSlice song created by SongCreator
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if(requestCode == SONG_CREATED){
                 TimeSlicesSong songCreated = data.getParcelableExtra(SONG_TO_EDIT);
-                dataProvider.saveSong(songCreated);
-                selectSongForPlaylistAdapter.addSong(songCreated);
+                dataProvider.saveSong(songCreated);//save in database
+                selectSongForPlaylistAdapter.addSong(songCreated);//add to adapter
                 selectSongForPlaylistAdapter.notifyDataSetChanged();
             }
         }
     }
 
-    //classe di test, al posto di questa ci sarà il database
+    //class fo test
+    //20 songs will save in the database
     public ArrayList<Song> provaDiTest(){
         ArrayList<Song> array = new ArrayList<>();
 

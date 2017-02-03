@@ -95,7 +95,7 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         //the listener is activate when the item is building
         holder.itemView.setOnClickListener(a);
         //when an item is recycled it take the settings of the first item in the list
-        //if the first item is selected, the recycle item will take the background of the first item whitch is wrong
+        //if the first item is selected, the recycled item will take the background of the first item whitch is wrong
         //without this if-else, when you press an item more than one item will higtlight
         if(selectedSongs.lastIndexOf(song)>=0){
             holder.itemView.setSelected(true);
