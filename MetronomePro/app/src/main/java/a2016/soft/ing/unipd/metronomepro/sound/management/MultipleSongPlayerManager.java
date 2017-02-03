@@ -35,10 +35,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
-    public MultipleSongPlayerManager(Context c) {
+    public MultipleSongPlayerManager(Context contextForMidiPlayer) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(c, this);
+        midiSongPlayer = new MidiSongPlayer(contextForMidiPlayer, this);
     }
 
     /**
