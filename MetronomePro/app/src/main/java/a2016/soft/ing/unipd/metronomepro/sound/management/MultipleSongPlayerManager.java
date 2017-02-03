@@ -12,8 +12,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
  * Developed by Omar. Thanks Federico for helping.
  *
  * This class deals with reproducing the songs selected by the user in the order chosen by the user itself.
- * In particular it loads the songs in the appropriate songPlayers (buffers) and plays them exploiting the available resources:
- * audioTrackSongPlayer and midiSongPlayer.
+ * In particular it loads the songs in the appropriate songPlayers (in the buffers) and plays them exploiting
+ * the available resources: audioTrackSongPlayer and midiSongPlayer.
  */
 
 
