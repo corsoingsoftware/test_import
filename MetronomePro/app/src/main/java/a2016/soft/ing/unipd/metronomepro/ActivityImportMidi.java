@@ -77,6 +77,14 @@ public class ActivityImportMidi extends AppCompatActivity {
             }
         });
 
+        Button homeButton = (Button) findViewById(R.id.homebutton);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnHome();
+            }
+        });
+
 
     }
 
@@ -159,6 +167,14 @@ public class ActivityImportMidi extends AppCompatActivity {
     private void openEditor() {
         Intent intent = new Intent(this, SongCreator.class);
         startActivity(intent);
+    }
+
+    /**
+     * This method return to home activity
+     */
+    private void returnHome() {
+        Intent home = new Intent(this, ActivityHome.class);
+        startActivity(home);
     }
 
     /**
