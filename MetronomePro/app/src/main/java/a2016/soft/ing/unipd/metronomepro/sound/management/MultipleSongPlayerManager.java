@@ -42,7 +42,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     }
 
     /**
-     * Attention! This is a logic load, different from loading in the songPlayers' buffers.
+     * Attention! This is a logic loading, different from loading in the songPlayers' buffers.
      * See AudioTrackSongPlayer and MidiSongPlayer classes for details.
      * @param entrySong Song to load logically.
      */
