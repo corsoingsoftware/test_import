@@ -12,7 +12,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
  * Developed by Omar. Thanks Federico for helping.
  *
  * This class deals with reproducing the songs selected by the user in the order chosen by the user itself.
- * In particular it loads the songs in the appropriate songPlayers and plays them exploiting the available resources:
+ * In particular it loads the songs in the appropriate songPlayers (buffers) and plays them exploiting the available resources:
  * audioTrackSongPlayer and midiSongPlayer.
  */
 
@@ -35,10 +35,21 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
-    public MultipleSongPlayerManager(Context contextForMidiPlayer) {
+    public MultipleSongPlayerManager(Context c) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(contextForMidiPlayer, this);
+        midiSongPlayer = new MidiSongPlayer(c, this);
+    }
+
+    /**
+     * Attention! This is a logic load, different from loading in the songPlayers' buffers.
+     * See AudioTrackSongPlayer and MidiSongPlayer classes for details.
+     * @param entrySong Song to load logically.
+     */
+
+    public void logicLoad(Song entrySong){
+
+        entrySong.getSongPlayer(this).load(entrySong);
     }
 
     /**

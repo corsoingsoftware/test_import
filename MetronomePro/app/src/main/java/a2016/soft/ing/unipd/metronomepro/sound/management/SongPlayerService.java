@@ -75,7 +75,7 @@ public class SongPlayerService extends Service {
     public void load(Song entrySong) {
 
         //atsp.load(song);
-        mspm.load(entrySong);
+        mspm.logicLoad(entrySong);
         Log.v(LOG_TAG,"in load");
 
     }
