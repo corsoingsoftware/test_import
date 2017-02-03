@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nbsp.materialfilepicker.MaterialFilePicker;
@@ -60,7 +61,6 @@ public class ActivityImportMidi extends AppCompatActivity {
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         Button importButton = (Button) findViewById(R.id.import_midi);
         importButton.setOnClickListener(new View.OnClickListener() {

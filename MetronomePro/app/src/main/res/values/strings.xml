@@ -29,4 +29,6 @@
     <string name="beats_song">Beats:</string>
     <string name="title_activity_select_song_for_playlist">SelectSongForPlaylist</string>
     <string name="title_activity_test_db">TestDB</string>
+
+    <string name="title_add_song">ADD SONG</string>
 </resources>
