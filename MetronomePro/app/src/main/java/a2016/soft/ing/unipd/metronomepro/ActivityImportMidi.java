@@ -60,7 +60,6 @@ public class ActivityImportMidi extends AppCompatActivity {
             midiStorageDir.mkdir();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         Button importButton = (Button) findViewById(R.id.import_midi);
         importButton.setOnClickListener(new View.OnClickListener() {
