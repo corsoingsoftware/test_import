@@ -36,8 +36,8 @@ import static android.R.attr.data;
 
 public class ActivityImportMidi extends AppCompatActivity {
 
-    public static final int PERMISSIONS_REQUEST_CODE = 0;
-    public static final int FILE_PICKER_REQUEST_CODE = 1;
+    private static final int PERMISSIONS_REQUEST_CODE = 0;
+    private static final int FILE_PICKER_REQUEST_CODE = 1;
     private DataProvider db;
     private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/midiStorageDir");
 
@@ -77,6 +77,10 @@ public class ActivityImportMidi extends AppCompatActivity {
 
     }
 
+    /**
+     * Method for control if the app have the permission for read external storage and if is allowed
+     * call the method openFilePicker() in the other case call the method showError()
+     */
     private void checkPermissionsAndOpenFilePicker() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
@@ -91,10 +95,21 @@ public class ActivityImportMidi extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method for show at the user that the app don't have the necessary permissions
+     */
     private void showError() {
         Toast.makeText(this, "Allow external storage reading", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * This method override the method of the material file picker that is the library used for take
+     * the absolute path of a chosen file, for other information:
+     * https://github.com/nbsp-team/MaterialFilePicker
+     * In this case I take the absolute path of the file, try to make a copy of it in the
+     * midiStorageDir and if the copy success add the midi file into the database, in the other case
+     * show an error
+     */
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -121,8 +136,11 @@ public class ActivityImportMidi extends AppCompatActivity {
             }
         }
 
-
-
+    /**
+     * This method is used for start the activity of the MaterialFilePicker, for other information
+     * see:
+     * https://github.com/nbsp-team/MaterialFilePicker
+     */
     private void openFilePicker(){
         new MaterialFilePicker()
                 .withActivity(this)
@@ -132,11 +150,20 @@ public class ActivityImportMidi extends AppCompatActivity {
                 .start();
     }
 
+    /**
+     * This method start the activity for create a time slice song
+     */
     private void openEditor() {
         Intent intent = new Intent(this, SongCreator.class);
         startActivity(intent);
     }
 
+    /**
+     * This method try to make a copy of a file into a chosen directory
+     * @param from is the absolute path of the file
+     * @param to is the absolute path of the directory where the file have to be copied
+     * @return true if the copy succeeds, false if the copy fails
+     */
     private static boolean copyFile(String from, String to) {
         try {
             File sd = Environment.getExternalStorageDirectory();
