@@ -10,7 +10,12 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 /**
  * Created by Federico Favotto on 06/01/2017.
  * Developed by Omar. Thanks Federico for the help.
+ *
+ * This class deals with reproducing in order the songs selected by the user. In particular it loads the songs in the
+ * appropriate songPlayers exploiting the available resources : audioTrackSongPlayer and midiSongPlayer.
  */
+
+
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
@@ -64,7 +69,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     /**
      *  It manages the loading of the songs. In particular it identifies blocks of songs
-     *  of the same type in the queue, remove them from it and loads them in the appropriate Player.
+     *  of the same type in the queue, remove them from it and loads them in the appropriate SongPlayer.
      */
 
     public void dequeueManagement(){
