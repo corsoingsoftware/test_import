@@ -82,6 +82,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
         Song currentSong = songsToLoadQueue.peek();
+
         Class currentSongClass = currentSong.getClass();
         SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
