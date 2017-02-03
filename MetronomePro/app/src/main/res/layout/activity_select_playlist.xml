@@ -26,7 +26,7 @@
             android:id="@+id/newPlaylist"
             android:layout_width="35sp"
             android:layout_height="35sp"
-            android:background="@drawable/plus"
+            android:background="@drawable/plus2"
             android:layout_toRightOf="@id/playlistspinner"/>
     </RelativeLayout>
 

@@ -68,11 +68,6 @@
             android:name=".PlaylistView"
             android:label="@string/title_activity_modify_playlist"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -80,14 +75,20 @@
             android:label="@string/title_activity_atsp_test"
             android:theme="@style/AppTheme"></activity>
         <activity
-            android:name=".TestDB"
-            android:label="@string/title_activity_test_db"
+            android:name=".ActivityImportMidi"
+            android:label="ImportSong"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".TestDB"
+            android:label="@string/title_activity_test_db"
+            android:theme="@style/AppTheme">
+
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

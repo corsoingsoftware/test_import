@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.ModifyPlaylistAdapter;
+import a2016.soft.ing.unipd.metronomepro.adapters.SelectPlaylistAdapter;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
@@ -29,6 +32,7 @@ public class select_playlist extends AppCompatActivity implements AdapterView.On
     private ModifyPlaylistAdapter modifyPlaylistAdapter;
     private String chosenPl;
     private static final int START_EDIT_NEW_SONG=1;
+    private SelectPlaylistAdapter playListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,30 @@ public class select_playlist extends AppCompatActivity implements AdapterView.On
         startActivityForResult(intent, START_EDIT_NEW_SONG);
         //Intent intent = new Intent(this,SelectSongForPlaylist.class);
         //startActivity(intent);
+    }
+
+    public void customDialog(){
+        final Dialog dialog = new Dialog(select_playlist.this);
+        dialog.setContentView(R.layout.dialog_submit);
+        final EditText edit_name = (EditText) dialog.findViewById(R.id.edit_name_p);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);
+        Button submit = (Button) dialog.findViewById(R.id.but_submit);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Playlist p = EntitiesBuilder.getPlaylist(edit_name.getText().toString());
+                playListAdapter.addPlaylist(p);
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+
     }
 
     //metodo di test per vedere se funziona

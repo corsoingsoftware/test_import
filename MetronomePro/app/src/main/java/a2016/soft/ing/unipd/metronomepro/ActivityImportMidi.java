@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +62,15 @@ public class ActivityImportMidi extends AppCompatActivity {
                 checkPermissionsAndOpenFilePicker();
             }
         });
+
+        Button timeSliceButton = (Button) findViewById(R.id.createts);
+        timeSliceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openEditor();
+            }
+        });
+
 
     }
 
@@ -117,6 +127,11 @@ public class ActivityImportMidi extends AppCompatActivity {
                 .withHiddenFiles(true)
                 .withTitle("Sample title")
                 .start();
+    }
+
+    private void openEditor() {
+        Intent intent = new Intent(this, SongCreator.class);
+        startActivity(intent);
     }
 
     private static boolean copyFile(String from, String to) {
