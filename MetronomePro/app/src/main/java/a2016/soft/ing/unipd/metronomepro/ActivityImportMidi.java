@@ -55,6 +55,9 @@ public class ActivityImportMidi extends AppCompatActivity {
             midiStorageDir.mkdir();
         }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Button importButton = (Button) findViewById(R.id.import_midi);
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +128,7 @@ public class ActivityImportMidi extends AppCompatActivity {
                 .withActivity(this)
                 .withRequestCode(FILE_PICKER_REQUEST_CODE)
                 .withHiddenFiles(true)
-                .withTitle("Sample title")
+                .withTitle("Device Directory")
                 .start();
     }
 
