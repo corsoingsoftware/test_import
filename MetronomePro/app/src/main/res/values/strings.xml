@@ -36,6 +36,6 @@
     <string name="import_failed">Import failed</string>
 
     <string name="title_add_song">ADD SONG</string>
-    <string name="file_picker_title">DEVICE'S DIRECTORY</string>
+    <string name="file_picker_title">DEVICE DIRECTORY</string>
     <string name="title_home">METRONOME</string>
 </resources>
