@@ -33,6 +33,8 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
 
+    private final String TAG = "SQLiteDataProvider";
+
     private static final String CREATE_TABLE_SONG = "CREATE TABLE "
             + TBL_SONG + "("
             + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY);";
@@ -77,11 +79,15 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion < newVersion){
-            db.execSQL("DROP TABLE IF EXIST " + TBL_MD_SONG);
-            db.execSQL("DROP TABLE IF EXIST " + TBL_TS_SONG);
-            db.execSQL("DROP TABLE IF EXIST " + TBL_PLAYLIST);
-            db.execSQL("DROP TABLE IF EXIST " + TBL_TS_SONG);
-            onCreate(db);
+            try{
+                db.execSQL("DROP TABLE IF EXIST " + TBL_MD_SONG);
+                db.execSQL("DROP TABLE IF EXIST " + TBL_TS_SONG);
+                db.execSQL("DROP TABLE IF EXIST " + TBL_PLAYLIST);
+                db.execSQL("DROP TABLE IF EXIST " + TBL_TS_SONG);
+                onCreate(db);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -105,6 +111,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.insert(TBL_MD_SONG, null, songValues);
             }
         } catch (SQLException e) {
+            Log.e(TAG, e.toString());
             return false;
         }
         return true;
@@ -121,6 +128,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             try {
                 database.insertOrThrow(TBL_PLAYLIST, null, playlistValues);
             } catch (SQLException e) {
+                Log.e(TAG, e.toString());
                 return false;
             }
         }
@@ -241,7 +249,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         try {
             database.execSQL(queryDelete);
         } catch (SQLException e) {
-            Log.e("DB", e.toString());
+            Log.e(TAG, e.toString());
             return false;
         }
         return true;
@@ -255,7 +263,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         try {
             database.execSQL(queryDelete);
         } catch (SQLException e) {
-            throw  new SQLException("");
+            Log.e(TAG, e.toString());
+            return false;
         }
         return true;
     }
@@ -272,7 +281,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.execSQL(queryUpdateName);
                 oldSongName = newSong.getName();
             } catch (SQLException e) {
-                Log.e("DB", e.toString());
+                Log.e(TAG, e.toString());
                 return false;
             }
         }
@@ -289,7 +298,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             try{
                 database.execSQL(queryUpdateSong);
             } catch (SQLException e) {
-                Log.e("DB", e.toString());
+                Log.e(TAG, e.toString());
                 return false;
             }
         }else{
@@ -312,7 +321,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.execSQL(queryDelete);
                 database.insert(tableType, null, songValues);
             } catch (SQLException e) {
-                Log.e("DB", e.toString());
+                Log.e(TAG, e.toString());
                 return false;
             }
         }
