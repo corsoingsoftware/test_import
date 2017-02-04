@@ -151,10 +151,13 @@ public class ActivityImportMidi extends AppCompatActivity {
                         db.saveSong(md);
                     }
                     else{
-                        Toast.makeText(this, getResources().getString(R.string.import_failed), Toast.LENGTH_LONG).show();
+                        showImportError();
                     }
 
                 }
+            }
+            else {
+                showImportError();
             }
         }
 
@@ -170,6 +173,13 @@ public class ActivityImportMidi extends AppCompatActivity {
                 .withHiddenFiles(true)
                 .withTitle(getResources().getString(R.string.file_picker_title))
                 .start();
+    }
+
+    /**
+     * Import for show an error to the user
+     */
+    private void showImportError() {
+        Toast.makeText(this, getResources().getString(R.string.import_failed), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -199,10 +209,10 @@ public class ActivityImportMidi extends AppCompatActivity {
             File sd = Environment.getExternalStorageDirectory();
             if (sd.canWrite()) {
                 int end = from.toString().lastIndexOf("/");
-                String str1 = from.toString().substring(STRING_TOP, end);
-                String str2 = from.toString().substring(end+ONE, from.length());
-                File source = new File(str1, str2);
-                File destination= new File(to, str2);
+                String path = from.toString().substring(STRING_TOP, end);
+                String file = from.toString().substring(end+ONE, from.length());
+                File source = new File(path, file);
+                File destination= new File(to, file);
                 if (source.exists()) {
                     FileChannel src = new FileInputStream(source).getChannel();
                     FileChannel dst = new FileOutputStream(destination).getChannel();
@@ -210,8 +220,11 @@ public class ActivityImportMidi extends AppCompatActivity {
                     src.close();
                     dst.close();
                 }
+                return true;
             }
-            return true;
+            else {
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }
