@@ -64,7 +64,7 @@ public class SongPlayerService extends Service {
     public byte[] getSong(Song entrySong) {
         Log.v(LOG_TAG,"in getSong");
         //return atsp.getSong(s);
-        return mspm.getSong(entrySong);
+        return null;// mspm.getSong(entrySong);
     }
 
     public PlayState getState(){
@@ -75,7 +75,7 @@ public class SongPlayerService extends Service {
     public void load(Song entrySong) {
 
         //atsp.load(song);
-        mspm.load(entrySong);
+        mspm.logicLoad(entrySong);
         Log.v(LOG_TAG,"in load");
 
     }
