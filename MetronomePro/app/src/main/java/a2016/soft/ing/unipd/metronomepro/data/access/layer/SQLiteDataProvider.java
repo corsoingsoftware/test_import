@@ -33,7 +33,6 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
 
-    //queries edited by Munerato and Moretto
     private static final String CREATE_TABLE_SONG = "CREATE TABLE "
             + TBL_SONG + "("
             + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY);";
@@ -61,10 +60,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     public SQLiteDataProvider(Context context) {
         super(context, DBNAME, null, DB_VERSION);
-    }
-
-    public SQLiteDataProvider(Context context, int version) {
-        super(context, DBNAME, null, version);
     }
 
     @Override
