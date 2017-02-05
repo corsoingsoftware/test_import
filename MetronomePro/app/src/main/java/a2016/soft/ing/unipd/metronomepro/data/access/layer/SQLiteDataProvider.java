@@ -33,8 +33,6 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider, DataProviderConstants {
 
-    private final String TAG = "SQLiteDataProvider";
-
     private static final String CREATE_TABLE_SONG = "CREATE TABLE "
             + TBL_SONG + "("
             + FIELD_SONG_ID + " VARCHAR(50) PRIMARY KEY);";
@@ -59,11 +57,21 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             + "FOREIGN KEY(" + FIELD_SONG_ID + ") REFERENCES " + TBL_SONG + "(" + FIELD_SONG_ID + ") ON UPDATE CASCADE ON DELETE CASCADE, "
             + "PRIMARY KEY(" + FIELD_PLAYLIST_ID + ", " + FIELD_SONG_ID + "));";
 
+    private final String TAG = "SQLiteDataProvider";
+    private final String QUERY_SELECTION = "SELECT * FROM";
+    private final int NO_SONGS_FOUND = -1;
+
+
 
     public SQLiteDataProvider(Context context) {
-        super(context, DBNAME, null, DB_VERSION);
+        //'super' calls the SQLiteOpenHelper constructor, for more information see:
+        // https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
+    /**
+     * onCreate, onUpgrade and onConfigure are methods called automatically and not callable from the user
+     */
     @Override
     public void onCreate(SQLiteDatabase database) {
         try {
@@ -138,24 +146,26 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public Song getSong(String songTitle){
         SQLiteDatabase database = this.getReadableDatabase();
-        String queryFirst = "SELECT * FROM ";
-        String queryLast = " WHERE " + FIELD_SONG_ID + " = '" + songTitle +"'";
-        String querySong = "" + queryFirst + TBL_MD_SONG + queryLast;
+        String queryConditions = " WHERE " + FIELD_SONG_ID + " = '" + songTitle +"'";
+        String querySong = "" + QUERY_SELECTION + TBL_MD_SONG + queryConditions;
         Cursor cursorSongs = database.rawQuery(querySong, null);
         if (cursorSongs.moveToFirst()) {
             MidiSong newMidi = EntitiesBuilder.getMidiSong();
             newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
             newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MD_PATH)));
+            
             return newMidi;
         }
-        querySong = "" + queryFirst + TBL_TS_SONG + queryLast;
+        querySong = "" + QUERY_SELECTION + TBL_TS_SONG + queryConditions;
         cursorSongs = database.rawQuery(querySong, null);
         if (cursorSongs.moveToFirst()) {
             TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
             newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
             newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TS_BLOB)));
+            
             return newTimeSlices;
         }
+        
         return null;
     }
 
@@ -163,8 +173,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public List<Song> getAllSongs() {
         List<Song> songList = new ArrayList<>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String query = "SELECT * FROM ";
-        Cursor cursorSongs = database.rawQuery("" + query +TBL_MD_SONG, null);
+        Cursor cursorSongs = database.rawQuery("" + QUERY_SELECTION + TBL_MD_SONG, null);
         if (cursorSongs.moveToFirst()) {
             do {
                 MidiSong newMidi = EntitiesBuilder.getMidiSong();
@@ -173,7 +182,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 songList.add(newMidi);
             } while (cursorSongs.moveToNext());
         }
-        cursorSongs = database.rawQuery("" + query + TBL_TS_SONG, null);
+        cursorSongs = database.rawQuery("" + QUERY_SELECTION + TBL_TS_SONG, null);
         if (cursorSongs.moveToFirst()) {
             do {
                 TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
@@ -182,13 +191,14 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 songList.add(newTimeSlices);
             } while (cursorSongs.moveToNext());
         }
+        
         return songList;
     }
 
     @Override
     public Playlist getPlaylist(String playlistName){
         SQLiteDatabase database = this.getReadableDatabase();
-        String queryPlaylist = "SELECT * FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID
+        String queryPlaylist = QUERY_SELECTION + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID
                 + " = '" + playlistName + "'";
         Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
         if (cursorPlaylist.moveToFirst()) {
@@ -196,7 +206,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             String tempPlaylistName = cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_ID));
             Playlist newPlaylist = EntitiesBuilder.getPlaylist(tempPlaylistName);
             int indexSong;
-            int maxIndex = -1;
+            int maxIndex = NO_SONGS_FOUND;
             String song;
             do{
                 song = cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_SONG_ID));
@@ -207,22 +217,24 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             List<Song> allSongs = getAllSongs();
             Song searchSong;
             Iterator <Song> songIterator;
-            boolean flag;
+            boolean songFounded;
             for (int i = 0; i < maxIndex + 1; i++){
-                flag = true;
+                songFounded = false;
                 songIterator = allSongs.iterator();
-                while (songIterator.hasNext() && flag){
+                while (songIterator.hasNext() && !songFounded){
                     searchSong = songIterator.next();
                     if (searchSong.getName().equals(songMap.get(i))) {
                         newPlaylist.add(searchSong);
                         songIterator.remove();
-                        flag = false;
+                        songFounded = true;
                     }
                 }
 
             }
+            
             return newPlaylist;
         }
+        
         return null;
     }
 
@@ -238,6 +250,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 playlistsToReturn.add(cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_ID)));
             } while (cursorPlaylist.moveToNext());
         }
+        
         return playlistsToReturn;
     }
 
@@ -250,8 +263,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             database.execSQL(queryDelete);
         } catch (SQLException e) {
             Log.e(TAG, e.toString());
+            
             return false;
         }
+        
         return true;
     }
 
@@ -264,8 +279,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             database.execSQL(queryDelete);
         } catch (SQLException e) {
             Log.e(TAG, e.toString());
+            
             return false;
         }
+        
         return true;
     }
 
@@ -282,6 +299,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 oldSongName = newSong.getName();
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
+                
                 return false;
             }
         }
@@ -299,6 +317,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.execSQL(queryUpdateSong);
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
+                
                 return false;
             }
         }else{
@@ -322,9 +341,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.insert(tableType, null, songValues);
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
+                
                 return false;
             }
         }
+        
         return true;
     }
 
