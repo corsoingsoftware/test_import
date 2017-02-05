@@ -6,24 +6,16 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
@@ -58,7 +50,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             + "PRIMARY KEY(" + FIELD_PLAYLIST_ID + ", " + FIELD_SONG_ID + "));";
 
     private final String TAG = "SQLiteDataProvider";
-    private final String QUERY_SELECTION = "SELECT * FROM";
+    private final String QUERY_SELECTION = "SELECT * FROM ";
     private final int NO_SONGS_FOUND = -1;
 
 
@@ -120,8 +112,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             }
         } catch (SQLException e) {
             Log.e(TAG, e.toString());
+            database.close();
             return false;
         }
+        database.close();
         return true;
     }
 
@@ -137,9 +131,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.insertOrThrow(TBL_PLAYLIST, null, playlistValues);
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
+                database.close();
                 return false;
             }
         }
+        database.close();
         return true;
     }
 
@@ -153,7 +149,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             MidiSong newMidi = EntitiesBuilder.getMidiSong();
             newMidi.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
             newMidi.setPath(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_MD_PATH)));
-            
+            cursorSongs.close();
+            database.close();
             return newMidi;
         }
         querySong = "" + QUERY_SELECTION + TBL_TS_SONG + queryConditions;
@@ -162,10 +159,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             TimeSlicesSong newTimeSlices = EntitiesBuilder.getTimeSlicesSong();
             newTimeSlices.setName(cursorSongs.getString(cursorSongs.getColumnIndex(FIELD_SONG_ID)));
             newTimeSlices.decode(cursorSongs.getBlob(cursorSongs.getColumnIndex(FIELD_TS_BLOB)));
-            
+            cursorSongs.close();
+            database.close();
             return newTimeSlices;
         }
-        
+        database.close();
         return null;
     }
 
@@ -191,7 +189,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 songList.add(newTimeSlices);
             } while (cursorSongs.moveToNext());
         }
-        
+        cursorSongs.close();
+        database.close();
         return songList;
     }
 
@@ -214,6 +213,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 songMap.append(indexSong, song);
                 if (indexSong > maxIndex) maxIndex = indexSong;
             } while (cursorPlaylist.moveToNext());
+            cursorPlaylist.close();
             List<Song> allSongs = getAllSongs();
             Song searchSong;
             Iterator <Song> songIterator;
@@ -229,12 +229,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                         songFounded = true;
                     }
                 }
-
             }
-            
+            database.close();
             return newPlaylist;
         }
-        
+        database.close();
         return null;
     }
 
@@ -250,7 +249,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 playlistsToReturn.add(cursorPlaylist.getString(cursorPlaylist.getColumnIndex(FIELD_PLAYLIST_ID)));
             } while (cursorPlaylist.moveToNext());
         }
-        
+        cursorPlaylist.close();
+        database.close();
         return playlistsToReturn;
     }
 
@@ -263,10 +263,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             database.execSQL(queryDelete);
         } catch (SQLException e) {
             Log.e(TAG, e.toString());
-            
+            database.close();
             return false;
         }
-        
+        database.close();
         return true;
     }
 
@@ -279,10 +279,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
             database.execSQL(queryDelete);
         } catch (SQLException e) {
             Log.e(TAG, e.toString());
-            
+            database.close();
             return false;
         }
-        
+        database.close();
         return true;
     }
 
@@ -299,7 +299,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 oldSongName = newSong.getName();
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
-                
+                database.close();
                 return false;
             }
         }
@@ -317,7 +317,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.execSQL(queryUpdateSong);
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
-                
+                database.close();
                 return false;
             }
         }else{
@@ -341,11 +341,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 database.insert(tableType, null, songValues);
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
-                
+                database.close();
                 return false;
             }
         }
-        
+        database.close();
         return true;
     }
 
