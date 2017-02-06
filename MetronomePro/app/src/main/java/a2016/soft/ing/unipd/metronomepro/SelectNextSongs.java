@@ -107,11 +107,16 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     s1.setName("song1");
                     s2.setName("song2");
                     s3.setName("song3");
-                    MidiSong midiS = (MidiSong)EntitiesBuilder.getMidiSong();
-                    midiS.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                    MidiSong midiS1 = (MidiSong)EntitiesBuilder.getMidiSong();
+                    midiS1.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                            +"/A.mid");//+ "/Tick.mid");
+                    midiS1.setName("midiSong1");
+                    MidiSong midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
+                    midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
                             + "/Tick.mid");
-                    midiS.setName("midiSong");
-                    p.add(midiS);
+                    midiS2.setName("midiSong2");
+                    p.add(midiS1);
+                    p.add(midiS2);
                     p.add(s1);
                     p.add(s2);
                     p.add(s3);

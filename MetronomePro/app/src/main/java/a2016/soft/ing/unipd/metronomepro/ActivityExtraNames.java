@@ -10,4 +10,5 @@ public interface ActivityExtraNames {
     String PLAYABLE_PLAYLIST="playable_playlist";
     String PLAYLIST="playlist";
     String SONG_TO_ADD ="song_to_add";
+    String PLAYLIST_SELECTED = "playlist_selected";
 }

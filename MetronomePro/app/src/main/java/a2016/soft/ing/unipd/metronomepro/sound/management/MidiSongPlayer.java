@@ -33,16 +33,11 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
         currentSong = UNPOINTED;
         this.callback = callback;
         this.context = c;
-        player = new MediaPlayer();
-        player.setOnCompletionListener(this);
     }
 
     @Override
     public void play() {
-        if(playerState != ON_PLAY) {
-            playerState = ON_PLAY;
-            player.start();
-        }
+        player.start();
     }
 
     @Override
@@ -78,39 +73,49 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public PlayState getState() {
+
         PlayState ps;
-        switch(playerState) {
-            case ON_PLAY :  ps = PlayState.PLAYSTATE_PLAYING;
-            case ON_PAUSE : ps = PlayState.PLAYSTATE_PAUSE;
-            case ON_STOP : ps = PlayState.PLAYSTATE_STOP;
-            default: ps = null;
+        if(player.isPlaying()) {
+            ps = PlayState.PLAYSTATE_PLAYING;
+        } else {
+            ps = PlayState.PLAYSTATE_STOP;
         }
+
         return ps;
     }
 
+    /**
+     * Federico: il player va creato ogni volta che si cambia la traccia!
+     * This method reinitializes the mediaPlayer
+     */
 
-    @Override
-    public void write(Song[] songs) {
-        currentSong = 0;
-        playlist = new ParcelableMidiSong[songs.length];
-        for(int i = 0; i < songs.length; i++)
-            playlist[i] = (ParcelableMidiSong) songs[i];
+    private void createNewMediaPlayer(String audioPath) {
+        if(player!=null){
+            player.setOnCompletionListener(null);
+            player.release();
+            player=null;
+        }
+        player= new MediaPlayer();
+        player.setOnCompletionListener(this);
+        Uri firstSongPath = Uri.parse(audioPath);
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
-            Uri firstSongPath = Uri.parse(playlist[currentSong].getPath());
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             player.setDataSource(context, firstSongPath);
             player.prepare();
-
         }catch(Exception e){
             e.printStackTrace();
             Log.d(TAG,"Midi not found or invalid path");
         }
+    }
 
-        try {
-            player.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void write(Song[] songs) {
+
+        currentSong = 0;
+        playlist = new ParcelableMidiSong[songs.length];
+        for(int i = 0; i < songs.length; i++)
+            playlist[i] = (ParcelableMidiSong) songs[i];
+        createNewMediaPlayer(playlist[currentSong].getPath());
     }
 
     @Override
@@ -118,15 +123,10 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
         currentSong++;
         if(currentSong < playlist.length){
             try {
-                player.setDataSource(playlist[currentSong].getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(TAG,"Midi not found or invalid path");
-            }
-            try {
-                player.prepare();
+                createNewMediaPlayer(playlist[currentSong].getPath());
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.d(TAG,"Midi not found or invalid path");
             }
             player.start();
         }
