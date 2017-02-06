@@ -7,35 +7,20 @@ import org.junit.Test;
 import java.sql.Time;
 import java.util.Random;
 
+import static a2016.soft.ing.unipd.metronomepro.TestGenerators.generateRandomTestSong;
 import static org.junit.Assert.*;
 
 /**
  * Created by Federico Favotto on 06/02/2017.
  */
 public class ParcelableTimeSlicesSongTest {
-    private static int incrementId=0;
+
+
     @Test
     public void encode() throws Exception {
         encodeThenDecode();
     }
 
-    /**
-     * It will returns a new random generated song with at least maxTimeSlices timeslices
-     */
-    private ParcelableTimeSlicesSong generateRandomTestSong(int maxTimeSlices) {
-        Random rand= new Random(System.currentTimeMillis());
-        ParcelableTimeSlicesSong song= new ParcelableTimeSlicesSong(Integer.toString(incrementId), incrementId);
-        incrementId++;
-        for(int i=0;i<maxTimeSlices;i++) {
-            TimeSlice timeSliceToAdd= new TimeSlice();
-            timeSliceToAdd.setBpm(rand.nextInt(270)+30);
-            timeSliceToAdd.setDurationInBeats(rand.nextInt(2000));
-            timeSliceToAdd.setTimeFigureDenominator(rand.nextInt(8));
-            timeSliceToAdd.setTimeFigureDenominator(rand.nextInt(4));
-            song.add(timeSliceToAdd);
-        }
-        return song;
-    }
 
     private void encodeThenDecode(){
         //test empty song
@@ -65,6 +50,10 @@ public class ParcelableTimeSlicesSongTest {
         encodeThenDecode();
     }
 
+    /**
+     * Test the parcelable in song!
+     * @throws Exception
+     */
     @Test
     public void writeToParcel() throws Exception {
         ParcelableTimeSlicesSong songToTest=generateRandomTestSong(50);
