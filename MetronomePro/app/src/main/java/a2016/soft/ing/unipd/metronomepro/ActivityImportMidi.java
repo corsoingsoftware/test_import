@@ -47,6 +47,7 @@ public class ActivityImportMidi extends AppCompatActivity {
     private static final int STRING_TOP =0;
     private static final int ONE = 1;
     private static final String MIDI_DIR_NAME = "midiStorageDir";
+    private static final String MIDI_EXTENSION = ".mid";
     private DataProvider db;
     private File midiStorageDir = new File(Environment.getExternalStorageDirectory()+"/"+MIDI_DIR_NAME);
 
@@ -142,16 +143,19 @@ public class ActivityImportMidi extends AppCompatActivity {
                     Log.d(getResources().getString(R.string.path), filePath);
 
                     String midiTitle = filePath.substring(filePath.lastIndexOf("/")+ONE);
-                    String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
-                    if(copyFile(filePath,midiPath)){
-                        Toast.makeText(this, getResources().getString(R.string.file_copied) + midiPath, Toast.LENGTH_LONG).show();
-                        MidiSong md = EntitiesBuilder.getMidiSong();
-                        md.setName(midiTitle);
-                        md.setPath(midiPath);
-                        db.saveSong(md);
-                    }
-                    else{
-                        showImportError();
+                    if(isMidi(midiTitle)) {
+                        String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
+                        if (copyFile(filePath, midiStorageDir.getAbsolutePath())) {
+                            Toast.makeText(this, getResources().getString(R.string.file_copied) + midiPath, Toast.LENGTH_LONG).show();
+                            MidiSong md = EntitiesBuilder.getMidiSong();
+                            md.setName(midiTitle);
+                            md.setPath(midiPath);
+                            db.saveSong(md);
+                        } else {
+                            showImportError();
+                        }
+                    } else {
+                        Toast.makeText(this, getResources().getString(R.string.file_type_wrong), Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -226,8 +230,14 @@ public class ActivityImportMidi extends AppCompatActivity {
                 return false;
             }
         } catch (Exception e) {
+            Log.e("IMPORT", e.toString());
             return false;
         }
+    }
+
+    private boolean isMidi(String title) {
+        String type = title.substring(title.lastIndexOf("."),title.length());
+        return type.equals(MIDI_EXTENSION);
     }
 
 }

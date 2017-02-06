@@ -48,6 +48,7 @@
             android:theme="@style/AppTheme" >
 
 
+
         </activity>
 
         <activity
@@ -55,11 +56,7 @@
             android:label="@string/title_activity_select_next_songs"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -82,11 +79,7 @@
             android:name=".TestDB"
             android:label="@string/title_activity_test_db"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
@@ -94,6 +87,17 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ActivityHome"></activity>
+        <activity
+            android:name=".ActivityImportMidi"
+            android:label="Import Song"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

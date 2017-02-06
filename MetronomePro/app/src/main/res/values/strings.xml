@@ -10,6 +10,9 @@
     <string name="sync_text">Sync</string>
     <string name="no_bt">Bluetooth not found</string>
 
+    <string name="import_button">IMPORT SONG</string>
+    <string name="create_s_button">CREATE SONG</string>
+
 
     <!--  DeviceListActivity -->
     <string name="scanning">scanning for devices...</string>
@@ -32,8 +35,10 @@
 
     <string name="exstorage_permission">Allow external storage reading</string>
     <string name="path">Path: </string>
+    <string name="error_import">IMPORT</string>
     <string name="file_copied">File copied in : </string>
     <string name="import_failed">Import failed</string>
+    <string name="file_type_wrong">File type not supported</string>
 
     <string name="title_add_song">ADD SONG</string>
     <string name="file_picker_title">DEVICE DIRECTORY</string>
