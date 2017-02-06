@@ -10,6 +10,9 @@
     <string name="sync_text">Sync</string>
     <string name="no_bt">Bluetooth not found</string>
 
+    <string name="import_button">IMPORT SONG</string>
+    <string name="create_s_button">CREATE SONG</string>
+
 
     <!--  DeviceListActivity -->
     <string name="scanning">scanning for devices...</string>

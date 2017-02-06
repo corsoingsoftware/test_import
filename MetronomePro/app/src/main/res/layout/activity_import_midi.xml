@@ -15,7 +15,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorAccent"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <Button
@@ -47,8 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="IMPORT SONG"
-        />
+        android:text="@string/import_button"
+        android:textColor="@color/white"
+        android:background="?attr/colorAccent" />
     <Button
         android:id="@+id/createts"
         android:layout_width="wrap_content"
@@ -56,7 +57,9 @@
         android:layout_below="@id/import_midi"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30sp"
-        android:text="CREATE SONG"/>
+        android:text="@string/create_s_button"
+        android:textColor="@color/white"
+        android:background="?attr/colorAccent"/>
 
 </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
