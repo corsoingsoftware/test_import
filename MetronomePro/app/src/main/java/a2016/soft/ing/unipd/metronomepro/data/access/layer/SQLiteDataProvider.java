@@ -51,7 +51,8 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     private final String TAG = "SQLiteDataProvider";
     private final String QUERY_SELECTION = "SELECT * FROM ";
-    private final int NO_SONGS_FOUND = -1;
+    private final int  NO_SONGS_FOUND = -1;
+    public final int MAX_TITLE_LENGTH = 50;
 
 
 
@@ -98,45 +99,53 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean saveSong(Song newSong) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues songValues = new ContentValues();
-        songValues.put(FIELD_SONG_ID, newSong.getName());
-        try {
-            database.insertOrThrow(TBL_SONG, null, songValues);
-            if (newSong instanceof TimeSlicesSong) {
-                songValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
-                database.insert(TBL_TS_SONG, null, songValues);
-            } else {
-                songValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
-                database.insert(TBL_MD_SONG, null, songValues);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, e.toString());
-            database.close();
-            return false;
-        }
-        database.close();
-        return true;
-    }
-
-    @Override
-    public boolean savePlaylist(Playlist newPlaylist) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues playlistValues = new ContentValues();
-        for (Song song : newPlaylist) {
-            playlistValues.put(FIELD_PLAYLIST_ID, newPlaylist.getName());
-            playlistValues.put(FIELD_SONG_ID, song.getName());
-            playlistValues.put(FIELD_SONG_INDEX, newPlaylist.getSongIndex(song));
+        if (newSong.getName().length() <= MAX_TITLE_LENGTH) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues songValues = new ContentValues();
+            songValues.put(FIELD_SONG_ID, newSong.getName());
             try {
-                database.insertOrThrow(TBL_PLAYLIST, null, playlistValues);
+                database.insertOrThrow(TBL_SONG, null, songValues);
+                if (newSong instanceof TimeSlicesSong) {
+                    songValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
+                    database.insert(TBL_TS_SONG, null, songValues);
+                } else {
+                    songValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
+                    database.insert(TBL_MD_SONG, null, songValues);
+                }
             } catch (SQLException e) {
                 Log.e(TAG, e.toString());
                 database.close();
                 return false;
             }
+            database.close();
+            return true;
+        } else {
+            return false;
         }
-        database.close();
-        return true;
+    }
+
+    @Override
+    public boolean savePlaylist(Playlist newPlaylist) {
+        if (newPlaylist.getName().length() <= MAX_TITLE_LENGTH) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues playlistValues = new ContentValues();
+            for (Song song : newPlaylist) {
+                playlistValues.put(FIELD_PLAYLIST_ID, newPlaylist.getName());
+                playlistValues.put(FIELD_SONG_ID, song.getName());
+                playlistValues.put(FIELD_SONG_INDEX, newPlaylist.getSongIndex(song));
+                try {
+                    database.insertOrThrow(TBL_PLAYLIST, null, playlistValues);
+                } catch (SQLException e) {
+                    Log.e(TAG, e.toString());
+                    database.close();
+                    return false;
+                }
+            }
+            database.close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -288,70 +297,76 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean modifySong(Song oldSong, Song newSong) {
-        SQLiteDatabase database = getWritableDatabase();
-        String oldSongName = oldSong.getName();
-        if (oldSong.getName().compareTo(newSong.getName()) != 0) {
-            String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = '"
-                    + newSong.getName() + "' WHERE " + FIELD_SONG_ID + " = '"
-                    + oldSong.getName() + "'";
-            try {
-                database.execSQL(queryUpdateName);
-                oldSongName = newSong.getName();
-            } catch (SQLException e) {
-                Log.e(TAG, e.toString());
-                database.close();
-                return false;
+        if (newSong.getName().length() <= 50) {
+            SQLiteDatabase database = getWritableDatabase();
+            String oldSongName = oldSong.getName();
+            if (oldSong.getName().compareTo(newSong.getName()) != 0) {
+                String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = '"
+                        + newSong.getName() + "' WHERE " + FIELD_SONG_ID + " = '"
+                        + oldSong.getName() + "'";
+                try {
+                    database.execSQL(queryUpdateName);
+                    oldSongName = newSong.getName();
+                } catch (SQLException e) {
+                    Log.e(TAG, e.toString());
+                    database.close();
+                    return false;
+                }
             }
+            if (oldSong.getClass().equals(newSong.getClass())) {
+                String queryUpdateSong = "";
+                if (oldSong instanceof MidiSong) {
+                    queryUpdateSong = "UPDATE " + TBL_MD_SONG + " SET " + FIELD_MD_PATH + " = '"
+                            + ((MidiSong) newSong).getPath() + "' WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                }
+                if (oldSong instanceof TimeSlicesSong) {
+                    queryUpdateSong = "UPDATE " + TBL_TS_SONG + " SET " + FIELD_TS_BLOB + " = "
+                            + ((TimeSlicesSong) newSong).encode() + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                }
+                try {
+                    database.execSQL(queryUpdateSong);
+                } catch (SQLException e) {
+                    Log.e(TAG, e.toString());
+                    database.close();
+                    return false;
+                }
+            } else {
+                String queryDelete = "";
+                String tableType = "";
+                ContentValues songValues = new ContentValues();
+                if (oldSong instanceof MidiSong) {
+                    queryDelete = "DELETE FROM " + TBL_MD_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                    songValues.put(FIELD_SONG_ID, newSong.getName());
+                    songValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
+                    tableType = TBL_TS_SONG;
+                }
+                if (oldSong instanceof TimeSlicesSong) {
+                    queryDelete = "DELETE FROM " + TBL_TS_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                    songValues.put(FIELD_SONG_ID, newSong.getName());
+                    songValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
+                    tableType = TBL_MD_SONG;
+                }
+                try {
+                    database.execSQL(queryDelete);
+                    database.insert(tableType, null, songValues);
+                } catch (SQLException e) {
+                    Log.e(TAG, e.toString());
+                    database.close();
+                    return false;
+                }
+            }
+            database.close();
+            return true;
+        } else {
+            return false;
         }
-        if (oldSong.getClass().equals(newSong.getClass())) {
-            String queryUpdateSong = "";
-            if (oldSong instanceof MidiSong) {
-                queryUpdateSong = "UPDATE " + TBL_MD_SONG + " SET " + FIELD_MD_PATH + " = '"
-                        + ((MidiSong) newSong).getPath() + "' WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
-            }
-            if (oldSong instanceof TimeSlicesSong) {
-                queryUpdateSong = "UPDATE " + TBL_TS_SONG + " SET " + FIELD_TS_BLOB + " = "
-                        + ((TimeSlicesSong) newSong).encode() + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
-            }
-            try{
-                database.execSQL(queryUpdateSong);
-            } catch (SQLException e) {
-                Log.e(TAG, e.toString());
-                database.close();
-                return false;
-            }
-        }else{
-            String queryDelete = "";
-            String tableType = "";
-            ContentValues songValues = new ContentValues();
-            if (oldSong instanceof MidiSong) {
-                queryDelete = "DELETE FROM " + TBL_MD_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
-                songValues.put(FIELD_SONG_ID, newSong.getName());
-                songValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
-                tableType = TBL_TS_SONG;
-            }
-            if (oldSong instanceof TimeSlicesSong) {
-                queryDelete = "DELETE FROM " + TBL_TS_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
-                songValues.put(FIELD_SONG_ID, newSong.getName());
-                songValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
-                tableType = TBL_MD_SONG;
-            }
-            try{
-                database.execSQL(queryDelete);
-                database.insert(tableType, null, songValues);
-            } catch (SQLException e) {
-                Log.e(TAG, e.toString());
-                database.close();
-                return false;
-            }
-        }
-        database.close();
-        return true;
     }
 
     @Override
     public boolean modifyPlaylist(Playlist oldPlaylist, Playlist newPlaylist) {
-        return deletePlaylist(oldPlaylist) && savePlaylist(newPlaylist);
+        if (newPlaylist.getName().length() <= MAX_TITLE_LENGTH) {
+            return deletePlaylist(oldPlaylist) && savePlaylist(newPlaylist);
+        } else return false;
     }
 
 }
