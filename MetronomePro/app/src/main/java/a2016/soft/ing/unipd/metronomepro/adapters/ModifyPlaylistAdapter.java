@@ -37,6 +37,7 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
  * https://developer.android.com/training/material/lists-cards.html
  */
 
+
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Playlist playlistToModify;
@@ -52,6 +53,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.dragListener = dragListener;
         this.context = c;
     }
+
 
     /**
      * add a song to the playlist

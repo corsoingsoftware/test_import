@@ -3,163 +3,153 @@ package a2016.soft.ing.unipd.metronomepro.sound.management;
 import android.content.Context;
 
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
- * Developed by Omar
+ * Developed by Omar. Thanks Federico for helping.
+ *
+ * This class deals with reproducing the songs selected by the user in the order chosen by the user itself.
+ * In particular it loads the songs in the appropriate songPlayers (in the buffers) and plays them exploiting
+ * the available resources: audioTrackSongPlayer and midiSongPlayer.
  */
+
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
-    private final static int PLAYERS = 2;
+    //Players for midiSongs and timeSlicesSongs respectively. They are unique in the class.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
-    private LinkedBlockingQueue<Song> songQueue;
-    private int typeChanged;
-    private int nextToPlay;
-    private Song[] arraySongs;
 
+    //Queue that contains songs to be loaded.
+    private LinkedBlockingQueue<Song> songsToLoadQueue;
 
-    public MultipleSongPlayerManager(Context c) {
+    //Contains the index of the next Song to be played.
+    private int indexNextToPlay;
+
+    //Contains the index of the next Song to be loaded.
+    private int indexNextToLoad;
+
+    //Array that contains songs to be played.
+    private Song[] arraySongsToPlay;
+
+    public MultipleSongPlayerManager(Context contextForMidiPlayer) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(c, this);
-        songQueue = new LinkedBlockingQueue<Song>();
-        typeChanged = 0;
+        midiSongPlayer = new MidiSongPlayer(contextForMidiPlayer, this);
     }
 
     /**
-     * Example of method to manage a generic song
+     * Attention! This is a logic loading, different from loading in songPlayers' buffers.
+     * See AudioTrackSongPlayer and MidiSongPlayer classes for details.
+     * @param entrySong Song to load logically.
      */
 
-    public void play(Song[] songs) {
+    public void logicLoad(Song entrySong){
 
-        Class currClass = songs[nextToPlay].getClass();
-        int i = nextToPlay;
-        Song currSong = songs[i];
-        currSong.getSongPlayer(this).play();
-
-        //Individuo la prossima song da riprodurre in seguito al playEnded
-
-        boolean stopLoop = false;
-        while(i < songs.length && !(stopLoop)) {
-
-            if(songs[i].getClass() == currClass)
-                i++;
-            else
-                stopLoop = true;
-        }
-
-        nextToPlay = i;
-
-        if(songQueue.size() > 0){
-            dequeueManagement(songs);
-        }
-    }
-
-    public void load(Song entrySong) {
         entrySong.getSongPlayer(this).load(entrySong);
     }
 
+    /**
+     * Method that initializes the attributes with initial values and SongQueue with arrayEntrySongs' elements.
+     * @param arrayEntrySongs  Array that contains songs to be played.
+     */
 
-    public void startTheseSongs(Song[] songs) {
+    public void startTheseSongs(Song[] arrayEntrySongs) {
 
-        if(songs != null) {
+        arraySongsToPlay = arrayEntrySongs;
+        indexNextToPlay = 0;
+        indexNextToLoad = 0;
+        songsToLoadQueue = new LinkedBlockingQueue<>();
 
-            for (Song s : songs) {
-                songQueue.add(s);
-            }
-
-            arraySongs = songs;
-            nextToPlay = 0;
-            dequeueManagement(arraySongs);
+        for(Song songToAdd : arrayEntrySongs){
+            songsToLoadQueue.add(songToAdd);
         }
 
+        dequeueManagement();
+        arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+        checkQueueEmpty();
     }
 
-    public void dequeueManagement(Song[] songs){
+    /**
+     *  It manages the loading of the songs. In particular it identifies blocks of songs
+     *  of the same type in the queue, remove them from it and loads them in the appropriate SongPlayer.
+     */
 
+    public void dequeueManagement(){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
-        Song currSong = songQueue.peek();
-        Class s = currSong.getClass();
-        SongPlayer currentPlayer = currSong.getSongPlayer(this);
+        Song currentSong = songsToLoadQueue.peek();
+        Class currentSongClass = currentSong.getClass();
+        SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
-        while(typeChanged < PLAYERS && songQueue.size() !=0) {
-
-            if(currSong.getClass() != s) {
-
-                typeChanged ++;
-
-                if(typeChanged < PLAYERS) {
-
-                    Song[] app = new Song[listSongsSameType.size()];
-                    app = listSongsSameType.toArray(app);
-                    currentPlayer.write(app);
-                    listSongsSameType.clear();
-                    currentPlayer = currSong.getSongPlayer(this);
-                    s = currSong.getClass();
-                    listSongsSameType.clear();
-                    listSongsSameType.add(currSong);
-                    songQueue.poll();
-                }
-
-            }
-            else {
-
-                listSongsSameType.add(currSong);
-                songQueue.poll();
-
-                /*if(songQueue.size()==0) {
-                    Song[] app = new Song[listSongsSameType.size()];
-                    app = listSongsSameType.toArray(app);
-                    currentPlayer.write(app);
-                }*/
-            }
-
-            currSong = songQueue.peek();
-
-            if(songQueue.size()==0) {
-                Song[] app = new Song[listSongsSameType.size()];
-                app = listSongsSameType.toArray(app);
-                currentPlayer.write(app);
-            }
-
+        while(songsToLoadQueue.size() > 0 && currentSong.getClass() == currentSongClass) {
+            songsToLoadQueue.poll();
+            listSongsSameType.add(currentSong);
+            currentSong = songsToLoadQueue.peek();
         }
 
-        play(arraySongs);
+        Song[] arraySongsSameType = new Song[listSongsSameType.size()];
+        indexNextToLoad = indexNextToLoad + listSongsSameType.size();
+        arraySongsSameType = listSongsSameType.toArray(arraySongsSameType);
+        currentSongSongPlayer.write(arraySongsSameType);
     }
 
-
-    public byte[] getSong(Song entrySong) {
-        return entrySong.getSongPlayer(this).getSong(entrySong);
-    }
-
+    /**
+     * It returns a Player for midiSongs. It will be transparently called if the song examined is an instance of
+     * MidiSong thanks to Song interface and its implementation in ParcelableMidiSong.
+     * @return midiSongPlayer SongPlayer for midiSongs.
+     */
 
     @Override
     public SongPlayer getMidiSongPlayer() {
+
         return midiSongPlayer;
     }
 
+    /**
+     * Similar to getMidiSongPlayer().
+     * @return audioTrackSongPlayer SongPlayer for timeSlicesSongs.
+     */
+
     @Override
     public SongPlayer getTimeSlicesSongPlayer() {
+
         return audioTrackSongPlayer;
     }
+
+    /**
+     * Method called when a SongPlayer (audioTrackSongPlayer or midiSongPlayer) stopped reproducing its loaded songs.
+     * It reproduces next ready Song or, if all songs have been played, calls pause method in both players.
+     * @param origin SongPlayer stopped reproducing its songs.
+     */
 
     @Override
     public void playEnded(SongPlayer origin) {
 
-        if(nextToPlay < arraySongs.length) {
-            typeChanged--;
-            play(arraySongs);
+        if(indexNextToPlay < arraySongsToPlay.length) {
+            origin.pause();
+            arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+            checkQueueEmpty();
+
+        } else {
+
+            audioTrackSongPlayer.pause();
+            midiSongPlayer.pause();
         }
     }
 
+    /**
+     *  Method that updates indexNextToPlay and checks if the queue is empty.
+     *  If not, it calls dequeueManagement() to continue songs' loading.
+     */
+
+    private void checkQueueEmpty() {
+
+        indexNextToPlay = indexNextToLoad;
+        if(indexNextToLoad < arraySongsToPlay.length)
+            dequeueManagement();
+    }
 }

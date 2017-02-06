@@ -43,11 +43,4 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-  <component name="revuProjectSettings">
-    <option name="reviewFiles">
-      <list>
-        <option value="app/src/main/java/a2016/soft/ing/unipd/metronomepro/sound/management/AudioTrackController_java.xml" />
-      </list>
-    </option>
-  </component>
 </project>
