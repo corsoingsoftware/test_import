@@ -32,8 +32,10 @@
 
     <string name="exstorage_permission">Allow external storage reading</string>
     <string name="path">Path: </string>
+    <string name="error_import">IMPORT</string>
     <string name="file_copied">File copied in : </string>
     <string name="import_failed">Import failed</string>
+    <string name="file_type_wrong">File type not supported</string>
 
     <string name="title_add_song">ADD SONG</string>
     <string name="file_picker_title">DEVICE DIRECTORY</string>
