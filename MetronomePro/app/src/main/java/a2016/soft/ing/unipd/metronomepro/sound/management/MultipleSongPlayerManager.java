@@ -9,12 +9,17 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
  * Created by Federico Favotto on 06/01/2017.
- * Developed by Omar. Thanks Federico for the help.
+ * Developed by Omar. Thanks Federico for helping.
+ *
+ * This class deals with reproducing the songs selected by the user in the order chosen by the user itself.
+ * In particular it loads the songs in the appropriate songPlayers (in the buffers) and plays them exploiting
+ * the available resources: audioTrackSongPlayer and midiSongPlayer.
  */
+
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
-    //Players for midiSong and timeSlicesSong respectively. They are unique in the class.
+    //Players for midiSongs and timeSlicesSongs respectively. They are unique in the class.
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
 
@@ -30,13 +35,19 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     //Array that contains songs to be played.
     private Song[] arraySongsToPlay;
 
-    public MultipleSongPlayerManager(Context c) {
+    public MultipleSongPlayerManager(Context contextForMidiPlayer) {
 
         audioTrackSongPlayer = new AudioTrackSongPlayer(this);
-        midiSongPlayer = new MidiSongPlayer(c, this);
+        midiSongPlayer = new MidiSongPlayer(contextForMidiPlayer, this);
     }
 
-    public void load(Song entrySong) {
+    /**
+     * Attention! This is a logic loading, different from loading in songPlayers' buffers.
+     * See AudioTrackSongPlayer and MidiSongPlayer classes for details.
+     * @param entrySong Song to load logically.
+     */
+
+    public void logicLoad(Song entrySong){
 
         entrySong.getSongPlayer(this).load(entrySong);
     }
@@ -64,7 +75,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     /**
      *  It manages the loading of the songs. In particular it identifies blocks of songs
-     *  of the same type in the queue, remove them from it and loads them in the appropriate Player.
+     *  of the same type in the queue, remove them from it and loads them in the appropriate SongPlayer.
      */
 
     public void dequeueManagement(){
