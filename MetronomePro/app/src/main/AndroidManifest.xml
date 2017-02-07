@@ -84,7 +84,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectionActitivy" />
+        <activity android:name=".ConnectionActivity" />
         <activity android:name=".ClientActivity"></activity>
     </application>
 

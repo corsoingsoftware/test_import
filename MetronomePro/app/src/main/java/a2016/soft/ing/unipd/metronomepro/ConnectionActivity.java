@@ -7,7 +7,7 @@ import android.os.Bundle;
  * Questa classe deve permettere all'utente di associarsi al server o cercarne uno.
  * Una volta fatto avvia l'activity di Omar nel caso sia server, altrimenti la clientactivity
  */
-public class ConnectionActitivy extends AppCompatActivity {
+public class ConnectionActivity extends AppCompatActivity {
     /**
      *
      * @param savedInstanceState
@@ -15,6 +15,6 @@ public class ConnectionActitivy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection_actitivy);
+        setContentView(R.layout.activity_connection_activity);
     }
 }
