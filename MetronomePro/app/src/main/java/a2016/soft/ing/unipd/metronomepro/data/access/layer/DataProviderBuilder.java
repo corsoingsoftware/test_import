@@ -14,8 +14,4 @@ public class DataProviderBuilder {
     public static DataProvider getDefaultDataProvider(Context c) {
         return new SQLiteDataProvider(c);
     }
-
-    public static DataProvider getDefaultDataProvider(Context c, int version) {
-        return new SQLiteDataProvider(c, version);
-    }
 }
