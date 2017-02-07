@@ -27,7 +27,9 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
-
+/**
+ * Created by giuli on 27/12/2016.
+ */
 public class PlaylistView extends AppCompatActivity implements SelectPlaylistAdapter.OnPlaylistClickListener, OnStartDragListener {
 
     private RecyclerView rVPlaylistItem;
@@ -35,6 +37,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     private SelectPlaylistAdapter playListAdapter;
     private ArrayList<Playlist> selectedPlaylist;
     private ItemTouchHelper itemTouchHelper;
+    private DataProvider db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         rVLayoutManager =  new LinearLayoutManager(this);
         rVPlaylistItem.setLayoutManager(rVLayoutManager);
 
-        DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
+        db = DataProviderBuilder.getDefaultDataProvider(this);
         List<String> playlistNames = db.getAllPlaylists();
         selectedPlaylist= new ArrayList<>();
         for (String s:playlistNames){
@@ -65,14 +68,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
             selectedPlaylist = savedInstanceState.getParcelableArrayList("playlist_for_select");
             playListAdapter = new SelectPlaylistAdapter(this,selectedPlaylist,this,this);
             rVPlaylistItem.setAdapter(playListAdapter);
-            /**
-             savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-             selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
-             selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
-             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
-             */
         }
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,32 +86,6 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         outState.putParcelableArrayList("playlist_for_select", (ArrayList<? extends Parcelable>) playListAdapter.getArrayPlaylist());
 
         super.onSaveInstanceState(outState);
-    }
-    //metodo di test per vedere se funziona
-    private ArrayList<Playlist> createTestPlaylist(){
-        Playlist p1 =  EntitiesBuilder.getPlaylist("prova di playlist 1");
-        Playlist p2 =  EntitiesBuilder.getPlaylist("prova di playlist 2");
-        Playlist p3 =  EntitiesBuilder.getPlaylist("prova di playlist 3");
-
-        p1.add(EntitiesBuilder.getSong("song 1"));
-
-
-        p2.add(EntitiesBuilder.getSong("song 1"));
-        p2.add(EntitiesBuilder.getSong("song 2"));
-
-        p3.add(EntitiesBuilder.getSong("song 1"));
-        p3.add(EntitiesBuilder.getSong("song 2"));
-        p3.add(EntitiesBuilder.getSong("song 3"));
-
-
-
-        ArrayList<Playlist> arrayList = new ArrayList<>();
-        //HARDCODED FOR TEST
-        arrayList.add(0,p1);
-        arrayList.add(1,p2);
-        arrayList.add(2,p3);
-
-        return arrayList;
     }
 
     public void customDialog(){
@@ -146,6 +116,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     public void onPlaylistClick() {
         Activity activity = this;
         Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
+        Playlist p = playListAdapter.getPlaylistToEdit();
         intent.putExtra(ActivityExtraNames.PLAYLIST_SELECTED,playListAdapter.getPlaylistToEdit());
         Playlist playList = playListAdapter.getPlaylistToEdit();
         startActivity(intent);

@@ -24,19 +24,26 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelablePlaylist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
-import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
+/**
+ * Created by giuli on 27/12/2016.
+ */
 public class SelectSongForPlaylist extends AppCompatActivity {
 
     private RecyclerView rVSelectSong;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongForPlaylistAdapter selectSongForPlaylistAdapter;
-    private DataProvider dataProvider;
-    private ArrayList<Song> playlistSongs;
-    ArrayList<Song> savedSongs = new ArrayList<>();
-    ArrayList<Song> selectedSongs;
-    ArrayList<Song> songForAdapter = provaDiTest();
+    private DataProvider dataProvider = DataProviderBuilder.getDefaultDataProvider(this); //the database
+    private ArrayList<Song> songsFrom;  //rappresent the songs recived from the activity that want to insert new songs
+    ArrayList<Song> savedSongs = new ArrayList<>(); //it is used for save the instance of the activity
+    ArrayList<Song> selectedSongs; //the song that the user has selected
+    ArrayList<Song> songForAdapter; //this is the list of the songs used to give to the adapter constructor
+    private DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
 
+    private static final int SONG_CREATED = 1;
+    private static final String SONG_SELECTING = "song for select";
 
 
     @Override
@@ -45,154 +52,104 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         setContentView(R.layout.activity_select_song_for_playlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //this is the tipical code for initializing a recycleview
         rVSelectSong = (RecyclerView)findViewById(R.id.recicle_song_for_playlist);
         rVSelectSong.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
-        /**
-         * if(savedInstanceState!=null&&savedInstanceState.containsKey(SONG_TO_EDIT)){
-         songToEdit=savedInstanceState.getParcelable(SONG_TO_EDIT);
-         }else{
-         Intent intent=getIntent();
-         try {
-         songToEdit = intent.getParcelableExtra(SONG_TO_EDIT);
-         } catch (Exception ex){
-         ex.printStackTrace();
-         }
-         }
-         timeSlicesAdapter = new TimeSlicesAdapter(this, this,songToEdit);
-         rVTimeSlices.setAdapter(timeSlicesAdapter);
-         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
-         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
-         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
-         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
-         fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
-        Intent returnIntent = new Intent();
-        ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-        returnIntent.putExtra(SONG_TO_EDIT, ps);
-        setResult(RESULT_OK,returnIntent);
-        finish();
-        }
-        });
-         */
 
-        if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){
-            savedSongs = savedInstanceState.getParcelableArrayList("song for select");
-            selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);
-            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+        for (Song s:provaDiTest()) { //save 20 songs in the database for testing
+            db.saveSong(s);
+        }
+        songForAdapter= (ArrayList<Song>) db.getAllSongs();//in the beginning songsForAdapter contains All the songs of the Database
+
+        //saving the instance of the song selected and deselected
+        //for more information https://developer.android.com/guide/components/activities/activity-lifecycle.html
+        if(savedInstanceState !=null && savedInstanceState.containsKey(SONG_TO_ADD)){//save the instance of the activity
+            savedSongs = savedInstanceState.getParcelableArrayList(SONG_SELECTING);//get the parcel of the all songs in the list
+            selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);//get the parcel of the song selected
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);//adapter initialized
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleView
         }
         else{
             Intent intent=getIntent();
             if(intent!=null) {
                 try {
-                    savedSongs = intent.getParcelableArrayListExtra(PLAYLIST);
-                    for (int i = 0;i<songForAdapter.size();i++) {
-                        for (int j = 0;j<savedSongs.size();j++) {
-                            if(savedSongs.get(j).getName().compareTo(songForAdapter.get(i).getName())==0){
-                                songForAdapter.remove(i);
+                    songsFrom = intent.getParcelableArrayListExtra(PLAYLIST);//takes the intent from ModifyPlaylistActivity
+                    //ModifyPlaylistActivity is a class that rapresent the playlist
+                    //it already  contains songs..
+                    //when the user inserts the new songs in the playlist, it must be able to enter only the songs that are not yet within the playlist
+                    //so I take all the songs in the database and I subtract those that pass me from ModifyPlaylistActivity
+                     for (int i = 0;i<songsFrom.size();i++) {
+                        for (int j = 0;j<songForAdapter.size();j++) {
+                            if(songsFrom.get(i).getName().compareTo(songForAdapter.get(j).getName())==0){
+                                songForAdapter.remove(j);
                             }
                         }
                     }
+
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);
-            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);
+
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);//adapter initialized
+            rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleview
         }
 
-
-
-        //riconosce l'istanza e reinizializza l'adapter ai valori precedenti
-
-        /**
-         * fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Song songToEdit = EntitiesBuilder.getSong();
-        Intent intent = new Intent(activity, SongCreator.class);
-        intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
-        startActivityForResult(intent, START_EDIT_NEW_SONG);
-
-        }
-        });
-         */
-        /**
-         * public void onClick(View v) {
-         Intent intent = new Intent(activity, SelectNextSongs.class);
-         intent.putExtra(PLAYLIST, (Parcelable) modifyPlaylistAdapter.getPlaylistToModify());
-         startActivity(intent);
-         }
-         */
-        /**
-         try {
-         Bundle boundle = getIntent().getExtras();//sono tutte le canzoni presenti nella playlist che mi passano
-         playlistSongs = boundle.getParcelableArrayList("");//nome della lista che lui chiama dalla sua classe
-         }
-         catch(NullPointerException e){}
-
-         dataProvider = DataProviderBuilder.getDefaultDataProvider(this);
-         List<Song> songInDb = dataProvider.getSongs();//ritorna tutte le canzoni nel db
-
-         for ( ParcelableSong i : playlistSongs) { //ogni canzone nella playlist
-         if(songInDb.contains(i)) { //se presente nel db...
-         songInDb.remove(i); //la rimuovo perchè non deve essere visualizzata
-         }
-         }
-         //converto songInDb da Lista a ArrayList<ParcelableSong>
-         ArrayList<ParcelableSong> songForView = new ArrayList<>();
-         for (Song i: songInDb
-         ) {
-         songForView.add((ParcelableSong)songInDb.get(songInDb.indexOf(i)));
-         }
-         //songForView ora contiene tutte le canzoni presenti nel database meno quelle che sono gia presenti nella playlist
-
-
-         */
         final Activity activity = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //I return with this button the songs selected by the user to ModifyPlaylistActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //for test
-                Snackbar.make(view, "hai selezionato "+selectSongForPlaylistAdapter.getSelectedSongs().size()+" canzoni", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Intent intent = new Intent(activity,ModifyPlaylistActivity.class);
                 intent.putParcelableArrayListExtra(SONG_TO_ADD,(ArrayList<Song>) selectSongForPlaylistAdapter.getSelectedSongs());
-                startActivityForResult(intent,RESULT_OK);
-                /**
-                 * Intent returnIntent = new Intent();
-                 ParcelableSong ps=(ParcelableSong) timeSlicesAdapter.getSongToEdit();
-                 returnIntent.putExtra(SONG_TO_EDIT, ps);
-                 setResult(RESULT_OK,returnIntent);
-                 finish();
-                 */
+                //the intent now contains the songs selected by the user
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
-        /**
-        ParcelablePlaylist playlistToModify = new ParcelablePlaylist("giulio");
-        playlistToModify.addAll(selectSongForPlaylistAdapter.getSelectedSongs());
-         */
+
+        FloatingActionButton FabtoEditorActivity = (FloatingActionButton) findViewById(R.id.FabtoEditorActivity);
+        //to create a new TimeSlice song with the activity SongCreator
+        FabtoEditorActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            //se voglio modificae una song passo nel extra al posto del entities bulder
+            public  void onClick(View view) {
+                Intent intent = new Intent(activity,SongCreator.class);
+                intent.putExtra(SONG_TO_EDIT,EntitiesBuilder.getTimeSlicesSong());
+                startActivityForResult(intent,SONG_CREATED);
+            }
+        });
     }
 
     protected void onSaveInstanceState(Bundle outState) {
-        //prende le canzoni totali
-        outState.putParcelableArrayList("song for select", (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
-        //prende le istanze delle canzoni già selezionate
+        //it takes all the songs in the adapter
+        outState.putParcelableArrayList(SONG_SELECTING, (ArrayList<Song>) selectSongForPlaylistAdapter.getArraySongs());
+        //it takes only the songs that user selected
         outState.putParcelableArrayList(SONG_TO_ADD,(ArrayList<Song>)selectSongForPlaylistAdapter.getSelectedSongs());
 
         super.onSaveInstanceState(outState);
     }
 
+    @Override //this method takes the TimeSlice song created by SongCreator
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == SONG_CREATED){
+                TimeSlicesSong songCreated = data.getParcelableExtra(SONG_TO_EDIT);
+                dataProvider.saveSong(songCreated);//save in database
+                selectSongForPlaylistAdapter.addSong(songCreated);//add to adapter
+                selectSongForPlaylistAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 
-    //classe di test, al posto di questa ci sarà il database
+    //class fo test
+    //20 songs will save in the database
     public ArrayList<Song> provaDiTest(){
         ArrayList<Song> array = new ArrayList<>();
 
@@ -239,6 +196,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         array.add((Song) s18);
         array.add((Song) s19);
         array.add((Song) s20);
+
 
         return array;
 

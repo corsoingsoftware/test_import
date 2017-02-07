@@ -16,6 +16,8 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 
 /**
@@ -29,6 +31,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     private Playlist playlistToEdit; //eventualmente..
     private OnPlaylistClickListener playlistClickListener;
     private OnStartDragListener dragListener;
+    private DataProvider db;
 
 
     //COSTRUTTORE: RICEVE IN ENTRATA UNA LISTA DI PLAYLIST
@@ -37,6 +40,7 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         this.arrayPlaylist=arrayPlaylist;
         this.playlistClickListener = playlistClickListener;
         this.dragListener = dragListener;
+        db=DataProviderBuilder.getDefaultDataProvider(context);
     }
     //costruttore per salvare le istanzepublic
     @Override
@@ -108,8 +112,9 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrayPlaylist.remove(position);
-                notifyItemRemoved(position);
+                db.deletePlaylist(arrayPlaylist.remove(position));
+               // arrayPlaylist.remove(position);
+               // notifyItemRemoved(position);
                 dialog.cancel();
             }
         });

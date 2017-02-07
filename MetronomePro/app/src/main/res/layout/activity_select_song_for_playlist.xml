@@ -24,11 +24,19 @@
     <include layout="@layout/content_select_song_for_playlist" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/FabtoEditorActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_add" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_add"
+        android:src="@mipmap/ic_save"
         app:layout_anchorGravity="center_vertical|center_horizontal"
         android:layout_gravity="bottom|center_horizontal" />
 

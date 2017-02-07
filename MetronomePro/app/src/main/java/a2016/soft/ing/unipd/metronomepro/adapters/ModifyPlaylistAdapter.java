@@ -17,6 +17,8 @@ import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -37,13 +39,13 @@ import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
  * https://developer.android.com/training/material/lists-cards.html
  */
 
-
 public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Playlist playlistToModify;
     private final OnStartDragListener dragListener;
     private Context context;
     private Song songSelected;
+    private DataProvider database;
 
     /**
      * default constructor
@@ -52,8 +54,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         this.playlistToModify = playlistToModify;
         this.dragListener = dragListener;
         this.context = c;
+        database = DataProviderBuilder.getDefaultDataProvider(c);
     }
-
 
     /**
      * add a song to the playlist
@@ -62,6 +64,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void addSong(Song song) {
         playlistToModify.add(song);
         notifyItemInserted(playlistToModify.size()-1);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
     }
 
     /**
@@ -71,6 +75,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void addAllSongs(ArrayList<Song> lista){
         playlistToModify.addAll(lista);
+        notifyDataSetChanged();
+        database.savePlaylist(playlistToModify);
        // notifyItemInserted(playlistToModify.size()-1);
     }
 
@@ -93,6 +99,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void delete(Song song) {
         playlistToModify.remove(song);
+        database.savePlaylist(playlistToModify);
+        playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**
@@ -113,6 +121,9 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(playlistToModify, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
+       // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**
@@ -124,8 +135,17 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
     public void onItemSwiped(int position) {
         playlistToModify.remove(position);
         notifyItemRemoved(position);
+        database.deletePlaylist(playlistToModify);
+        database.savePlaylist(playlistToModify);
+       // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
+    /**
+     * oggetto che contiene proprita grafiche creato in oncreate distrutto in onrecycled nel onbind vengono risettate le scritte
+     * @param parent
+     * @param viewType
+     * @return
+     */
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
