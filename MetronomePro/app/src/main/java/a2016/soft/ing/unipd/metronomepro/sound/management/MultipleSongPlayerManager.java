@@ -19,21 +19,39 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.SongPlayerCallback {
 
-    //Players for midiSongs and timeSlicesSongs respectively. They are unique in the class.
+    /**
+     * Players for midiSongs and timeSlicesSongs respectively. They are unique in the class.
+     */
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
 
-    //Queue that contains songs to be loaded.
+    /**
+     * Queue that contains songs to be loaded.
+     */
     private LinkedBlockingQueue<Song> songsToLoadQueue;
 
-    //Contains the index of the next Song to be played.
+    /**
+     * Contains the index of the next Song to be played.
+     */
     private int indexNextToPlay;
 
-    //Contains the index of the next Song to be loaded.
+    /**
+     * Contains the index of the next Song to be loaded.
+     */
     private int indexNextToLoad;
 
-    //Array that contains songs to be played.
+    /**
+     * Array that contains songs to be played.
+     */
     private Song[] arraySongsToPlay;
+
+    /**
+     * Constructor of the class. It initializes songPlayers passing the class itself which implements SongPlayerCallback
+     * interface defined in SongPlayer.
+     * @see SongPlayer's SongPlayerCallback interface.
+     * Furthermore a MidiSongPlayer needs a context for his initialization.
+     * @param contextForMidiPlayer Context for MidiSongPlayer.
+     */
 
     public MultipleSongPlayerManager(Context contextForMidiPlayer) {
 
@@ -43,11 +61,20 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     /**
      * Attention! This is a logic loading, different from loading in songPlayers' buffers.
-     * See AudioTrackSongPlayer and MidiSongPlayer classes for details.
+     * @see AudioTrackSongPlayer and
+     * @see MidiSongPlayer classes for details.
      * @param entrySong Song to load logically.
      */
 
     public void logicLoad(Song entrySong){
+
+        /**
+         * This instruction permits to obtain the appropriate SongPlayer and load logically entrySong in it.
+         * This is possible thanks to Song interface and its implementation in ParcelableMidiSong and ParcelableTimeSlicesSong.
+         * @see Song
+         * @see a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong
+         * @see a2016.soft.ing.unipd.metronomepro.entities.ParcelableMidiSong
+         */
 
         entrySong.getSongPlayer(this).load(entrySong);
     }
@@ -68,6 +95,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             songsToLoadQueue.add(songToAdd);
         }
 
+        /**
+         * At the beginning the two songPlayers are free, it's reasonable to call dequeueManagement() and
+         * checkQueueEmpty() to occupy them. After this, during the loading and reproduction of the remaining songs,
+         * a SongPlayer will be always free and ready for use thanks to class' logic of execution.
+         */
+
         dequeueManagement();
         arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
         checkQueueEmpty();
@@ -82,6 +115,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
         Song currentSong = songsToLoadQueue.peek();
+
         Class currentSongClass = currentSong.getClass();
         SongPlayer currentSongSongPlayer = currentSong.getSongPlayer(this);
 
@@ -90,6 +124,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
             listSongsSameType.add(currentSong);
             currentSong = songsToLoadQueue.peek();
         }
+
+        /**
+         * Update indexNextLoad and load the songs of same type in the SongPlayer's buffer.
+         */
 
         Song[] arraySongsSameType = new Song[listSongsSameType.size()];
         indexNextToLoad = indexNextToLoad + listSongsSameType.size();

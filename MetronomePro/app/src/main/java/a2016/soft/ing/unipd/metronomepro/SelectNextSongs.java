@@ -47,7 +47,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
-        spsc = new SongPlayerServiceCaller(this, this);
+        spsc = new SongPlayerServiceCaller(this,this);
 
 
 
