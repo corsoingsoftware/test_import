@@ -177,9 +177,6 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
 
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
                     playlist = modifyPlaylistAdapter.getPlaylistToModify();
-                   // modifyPlaylistAdapter.notifyDataSetChanged();
-                  //  songsToAdd=data.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
-                   // playlist.addAll(songsToAdd);
                     database.savePlaylist(playlist);
                     break;
             }
