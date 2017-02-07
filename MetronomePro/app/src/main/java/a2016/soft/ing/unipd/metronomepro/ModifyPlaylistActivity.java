@@ -174,8 +174,12 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             switch (requestCode){
                 case START_ADD_SONGS:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
-                    playlist.addAll(songsToAdd);
+                    playlist = modifyPlaylistAdapter.getPlaylistToModify();
+                   // modifyPlaylistAdapter.notifyDataSetChanged();
+                  //  songsToAdd=data.<Song>getParcelableArrayListExtra(SONG_TO_ADD);
+                   // playlist.addAll(songsToAdd);
                     database.savePlaylist(playlist);
                     break;
             }
