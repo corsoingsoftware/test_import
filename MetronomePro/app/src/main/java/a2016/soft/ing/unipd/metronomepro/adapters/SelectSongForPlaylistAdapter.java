@@ -1,6 +1,7 @@
 package a2016.soft.ing.unipd.metronomepro.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,9 +19,12 @@ import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.SelectSongForPlaylist;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperViewHolder;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
@@ -31,22 +36,28 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
  * playlist that is recived from an other activity.
  * This adapter allows to select and deselect the songs that will be included in the playlist
  */
-public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder>  {
+public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private ArrayList<Song> arraySongs; //it rappresent the songs that the user could select
     private ArrayList<Song> selectedSongs=new ArrayList<>(); //it rappresent the songs that the users want to insert into the playlist
     private Context context; // the context of the activity
+    private DataProvider db;
+    private OnStartDragListener dragListener;//to permise to delate a song
 
     //base constructor
-    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs){
+    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs,OnStartDragListener dragListener){
         this.context = context;
         this.arraySongs = arraySongs;
+        db=DataProviderBuilder.getDefaultDataProvider(context);
+        this.dragListener = dragListener;
     }
     //constructor that allows to save the instance of the songs selected
-    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs,ArrayList<Song> selectedSongs){
+    public SelectSongForPlaylistAdapter(Context context, ArrayList<Song> arraySongs,ArrayList<Song> selectedSongs,OnStartDragListener dragListener){
         this.context = context;
         this.arraySongs = arraySongs;
         this.selectedSongs = selectedSongs;
+        db=DataProviderBuilder.getDefaultDataProvider(context);
+        this.dragListener = dragListener;
     }
 
     /**
@@ -139,6 +150,41 @@ public class SelectSongForPlaylistAdapter extends RecyclerView.Adapter<a2016.sof
         //so they will set in the right settings
         holder.itemView.setOnClickListener(null);
     }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+
+    }
+
+    /**
+     * to delate a song
+     * if you delate a song in this layout it will remove from database, and so in the application
+     * @param position the position of swiped element
+     */
+    @Override
+    public void onItemSwiped(final int position) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.delate_dialog);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);//not delate
+        Button submit = (Button) dialog.findViewById(R.id.but_submit_p);//delate
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+                notifyItemChanged(position);
+            }
+        });
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteSong(arraySongs.remove(position));
+                notifyDataSetChanged();
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
     /**
      *A ViewHolder describes an item view and metadata about its place within the RecyclerView.
      *for more information: https://developer.android.com/reference/android/support/v7/widget/RecyclerView.ViewHolder.html

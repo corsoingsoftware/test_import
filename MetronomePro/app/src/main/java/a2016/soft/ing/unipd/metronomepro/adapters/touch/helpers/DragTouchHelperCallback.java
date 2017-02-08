@@ -56,7 +56,7 @@ public class DragTouchHelperCallback extends ItemTouchHelper.Callback
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
-        // Notify the adapter of the dismissal
+      //   Notify the adapter of the dismissal
         mAdapter.onItemSwiped(viewHolder.getAdapterPosition());
     }
 

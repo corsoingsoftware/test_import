@@ -11,4 +11,6 @@ public interface ActivityExtraNames {
     String PLAYLIST="playlist";
     String SONG_TO_ADD ="song_to_add";
     String PLAYLIST_SELECTED = "playlist_selected";
+    String PLAYLIST_FOR_SELECT = "playlist_for_select";
+    String SELECTED_SONGS_KEY = "song for select";
 }

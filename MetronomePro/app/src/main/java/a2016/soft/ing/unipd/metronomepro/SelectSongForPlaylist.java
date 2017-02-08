@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongForPlaylistAdapter;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.DragTouchHelperCallback;
+import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.OnStartDragListener;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
@@ -28,7 +31,7 @@ import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.*;
  * SelectSongForPlaylist are built for insert the songs that are saved into the database, into a
  * playlist that is recived from an other activity.
  */
-public class SelectSongForPlaylist extends AppCompatActivity {
+public class SelectSongForPlaylist extends AppCompatActivity implements OnStartDragListener {
 
     private RecyclerView rVSelectSong;
     private RecyclerView.LayoutManager rVLayoutManager;
@@ -38,9 +41,9 @@ public class SelectSongForPlaylist extends AppCompatActivity {
     private ArrayList<Song> selectedSongs; //the song that the user has selected
     private ArrayList<Song> songForAdapter; //this is the list of the songs used to give to the adapter constructor
     private DataProvider db = DataProviderBuilder.getDefaultDataProvider(this);
+    private ItemTouchHelper itemTouchHelper;
 
     private static final int SONG_CREATED = 1;
-    private static final String SELECTED_SONGS_KEY = "song for select";
 
 
     @Override
@@ -57,9 +60,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         rVLayoutManager = new LinearLayoutManager(this);
         rVSelectSong.setLayoutManager(rVLayoutManager);
 
-        for (Song currentSong:provaDiTest()) { //save 20 songs in the database for testing
-            db.saveSong(currentSong);
-        }
+
         songForAdapter= (ArrayList<Song>) db.getAllSongs();//in the beginning songsForAdapter contains All the songs of the Database
 
         //restoring the instance of the song selected and deselected
@@ -67,7 +68,7 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         if(savedInstanceState !=null && (savedInstanceState.containsKey(SONG_TO_ADD)||savedInstanceState.containsKey(SELECTED_SONGS_KEY))){//save the instance of the activity
             savedSongs = savedInstanceState.getParcelableArrayList(SELECTED_SONGS_KEY);//get the parcel of the all songs in the list
             selectedSongs = savedInstanceState.getParcelableArrayList(SONG_TO_ADD);//get the parcel of the song selected
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs);//adapter initialized
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,savedSongs,selectedSongs,this);//adapter initialized
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleView
         }
         else{
@@ -94,8 +95,11 @@ public class SelectSongForPlaylist extends AppCompatActivity {
             }
 
 
-            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter);//adapter initialized
+            selectSongForPlaylistAdapter = new SelectSongForPlaylistAdapter(this,songForAdapter,this);//adapter initialized
             rVSelectSong.setAdapter(selectSongForPlaylistAdapter);//and passed to the recycleview
+            DragTouchHelperCallback myItemTouchHelper = new DragTouchHelperCallback(selectSongForPlaylistAdapter);
+            itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
+            itemTouchHelper.attachToRecyclerView(rVSelectSong);
         }
 
         FloatingActionButton passSelectedSongs = (FloatingActionButton) findViewById(R.id.fab);
@@ -153,60 +157,11 @@ public class SelectSongForPlaylist extends AppCompatActivity {
         }
     }
 
-    //class fo test
-    //20 songs will save in the database
-    public ArrayList<Song> provaDiTest(){
-        ArrayList<Song> array = new ArrayList<>();
 
-        Song s0 = EntitiesBuilder.getSong("song 0");
-        Song s1 = EntitiesBuilder.getSong("song 1");
-        Song s2 = EntitiesBuilder.getSong("song 2");
-        Song s3 = EntitiesBuilder.getSong("song 3");
-        Song s4 = EntitiesBuilder.getSong("song 4");
-        Song s5 = EntitiesBuilder.getSong("song 5");
-        Song s6 = EntitiesBuilder.getSong("song 6");
-        Song s7 = EntitiesBuilder.getSong("song 7");
-        Song s8 = EntitiesBuilder.getSong("song 8");
-        Song s9 = EntitiesBuilder.getSong("song 9");
-        Song s10 = EntitiesBuilder.getSong("song 10");
-        Song s11 = EntitiesBuilder.getSong("song 11");
-        Song s12 = EntitiesBuilder.getSong("song 12");
-        Song s13 = EntitiesBuilder.getSong("song 13");
-        Song s14 = EntitiesBuilder.getSong("song 14");
-        Song s15 = EntitiesBuilder.getSong("song 15");
-        Song s16 = EntitiesBuilder.getSong("song 16");
-        Song s17 = EntitiesBuilder.getSong("song 17");
-        Song s18 = EntitiesBuilder.getSong("song 18");
-        Song s19 = EntitiesBuilder.getSong("song 19");
-        Song s20 = EntitiesBuilder.getSong("song 20");
-
-        array.add((Song) s0);
-        array.add((Song) s1);
-        array.add((Song) s2);
-        array.add((Song) s3);
-        array.add((Song) s4);
-        array.add((Song) s5);
-        array.add((Song) s6);
-        array.add((Song) s7);
-        array.add((Song) s8);
-        array.add((Song) s9);
-        array.add((Song) s10);
-        array.add((Song) s11);
-        array.add((Song) s12);
-        array.add((Song) s13);
-        array.add((Song) s14);
-        array.add((Song) s15);
-        array.add((Song) s16);
-        array.add((Song) s17);
-        array.add((Song) s18);
-        array.add((Song) s19);
-        array.add((Song) s20);
-
-
-        return array;
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
 
     }
-
 }
 
 

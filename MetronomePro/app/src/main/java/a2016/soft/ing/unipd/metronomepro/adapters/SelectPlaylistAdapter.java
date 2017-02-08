@@ -24,13 +24,17 @@ import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
  * Created by giulio pettenuzzo on 13/12/2016.
  */
 
+/**
+ *This class allows to manage playlists
+ */
+
 public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private Context context;
-    private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();
-    private Playlist playlistToEdit; //eventualmente..
+    private ArrayList<Playlist> arrayPlaylist= new ArrayList<>();//this is the list of playlist created
+    private Playlist playlistToEdit;//the playlist the user want to edit
     private OnPlaylistClickListener playlistClickListener;
-    private OnStartDragListener dragListener;
+    private OnStartDragListener dragListener;//to permise to delate a playlist
     private DataProvider db;
 
 
@@ -47,25 +51,44 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
+
+    /**
+     * method to add a new playlist
+     * @param playlist
+     */
     public void addPlaylist(Playlist playlist){
         arrayPlaylist.add(arrayPlaylist.size(),playlist);
     }
 
+    /**
+     * to remuve a playlist
+     * @param position
+     */
     public void remuvePlaylist(int position){
         arrayPlaylist.remove(position);
     }
+
+    /**
+     * to get the playlist the user select
+     * @return
+     */
     public Playlist getPlaylistToEdit(){
         return playlistToEdit;
     }
+
+    /**
+     * to get the whole playlist
+     * @return
+     */
     public ArrayList<Playlist> getArrayPlaylist(){
         return arrayPlaylist;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //creo una View..
+        //creating a view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_viewer_item_layout,parent,false);
-        //e la passo al ViewHolder
+        //and pass it to view holder
         ViewHolder vh = new ViewHolder(v,(TextView)v.findViewById(R.id.textViewItem));
         return vh;
     }
@@ -84,11 +107,12 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
         });
     }
 
+    /**
+     * @return the total number of playlist
+     */
     @Override
     public int getItemCount() {
         return arrayPlaylist.size();
-
-
     }
 
 
@@ -96,12 +120,16 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
     public void onItemMove(int fromPosition, int toPosition) {
     }
 
+    /**
+     * when a item is swipped: a dialog will be open and the user can decide if delate it or not
+     * @param position the position of swiped element
+     */
     @Override
     public void onItemSwiped(final int position) {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.delate_dialog);
-        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);
-        Button submit = (Button) dialog.findViewById(R.id.but_submit_p);
+        Button cancel = (Button) dialog.findViewById(R.id.but_cancel_p);//not delate
+        Button submit = (Button) dialog.findViewById(R.id.but_submit_p);//delate
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,13 +141,11 @@ public class SelectPlaylistAdapter extends RecyclerView.Adapter<SelectPlaylistAd
             @Override
             public void onClick(View v) {
                 db.deletePlaylist(arrayPlaylist.remove(position));
-               // arrayPlaylist.remove(position);
-               // notifyItemRemoved(position);
+                notifyDataSetChanged();
                 dialog.cancel();
             }
         });
         dialog.show();
-
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements
