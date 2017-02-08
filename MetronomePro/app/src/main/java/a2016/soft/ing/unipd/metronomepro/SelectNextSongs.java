@@ -10,6 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.group3.sync.Manager;
+import org.group3.sync.Peer;
+import org.group3.sync.ServerActionListener;
+import org.group3.sync.ServerInfo;
+import org.group3.sync.exception.ErrorCode;
+
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
@@ -25,9 +31,11 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCalle
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYABLE_PLAYLIST;
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYLIST;
+import static java.lang.System.out;
 
-public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
+public class SelectNextSongs extends AppCompatActivity implements ServerActionListener, SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
+    Manager connectionManager;
     private final static int MAX_SELECTABLE = 3;
     SongPlayerServiceCaller spsc;
     Playlist p;
@@ -174,6 +182,37 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
             spsc.load((Song) playlist.get(i).getInnerSong());
         }
+    }
+
+
+    @Override
+    public void onClientConnected(Peer peer) {
+        out.println("onClientConnected");
+    }
+
+    @Override
+    public void onClientSynchronized(Peer peer) {
+        out.println("onClientSynchronized");
+    }
+
+    @Override
+    public void onClientDisconnected(Peer peer) {
+        out.println("onClientDisconnected");
+    }
+
+    @Override
+    public void onServerStarted(ServerInfo serverInfo) {
+        out.println("onServerStarted");
+    }
+
+    @Override
+    public void onServerStopped() {
+        out.println("onServerStopped");
+    }
+
+    @Override
+    public void onError(ErrorCode error) {
+        out.println("onError");
     }
 
 }
