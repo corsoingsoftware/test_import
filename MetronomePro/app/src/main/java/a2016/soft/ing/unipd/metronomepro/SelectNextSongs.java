@@ -266,12 +266,12 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
 
     @Override
     public void onClientConnected(Peer peer) {
-        Toast.makeText(this,"Client conn: "+peer.getName(),Toast.LENGTH_SHORT);
+       // Toast.makeText(this,"Client conn: "+peer.getName(),Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onClientSynchronized(Peer peer) {
-        Toast.makeText(this,"Client sync: "+peer.getName(),Toast.LENGTH_SHORT);
+        //Toast.makeText(this,"Client sync: "+peer.getName(),Toast.LENGTH_SHORT);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -282,22 +282,22 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
 
     @Override
     public void onClientDisconnected(Peer peer) {
-        Toast.makeText(this,"Client disc: "+peer.getName(),Toast.LENGTH_SHORT);
+        //Toast.makeText(this,"Client disc: "+peer.getName(),Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onServerStarted(ServerInfo serverInfo) {
-        Toast.makeText(this,"server started",Toast.LENGTH_SHORT);
+        //Toast.makeText(this,"server started",Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onServerStopped() {
-        Toast.makeText(this,"ServerStopped",Toast.LENGTH_SHORT);
+        //Toast.makeText(this,"ServerStopped",Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onError(ErrorCode error) {
-        Toast.makeText(this,"error "+error,Toast.LENGTH_SHORT);
+        //Toast.makeText(this,"error "+error,Toast.LENGTH_SHORT);
     }
 
 }
