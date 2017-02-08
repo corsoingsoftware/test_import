@@ -3,6 +3,7 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -302,7 +303,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public boolean modifySong(Song oldSong, Song newSong) {
         if (newSong.getName().length() <= 50) {
             SQLiteDatabase database = getWritableDatabase();
-            String oldSongName=DatabaseUtils.sqlEscapeString(oldSong.getName());
+            String oldSongName= DatabaseUtils.sqlEscapeString(oldSong.getName());
             String newSongName=DatabaseUtils.sqlEscapeString(newSong.getName());
             if (oldSong.getName().compareTo(newSong.getName()) != 0) {
                 String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = "
@@ -310,7 +311,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                         + oldSongName + ";";
                 try {
                     database.execSQL(queryUpdateName);
-                    //oldSongName = newSong.getName();
+                    oldSongName = newSong.getName();
                 } catch (SQLException e) {
                     Log.e(TAG, e.toString());
                     database.close();
