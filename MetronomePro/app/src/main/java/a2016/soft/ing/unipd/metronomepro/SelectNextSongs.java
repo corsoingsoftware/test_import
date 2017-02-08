@@ -47,7 +47,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVNextSongs.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
-        spsc = new SongPlayerServiceCaller(this,this);
+        spsc = new SongPlayerServiceCaller(this, this);
 
 
 
@@ -107,16 +107,11 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     s1.setName("song1");
                     s2.setName("song2");
                     s3.setName("song3");
-                    MidiSong midiS1 = (MidiSong)EntitiesBuilder.getMidiSong();
-                    midiS1.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                            +"/A.mid");//+ "/Tick.mid");
-                    midiS1.setName("midiSong1");
-                    MidiSong midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
-                    midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                            + "/Tick.mid");
-                    midiS2.setName("midiSong2");
-                    p.add(midiS1);
-                    p.add(midiS2);
+                    MidiSong midiS = (MidiSong)EntitiesBuilder.getMidiSong();
+                    midiS.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                            + "/Movie_Themes_-_20th_Century_Fox.mid");
+                    midiS.setName("midiSong");
+                    p.add(midiS);
                     p.add(s1);
                     p.add(s2);
                     p.add(s3);

@@ -7,13 +7,9 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableMidiSong;
-import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 /**
@@ -23,43 +19,51 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListener {
 
     public final String TAG = "MidiSongPlayer";
-    private MediaPlayer actualPlayer;
+    private final int UNPOINTED = -1;
+    private MediaPlayer player;
+    private int playerState;
+    private final int ON_PLAY = 0, ON_PAUSE = 1, ON_STOP = 2;
     private SongPlayerCallback callback;
-    private List<String> songList;
-    private Iterator<String> currentSong;
+    private MidiSong[] playlist;
+    private int currentSong;
     private Context context;
-    private HashMap <String, MediaPlayer> playerList;
-    private final Iterator NULL_POINTER = null;
-    private final MediaPlayer NOT_INITIALIZED = null;
 
     MidiSongPlayer(Context c, SongPlayerCallback callback){
-        currentSong = NULL_POINTER;
-        actualPlayer = NOT_INITIALIZED;
+        playerState = ON_STOP;
+        currentSong = UNPOINTED;
         this.callback = callback;
         this.context = c;
-        playerList = new HashMap<>();
+        player = new MediaPlayer();
+        player.setOnCompletionListener(this);
     }
 
     @Override
     public void play() {
-        actualPlayer.start();
+        if(playerState != ON_PLAY) {
+            playerState = ON_PLAY;
+            player.start();
+        }
     }
 
     @Override
     public void pause() {
-        actualPlayer.pause();
+        if(playerState == ON_PLAY) {
+            playerState = ON_PAUSE;
+            player.pause();
+        }
     }
 
     @Override
     public void stop() {
-        actualPlayer.stop();
+        if(playerState != ON_STOP) {
+            playerState = ON_STOP;
+            player.stop();
+        }
     }
 
     @Override
     public void load(Song song) {
-        String audioPath = ((MidiSong) song).getPath();
-        MediaPlayer playerToAdd = getMediaPlayer(audioPath);
-        if(playerToAdd != null) playerList.put(song.getName(), playerToAdd);
+        System.out.print("LOAD");
     }
 
     /**
@@ -74,45 +78,64 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public PlayState getState() {
-        return PlayState.PLAYSTATE_UNKNOW;
+        PlayState ps;
+        switch(playerState) {
+            case ON_PLAY :  ps = PlayState.PLAYSTATE_PLAYING;
+            case ON_PAUSE : ps = PlayState.PLAYSTATE_PAUSE;
+            case ON_STOP : ps = PlayState.PLAYSTATE_STOP;
+            default: ps = null;
+        }
+        return ps;
     }
+
 
     @Override
     public void write(Song[] songs) {
-        for (Song song : songs) songList.add(song.getName());
-        currentSong = songList.iterator();
-        actualPlayer = playerList.get(currentSong.next());
+
+
+        currentSong = 0;
+        playlist = new ParcelableMidiSong[songs.length];
+        for(int i = 0; i < songs.length; i++)
+            playlist[i] = (ParcelableMidiSong) songs[i];
+        try {
+            Uri firstSongPath = Uri.parse(playlist[currentSong].getPath());
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            player.setDataSource(context, firstSongPath);
+            player.prepare();
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.d(TAG,"Midi not found or invalid path");
+        }
+
+        /*try {
+            player.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(currentSong.hasNext()){
-            actualPlayer = playerList.get(currentSong.next());
-            actualPlayer.start();
-        } else {
-            songList = null;
-            currentSong = null;
-            actualPlayer = null;
+        currentSong++;
+        if(currentSong < playlist.length){
+            try {
+                player.setDataSource(playlist[currentSong].getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG,"Midi not found or invalid path");
+            }
+            try {
+                player.prepare();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            player.start();
+        }
+        else{
+            currentSong = UNPOINTED;
+            playlist = null;
             callback.playEnded(this);
         }
-    }
-
-    /**
-     * Federico: il player va creato ogni volta che si cambia la traccia!
-     */
-    private MediaPlayer getMediaPlayer(String audioPath) {
-        MediaPlayer newMediaPlayer = new MediaPlayer();
-        newMediaPlayer.setOnCompletionListener(this);
-        newMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        Uri firstSongPath = Uri.parse(audioPath);
-        try {
-            newMediaPlayer.setDataSource(context, firstSongPath);
-            newMediaPlayer.prepare();
-        }catch(Exception e){
-            e.printStackTrace();
-            Log.d(TAG,"Midi not found or invalid path");
-            return null;
-        }
-        return newMediaPlayer;
     }
 }

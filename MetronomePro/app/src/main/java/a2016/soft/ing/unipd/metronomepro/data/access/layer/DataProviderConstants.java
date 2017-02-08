@@ -7,7 +7,7 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 
 public interface DataProviderConstants {
 
-    public static final String DB_NAME = "MetronomeProDB";
+    public static final String DBNAME = "MetronomeProDB";
     public static final int DB_VERSION = 1;
 
     public static final String TBL_SONG = "Song";

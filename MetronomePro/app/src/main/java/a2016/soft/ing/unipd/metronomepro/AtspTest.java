@@ -7,61 +7,64 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 
 /**
- * This class is for testing android functions not testable by unit testing.
- * It creates a new TimeSlicesSong and tests if AudioTrackSongPlayer can reproduce it.
+ * This class is for testing android functions not testable by unit testing
  */
-
-
-public class AtspTest extends AppCompatActivity implements SongPlayer.SongPlayerCallback {
-
-    private int durationForTest = 30;
-    private int bpmForTest = 100;
-    private AudioTrackSongPlayer audioTrackTest;
+public class AtspTest extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atsp_test);
-        Toolbar toolbarActivityTest = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbarActivityTest);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //Commented by Federico to compile
+//
+//        final SongPlayer atsp = new AudioTrackSongPlayer((AudioTrackSongPlayer.AudioTrackSongPlayerCallback) this);
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//
+//                atsp.stop();
+//            }
+//        });
+//
+//        TimeSlice t1, t2, t3;
+//
+//        TimeSlicesSong s = new ParcelableTimeSlicesSong();
+//        t1 = new TimeSlice();
+//        t1.setBpm(180);
+//        t1.setDurationInBeats(10);
+//        s.add(t1);
+//        t2 = new TimeSlice();
+//        t2.setBpm(300);
+//        t2.setDurationInBeats(10);
+//        s.add(t2);
+//        t3 = new TimeSlice();
+//        t3.setBpm(30);
+//        t3.setDurationInBeats(10);
+//        s.add(t3);
+//
+//
+//        atsp.load(s);
+//
+//        Song[] arrayS = new Song[1];
+//        arrayS[0] = s;
 
-        /**
-         * Initialize audioTrackTest and create a TimeSlicesSong object for testing.
-         */
 
-        audioTrackTest = new AudioTrackSongPlayer(this);
-        TimeSlicesSong songTest = EntitiesBuilder.getTimeSlicesSong();
-        TimeSlice timeSliceTest = new TimeSlice();
-        timeSliceTest.setDurationInBeats(durationForTest);
-        timeSliceTest.setBpm(bpmForTest);
-        songTest.add(timeSliceTest);
-        Song[] arraySongTest = new Song[1];
-        arraySongTest[0] = songTest;
+        //((AudioTrackSongPlayer)atsp).write(arrayS);
 
-        /**
-         * I logically load the song, write it in the audioTrackTest's buffer and I play it.
-         */
-
-        audioTrackTest.load(songTest);
-        audioTrackTest.write(arraySongTest);
-        audioTrackTest.play();
-    }
-
-    @Override
-    public void playEnded(SongPlayer origin) {
-
-        /**
-         * Useless for this test.
-         */
+        //atsp.play();
     }
 }

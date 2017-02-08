@@ -30,31 +30,12 @@ import a2016.soft.ing.unipd.metronomepro.utilities.Constants;
 
 /**
  * Created by Federico Favotto on 12/12/2016.
- * This class manage the interaction with user on a timeslice song.
- * It adapts the song itself to a view defined.
- * Every item has a particularly color and a width
- * the width depends of the length of the timeslice, for example a 1 seconds timeslice is weighter than a 0.5 seconds timeslice
- * The color it's calculated from the difficult of timeslice, i mean, if the timeslice has an higher BPM it's more difficult.
- *
  */
 
 public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    /**
-     * It's used to approximate the doubles
-     */
-    private static final double AWAY_FROM_ZERO = 0.5;
-    /**
-     * Default color white
-     */
+
     private static final int DEF_COLOR = 0xFFFFFFFF;
-    /**
-     * Transparent color, used in select timeslice
-     */
-    private static final int DEF_NO_SELECTED_COLOR = 0x00000000;
-    /**
-     * It defines when no timeslice is selected!
-     */
-    private static final int NO_POSITION_SELECTED = -1;
+    private static final int NO_POSITION_SELECTED=-1;
     /**
      * It must be final cause can't change
      */
@@ -119,7 +100,6 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     /**
      * The default constructor. It initializes the adapter with a default song
-     *
      * @param context
      * @param dragListener
      */
@@ -130,43 +110,37 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     /**
      * The complete constructor
-     *
-     * @param context context of application (android likes it)
-     * @param dragListener the listener when an item drags
-     * @param song The song to edit!
+     * @param context
+     * @param dragListener
+     * @param song
      */
     public TimeSlicesAdapter(Context context, OnStartDragListener dragListener, Song song) {
         this.dragListener = dragListener;
         this.context = context;
         this.songToEdit = (TimeSlicesSong) song;
         this.actualRevision = 0;
-        timeSliceSelected = NO_POSITION_SELECTED;
+        timeSliceSelected=NO_POSITION_SELECTED;
         this.onTimeSliceSelectedListeners = new ArrayList<>();
-        //Compiled dinamically the array or colors
         Resources res = context.getResources();
         TypedArray colors = res.obtainTypedArray(R.array.bPMColors);
+        int color = colors.getColor(0, 0);
         timeSliceBackgroundColors = new int[colors.length()];
         for (int i = 0; i < timeSliceBackgroundColors.length; i++) {
             timeSliceBackgroundColors[i] = colors.getInt(i, DEF_COLOR);
         }
-        //Refresh all sizes
         calculateAllWidthsAndColors();
     }
 
-    /**
-     * This method compile the width and the color minimum and maximum, but it not refresh the view (lazy initialization)
-     */
     private void calculateAllWidthsAndColors() {
         //It must be called one time, to not decrease performance too much
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        itemsHeigth = (int) (context.getResources().getDimension(R.dimen.item_ts_height) * displayMetrics.density + AWAY_FROM_ZERO);
-        minWidth = (int) (context.getResources().getDimension(R.dimen.min_item_ts_width) * displayMetrics.density + AWAY_FROM_ZERO);
-        maxWidth = (int) (context.getResources().getDimension(R.dimen.max_item_ts_width) * displayMetrics.density + AWAY_FROM_ZERO);
+        itemsHeigth = (int) (150.0 * displayMetrics.density + 0.5);
+        minWidth = (int) (context.getResources().getDimension(R.dimen.min_item_ts_width) * displayMetrics.density + 0.5);
+        maxWidth = (int) (context.getResources().getDimension(R.dimen.max_item_ts_width) * displayMetrics.density + 0.5);
         minBPM = Integer.MAX_VALUE;
         maxBPM = Integer.MIN_VALUE;
         minLengthInSecs = Double.MAX_VALUE;
         maxLengthInSecs = Double.MIN_VALUE;
-        //increments the revision, so the object ask to recalculate size and color of itself
         actualRevision++;
         songToEditState = new ArrayList<>(songToEdit.size());
         for (TimeSlice ts :
@@ -182,15 +156,9 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         }
     }
 
-    /**
-     * Called when a timeslice is selected!
-     * @param ts the timeSliceSelected
-     * @param position the position
-     */
     private void onTimeSliceSelected(TimeSlice ts, int position) {
         int oldPosition = timeSliceSelected;
         timeSliceSelected = position;
-        //notify only edits to list!
         notifyItemChanged(oldPosition);
         notifyItemChanged(position);
         Iterator<OnTimeSliceSelectedListener> iterator = onTimeSliceSelectedListeners.iterator();
@@ -208,28 +176,22 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         }
     }
 
-    /**
-     * This method sets the timeslice as selected, the timeslice must be present on the song!
-     * @param timeSlice
-     */
     public void setSelectedItem(TimeSlice timeSlice) {
-        onTimeSliceSelected(timeSlice, songToEdit.indexOf(timeSlice));
+
     }
 
     /**
      * Return the selected element if something is selected, null otherwise
-     *
      * @return
      */
     public TimeSlice getTimeSliceSelected() {
-        if (timeSliceSelected >= 0 && timeSliceSelected < songToEdit.size())
+        if(timeSliceSelected>=0&&timeSliceSelected<songToEdit.size())
             return songToEdit.get(timeSliceSelected);
         return null;
     }
 
     /**
      * It returns the position of selected element, if nothing is selected it returns NO_POSITION_SELECTED
-     *
      * @return
      */
     public int getTimeSliceSelectedPosition() {
@@ -242,22 +204,16 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     /**
      * Add the timeslice in the song at specific position
-     *
      * @param position
      * @param newTS
      */
     public void addTimeSlice(int position, TimeSlice newTS) {
-        songToEdit.add(position, newTS);
+        songToEdit.add(position,newTS);
         calculateAllWidthsAndColors();
-        //I must notify all dataset cause new timeslice can redefine the max or min bpm or width!
         notifyDataSetChanged();
         //notifyItemInserted(position);
     }
 
-    /**
-     * If i will not unregister from events, they keep binding on wrong element when i recycle the view for another element
-     * @param holder
-     */
     @Override
     public void onViewRecycled(ViewHolder holder) {
         //Unregister from listeners to recycle view
@@ -266,11 +222,6 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         super.onViewRecycled(holder);
     }
 
-    /**
-     * Called when user drags an element!
-     * @param fromPosition the starting position
-     * @param toPosition the final position
-     */
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(songToEdit, fromPosition, toPosition);
@@ -278,10 +229,6 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    /**
-     * Called when user swiped an element!
-     * @param position the position of swiped element
-     */
     @Override
     public void onItemSwiped(int position) {
         //Maybe some action with swipe like a timeslice remove
@@ -296,8 +243,9 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
      * @param position
      */
     private void removeTimeSlice(int position) {
-        if (position == timeSliceSelected) {
-            timeSliceSelected = NO_POSITION_SELECTED;
+        TimeSlice currTimeSlice = songToEdit.get(position);
+        if(position==timeSliceSelected){
+            timeSliceSelected=NO_POSITION_SELECTED;
         }
         songToEdit.remove(position);
         songToEditState.remove(position);
@@ -306,12 +254,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         calculateAllWidthsAndColors();
     }
 
-    /**
-     * This method is called by android when it needs more views! Cause the screen can contain more.
-     * @param parent
-     * @param viewType
-     * @return
-     */
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -326,13 +269,6 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         return vh;
     }
 
-    /**
-     * When user scroll the view, android recycle the view that is fading and reuses it to load the new element of list.
-     * So the view memory has only 13 elements if screen can hold 13, 14 if screen can hold 14....
-     * Either if the list count is more than that!
-     * @param holder the view to recycle
-     * @param position the position in the list of the element to load
-     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final TimeSlice ts = songToEdit.get(position);
@@ -345,7 +281,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         if (timeSliceSelected == position) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.timeSliceSelectedColor));
         } else {
-            holder.itemView.setBackgroundColor(DEF_NO_SELECTED_COLOR);
+            holder.itemView.setBackgroundColor(0x00000000);
         }
         holder.bitTextView.setText(Long.toString(ts.getDurationInBeats()));
         holder.bpmTextView.setText(Integer.toString(ts.getBpm()));
@@ -371,7 +307,7 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     /**
      * refresh current time slice state
-     * Called only if timeslicerevision is less than currentRevision
+     *
      * @param timeSliceState      the old state
      * @param timeSliceAssociated the time slice associated
      */
@@ -387,15 +323,11 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
         else //saturation of array
             timeSliceState.timeSliceColor = timeSliceBackgroundColors[colorIndex - 1];
         span = maxWidth - minWidth;
-        double lengthInSec = timeSliceAssociated.getDurationInBeats() * ((double) Constants.SECS_IN_MIN / bpm);
+        double lengthInSec = timeSliceAssociated.getDurationInBeats()* ((double) Constants.SECS_IN_MIN / bpm);
         double singleTSLength = span / (maxLengthInSecs - minLengthInSecs);
-        timeSliceState.timeSliceWidth = minWidth + (int) ((lengthInSec - (double) minLengthInSecs) * singleTSLength + AWAY_FROM_ZERO);
+        timeSliceState.timeSliceWidth = minWidth + (int) ((lengthInSec - (double) minLengthInSecs) * singleTSLength + 0.5);
     }
 
-    /**
-     * The size of the list
-     * @return
-     */
     @Override
     public int getItemCount() {
         return songToEdit.size();
@@ -403,7 +335,6 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
 
     /**
      * Return the current song to edit...
-     *
      * @return the song
      */
     public Song getSongToEdit() {
@@ -411,13 +342,12 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     }
 
     /**
-     * Change dataset it's like to reload all adapter!
-     *
+     * Change dataset
      * @param songToEdit
      */
     public void setSongToEdit(Song songToEdit) {
         this.songToEdit = (TimeSlicesSong) songToEdit;
-        timeSliceSelected = NO_POSITION_SELECTED;
+        timeSliceSelected=NO_POSITION_SELECTED;
         calculateAllWidthsAndColors();
         //I must notify the collection changed
         this.notifyDataSetChanged();
@@ -429,15 +359,9 @@ public class TimeSlicesAdapter extends RecyclerView.Adapter<TimeSlicesAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
 
-        //not private to direct access, while user's scrolling, we can't wait function call's time
+        //not private to direct access
         TextView bpmTextView, bitTextView, rhythmicsTextView;
-        /**
-         * The view to allow fast drag!
-         */
         View motionView;
-        /**
-         * View to color when item's selected
-         */
         View viewToColor;
 
         ViewHolder(View itemView, TextView bpmTextView, TextView bitTextView, TextView rhythmicsTextView, View motionView, View viewToColor) {

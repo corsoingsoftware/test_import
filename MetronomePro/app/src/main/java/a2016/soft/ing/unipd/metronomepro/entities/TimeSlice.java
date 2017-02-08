@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
  * Created by Federico Favotto on 07/12/2016.
  */
 
-public class TimeSlice implements Streamable, Parcelable {
+public class TimeSlice implements Streamable, Parcelable{
 
     private int bpm;
     private int durationInBeats;
@@ -124,16 +124,5 @@ public class TimeSlice implements Streamable, Parcelable {
         dest.writeInt(durationInBeats);
         dest.writeInt(timeFigureNumerator);
         dest.writeInt(timeFigureDenominator);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof TimeSlice){
-            TimeSlice toCheck=(TimeSlice) obj;
-            return bpm == toCheck.getBpm() &&
-                    durationInBeats==toCheck.getDurationInBeats() &&
-                    timeFigureDenominator==toCheck.getTimeFigureDenominator()&&
-                    timeFigureNumerator==toCheck.getTimeFigureNumerator();
-        } else return false;
     }
 }

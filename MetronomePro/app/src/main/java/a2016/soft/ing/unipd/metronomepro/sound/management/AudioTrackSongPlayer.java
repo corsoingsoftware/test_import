@@ -137,6 +137,10 @@ public class AudioTrackSongPlayer implements SongPlayer {
                 currentThread.interrupt();
             }
         }
+
+
+        at.pause();
+        at.flush();
         at.stop();
 
     }
@@ -250,8 +254,8 @@ public class AudioTrackSongPlayer implements SongPlayer {
 
                 byte[] arraySong;
 
-                /*while (!goThread) {
-                }  //Attesa!*/
+                while (!goThread) {
+                }  //Attesa!
 
                 //Impedisco l'accesso al buffer da parte di altri Thread durante la scrittura
                 goThread = false;

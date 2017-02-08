@@ -17,7 +17,6 @@ public class AudioTrackControllerTest {
         c = new MockContext();
 
     }
-    @Test
     public void testSetBpm() {
         AudioTrackController at = new AudioTrackController();
         at.initialize(30, 300);
@@ -25,5 +24,5 @@ public class AudioTrackControllerTest {
         at.setBPM(10);
     }
 
-}
+         }
 

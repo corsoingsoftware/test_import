@@ -3,24 +3,17 @@ package a2016.soft.ing.unipd.metronomepro;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioTrack;
-import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
-import a2016.soft.ing.unipd.metronomepro.entities.ParcelableTimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
-import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackController;
 import a2016.soft.ing.unipd.metronomepro.sound.management.AudioTrackSongPlayer;
-import a2016.soft.ing.unipd.metronomepro.sound.management.PlayState;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayer;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
-import a2016.soft.ing.unipd.metronomepro.sound.management.SoundManagerServiceCaller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -31,7 +24,7 @@ import static org.junit.Assert.assertNotEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest implements SongPlayer.SongPlayerCallback{
+public class ExampleInstrumentedTest {
 
     @Test
     public void setBpm() throws Exception {
@@ -122,54 +115,37 @@ public class ExampleInstrumentedTest implements SongPlayer.SongPlayerCallback{
         t3.setDurationInBeats(20);
 
 
-        TimeSlicesSong s = EntitiesBuilder.getTimeSlicesSong();
-        s.add(t1);
-        s.add(t2);
-        s.add(t3);
+//        Song s = new ParcelableSong();
+//        s.add(t1);
+//        s.add(t2);
+//        s.add(t3);
 
-        AudioTrackSongPlayer atsp = new AudioTrackSongPlayer((SongPlayer.SongPlayerCallback) this);
+        //SongPlayer atsp = new AudioTrackSongPlayer();
+      //  atsp.load(s);
 
         Song[] arrayS = new Song[1];
-        arrayS[0] = s;
+//        arrayS[0] = s;
 
-        atsp.write(arrayS);
-        atsp.play();
-
-        assertEquals(atsp.getState(), PlayState.PLAYSTATE_PLAYING);
-
+      //  ((AudioTrackSongPlayer)atsp).write(arrayS);
+        //atsp.play();
     }
 
     @Test
     public void encodeDecodeTest() throws Exception {
 
-        /**
-         * I create a new TimeSlice and encode it. "encodedTimeSlice" represents "timeSliceToEncode" in bytes.
-         */
-        TimeSlice timeSliceToEncode = new TimeSlice();
-        byte[] encodedTimeSlice = timeSliceToEncode.encode();
+        //Create a new TimeSlice and encode it, "toReturn" represents "t1"
+        TimeSlice t1 = new TimeSlice();
+        byte[] toReturn = t1.encode();
+        //To use decode "method", I need a new TimeSlice object.
+        TimeSlice t2 = new TimeSlice();
+        //Decodification of toReturn
+        t2.decode(toReturn);
 
-        /**
-         * To use decode method I need a new TimeSlice object.
-         */
-        TimeSlice tsForDecodeMethod = new TimeSlice();
+        //Verify if the attributes are equals
 
-        /**
-         * Decoding of encodedTimeSlices.
-         */
-        tsForDecodeMethod.decode(encodedTimeSlice);
-
-        /**
-         * Verify if the two objects' attributes are equals.
-         */
-
-        assertEquals(timeSliceToEncode.getBpm(), tsForDecodeMethod.getBpm());
-        assertEquals(timeSliceToEncode.getDurationInBeats(), tsForDecodeMethod.getDurationInBeats());
-        assertEquals(timeSliceToEncode.getTimeFigureDenominator(), tsForDecodeMethod.getTimeFigureDenominator());
-        assertEquals(tsForDecodeMethod.getTimeFigureNumerator(), tsForDecodeMethod.getTimeFigureNumerator());
-    }
-
-    @Override
-    public void playEnded(SongPlayer origin) {
-
+        assertEquals(t1.getBpm(), t2.getBpm());
+        assertEquals(t1.getDurationInBeats(), t2.getDurationInBeats());
+        assertEquals(t1.getTimeFigureDenominator(), t2.getTimeFigureDenominator());
+        assertEquals(t2.getTimeFigureNumerator(), t2.getTimeFigureNumerator());
     }
 }

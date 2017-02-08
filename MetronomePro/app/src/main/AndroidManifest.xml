@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="a2016.soft.ing.unipd.metronomepro">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -40,24 +39,30 @@
         <activity
             android:name=".SongCreator"
             android:label="@string/title_activity_song_creator"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".SelectSongForPlaylist"
             android:label="@string/title_activity_song_creator"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".SelectNextSongs"
             android:label="@string/title_activity_select_next_songs"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".ModifyPlaylistActivity"
             android:label="@string/title_activity_modify_playlist"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".PlaylistView"
             android:label="@string/title_activity_modify_playlist"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AtspTest"
             android:label="@string/title_activity_atsp_test"
@@ -65,7 +70,7 @@
         <activity
             android:name=".TestDB"
             android:label="@string/title_activity_test_db"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -74,19 +79,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ActivityHome" />
-        <activity
-            android:name=".ActivityImportMidi"
-            android:label="Import Song"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ConnectionActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ClientActivity"></activity>
+        <activity android:name=".ShowPeersActivity"></activity>
     </application>
 
 </manifest>
