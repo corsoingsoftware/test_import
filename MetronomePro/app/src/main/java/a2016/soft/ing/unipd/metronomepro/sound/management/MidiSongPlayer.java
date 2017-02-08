@@ -43,12 +43,14 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void play() {
+
         actualPlayer.start();
     }
 
     @Override
     public void pause() {
-        actualPlayer.pause();
+        if(actualPlayer!=null&&actualPlayer.isPlaying())
+            actualPlayer.pause();
     }
 
     @Override
