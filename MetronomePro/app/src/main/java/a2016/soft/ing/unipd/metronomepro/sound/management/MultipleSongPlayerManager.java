@@ -102,8 +102,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
          */
 
         dequeueManagement();
-        arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+
         checkQueueEmpty();
+    }
+
+    public void play(){
+        arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
     }
 
     /**
@@ -170,6 +174,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
         if(indexNextToPlay < arraySongsToPlay.length) {
             origin.pause();
             arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+            indexNextToPlay = indexNextToLoad;
             checkQueueEmpty();
 
         } else {
@@ -186,7 +191,6 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     private void checkQueueEmpty() {
 
-        indexNextToPlay = indexNextToLoad;
         if(indexNextToLoad < arraySongsToPlay.length)
             dequeueManagement();
     }

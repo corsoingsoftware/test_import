@@ -87,6 +87,9 @@ public class SongPlayerService extends Service {
     }
 
 
+    public void play(){
+        mspm.play();
+    }
 
     public class MyBinder extends Binder {
         SongPlayerService getService() {

@@ -80,7 +80,7 @@ public class SongPlayerServiceCaller implements SongPlayer {
 
     @Override
     public void play() {
-
+        pService.play();
     }
 
     @Override
@@ -111,7 +111,6 @@ public class SongPlayerServiceCaller implements SongPlayer {
     public void write(Song[] songs) {
         pService.write(songs);
     }
-
     @Override
     public void load(Song song){
         Log.v(LOG_TAG,"in load");
