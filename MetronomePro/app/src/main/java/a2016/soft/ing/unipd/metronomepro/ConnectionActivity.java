@@ -1,5 +1,6 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import org.group3.sync.ServerInfo;
 import org.group3.sync.exception.ErrorCode;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
@@ -32,6 +34,7 @@ public class ConnectionActivity extends AppCompatActivity implements ServerActio
     SongPlayerServiceCaller spsc;
     long timeDifference;
     TimeSlicesSong ts;
+    MidiSong midiS2;
     /**
      *
      * @param savedInstanceState
@@ -53,8 +56,9 @@ public class ConnectionActivity extends AppCompatActivity implements ServerActio
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            spsc.write(new Song[]{midiS2});
                             while(System.currentTimeMillis()<start);
-                            spsc.write(new Song[]{ts});
+                            spsc.play();
                         }
                     }).start();
                 }
@@ -98,13 +102,26 @@ public class ConnectionActivity extends AppCompatActivity implements ServerActio
 
     @Override
     public void serviceConnected() {
-        ts= EntitiesBuilder.getTimeSlicesSong();
+        /*ts= EntitiesBuilder.getTimeSlicesSong();
         ts.setName("prova");
         TimeSlice a= new TimeSlice();
         a.setBpm(60);
-        a.setDurationInBeats(200);
+        a.setDurationInBeats(3);
         ts.add(a);
-        spsc.load(ts);
+        a= new TimeSlice();
+        a.setBpm(120);
+        a.setDurationInBeats(4);
+        ts.add(a);
+        a= new TimeSlice();
+        a.setBpm(300);
+        a.setDurationInBeats(4);
+        ts.add(a);
+        spsc.load(ts);*/
+        midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
+        midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                + "/A.mid");
+        midiS2.setName("midiSong2");
+        spsc.load(midiS2);
 
     }
 }
