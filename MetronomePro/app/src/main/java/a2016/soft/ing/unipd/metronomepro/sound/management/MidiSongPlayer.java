@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -79,6 +80,7 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void write(Song[] songs) {
+        songList=new ArrayList<>(200);
         for (Song song : songs) songList.add(song.getName());
         currentSong = songList.iterator();
         actualPlayer = playerList.get(currentSong.next());

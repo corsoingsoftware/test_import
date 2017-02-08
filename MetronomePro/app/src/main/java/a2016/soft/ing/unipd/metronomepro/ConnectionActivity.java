@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
+import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
@@ -43,6 +45,7 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
     boolean bluetoothOk=false, serviceOk=false;
     long timeDiff;
     TimeSlicesSong ts;
+    MidiSong midiS2;
     private static final int REQUEST_ENABLE_BT=1;
     /**
      *
@@ -151,7 +154,7 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
     @Override
     public void onReceiveStart(MetroConfig config, long time, long delay) {
 
-        spsc.write(new Song[]{ts});
+        spsc.write(new Song[]{midiS2});
         long a=System.currentTimeMillis();
         long b=time+(timeDiff);
         while(a<b-10){
@@ -178,13 +181,27 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
 
     @Override
     public void serviceConnected() {
-        ts= EntitiesBuilder.getTimeSlicesSong();
-        ts.setName("prova");
-        TimeSlice a= new TimeSlice();
-        a.setBpm(60);
-        a.setDurationInBeats(200);
-        ts.add(a);
-        spsc.load(ts);
+//        ts= EntitiesBuilder.getTimeSlicesSong();
+//
+//        ts.setName("prova");
+//        TimeSlice a= new TimeSlice();
+//        a.setBpm(60);
+//        a.setDurationInBeats(3);
+//        ts.add(a);
+//        a= new TimeSlice();
+//        a.setBpm(120);
+//        a.setDurationInBeats(4);
+//        ts.add(a);
+//        a= new TimeSlice();
+//        a.setBpm(300);
+//        a.setDurationInBeats(4);
+//        ts.add(a);
+//        spsc.load(ts);
+        midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
+        midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                + "/A.mid");
+        midiS2.setName("midiSong2");
+        spsc.load(midiS2);
         serviceOk=true;
         if(bluetoothOk&&serviceOk){
             faiqualcosa();

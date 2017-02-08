@@ -24,7 +24,6 @@ import a2016.soft.ing.unipd.metronomepro.entities.Song;
 
 public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.ViewHolder> implements ItemTouchHelperAdapter{
 
-
     private ArrayList<PlayableSong> arraySongs;
     private Context context;
     private int selectedSongs;
