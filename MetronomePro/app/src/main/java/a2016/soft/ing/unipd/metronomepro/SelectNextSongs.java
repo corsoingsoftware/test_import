@@ -1,15 +1,31 @@
 package a2016.soft.ing.unipd.metronomepro;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
+import org.group3.sync.Manager;
+import org.group3.sync.ManagerFactory;
+import org.group3.sync.Peer;
+import org.group3.sync.Server;
+import org.group3.sync.ServerActionListener;
+import org.group3.sync.ServerInfo;
+import org.group3.sync.exception.AdapterNotActivatedException;
+import org.group3.sync.exception.ErrorCode;
+
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.SelectSongsAdapter;
@@ -25,10 +41,14 @@ import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCalle
 
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYABLE_PLAYLIST;
 import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.PLAYLIST;
+import static java.lang.System.out;
 
-public class SelectNextSongs extends AppCompatActivity implements SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
+public class SelectNextSongs extends AppCompatActivity implements ServerActionListener, SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
+    Manager connectionManager;
+    Server server;
     private final static int MAX_SELECTABLE = 3;
+    private static final int REQUEST_ENABLE_BT=1;
     SongPlayerServiceCaller spsc;
     Playlist p;
     private RecyclerView rVNextSongs;
@@ -48,6 +68,27 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
         rVLayoutManager = new LinearLayoutManager(this);
         rVNextSongs.setLayoutManager(rVLayoutManager);
         spsc = new SongPlayerServiceCaller(this,this);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5);
+            }
+        }
+        try {
+
+            connectionManager= ManagerFactory.bluetoothInstance();
+            server=connectionManager.newServer(this,this);
+
+        }catch (AdapterNotActivatedException ex){
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }catch (Exception ex){
+            //def action
+            ex.printStackTrace();
+        }
 
 
 
@@ -148,13 +189,38 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     }*/
 
                     spsc.write(songs);
-                    spsc.play();
+                    final long start = System.currentTimeMillis()+2000;
+                    sendNextSongs(songs);
+                    server.broadcastStart(start);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(System.currentTimeMillis()<start);
+                            spsc.play();
+                        }
+                    }).start();
                 }
 
                 //Blocco tutto
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_ENABLE_BT:
+                if(resultCode==RESULT_OK){
+                    try {
+                        server = connectionManager.newServer(this, this);
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -174,6 +240,64 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
 
             spsc.load((Song) playlist.get(i).getInnerSong());
         }
+    }
+
+    private void sendPlaylist()
+    {
+        ArrayList<PlayableSong> songs=selectSongsAdapter.getArraySongs();
+        StringBuilder sb= new StringBuilder();
+        sb.append("playlist:");
+        for(PlayableSong song : songs) {
+            sb.append(song.getInnerSong().getName()+";");
+        }
+        server.broadcastGeneralMessage(sb.toString().getBytes(Charset.forName("UTF-8")));
+    }
+
+    private void sendNextSongs(Song[] songs)
+    {
+        StringBuilder sb= new StringBuilder();
+        sb.append("next:");
+        for(Song song : songs) {
+            sb.append(song.getName()+";");
+        }
+        server.broadcastGeneralMessage(sb.toString().getBytes(Charset.forName("UTF-8")));
+    }
+
+
+    @Override
+    public void onClientConnected(Peer peer) {
+        Toast.makeText(this,"Client conn: "+peer.getName(),Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onClientSynchronized(Peer peer) {
+        Toast.makeText(this,"Client sync: "+peer.getName(),Toast.LENGTH_SHORT);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendPlaylist();
+            }
+        }).start();
+    }
+
+    @Override
+    public void onClientDisconnected(Peer peer) {
+        Toast.makeText(this,"Client disc: "+peer.getName(),Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onServerStarted(ServerInfo serverInfo) {
+        Toast.makeText(this,"server started",Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onServerStopped() {
+        Toast.makeText(this,"ServerStopped",Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onError(ErrorCode error) {
+        Toast.makeText(this,"error "+error,Toast.LENGTH_SHORT);
     }
 
 }
