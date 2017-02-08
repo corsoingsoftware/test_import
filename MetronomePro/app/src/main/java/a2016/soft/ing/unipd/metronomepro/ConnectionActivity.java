@@ -151,12 +151,13 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
     @Override
     public void onReceiveStart(MetroConfig config, long time, long delay) {
 
+        spsc.write(new Song[]{ts});
         long a=System.currentTimeMillis();
         long b=time+(timeDiff);
-        while(a<b){
+        while(a<b-10){
             a=System.currentTimeMillis();
         }
-        spsc.write(new Song[]{ts});
+        spsc.play();
         a=System.currentTimeMillis();
         out.println(a-b);
         out.println("");
