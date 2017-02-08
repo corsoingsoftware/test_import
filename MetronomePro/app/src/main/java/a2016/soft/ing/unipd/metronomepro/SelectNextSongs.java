@@ -148,6 +148,7 @@ public class SelectNextSongs extends AppCompatActivity implements SongPlayerServ
                     }*/
 
                     spsc.write(songs);
+                    spsc.play();
                 }
 
                 //Blocco tutto

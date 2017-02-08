@@ -24,6 +24,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
      */
     private AudioTrackSongPlayer audioTrackSongPlayer;
     private MidiSongPlayer midiSongPlayer;
+    private int nextToPlayForFirstPlay;
 
     /**
      * Queue that contains songs to be loaded.
@@ -108,6 +109,12 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
     public void play(){
         arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+        indexNextToPlay = nextToPlayForFirstPlay;
+    }
+
+    private void internalPlay(){
+        arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
+        indexNextToPlay = indexNextToLoad;
     }
 
     /**
@@ -134,6 +141,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
          */
 
         Song[] arraySongsSameType = new Song[listSongsSameType.size()];
+        nextToPlayForFirstPlay=listSongsSameType.size();
         indexNextToLoad = indexNextToLoad + listSongsSameType.size();
         arraySongsSameType = listSongsSameType.toArray(arraySongsSameType);
         currentSongSongPlayer.write(arraySongsSameType);
@@ -173,8 +181,7 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
 
         if(indexNextToPlay < arraySongsToPlay.length) {
             origin.pause();
-            arraySongsToPlay[indexNextToPlay].getSongPlayer(this).play();
-            indexNextToPlay = indexNextToLoad;
+            internalPlay();
             checkQueueEmpty();
 
         } else {
