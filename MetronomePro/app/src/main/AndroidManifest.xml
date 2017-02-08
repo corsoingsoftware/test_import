@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="a2016.soft.ing.unipd.metronomepro">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -77,14 +78,14 @@
         <activity
             android:name=".ActivityImportMidi"
             android:label="Import Song"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ConnectionActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectionActivity" />
         <activity android:name=".ClientActivity"></activity>
     </application>
 
