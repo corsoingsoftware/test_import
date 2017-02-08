@@ -191,6 +191,11 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
                     spsc.write(songs);
                     final long start = System.currentTimeMillis()+2000;
                     sendNextSongs(songs);
+                    try {
+                        Thread.sleep(200);
+                    }catch (Exception ex){
+
+                    }
                     server.broadcastStart(start);
                     new Thread(new Runnable() {
                         @Override
