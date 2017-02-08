@@ -1,6 +1,8 @@
 package a2016.soft.ing.unipd.metronomepro;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,10 +16,13 @@ import org.group3.sync.Manager;
 import org.group3.sync.ManagerFactory;
 import org.group3.sync.MetroConfig;
 import org.group3.sync.Peer;
+import org.group3.sync.exception.AdapterNotActivatedException;
+import org.group3.sync.exception.ConnectivityException;
 import org.group3.sync.exception.ErrorCode;
 
 import java.util.List;
 
+import a2016.soft.ing.unipd.metronomepro.bluetooth.BluetoothChatService;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
@@ -38,6 +43,7 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
     boolean bluetoothOk=false, serviceOk=false;
     long timeDiff;
     TimeSlicesSong ts;
+    private static final int REQUEST_ENABLE_BT=1;
     /**
      *
      * @param savedInstanceState
@@ -58,15 +64,35 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5);
             }
         }
-        connectionManager= ManagerFactory.bluetoothInstance();
         try {
 
+            connectionManager= ManagerFactory.bluetoothInstance();
             client=connectionManager.newClient(this,this);
 
+        }catch (AdapterNotActivatedException ex){
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }catch (Exception ex){
+            //def action
             ex.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_ENABLE_BT:
+                if(resultCode==RESULT_OK){
+                    try {
+                        client = connectionManager.newClient(this, this);
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -124,8 +150,13 @@ public class ConnectionActivity extends AppCompatActivity implements ClientActio
 
     @Override
     public void onReceiveStart(MetroConfig config, long time, long delay) {
-        while(System.currentTimeMillis()-timeDiff<time){
+
+        long a=System.nanoTime();
+        long b=time+(timeDiff*1000000);
+        while(a<b){
+            a=System.nanoTime();
         }
+        out.println(a-b);
         spsc.write(new Song[]{ts});
         out.println("");
     }
