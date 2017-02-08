@@ -25,6 +25,7 @@
     <string name="title_activity_song_creator">Editor</string>
     <string name="title_activity_select_next_songs">SelectNextSongs</string>
     <string name="title_activity_modify_playlist">ModifyPlaylistActivity</string>
+    <string name="title_activity_peer">activitypeer</string>
     <string name="title_activity_atsp_test">AtspTest</string>
     <string name="saved_string">Saved</string>
     <string name="name_song">Name:</string>

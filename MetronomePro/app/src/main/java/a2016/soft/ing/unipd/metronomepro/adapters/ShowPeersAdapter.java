@@ -79,8 +79,8 @@ public class ShowPeersAdapter extends RecyclerView.Adapter<ShowPeersAdapter.View
     }
 
     @Override
-    public ShowPeersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_show_peers, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_peers_item, parent, false);
         ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.peer_item));
         return vh;
     }

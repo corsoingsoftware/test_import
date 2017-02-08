@@ -63,7 +63,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ShowPeersActivity"
-            android:label="@string/title_activity_atsp_test"
+            android:label="@string/title_activity_peer"
             android:theme="@style/AppTheme" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
