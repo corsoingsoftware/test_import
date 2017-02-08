@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import org.group3.sync.Peer;
+
+import java.util.ArrayList;
+
 import a2016.soft.ing.unipd.metronomepro.adapters.ShowPeersAdapter;
 
 public class ShowPeersActivity extends AppCompatActivity {
@@ -21,8 +25,9 @@ public class ShowPeersActivity extends AppCompatActivity {
         rVShowPeers.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVShowPeers.setLayoutManager(rVLayoutManager);
+        ArrayList<Peer> peerList;
 
-        showPeersAdapter = new showPeersAdapter(this,songForAdapter,this);//adapter initialized
+        showPeersAdapter = new showPeersAdapter(peerList);
         rVShowPeers.setAdapter(showPeersAdapter);
 
     }
