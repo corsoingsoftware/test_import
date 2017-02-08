@@ -94,10 +94,10 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             actualPlayer = playerList.get(currentSong.next());
             actualPlayer.start();
         } else {
+            callback.playEnded(this);
             songList = null;
             currentSong = null;
             actualPlayer = null;
-            callback.playEnded(this);
         }
     }
 

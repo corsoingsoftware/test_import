@@ -19,11 +19,15 @@ import org.group3.sync.Peer;
 import org.group3.sync.exception.AdapterNotActivatedException;
 import org.group3.sync.exception.ErrorCode;
 
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
+import a2016.soft.ing.unipd.metronomepro.entities.TimeSlice;
 import a2016.soft.ing.unipd.metronomepro.entities.TimeSlicesSong;
 import a2016.soft.ing.unipd.metronomepro.sound.management.SongPlayerServiceCaller;
 
@@ -37,6 +41,8 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     Manager connectionManager;
     Client client;
     SongPlayerServiceCaller spsc;
+    HashMap<String,Song> songsOfPlaylist;
+    Song[] songsToPlay;
     boolean bluetoothOk=false, serviceOk=false;
     long timeDiff;
     private static final int REQUEST_ENABLE_BT=1;
@@ -147,7 +153,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     @Override
     public void onReceiveStart(MetroConfig config, long time, long delay) {
 
-        spsc.write(new Song[]{});
+        spsc.write(songsToPlay);
         long a=System.currentTimeMillis();
         long b=time+(timeDiff);
         while(a<b-10){
@@ -167,10 +173,75 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
 
     @Override
     public void onReceiveGeneralMessage(byte[] message) {
-
-        out.println("");
+        String string = new String(message, Charset.forName("UTF-8"));
+        manageGeneralMessage(string);
+        out.println(string);
     }
 
+
+    public void manageGeneralMessage(String s){
+        int a=s.indexOf(":");
+        String toManage=s.substring(0,a);
+        if (toManage.equals("playlist")) {
+            refreshPlaylist(s.substring(a+1,s.length()-1));
+        } else if (toManage.equals("next")) {
+            refreshNext(s.substring(a+1,s.length()-1));
+        }
+    }
+
+    private void refreshPlaylist(String songs){
+        songsOfPlaylist= new HashMap<>();
+
+        TimeSlice t1, t2;
+        t1 = new TimeSlice();
+        t1.setDurationInBeats(10);
+        t1.setBpm(80);
+        t2 = new TimeSlice();
+        t2.setDurationInBeats(10);
+        t2.setBpm(180);
+        TimeSlicesSong s1 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+        s1.add(t1);
+        s1.add(t2);
+        TimeSlicesSong s2 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+        TimeSlice t3, t4;
+        t3 = new TimeSlice();
+        t4 = new TimeSlice();
+        t3.setDurationInBeats(10);
+        t3.setBpm(250);
+        s2.add(t3);
+        TimeSlicesSong s3 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
+        t4.setDurationInBeats(10);
+        t4.setBpm(300);
+        s3.add(t4);
+        s1.setName("song1");
+        s2.setName("song2");
+        s3.setName("song3");
+        MidiSong midiS1 = (MidiSong)EntitiesBuilder.getMidiSong();
+        midiS1.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                +"/A.mid");//+ "/Tick.mid");
+        midiS1.setName("midiSong1");
+        MidiSong midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
+        midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
+                + "/Tick.mid");
+        midiS2.setName("midiSong2");
+        songsOfPlaylist.put(midiS1.getName(),midiS1);
+        songsOfPlaylist.put(midiS2.getName(),midiS2);
+        songsOfPlaylist.put(s1.getName(),s1);
+        songsOfPlaylist.put(s2.getName(),s2);
+        songsOfPlaylist.put(s3.getName(),s3);
+        for(Song s : songsOfPlaylist.values()){
+            spsc.load(s);
+        }
+    }
+
+    private void refreshNext(String next){
+        String[] titles=next.split(";");
+        songsToPlay= new Song[titles.length];
+
+        for(int i=0; i<titles.length;i++){
+            songsToPlay[i]=songsOfPlaylist.get(titles[i]);
+        }
+    }
 
     @Override
     public void serviceConnected() {
