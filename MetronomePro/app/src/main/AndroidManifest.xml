@@ -59,6 +59,12 @@
             android:name=".PlaylistView"
             android:label="Playlists:"
             android:theme="@style/AppTheme" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AtspTest"
@@ -81,12 +87,6 @@
             android:name=".ActivityImportMidi"
             android:label="Import Song"
             android:theme="@style/AppTheme">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ConnectionActivity" >
         </activity>

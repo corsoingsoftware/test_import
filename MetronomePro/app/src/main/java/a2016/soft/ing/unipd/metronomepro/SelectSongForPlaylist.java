@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class SelectSongForPlaylist extends AppCompatActivity implements OnStartD
     private ItemTouchHelper itemTouchHelper;
 
     private static final int SONG_CREATED = 1;
+    private static final int SONG_MIDI = 2;
 
 
     @Override
@@ -141,6 +144,23 @@ public class SelectSongForPlaylist extends AppCompatActivity implements OnStartD
         super.onSaveInstanceState(outState);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_song, menu);
+        MenuItem menuItem = menu.findItem(R.id.connect_to_someone);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(),ActivityImportMidi.class);
+                startActivityForResult(intent,SONG_MIDI);
+                return true;
+            }
+        });
+        return true;
+    }
+
     @Override
     /**
      * this method takes the TimeSlice song created by SongCreator
@@ -153,6 +173,8 @@ public class SelectSongForPlaylist extends AppCompatActivity implements OnStartD
                 db.saveSong(songCreated);//save in database
                 selectSongForPlaylistAdapter.addSong(songCreated);//add to adapter
                 selectSongForPlaylistAdapter.notifyDataSetChanged();
+            }else if(requestCode == SONG_MIDI){
+                //refresh
             }
         }
     }

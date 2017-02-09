@@ -73,31 +73,14 @@ public class ActivityImportMidi extends AppCompatActivity {
         }
 
 
-        Button importButton = (Button) findViewById(R.id.import_midi);
-        importButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionsAndOpenFilePicker();
-            }
-        });
 
-        Button timeSliceButton = (Button) findViewById(R.id.createts);
-        timeSliceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openEditor();
-            }
-        });
-
-        Button homeButton = (Button) findViewById(R.id.homebutton);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnHome();
-            }
-        });
+    }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkPermissionsAndOpenFilePicker();
     }
 
     /**
@@ -161,7 +144,8 @@ public class ActivityImportMidi extends AppCompatActivity {
             }
         }
         else {
-            showImportError();
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -237,7 +221,7 @@ public class ActivityImportMidi extends AppCompatActivity {
 
     private boolean isMidi(String title) {
         String type = title.substring(title.lastIndexOf("."),title.length());
-        return type.equals(MIDI_EXTENSION);
+        return true;
     }
 
 }
