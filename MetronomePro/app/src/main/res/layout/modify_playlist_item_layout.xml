@@ -10,7 +10,10 @@ android:layout_height="wrap_content">
         android:text="SongName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/song_text_view" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/song_text_view"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"/>
 
     <ImageView
         android:id="@+id/handle"

@@ -43,7 +43,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SelectSongForPlaylist"
-            android:label="@string/title_activity_song_creator"
+            android:label="Select songs to add"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SelectNextSongs"
@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PlaylistView"
-            android:label="@string/title_activity_modify_playlist"
+            android:label="Playlists:"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -101,13 +101,13 @@ public class SelectSongsAdapter extends RecyclerView.Adapter<SelectSongsAdapter.
         PlayableSong s = arraySongs.get(position);
 
         switch (s.getSongState()){
-            case PlayableSong.STATE_TOPLAY: holder.nameSong.setTextColor(Color.BLACK);
+            case PlayableSong.STATE_TOPLAY: holder.itemView.setBackgroundColor(0xFF64B5F6);
                 break;
 
-            case PlayableSong.STATE_READYTOPLAY: holder.nameSong.setTextColor(Color.BLUE);
+            case PlayableSong.STATE_READYTOPLAY: holder.itemView.setBackgroundColor(0x00000000);
                 break;
 
-            case PlayableSong.STATE_PLAYED: holder.nameSong.setTextColor(Color.RED);
+            case PlayableSong.STATE_PLAYED: holder.itemView.setBackgroundColor(Color.GRAY);
                 break;
         }
 
