@@ -75,9 +75,10 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
      */
     public void addAllSongs(ArrayList<Song> lista){
         playlistToModify.addAll(lista);
-        notifyDataSetChanged();
+        database.deletePlaylist(playlistToModify);
         database.savePlaylist(playlistToModify);
-       // notifyItemInserted(playlistToModify.size()-1);
+        notifyDataSetChanged();
+        // notifyItemInserted(playlistToModify.size()-1);
     }
 
     /**
@@ -111,8 +112,8 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         return playlistToModify;
     }
 
-     /**
-      * notice if that a song has been moved
+    /**
+     * notice if that a song has been moved
      * notify and change its position.
      * @param fromPosition the starting position
      * @param toPosition the final position
@@ -123,7 +124,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         notifyItemMoved(fromPosition, toPosition);
         database.deletePlaylist(playlistToModify);
         database.savePlaylist(playlistToModify);
-       // playlistToModify = database.getPlaylist(playlistToModify.getName());
+        // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**
@@ -137,7 +138,7 @@ public class ModifyPlaylistAdapter extends RecyclerView.Adapter<ModifyPlaylistAd
         notifyItemRemoved(position);
         database.deletePlaylist(playlistToModify);
         database.savePlaylist(playlistToModify);
-       // playlistToModify = database.getPlaylist(playlistToModify.getName());
+        // playlistToModify = database.getPlaylist(playlistToModify.getName());
     }
 
     /**

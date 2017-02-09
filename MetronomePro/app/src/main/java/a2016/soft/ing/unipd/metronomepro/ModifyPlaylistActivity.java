@@ -46,7 +46,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
     private Playlist supporto; //è una playlist di supporto che mi serve per ricevee l'intent da SelectPlaylistActivity vedi riga 129
     SongPlayerServiceCaller spsc;
     private ArrayList<Song> songsToAdd = new ArrayList<>();//creata da giulio: sono le canzoni che vengono
-                                                                    //selezionte nel layout di giulio
+    //selezionte nel layout di giulio
     //All results:
     private static final int START_ADD_SONGS=1;
 
@@ -67,18 +67,18 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             @Override
             //creato da giulio: mi passi una playlist sottoforma di array di canzoni
             public void onClick(View view) {
-              //  Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
+                //  Playlist playlistToEdit = modifyPlaylistAdapter.getPlaylistToModify();
                 Intent intent = new Intent(activity,SelectSongForPlaylist.class);
                 intent.putParcelableArrayListExtra(PLAYLIST,modifyPlaylistAdapter.getAllSongs());
                 startActivityForResult(intent, START_ADD_SONGS);
             }
             /**public void onClick(View view) {
-                Song songToEdit = EntitiesBuilder.getSong();
-                Intent intent = new Intent(activity,SelectSongForPlaylist.class);
-                intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
-                startActivityForResult(intent, START_EDIT_NEW_SONG);
+             Song songToEdit = EntitiesBuilder.getSong();
+             Intent intent = new Intent(activity,SelectSongForPlaylist.class);
+             intent.putExtra(SONG_TO_EDIT, (Parcelable) songToEdit);
+             startActivityForResult(intent, START_EDIT_NEW_SONG);
 
-            }*/
+             }*/
         });
 
         FloatingActionButton floatingActionButtonPlay= (FloatingActionButton)findViewById(R.id.fabPlay);
@@ -107,16 +107,16 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             try {
                 //DataProvider dp = DataProviderBuilder.getDefaultDataProvider(this);
                 //TODO Modified by Mune, I touched the 2 methods below, if they're wrong just fix them (sorry <3)
-           //     List<Song> songs = dp.getAllSongs();
-             //   playlist.addAll(songs);
-             //   database.savePlaylist(playlist);
+                //     List<Song> songs = dp.getAllSongs();
+                //   playlist.addAll(songs);
+                //   database.savePlaylist(playlist);
             }catch (Exception ex){
                 ex.printStackTrace();
 //                playlist.add(EntitiesBuilder.getSong("canzone 1"));
 //                playlist.add(EntitiesBuilder.getSong("canzone 2"));
 //                playlist.add(EntitiesBuilder.getSong("canzone 3"));
 //                playlist.add(EntitiesBuilder.getSong("canzone 4"));
-      //          playlist.add(EntitiesBuilder.getMidiSong());
+                //          playlist.add(EntitiesBuilder.getMidiSong());
             }
             /**
              * creato da giulio: riceve le canzoni che ho selezionato
@@ -134,11 +134,11 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
                     }
                     database.savePlaylist(playlist);
                     onSaveInstanceState(intent.getBundleExtra(PLAYLIST_SELECTED));
-   //               playlist = database.getPlaylist(playlist.getName());
-  //                playlist = database.getPlaylist(PLAYLIST_SELECTED);
+                    //               playlist = database.getPlaylist(playlist.getName());
+                    //                playlist = database.getPlaylist(PLAYLIST_SELECTED);
 
                     //           songsToAdd = intent.<Song>getParcelableArrayListExtra(SONG_TO_ADD); //canzoni passate dal SelectSongForPlaylist
-        //            playlist.addAll(songsToAdd);
+                    //            playlist.addAll(songsToAdd);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -174,8 +174,9 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             switch (requestCode){
                 case START_ADD_SONGS:
                     //modifyPlaylistAdapter.addSong((ParcelableSong)data.getParcelableExtra(SONG_TO_EDIT));
+
                     modifyPlaylistAdapter.addAllSongs(data.<Song>getParcelableArrayListExtra(SONG_TO_ADD));
-                    playlist.addAll(songsToAdd);
+                    playlist = modifyPlaylistAdapter.getPlaylistToModify();
                     database.savePlaylist(playlist);
                     break;
             }
