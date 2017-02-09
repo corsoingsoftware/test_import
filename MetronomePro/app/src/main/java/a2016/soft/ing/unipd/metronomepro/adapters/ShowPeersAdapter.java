@@ -21,14 +21,23 @@ import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperV
 
 public class ShowPeersAdapter extends RecyclerView.Adapter<ShowPeersAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
+    public interface PeerSelected{
+        void onPeerSelected(Peer peer);
+    }
     private ArrayList<Peer> peerList;
+    private PeerSelected onSelected;
 
-    public ShowPeersAdapter(ArrayList<Peer> peerList) {
+    public ShowPeersAdapter(ArrayList<Peer> peerList, PeerSelected onSelected) {
+        super();
         this.peerList = peerList;
+        this.onSelected=onSelected;
     }
 
-    public ShowPeersAdapter() {
-        super();
+
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.itemView.setOnClickListener(null);
     }
 
     @Override
@@ -88,24 +97,33 @@ public class ShowPeersAdapter extends RecyclerView.Adapter<ShowPeersAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_peers_item, parent, false);
-        ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.peer_item));
+        ViewHolder vh = new ViewHolder(v, (TextView) v.findViewById(R.id.peer_item),(TextView) v.findViewById(R.id.peer_item_code));
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Peer p = peerList.get(position);
+        final Peer p = peerList.get(position);
         holder.peerName.setText(p.getName());
+        holder.peerCode.setText(p.getAddress());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSelected.onPeerSelected(p);
+            }
+        });
     }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
 
         TextView peerName;
+        TextView peerCode;
 
-        public ViewHolder(View itemView, TextView peerName) {
+        public ViewHolder(View itemView, TextView peerName,TextView peerCode) {
             super(itemView);
             this.peerName = peerName;
+            this.peerCode=peerCode;
         }
 
         @Override

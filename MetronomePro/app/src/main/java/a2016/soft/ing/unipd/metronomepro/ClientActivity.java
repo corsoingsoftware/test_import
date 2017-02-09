@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ import static java.lang.System.out;
 /**
  * Activity che riceve i comandi del server e li esegue
  */
-public class ClientActivity extends AppCompatActivity implements ClientActionListener, SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
+public class ClientActivity extends AppCompatActivity implements ClientActionListener,ShowPeersAdapter.PeerSelected, SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
     private ShowPeersAdapter showPeersAdapter;
     private RecyclerView rVshowPeersList;
@@ -73,7 +74,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         rVshowPeersList.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVshowPeersList.setLayoutManager(rVLayoutManager);
-        showPeersAdapter = new ShowPeersAdapter(new ArrayList<Peer>(20));
+        showPeersAdapter = new ShowPeersAdapter(new ArrayList<Peer>(20), this);
         rVshowPeersList.setAdapter(showPeersAdapter);
         provider = DataProviderBuilder.getDefaultDataProvider(this);
         allSongs = new HashMap<>(200);
@@ -105,6 +106,12 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
             ex.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        client.disconnect();
     }
 
     @Override
@@ -252,6 +259,11 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         if (bluetoothOk && serviceOk) {
             faiqualcosa();
         }
+    }
+
+    @Override
+    public void onPeerSelected(Peer peer) {
+        client.connectToPeer(peer);
     }
 }
 

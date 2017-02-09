@@ -28,7 +28,7 @@ public class ShowPeersActivity extends AppCompatActivity {
         rVshowPeersList.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVshowPeersList.setLayoutManager(rVLayoutManager);
-        showPeersAdapter = new ShowPeersAdapter(test());
+        showPeersAdapter = new ShowPeersAdapter(test(),null);
         rVshowPeersList.setAdapter(showPeersAdapter);
         Peer ptoAdd = new Peer("aggiunta","aggiunta","aggiunta");
         showPeersAdapter.addPeer(ptoAdd);
