@@ -57,7 +57,6 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PlaylistView"
-            android:label="Playlists:"
             android:theme="@style/AppTheme" >
 
             <intent-filter>

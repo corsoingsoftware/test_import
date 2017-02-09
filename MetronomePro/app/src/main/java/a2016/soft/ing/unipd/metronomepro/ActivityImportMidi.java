@@ -93,12 +93,19 @@ public class ActivityImportMidi extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
                 showError();
+                finish();
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{permission}, PERMISSIONS_REQUEST_CODE);
             }
         } else {
             openFilePicker();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        checkPermissionsAndOpenFilePicker();
     }
 
     /**
@@ -119,7 +126,10 @@ public class ActivityImportMidi extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==PERMISSIONS_REQUEST_CODE){
 
+            checkPermissionsAndOpenFilePicker();
+        }
         if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             if (filePath != null) {
