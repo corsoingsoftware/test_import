@@ -101,7 +101,12 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     public void onPeerListReady(List<Peer> list) {
         out.println("");
         if(list.size()>0){
-            client.connectToPeer(list.get(0));
+            for(Peer p : list){
+                if(p.getAddress().equals("2C:8A:72:65:DF:4D")) {
+                    client.connectToPeer(p);
+                    break;
+                }
+            }
         }
 
     }
