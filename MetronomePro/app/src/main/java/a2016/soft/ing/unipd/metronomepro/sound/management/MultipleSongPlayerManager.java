@@ -102,7 +102,8 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
          * a SongPlayer will be always free and ready for use thanks to class' logic of execution.
          */
 
-        dequeueManagement();
+        nextToPlayForFirstPlay=dequeueManagement();
+
 
         checkQueueEmpty();
     }
@@ -120,9 +121,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
     /**
      *  It manages the loading of the songs. In particular it identifies blocks of songs
      *  of the same type in the queue, remove them from it and loads them in the appropriate SongPlayer.
+     *  @return first index
      */
 
-    public void dequeueManagement(){
+    public int dequeueManagement(){
 
         LinkedList<Song> listSongsSameType = new LinkedList<Song>();
         Song currentSong = songsToLoadQueue.peek();
@@ -141,10 +143,10 @@ public class MultipleSongPlayerManager implements SongPlayerManager, SongPlayer.
          */
 
         Song[] arraySongsSameType = new Song[listSongsSameType.size()];
-        nextToPlayForFirstPlay=listSongsSameType.size();
         indexNextToLoad = indexNextToLoad + listSongsSameType.size();
         arraySongsSameType = listSongsSameType.toArray(arraySongsSameType);
         currentSongSongPlayer.write(arraySongsSameType);
+        return listSongsSameType.size();
     }
 
     /**

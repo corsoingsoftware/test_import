@@ -88,6 +88,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
             case REQUEST_ENABLE_BT:
                 if(resultCode==RESULT_OK){
                     try {
+                        connectionManager= ManagerFactory.bluetoothInstance();
                         client = connectionManager.newClient(this, this);
                     }catch (Exception ex){
                         ex.printStackTrace();
