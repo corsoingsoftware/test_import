@@ -34,9 +34,11 @@
             android:text="BIT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/bit_text_view"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_below="@+id/metric_text_view"
-            android:layout_alignEnd="@+id/metric_text_view" />
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:text="BPM"

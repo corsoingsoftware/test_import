@@ -35,7 +35,6 @@
     </style>
 
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
