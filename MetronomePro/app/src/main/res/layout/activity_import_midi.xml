@@ -6,60 +6,60 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="a2016.soft.ing.unipd.metronomepro.ActivityImportMidi">
-<android.support.design.widget.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorAccent"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorAccent"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <Button
+                android:id="@+id/homebutton"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:gravity="left"
+                android:background="@drawable/home"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_add_song"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/homebutton"
-            android:layout_width="25sp"
-            android:layout_height="25sp"
-            android:gravity="left"
-            android:background="@drawable/home"
-            />
-
-        <TextView
+            android:id="@+id/import_midi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_add_song"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:id="@+id/toolbar_title" />
+            android:layout_centerInParent="true"
+            android:text="@string/import_button"
+            android:textColor="@color/white"
+            android:background="?attr/colorAccent" />
+        <Button
+            android:id="@+id/createts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/import_midi"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30sp"
+            android:text="@string/create_s_button"
+            android:textColor="@color/white"
+            android:background="?attr/colorAccent"/>
 
-    </android.support.v7.widget.Toolbar>
-
-</android.support.design.widget.AppBarLayout>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/import_midi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/import_button"
-        android:textColor="@color/white"
-        android:background="?attr/colorAccent" />
-    <Button
-        android:id="@+id/createts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/import_midi"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30sp"
-        android:text="@string/create_s_button"
-        android:textColor="@color/white"
-        android:background="?attr/colorAccent"/>
-
-</RelativeLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

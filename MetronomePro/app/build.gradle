@@ -59,3 +59,9 @@ dependencies {
     compile project(path: ':sync')
 }
 
+repositories {
+    maven {
+        url  "http://dl.bintray.com/lukaville/maven"
+    }
+}
+

@@ -133,37 +133,37 @@ public class ActivityImportMidi extends AppCompatActivity {
      * midiStorageDir and if the copy success add the midi file into the database, in the other case
      * show an error
      */
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-                if (filePath != null) {
-                    Log.d(getResources().getString(R.string.path), filePath);
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            if (filePath != null) {
+                Log.d(getResources().getString(R.string.path), filePath);
 
-                    String midiTitle = filePath.substring(filePath.lastIndexOf("/")+ONE);
-                    if(isMidi(midiTitle)) {
-                        String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
-                        if (copyFile(filePath, midiStorageDir.getAbsolutePath())) {
-                            Toast.makeText(this, getResources().getString(R.string.file_copied) + midiPath, Toast.LENGTH_LONG).show();
-                            MidiSong md = EntitiesBuilder.getMidiSong();
-                            md.setName(midiTitle);
-                            md.setPath(midiPath);
-                            db.saveSong(md);
-                        } else {
-                            showImportError();
-                        }
+                String midiTitle = filePath.substring(filePath.lastIndexOf("/")+ONE);
+                if(isMidi(midiTitle)) {
+                    String midiPath = midiStorageDir.getAbsolutePath() + "/" + midiTitle;
+                    if (copyFile(filePath, midiStorageDir.getAbsolutePath())) {
+                        Toast.makeText(this, getResources().getString(R.string.file_copied) + midiPath, Toast.LENGTH_LONG).show();
+                        MidiSong md = EntitiesBuilder.getMidiSong();
+                        md.setName(midiTitle);
+                        md.setPath(midiPath);
+                        db.saveSong(md);
                     } else {
-                        Toast.makeText(this, getResources().getString(R.string.file_type_wrong), Toast.LENGTH_LONG).show();
+                        showImportError();
                     }
-
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.file_type_wrong), Toast.LENGTH_LONG).show();
                 }
-            }
-            else {
-                showImportError();
+
             }
         }
+        else {
+            showImportError();
+        }
+    }
 
     /**
      * This method is used for start the activity of the MaterialFilePicker, for other information
