@@ -7,20 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context="a2016.soft.ing.unipd.metronomepro.SelectNextSongs">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
     <include layout="@layout/content_select_next_songs" />
 
     <android.support.design.widget.FloatingActionButton
@@ -30,5 +16,37 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_media_play" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="15dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:text="Playlist: "
+                android:id="@+id/p_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:padding="15dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:text="@string/name_song"
+                android:id="@+id/name_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/p_desc" />
+        </RelativeLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

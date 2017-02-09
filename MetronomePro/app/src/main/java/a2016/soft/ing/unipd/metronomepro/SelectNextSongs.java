@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.group3.sync.Manager;
@@ -51,6 +53,7 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
     private static final int REQUEST_ENABLE_BT=1;
     SongPlayerServiceCaller spsc;
     Playlist p;
+
     private RecyclerView rVNextSongs;
     private RecyclerView.LayoutManager rVLayoutManager;
     private SelectSongsAdapter selectSongsAdapter;
@@ -210,6 +213,10 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
 
             }
         });
+
+
+        TextView tv= (TextView)findViewById(R.id.name_playlist);
+        tv.setText(p.getName());
     }
 
     @Override
@@ -225,6 +232,30 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
                     }
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(server!=null){
+            try {
+                server.terminate();
+            }catch(Exception ex){
+
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        if(server!=null){
+            try {
+                server.terminate();
+            }catch(Exception ex){
+
+            }
         }
     }
 

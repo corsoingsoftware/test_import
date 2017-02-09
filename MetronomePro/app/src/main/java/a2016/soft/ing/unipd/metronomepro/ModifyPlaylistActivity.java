@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +155,8 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rVModifyPlaylist);
 
+        TextView tv= (TextView)findViewById(R.id.name_playlist);
+        tv.setText(playlist.getName());
 
     }
 
