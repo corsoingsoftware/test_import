@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,8 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
 import a2016.soft.ing.unipd.metronomepro.ActivityExtraNames;
+
+import static a2016.soft.ing.unipd.metronomepro.ActivityExtraNames.SONG_TO_EDIT;
 /**
  * Created by giuli on 27/12/2016.
  */
@@ -44,6 +48,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     private ArrayList<Playlist> selectedPlaylist;//playlist the user select
     private ItemTouchHelper itemTouchHelper;
     private DataProvider db;
+    MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +139,25 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
         intent.putExtra(ActivityExtraNames.PLAYLIST_SELECTED,playListAdapter.getPlaylistToEdit());
         //Playlist playList = playListAdapter.getPlaylistToEdit();
         startActivity(intent);
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_it, menu);
+        menuItem = menu.findItem(R.id.connect_to_someone);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(),ClientActivity.class);
+                intent.putExtra(SONG_TO_EDIT,EntitiesBuilder.getTimeSlicesSong());
+                startActivity(intent);
+                return true;
+            }
+        });
+        return true;
     }
 
     @Override

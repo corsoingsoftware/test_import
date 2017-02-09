@@ -9,6 +9,7 @@ import android.widget.TextView;
 import org.group3.sync.Peer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import a2016.soft.ing.unipd.metronomepro.R;
 import a2016.soft.ing.unipd.metronomepro.adapters.touch.helpers.ItemTouchHelperAdapter;
@@ -53,6 +54,12 @@ public class ShowPeersAdapter extends RecyclerView.Adapter<ShowPeersAdapter.View
     public void removePeer(int indexOfPeerToRemove) {
         peerList.remove(indexOfPeerToRemove);
         notifyItemRemoved(indexOfPeerToRemove);
+    }
+
+    public void refreshPeers(List<Peer> newList) {
+        peerList.clear();
+        peerList.addAll(newList);
+        notifyDataSetChanged();
     }
 
     public Peer getPeer(int index) {

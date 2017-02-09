@@ -2,6 +2,7 @@ package a2016.soft.ing.unipd.metronomepro;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -9,6 +10,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import org.group3.sync.Client;
 import org.group3.sync.ClientActionListener;
@@ -24,6 +28,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import a2016.soft.ing.unipd.metronomepro.adapters.ShowPeersAdapter;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
+import a2016.soft.ing.unipd.metronomepro.data.access.layer.SQLiteDataProvider;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.MidiSong;
 import a2016.soft.ing.unipd.metronomepro.entities.Song;
@@ -38,27 +46,45 @@ import static java.lang.System.out;
  */
 public class ClientActivity extends AppCompatActivity implements ClientActionListener, SongPlayerServiceCaller.SongPlayerServiceCallerCallback {
 
-    Manager connectionManager;
-    Client client;
-    SongPlayerServiceCaller spsc;
-    HashMap<String,Song> songsOfPlaylist;
-    Song[] songsToPlay;
-    boolean bluetoothOk=false, serviceOk=false;
+    private ShowPeersAdapter showPeersAdapter;
+    private RecyclerView rVshowPeersList;
+    private RecyclerView.LayoutManager rVLayoutManager;
+    private DataProvider provider;
+
+    private Manager connectionManager;
+    private Client client;
+    private SongPlayerServiceCaller spsc;
+    private HashMap<String, Song> songsOfPlaylist;
+    private Song[] songsToPlay;
+    private boolean bluetoothOk = false, serviceOk = false;
+    HashMap<String, Song> allSongs;
     long timeDiff;
-    private static final int REQUEST_ENABLE_BT=1;
+    private static final int REQUEST_ENABLE_BT = 1;
+
     /**
-     *
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection_activity);
+        setContentView(R.layout.activity_show_peers);
 
-        spsc = new SongPlayerServiceCaller(this,this);
+        rVshowPeersList = (RecyclerView) findViewById(R.id.recycler_peer);
+        rVshowPeersList.setHasFixedSize(true);
+        rVLayoutManager = new LinearLayoutManager(this);
+        rVshowPeersList.setLayoutManager(rVLayoutManager);
+        showPeersAdapter = new ShowPeersAdapter(new ArrayList<Peer>(20));
+        rVshowPeersList.setAdapter(showPeersAdapter);
+        provider = DataProviderBuilder.getDefaultDataProvider(this);
+        allSongs = new HashMap<>(200);
+        List<Song> songs = provider.getAllSongs();
+        for (Song song : songs) {
+            allSongs.put(song.getName(), song);
+        }
+        spsc = new SongPlayerServiceCaller(this, this);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
             } else {
@@ -68,13 +94,13 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         }
         try {
 
-            connectionManager= ManagerFactory.bluetoothInstance();
-            client=connectionManager.newClient(this,this);
+            connectionManager = ManagerFactory.bluetoothInstance();
+            client = connectionManager.newClient(this, this);
 
-        }catch (AdapterNotActivatedException ex){
+        } catch (AdapterNotActivatedException ex) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             //def action
             ex.printStackTrace();
         }
@@ -84,13 +110,13 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_ENABLE_BT:
-                if(resultCode==RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     try {
-                        connectionManager= ManagerFactory.bluetoothInstance();
+                        connectionManager = ManagerFactory.bluetoothInstance();
                         client = connectionManager.newClient(this, this);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -101,13 +127,8 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     @Override
     public void onPeerListReady(List<Peer> list) {
         out.println("");
-        if(list.size()>0){
-            for(Peer p : list){
-                if(p.getAddress().equals("2C:8A:72:65:DF:4D")) {
-                    client.connectToPeer(p);
-                    break;
-                }
-            }
+        if (list.size() > 0) {
+            showPeersAdapter.refreshPeers(list);
         }
 
     }
@@ -126,16 +147,26 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
 
     @Override
     public void onSynchronized(long timeDifference) {
-        timeDiff=timeDifference;
-        bluetoothOk=true;
-        if(bluetoothOk&&serviceOk){
+        timeDiff = timeDifference;
+        bluetoothOk = true;
+        if (bluetoothOk && serviceOk) {
             faiqualcosa();
         }
         out.println("");
     }
 
-    private void faiqualcosa(){
+    private void makeToast(final String s){
+        final Context a =this;
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(a,s,Toast.LENGTH_SHORT);
+            }
+        });
+    }
 
+    private void faiqualcosa() {
+        makeToast("service connected");
     }
 
     @Override
@@ -160,14 +191,14 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     public void onReceiveStart(MetroConfig config, long time, long delay) {
 
         spsc.write(songsToPlay);
-        long a=System.currentTimeMillis();
-        long b=time+(timeDiff);
-        while(a<b-7){
-            a=System.currentTimeMillis();
+        long a = System.currentTimeMillis();
+        long b = time + (timeDiff);
+        while (a < b - 7) {
+            a = System.currentTimeMillis();
         }
         spsc.play();
-        a=System.currentTimeMillis();
-        out.println(a-b);
+        a = System.currentTimeMillis();
+        out.println(a - b);
         out.println("");
     }
 
@@ -185,90 +216,40 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     }
 
 
-    public void manageGeneralMessage(String s){
-        int a=s.indexOf(":");
-        String toManage=s.substring(0,a);
+    public void manageGeneralMessage(String s) {
+        int a = s.indexOf(":");
+        String toManage = s.substring(0, a);
         if (toManage.equals("playlist")) {
-            refreshPlaylist(s.substring(a+1,s.length()-1));
+            refreshPlaylist(s.substring(a + 1, s.length() - 1));
         } else if (toManage.equals("next")) {
-            refreshNext(s.substring(a+1,s.length()-1));
+            refreshNext(s.substring(a + 1, s.length() - 1));
         }
     }
 
-    private void refreshPlaylist(String songs){
-        songsOfPlaylist= new HashMap<>();
-
-        TimeSlice t1, t2;
-        t1 = new TimeSlice();
-        t1.setDurationInBeats(10);
-        t1.setBpm(80);
-        t2 = new TimeSlice();
-        t2.setDurationInBeats(10);
-        t2.setBpm(180);
-        TimeSlicesSong s1 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
-        s1.add(t1);
-        s1.add(t2);
-        TimeSlicesSong s2 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
-        TimeSlice t3, t4;
-        t3 = new TimeSlice();
-        t4 = new TimeSlice();
-        t3.setDurationInBeats(10);
-        t3.setBpm(250);
-        s2.add(t3);
-        TimeSlicesSong s3 = (TimeSlicesSong)EntitiesBuilder.getTimeSlicesSong();
-        t4.setDurationInBeats(10);
-        t4.setBpm(300);
-        s3.add(t4);
-        s1.setName("song1");
-        s2.setName("song2");
-        s3.setName("song3");
-        MidiSong midiS1 = (MidiSong)EntitiesBuilder.getMidiSong();
-        midiS1.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                +"/A.mid");//+ "/Tick.mid");
-        midiS1.setName("midiSong1");
-        MidiSong midiS2 = (MidiSong)EntitiesBuilder.getMidiSong();
-        midiS2.setPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                + "/Tick.mid");
-        midiS2.setName("midiSong2");
-        songsOfPlaylist.put(midiS1.getName(),midiS1);
-        songsOfPlaylist.put(midiS2.getName(),midiS2);
-        songsOfPlaylist.put(s1.getName(),s1);
-        songsOfPlaylist.put(s2.getName(),s2);
-        songsOfPlaylist.put(s3.getName(),s3);
-        for(Song s : songsOfPlaylist.values()){
-            spsc.load(s);
+    private void refreshPlaylist(String songs) {
+        String[] titles = songs.split(";");
+        songsOfPlaylist = new HashMap<>(20);
+        for (int i = 0; i < titles.length; i++) {
+            if (allSongs.containsKey(titles[i])) {
+                songsOfPlaylist.put(titles[i], allSongs.get(titles[i]));
+                spsc.load(allSongs.get(titles[i]));
+            }
         }
     }
 
-    private void refreshNext(String next){
-        String[] titles=next.split(";");
-        songsToPlay= new Song[titles.length];
+    private void refreshNext(String next) {
+        String[] titles = next.split(";");
+        songsToPlay = new Song[titles.length];
 
-        for(int i=0; i<titles.length;i++){
-            songsToPlay[i]=songsOfPlaylist.get(titles[i]);
+        for (int i = 0; i < titles.length; i++) {
+            songsToPlay[i] = songsOfPlaylist.get(titles[i]);
         }
     }
 
     @Override
     public void serviceConnected() {
-//        ts= EntitiesBuilder.getTimeSlicesSong();
-//
-//        ts.setName("prova");
-//        TimeSlice a= new TimeSlice();
-//        a.setBpm(60);
-//        a.setDurationInBeats(3);
-//        ts.add(a);
-//        a= new TimeSlice();
-//        a.setBpm(120);
-//        a.setDurationInBeats(4);
-//        ts.add(a);
-//        a= new TimeSlice();
-//        a.setBpm(300);
-//        a.setDurationInBeats(4);
-//        ts.add(a);
-//        spsc.load(ts);
-        serviceOk=true;
-        if(bluetoothOk&&serviceOk){
+        serviceOk = true;
+        if (bluetoothOk && serviceOk) {
             faiqualcosa();
         }
     }
