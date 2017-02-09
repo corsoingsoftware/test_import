@@ -23,10 +23,7 @@
         <activity
             android:name=".ActivityHome"
             android:label="MetronomoPro">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity
@@ -80,6 +77,10 @@
             android:name=".TestDB"
             android:label="@string/title_activity_test_db"
             android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

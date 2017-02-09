@@ -100,7 +100,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean saveSong(Song newSong) {
-        if (newSong.getName().length() <= MAX_TITLE_LENGTH) {
+        if (controlName(newSong.getName())) {
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues songValues = new ContentValues();
             songValues.put(FIELD_SONG_ID, newSong.getName());
@@ -127,7 +127,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean savePlaylist(Playlist newPlaylist) {
-        if (newPlaylist.getName().length() <= MAX_TITLE_LENGTH) {
+        if (controlName(newPlaylist.getName())) {
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues playlistValues = new ContentValues();
             for (Song song : newPlaylist) {
@@ -209,7 +209,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         SQLiteDatabase database = this.getReadableDatabase();
         playlistName = DatabaseUtils.sqlEscapeString(playlistName);
         String queryPlaylist = QUERY_SELECTION + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID
-                + " = '" + playlistName + "'";
+                + " = " + playlistName;
         Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
         if (cursorPlaylist.moveToFirst()) {
             SparseArray<String> songMap = new SparseArray<>();
@@ -268,7 +268,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deleteSong(Song oldSong) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String oldSongName= DatabaseUtils.sqlEscapeString(oldSong.getName());
+        String oldSongName = DatabaseUtils.sqlEscapeString(oldSong.getName());
         String queryDelete = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_ID + " = "
                 + oldSongName + ";" ;
         try {
@@ -285,7 +285,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deletePlaylist(Playlist oldPlaylist) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String oldPlaylistname= DatabaseUtils.sqlEscapeString(oldPlaylist.getName());
+        String oldPlaylistname = DatabaseUtils.sqlEscapeString(oldPlaylist.getName());
         String queryDelete = "DELETE FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID + " = "
                 + oldPlaylistname + ";";
         try {
@@ -301,10 +301,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean modifySong(Song oldSong, Song newSong) {
-        if (newSong.getName().length() <= 50) {
+        if (controlName(newSong.getName())) {
             SQLiteDatabase database = getWritableDatabase();
-            String oldSongName= DatabaseUtils.sqlEscapeString(oldSong.getName());
-            String newSongName=DatabaseUtils.sqlEscapeString(newSong.getName());
+            String oldSongName = DatabaseUtils.sqlEscapeString(oldSong.getName());
+            String newSongName = DatabaseUtils.sqlEscapeString(newSong.getName());
             if (oldSong.getName().compareTo(newSong.getName()) != 0) {
                 String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = "
                         + newSongName + " WHERE " + FIELD_SONG_ID + " = "
@@ -369,9 +369,14 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
 
     @Override
     public boolean modifyPlaylist(Playlist oldPlaylist, Playlist newPlaylist) {
-        if (newPlaylist.getName().length() <= MAX_TITLE_LENGTH) {
+        if (controlName(newPlaylist.getName())) {
             return deletePlaylist(oldPlaylist) && savePlaylist(newPlaylist);
         } else return false;
+    }
+
+    private boolean controlName(String name){
+        if(name.length() == 0 || name == null || name.length() > MAX_TITLE_LENGTH) return false;
+        return true;
     }
 
 }
