@@ -6,4 +6,8 @@
         android:title="connect"
         android:icon="@mipmap/ic_connect"
         app:showAsAction="always" />
+
+    <item android:id="@+id/metronome_easy"
+        android:title="simple metro"
+        app:showAsAction="never" />
 </menu>

@@ -381,6 +381,22 @@ public class MetronomeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(soundManagerServiceCaller!=null){
+            try {
+                soundManagerServiceCaller.stop();
+            }catch(Exception ex){
+
+            }
+            try{
+                soundManagerServiceCaller.close();
+            }catch (Exception ex){
+            }
+        }
+    }
+
     /**
      * Establish connection with other divice
      *

@@ -157,6 +157,15 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
                 return true;
             }
         });
+        MenuItem menuItem2 = menu.findItem(R.id.metronome_easy);
+        menuItem2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(),MetronomeActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
         return true;
     }
 

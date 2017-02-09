@@ -7,6 +7,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
 
 /**
@@ -14,9 +17,9 @@ import a2016.soft.ing.unipd.metronomepro.MetronomeActivity;
  * Le chiamate dell'interfaccia SoundManager non saranno altro che degli ECHO sul servizio.
  */
 
-public class SoundManagerServiceCaller implements SoundManager {
+public class SoundManagerServiceCaller implements SoundManager, Closeable {
 
-    private SoundManagerService mService;
+    public SoundManagerService mService;
     private MetronomeActivity activityContext;
     private boolean mBound;     //Booleano che indica se è stata effettuata o meno la connessione al servizio.
     private ServiceConnection mConnection;
@@ -139,5 +142,14 @@ public class SoundManagerServiceCaller implements SoundManager {
     public void stop() {
         Log.v(LOG_TAG, "in stop");
         mService.stop();
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            mService.unbindService(mConnection);
+        }catch(Exception ex){
+
+        }
     }
 }
