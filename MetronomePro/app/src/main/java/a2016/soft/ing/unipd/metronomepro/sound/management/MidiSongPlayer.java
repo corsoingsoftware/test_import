@@ -43,8 +43,11 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
 
     @Override
     public void play() {
-
-        actualPlayer.start();
+        try {
+            actualPlayer.start();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -95,9 +98,6 @@ public class MidiSongPlayer implements SongPlayer, MediaPlayer.OnCompletionListe
             actualPlayer.start();
         } else {
             callback.playEnded(this);
-            songList = null;
-            currentSong = null;
-            actualPlayer = null;
         }
     }
 

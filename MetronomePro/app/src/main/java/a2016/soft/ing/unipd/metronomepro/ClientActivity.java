@@ -162,7 +162,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         spsc.write(songsToPlay);
         long a=System.currentTimeMillis();
         long b=time+(timeDiff);
-        while(a<b-10){
+        while(a<b-7){
             a=System.currentTimeMillis();
         }
         spsc.play();
