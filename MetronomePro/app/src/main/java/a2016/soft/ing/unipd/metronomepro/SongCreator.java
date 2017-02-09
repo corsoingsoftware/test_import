@@ -35,6 +35,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
     private TimeSlicesAdapter timeSlicesAdapter;
     private ItemTouchHelper itemTouchHelper;
     private EditText bpmEditText;
+    private EditText nameEditText;
     private EditText beatsEditText;
     private ImageButton addEditTimeSliceButton;
     private View backgroundView;
@@ -51,6 +52,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         beatsEditText=(EditText)findViewById(R.id.editText_beats);
         addEditTimeSliceButton=(ImageButton)findViewById(R.id.button_add_or_save_timeslice);
         backgroundView=findViewById(R.id.background_relative_layout);
+        nameEditText =(EditText) findViewById(R.id.name_song_edit_text);
         //sarà a false
         rVTimeSlices.setHasFixedSize(false);
         rVLayoutManager =  new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -75,6 +77,7 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
         HorizontalDragTouchHelperCallback myItemTouchHelper = new HorizontalDragTouchHelperCallback(timeSlicesAdapter);
         itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(rVTimeSlices);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabOk);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,8 @@ public class SongCreator extends AppCompatActivity implements OnStartDragListene
                 Snackbar.make(view,getString(R.string.saved_string), Snackbar.LENGTH_LONG).show();
                 Intent returnIntent = new Intent();
                 TimeSlicesSong ps=(TimeSlicesSong) timeSlicesAdapter.getSongToEdit();
+                if(ps!=null&&nameEditText!=null&&nameEditText.getText()!=null)
+                    ps.setName(nameEditText.getText().toString());
                 returnIntent.putExtra(SONG_TO_EDIT, ps);
                 setResult(RESULT_OK,returnIntent);
                 finish();
