@@ -3,6 +3,7 @@ package a2016.soft.ing.unipd.metronomepro.data.access.layer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -206,6 +207,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public Playlist getPlaylist(String playlistName){
         SQLiteDatabase database = this.getReadableDatabase();
+        playlistName = DatabaseUtils.sqlEscapeString(playlistName);
         String queryPlaylist = QUERY_SELECTION + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID
                 + " = '" + playlistName + "'";
         Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
@@ -266,8 +268,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deleteSong(Song oldSong) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String queryDelete = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_ID + " = '"
-                + oldSong.getName() + "'";
+        String oldSongName= DatabaseUtils.sqlEscapeString(oldSong.getName());
+        String queryDelete = "DELETE FROM " + TBL_SONG + " WHERE " + FIELD_SONG_ID + " = "
+                + oldSongName + ";" ;
         try {
             database.execSQL(queryDelete);
         } catch (SQLException e) {
@@ -282,8 +285,9 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     @Override
     public boolean deletePlaylist(Playlist oldPlaylist) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String queryDelete = "DELETE FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID + " = '"
-                + oldPlaylist.getName() + "';";
+        String oldPlaylistname= DatabaseUtils.sqlEscapeString(oldPlaylist.getName());
+        String queryDelete = "DELETE FROM " + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID + " = "
+                + oldPlaylistname + ";";
         try {
             database.execSQL(queryDelete);
         } catch (SQLException e) {
@@ -299,11 +303,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
     public boolean modifySong(Song oldSong, Song newSong) {
         if (newSong.getName().length() <= 50) {
             SQLiteDatabase database = getWritableDatabase();
-            String oldSongName = oldSong.getName();
+            String oldSongName= DatabaseUtils.sqlEscapeString(oldSong.getName());
+            String newSongName=DatabaseUtils.sqlEscapeString(newSong.getName());
             if (oldSong.getName().compareTo(newSong.getName()) != 0) {
-                String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = '"
-                        + newSong.getName() + "' WHERE " + FIELD_SONG_ID + " = '"
-                        + oldSong.getName() + "'";
+                String queryUpdateName = "UPDATE " + TBL_SONG + " SET " + FIELD_SONG_ID + " = "
+                        + newSongName + " WHERE " + FIELD_SONG_ID + " = "
+                        + oldSongName + ";";
                 try {
                     database.execSQL(queryUpdateName);
                     oldSongName = newSong.getName();
@@ -317,11 +322,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 String queryUpdateSong = "";
                 if (oldSong instanceof MidiSong) {
                     queryUpdateSong = "UPDATE " + TBL_MD_SONG + " SET " + FIELD_MD_PATH + " = '"
-                            + ((MidiSong) newSong).getPath() + "' WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                            + ((MidiSong) newSong).getPath() + "' WHERE " + FIELD_SONG_ID + " = " + oldSongName + ";";
                 }
                 if (oldSong instanceof TimeSlicesSong) {
                     queryUpdateSong = "UPDATE " + TBL_TS_SONG + " SET " + FIELD_TS_BLOB + " = "
-                            + ((TimeSlicesSong) newSong).encode() + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                            + ((TimeSlicesSong) newSong).encode() + " WHERE " + FIELD_SONG_ID + " = " + oldSongName + ";";
                 }
                 try {
                     database.execSQL(queryUpdateSong);
@@ -335,13 +340,13 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
                 String tableType = "";
                 ContentValues songValues = new ContentValues();
                 if (oldSong instanceof MidiSong) {
-                    queryDelete = "DELETE FROM " + TBL_MD_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                    queryDelete = "DELETE FROM " + TBL_MD_SONG + " WHERE " + FIELD_SONG_ID + " = " + oldSongName + ";";
                     songValues.put(FIELD_SONG_ID, newSong.getName());
                     songValues.put(FIELD_TS_BLOB, ((TimeSlicesSong) newSong).encode());
                     tableType = TBL_TS_SONG;
                 }
                 if (oldSong instanceof TimeSlicesSong) {
-                    queryDelete = "DELETE FROM " + TBL_TS_SONG + " WHERE " + FIELD_SONG_ID + " = '" + oldSongName + "'";
+                    queryDelete = "DELETE FROM " + TBL_TS_SONG + " WHERE " + FIELD_SONG_ID + " = " + oldSongName + ";";
                     songValues.put(FIELD_SONG_ID, newSong.getName());
                     songValues.put(FIELD_MD_PATH, ((MidiSong) newSong).getPath());
                     tableType = TBL_MD_SONG;
