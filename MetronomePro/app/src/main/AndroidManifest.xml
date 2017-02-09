@@ -58,7 +58,13 @@
         <activity
             android:name=".PlaylistView"
             android:label="@string/title_activity_modify_playlist"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AtspTest"
             android:label="@string/title_activity_atsp_test"
@@ -82,12 +88,10 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".ConnectionActivity" >
         </activity>
-        <activity android:name=".ClientActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".ClientActivity"
+            android:label="Client"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
