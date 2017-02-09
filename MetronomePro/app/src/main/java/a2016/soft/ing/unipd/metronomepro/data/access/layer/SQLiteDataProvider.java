@@ -209,7 +209,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper implements DataProvider
         SQLiteDatabase database = this.getReadableDatabase();
         playlistName = DatabaseUtils.sqlEscapeString(playlistName);
         String queryPlaylist = QUERY_SELECTION + TBL_PLAYLIST + " WHERE " + FIELD_PLAYLIST_ID
-                + " = '" + playlistName + "'";
+                + " = " + playlistName;
         Cursor cursorPlaylist = database.rawQuery(queryPlaylist, null);
         if (cursorPlaylist.moveToFirst()) {
             SparseArray<String> songMap = new SparseArray<>();

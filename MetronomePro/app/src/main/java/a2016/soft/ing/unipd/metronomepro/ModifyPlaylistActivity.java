@@ -126,6 +126,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity implements OnStart
             if(intent!=null&&intent.hasExtra(PLAYLIST_SELECTED)){
                 try {
                     supporto = intent.getParcelableExtra(PLAYLIST_SELECTED);//canzoni passate dalla playlist (PlaylistView)
+                    supporto.setName("supporto");
                     if(database.getPlaylist(supporto.getName())==null){//NON ELIMINARE QUESTO IF ELSE RISOLVE UN GRAN BUG
                         playlist = supporto;
                     }

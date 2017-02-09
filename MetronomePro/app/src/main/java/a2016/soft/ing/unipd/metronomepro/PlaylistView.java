@@ -27,6 +27,7 @@ import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProviderBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.EntitiesBuilder;
 import a2016.soft.ing.unipd.metronomepro.entities.Playlist;
+import a2016.soft.ing.unipd.metronomepro.ActivityExtraNames;
 /**
  * Created by giuli on 27/12/2016.
  */
@@ -90,7 +91,7 @@ public class PlaylistView extends AppCompatActivity implements SelectPlaylistAda
     }
     protected void onSaveInstanceState(Bundle outState) {
         //it takes the whole playlists
-        outState.putParcelableArrayList(ActivityExtraNames.PLAYLIST_FOR_SELECT, (ArrayList<? extends Parcelable>) playListAdapter.getArrayPlaylist());
+        outState.putParcelableArrayList(ActivityExtraNames.PLAYABLE_PLAYLIST, (ArrayList<? extends Parcelable>) playListAdapter.getArrayPlaylist());
 
         super.onSaveInstanceState(outState);
     }
