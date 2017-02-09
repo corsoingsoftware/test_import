@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.PersistableBundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import a2016.soft.ing.unipd.metronomepro.adapters.ShowPeersAdapter;
 import a2016.soft.ing.unipd.metronomepro.data.access.layer.DataProvider;
@@ -51,6 +54,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
     private RecyclerView rVshowPeersList;
     private RecyclerView.LayoutManager rVLayoutManager;
     private DataProvider provider;
+    private FloatingActionButton fabToSnack;
 
     private Manager connectionManager;
     private Client client;
@@ -71,6 +75,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         setContentView(R.layout.activity_show_peers);
 
         rVshowPeersList = (RecyclerView) findViewById(R.id.recycler_peer);
+        fabToSnack=(FloatingActionButton)findViewById(R.id.fabOk);
         rVshowPeersList.setHasFixedSize(true);
         rVLayoutManager = new LinearLayoutManager(this);
         rVshowPeersList.setLayoutManager(rVLayoutManager);
@@ -159,7 +164,7 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         if (bluetoothOk && serviceOk) {
             faiqualcosa();
         }
-        out.println("");
+        makeToast("Syncronized to Server!");
     }
 
     private void makeToast(final String s){
@@ -167,7 +172,11 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(a,s,Toast.LENGTH_SHORT);
+                try {
+                    Snackbar.make(fabToSnack,s,Snackbar.LENGTH_LONG).show();
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         });
     }

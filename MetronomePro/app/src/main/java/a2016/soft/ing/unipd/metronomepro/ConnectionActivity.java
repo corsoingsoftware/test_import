@@ -42,27 +42,11 @@ public class ConnectionActivity extends AppCompatActivity implements ServerActio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection_activity);
+        //setContentView(R.layout.activity_connection_activity);
         connectionManager= ManagerFactory.bluetoothInstance();//grande Lì!
         try {
             final Server server=connectionManager.newServer(this, this);
             spsc = new SongPlayerServiceCaller(this, this);
-            Button b = (Button)findViewById(R.id.button2);
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final long start = System.currentTimeMillis()+2000;
-                    server.broadcastStart(start);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            spsc.write(new Song[]{midiS2});
-                            while(System.currentTimeMillis()<start);
-                            spsc.play();
-                        }
-                    }).start();
-                }
-            });
         }
         catch (Exception ex){
 
