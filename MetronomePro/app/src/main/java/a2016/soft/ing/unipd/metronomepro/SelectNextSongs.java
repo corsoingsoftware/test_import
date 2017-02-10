@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -173,7 +174,7 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
 
         rVNextSongs.setAdapter(selectSongsAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,23 +191,26 @@ public class SelectNextSongs extends AppCompatActivity implements ServerActionLi
                         spsc.write(entrySong);
                         spsc.play(entrySong);
                     }*/
+                    if (songs != null && songs.length > 0) {
+                        spsc.write(songs);
+                        final long start = System.currentTimeMillis() + 2000;
+                        sendNextSongs(songs);
+                        try {
+                            Thread.sleep(200);
+                        } catch (Exception ex) {
 
-                    spsc.write(songs);
-                    final long start = System.currentTimeMillis()+2000;
-                    sendNextSongs(songs);
-                    try {
-                        Thread.sleep(200);
-                    }catch (Exception ex){
-
-                    }
-                    server.broadcastStart(start);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while(System.currentTimeMillis()<start);
-                            spsc.play();
                         }
-                    }).start();
+                        server.broadcastStart(start);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                while (System.currentTimeMillis() < start) ;
+                                spsc.play();
+                            }
+                        }).start();
+                    } else {
+                        Snackbar.make(fab,"No Songs Selected",Snackbar.LENGTH_SHORT).show();
+                    }
                 }
 
                 //Blocco tutto

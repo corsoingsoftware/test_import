@@ -167,18 +167,21 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
         makeToast("Syncronized to Server!");
     }
 
-    private void makeToast(final String s){
+    private void makeToast(final String s, final int duration){
         final Context a =this;
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Snackbar.make(fabToSnack,s,Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(fabToSnack,s,duration).show();
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
             }
         });
+    }
+    private void makeToast(final String s){
+        makeToast(s,Snackbar.LENGTH_LONG);
     }
 
     private void faiqualcosa() {
@@ -249,6 +252,8 @@ public class ClientActivity extends AppCompatActivity implements ClientActionLis
             if (allSongs.containsKey(titles[i])) {
                 songsOfPlaylist.put(titles[i], allSongs.get(titles[i]));
                 spsc.load(allSongs.get(titles[i]));
+            }else{
+                makeToast("This song doesn't exist! "+titles[i], Snackbar.LENGTH_LONG);
             }
         }
     }
